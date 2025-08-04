@@ -1,0 +1,71 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "maple",
+  "name": "MemOS API Reference",
+  "appearance": {
+    "strict": true
+  },
+  "colors": {
+    "primary": "#0D9373",
+    "light": "#55D799",
+    "dark": "#0D9373"
+  },
+  "background": {
+    "color": {
+      "dark": "#101828"
+    }
+  },
+  "favicon": "/mintdocs/favicon.svg",
+  "icons": {
+    "library": "lucide"
+  },
+  "navigation": {
+    "groups": [
+      {
+        "group": "users",
+        "pages": [
+          "/mintdocs/api-reference/users/get",
+          "/mintdocs/api-reference/users/post",
+          "/mintdocs/api-reference/users/me"
+        ]
+      },
+      {
+        "group": "mem_cubes",
+        "pages": [
+          "/mintdocs/api-reference/mem_cubes/post",
+          "/mintdocs/api-reference/mem_cubes/delete",
+          "/mintdocs/api-reference/mem_cubes/share"
+        ]
+      },
+      {
+        "group": "memories",
+        "pages": [
+          "/mintdocs/api-reference/memories/get",
+          "/mintdocs/api-reference/memories/post",
+          "/mintdocs/api-reference/memories/delete",
+          "/mintdocs/api-reference/memories/memory_get",
+          "/mintdocs/api-reference/memories/memory_put",
+          "/mintdocs/api-reference/memories/memory_delete"
+        ]
+      },
+      {
+        "group": "others",
+        "pages": [
+          "/mintdocs/api-reference/configure/post",
+          "/mintdocs/api-reference/chat/post",
+          "/mintdocs/api-reference/search/post"
+        ]
+      }
+    ]
+  },
+  "logo": {
+    "light": "/mintdocs/logo/light.svg",
+    "dark": "/mintdocs/logo/dark.svg",
+    "href": "https://memos.openmem.net"
+  },
+  "api": {
+    "playground": {
+      "display": "simple"
+    }
+  }
+}
