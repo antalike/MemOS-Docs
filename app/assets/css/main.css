@@ -4,7 +4,16 @@
 @source "../../../content/**/*";
 
 @theme static {
+  --container-8xl: 90rem;
   --font-sans: 'Public Sans', sans-serif;
+}
+
+:root {
+  --ui-container: var(--container-8xl);
+}
+
+header>div {
+  max-width: 100vw !important;
 }
 
 /* open-api-docs-module reset styles */
@@ -24,4 +33,13 @@
 
 img[alt="MemOS Banner"] {
   width: 100%;
+}
+
+.scrollbar-hide {
+  scrollbar-width: none; 
+  -ms-overflow-style: none; 
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; 
 }

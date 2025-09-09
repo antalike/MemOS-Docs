@@ -25,7 +25,7 @@ const convertToBase64 = async () => {
     if (!response.ok) {
       throw new Error(`Failed to fetch image: ${response.status}`)
     }
-    
+
     const blob = await response.blob()
     const reader = new FileReader()
     

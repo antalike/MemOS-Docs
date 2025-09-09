@@ -1,0 +1,65 @@
+nav:
+  # You can include icons using the syntax `(ri:icon-name)`.
+  # The frontend will render these as actual icons.
+  # You can find available icons at https://icones.js.org/
+
+  - "(ri:home-line) Home":
+    - "(ri:eye-line) Overview": home/overview.md
+    - "(ri:information-line) What Is MemOS?": home/memos_intro.md
+    - "(ri:lightbulb-line) Core Concepts": home/core_concepts.md
+    - "(ri:building-2-line) Architecture": home/architecture.md
+
+  - "(ri:rocket-line) Getting Started":
+    - "(ri:install-line) Installation": getting_started/installation.md
+    - "(ri:play-line) Quick Start": getting_started/quick_start.md
+    - "(ri:bookmark-line) Your First Memory": getting_started/your_first_memory.md
+    - "(ri:file-code-line) REST API Server": getting_started/rest_api_server.md
+    - "(ri:code-line) Examples": getting_started/examples.md
+
+  - "(ri:cpu-line) MOS":
+    - "(ri:eye-line) Overview": modules/mos/overview.md
+    - "(ri:book-open-line) MemOS NEO": modules/mos/memos_neo.md
+    - "(ri:tools-line) MemOS MCP": modules/mos/memos_mcp.md
+    - "(ri:team-line) Users": modules/mos/users.md
+    - "(ri:settings-3-line) Users Configurations": modules/mos/users_configurations.md
+    - "(ri:checkbox-multiple-blank-line) MemCube": modules/mem_cube.md
+    - "(ri:book-open-line) MemReader": modules/mem_reader.md
+    - "(ri:calendar-line) MemScheduler": modules/mem_scheduler.md
+    - "(ri:robot-2-line) LLMs and Embeddings": modules/model_backend.md
+
+  - "(ri:brain-line) Memories":
+    - "(ri:database-2-line) KV Cache Memory": modules/memories/kv_cache_memory.md
+    - "(ri:book-2-line) Plaintext Memory":
+      - "(ri:file-text-line) General Textual Memory": modules/memories/general_textual_memory.md
+      - "(ri:tree-line) Tree Textual Memory": modules/memories/tree_textual_memory.md
+      - "(ri:database-line) Neo4j Graph Database": modules/memories/neo4j_graph_db.md
+      - "(ri:database-line) Nebula Graph Database": modules/memories/nebula_graph_db.md
+    - "(ri:cpu-line) Parametric Memory": modules/memories/parametric_memory.md
+
+  - "(ri:history-line) Scenario Examples":
+    - "(ri:database-2-line) Overview": cookbook/overview.md
+    - "(ri:seedling-line) Chapter 1: Your First MemCube":
+      - "(ri:cloud-line) API": cookbook/chapter1/api.md
+      - "(ri:node-tree) OLLAMA": cookbook/chapter1/ollama.md
+    - "(ri:database-2-line) Chapter 2: TreeNodeTextualMemoryMetadata": 
+      - "(ri:cloud-line) API": cookbook/chapter2/api.md
+      - "(ri:node-tree) OLLAMA": cookbook/chapter2/ollama.md
+    - "(ri:search-2-line) Chapter 3: Intelligent Novel Analysis System": cookbook/chapter3/overview.md
+    - "(ri:graduation-cap-line) Chapter 4: Using MemOS to Build a Production-Grade Knowledge Q&A System": cookbook/chapter4/overview.md
+
+  - "(ri:star-line) Best Practice":
+    - "(ri:speed-line) Performance Tuning": best_practice/performance_tuning.md
+    - "(ri:building-3-line) Memory Structure Design": best_practice/memory_structure_design.md
+    - "(ri:wifi-line) Network Workarounds": best_practice/network_workarounds.md
+    - "(ri:error-warning-line) Common Errors & Solutions": best_practice/common_errors_solutions.md
+    - "(ri:tools-line) MCP for Coze Space and Tools": best_practice/mcp_for_cozespace_and_tools.md
+
+  - "(ri:heart-line) Contribution":
+    - "(ri:eye-line) Overview": contribution/overview.md
+    - "(ri:tools-line) Setting Up": contribution/setting_up.md
+    - "(ri:git-branch-line) Development Workflow": contribution/development_workflow.md
+    - "(ri:git-commit-line) Commit Guidelines": contribution/commit_guidelines.md
+    - "(ri:article-line) Writing Docs": contribution/writing_docs.md
+    - "(ri:flask-line) Writing Tests": contribution/writing_tests.md
+
+  - "(ri:file-code-line) API Reference": api-reference/configure-memos

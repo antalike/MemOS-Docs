@@ -2,12 +2,13 @@
 const { footer } = useAppConfig()
 const route = useRoute()
 const isHomePage = computed(() => route.path === '/')
+const { t } = useI18n()
 </script>
 
 <template>
   <UFooter :class="{ 'fixed bottom-0 w-full': isHomePage }">
     <template #left>
-      {{ footer.credits }}
+      {{ t(`${footer.credits}`) }}
     </template>
 
     <template #right>

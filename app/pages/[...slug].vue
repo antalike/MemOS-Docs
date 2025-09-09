@@ -3,20 +3,29 @@ import type { ContentNavigationItem } from '@nuxt/content'
 
 const route = useRoute()
 const { toc } = useAppConfig()
-const navigation = inject<ContentNavigationItem[]>('navigation')
+const navigation = inject<ContentNavigationItem[]>('navigation', [])
+const { t, locale } = useI18n()
+const config = useRuntimeConfig()
 
 // Remove trailing slash to match content path
 const normalizedPath = route.path.replace(/\/$/, '') || '/'
 
 const { data: page } = await useAsyncData(normalizedPath, () => {
-  return queryCollection('docs').path(normalizedPath).first()
+  const docsPath = locale.value === 'cn' ? normalizedPath : `/en${normalizedPath}`
+
+  return queryCollection('docs').path(docsPath).first()
+})
+
+// Watch locale changes and refresh content
+watch(locale, async (_newLocale: string) => {
+  await refreshNuxtData(normalizedPath)
 })
 
 if (!page.value) {
   throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
 }
 
-const surround = await useSurroundWithDesc(normalizedPath, navigation || [])
+const surround = await useSurroundWithDesc(normalizedPath, navigation.value || [], locale.value, config.public.env)
 
 const description = computed(() => {
   const frontmatterDesc = Object.keys(page.value || {}).includes('desc') ? page.value?.desc : undefined
@@ -34,13 +43,18 @@ const links = computed(() => {
   if (toc?.bottom?.edit) {
     links.push({
       icon: 'i-lucide-external-link',
-      label: 'Edit this page',
+      label: 'community.edit',
       to: `${toc.bottom.edit}/${page?.value?.stem}.${page?.value?.extension}`,
       target: '_blank'
     })
   }
 
-  return [...links, ...(toc?.bottom?.links || [])].filter(Boolean)
+  return [...links, ...(toc?.bottom?.links || [])].filter(Boolean).map((item) => {
+    return {
+      ...item,
+      label: t(`${item.label}`)
+    }
+  })
 })
 
 useHead({
@@ -109,7 +123,7 @@ useHead({
               />
 
               <UPageLinks
-                :title="toc.bottom.title"
+                :title="t(`${toc.bottom.title}`)"
                 :links="links"
               />
             </div>

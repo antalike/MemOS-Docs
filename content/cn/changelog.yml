@@ -1,0 +1,136 @@
+versions:
+  - name: v1.0.0
+    date: 2025-08-07
+    changedInfo:
+      New Features:
+        - type: Playground
+          changedInfo:
+            - 开放Playground功能，并优化算法效果；
+        - type: MemCube构建
+          changedInfo:
+            - 新增一个基于小说MemCube的文字游戏demo
+        - type: 扩展评估集
+          changedInfo:
+            - 新增LongMemEval评估结果与评估脚本；
+      Improvements:
+        - type: 明文记忆功能
+          changedInfo:
+            - 互联网检索接入博查；
+            - 增加对Nebula数据库的支持；
+            - 增加对树形明文记忆search接口的上下文理解功能；
+      Bug Fixes:
+        - type: KV Cache拼接
+          changedInfo:
+            - 修复concat_cache方法；
+        - type: 明文记忆
+          changedInfo:
+            - 修复nebula搜索相关问题；
+  - name: v0.2.2
+    date: 2025-07-29
+    changedInfo:
+      New Features:
+        - type: 明文记忆
+          changedInfo:
+            - 实现互联网检索接入与 Nebula 数据库支持
+            - 增强记忆抽取的上下文理解能力
+            - 上线互联网检索接口，并接入 memreader 处理互联网消息
+        - type: KV Cache
+          changedInfo:
+            - 进行 KV Cache 评测，包括 LMCache 详细调研及性能测试
+            - 完成 MemOS vllm（0.2.1 版）在特定环境和模型下的压力测试
+            - 细化 Qwen2.5-72B-Instruct 模型上预载 KV Cache 的 ttft 测试数据并补充进报告
+            - 结合国产硬件应用，完成高 ROI 推理服务系统的第一版调研与设计
+        - type: 记忆操作模型
+          changedInfo:
+            - 完成模型训练评估并发布
+            - 发布 4b、1.7b、0.6b 模型，支持记忆抽取和整合
+      Improvements:
+        - type: 文档
+          changedInfo:
+            - 新增 Cookbook 前三个章节的英文版
+        - type: 记忆调度
+          changedInfo:
+            - 开展代码重构与功能完善工作
+            - 重构 monitor、dispatcher、retriever 等功能模块
+            - 新增 schemas 和 utils 大类代码
+            - 完善网络日志打印功能
+            - 增强调度器鲁棒性，新增异常捕获装饰器
+            - 对部分共享资源加锁
+        - type: 开发环境
+          changedInfo:
+            - 更新Docker配置
+            - 更新dim环境配置
+        - type: API增强
+          changedInfo:
+            - 增加playground上下文支持
+            - 增强产品API功能
+            - 重写查询模块
+            - 添加chat历史功能
+      Bug Fixes:
+        - type: 数据解析
+          changedInfo:
+            - 修复日期解析错误
+            - 修复memos_w_scheduler示例代码问题
+            - 修复Nebula图数据库的精细搜索bug
+            - 修复metadata过滤器的获取逻辑
+        - type: 系统集成
+          changedInfo:
+            - 对齐MOSProduct._build_system_prompt签名与MOSCore
+        - type: 明文记忆
+          changedInfo:
+            - 修复通用文本记忆处理逻辑
+            - 修复memreader组件问题
+
+  - name: v0.2.1
+    date: 2025-07-21
+    changedInfo:
+      New Features:
+        - type: MemCube功能
+          changedInfo:
+            - 新增明文记忆 + KV Cache功能，提供推理解码性能报告
+            - 完成趣味性cube功能开发，已跑通完整流程，支持embedding模型切换
+        - type: MemOS系统
+          changedInfo:
+            - 发布MemOS Neo轻量级版本，简化架构仅保留核心API模块
+            - 新增MCP支持，扩展MCP能力
+            - 构建嵌入Agent流的Pipeline文档，支持Coze框架集成
+        - type: 部署与环境支持
+          changedInfo:
+            - 新增Docker部署支持
+            - API层面支持多模型调用，兼容OpenAI/Qwen/DeepSeek等主流模型
+            - 完善embedding模型支持
+            - 新增neo4j社区版/Nebular数据库支持
+            - 新增单库多租户架构支持
+        - type: 评估与测试
+          changedInfo:
+            - 适配memos的API接口形式评估，更新评估代码
+        - type: 文档与示例
+          changedInfo:
+            - 新增Cookbook内容
+            - 新增Mud游戏示例
+
+  - name: v0.2.0
+    date: 2025-07-11
+    changedInfo:
+      New Features:
+        - type: 官网易用性更新
+          changedInfo:
+            - 增加Doc文档搜索框功能
+            - 增加中英文Doc切换功能
+            - 增加页脚转换链接和编辑页面
+        - type: 算子模型
+          changedInfo:
+            - 新增MemReader-4B小模型，专注记忆抽取操作
+            - 支持纯本地化部署，适用于受限网络环境
+            - 实现更低成本和更快速度的记忆操作，性能超越GPT-4o-mini
+            - 基于Qwen3-4b微调，结合人工和模型标注数据进行监督微调
+        - type: 框架跨平台适配
+          changedInfo:
+            - 新增Windows平台部署适配
+            - 新增Mac平台部署适配
+            - 完成Linux、Windows、macOS三大主流操作系统适配
+            - 通过Ubuntu 20.04+/CentOS、Windows 10+/11、macOS 14 Ventura+等平台测试
+            - 支持核心模块稳定运行（记忆生命周期管理、互操作协议MIP、记忆缓存调度等）
+        - type: Playground 进展
+          changedInfo:
+            - 已完成工程、前端、算法端联调，进行bug修复和调优中

@@ -1,28 +1,62 @@
 <script setup lang="ts">
 import type { ContentNavigationItem } from '@nuxt/content'
+import { getHomePath } from '~/utils'
 
-const navigation = inject<Ref<ContentNavigationItem[]>>('navigation')
-
+const route = useRoute()
+const { t, locale, setLocale } = useI18n()
 const { header } = useAppConfig()
+const homePath = computed(() => {
+  return getHomePath('/', locale.value)
+})
+// docs navigation for mobile
+const navigation = inject<ContentNavigationItem[]>('navigation', [])
+const localizedMenus = computed(() => {
+  return [
+    {
+      to: getHomePath('/', locale.value),
+      label: t('header.home')
+    },
+    {
+      to: getLangPath('/home/overview', locale.value),
+      label: t('header.docs'),
+      active: !route.path.includes('/changelog')
+    },
+    {
+      label: t('header.research'),
+      target: '_blank',
+      to: 'https://memos.openmem.net/paper_memos_v2'
+    },
+    {
+      label: t('header.openmem'),
+      target: '_blank',
+      to: getHomePath('/openmem', locale.value)
+    },
+    {
+      label: t('header.changelog'),
+      to: getLangPath('/changelog', locale.value),
+      active: route.path.includes('/changelog')
+    }
+  ]
+})
+
+function handleLocaleSwitch() {
+  setLocale(locale.value === 'en' ? 'cn' : 'en')
+}
 </script>
 
 <template>
   <UHeader
-    :ui="{
-      center: 'flex justify-center items-center',
-      container: 'flex items-center justify-between gap-3 h-full'
-    }"
-    :to="header?.to || '/'"
+    :to="homePath"
   >
     <template
       #left
     >
-      <NuxtLink :to="header?.to || '/'">
+      <NuxtLink :to="homePath">
         <LogoPro class="w-auto h-6 shrink-0" />
       </NuxtLink>
     </template>
 
-    <UNavigationMenu :items="header.memu" class="justify-center">
+    <UNavigationMenu :items="localizedMenus" class="justify-center">
       <template #item="{ item }">
         <div>{{ item.label }}</div>
       </template>
@@ -31,12 +65,20 @@ const { header } = useAppConfig()
     <template #right>
       <UContentSearchButton
         v-if="header?.search"
+        class="cursor-pointer"
       />
 
+      <UButton
+        color="neutral"
+        variant="ghost"
+        class="cursor-pointer"
+        @click="handleLocaleSwitch"
+      >
+        <LocaleSwitch class="w-[20px] h-[20px]" />
+      </UButton>
+
       <UModal>
-        <UTooltip text="Contact Us" class="hidden lg:flex" :delay-duration="0">
-          <UButton color="neutral" variant="ghost" icon="ri:wechat-fill" />
-        </UTooltip>
+        <UButton color="neutral" variant="ghost" icon="ri:wechat-fill" class="cursor-pointer"/>
         <template #content>
           <img
             src="https://statics.memtensor.com.cn/memos/contact-ui.png"
@@ -56,6 +98,14 @@ const { header } = useAppConfig()
     </template>
 
     <template #body>
+      <UNavigationMenu orientation="vertical" :items="localizedMenus" class="justify-center">
+        <template #item="{ item }">
+          <div>{{ item.label }}</div>
+        </template>
+      </UNavigationMenu>
+
+      <USeparator type="dashed" class="mt-4 mb-6" />
+
       <UContentNavigation
         highlight
         :navigation="navigation"

@@ -884,13 +884,13 @@
             "type": "string",
             "title": "Session Id",
             "description": "Session ID for the MOS. This is used to distinguish between different dialogue",
-            "default": "5cc9f7d7-74c3-4bb3-9b4f-11adf416530b"
+            "default": "0ce84b9c-0615-4b9d-83dd-fba50537d5d3"
           },
           "chat_model": {
-            "$ref": "#/components/schemas/LLMConfigFactory",
+            "$ref": "#/components/schemas/LLMConfigFactory"
           },
           "mem_reader": {
-            "$ref": "#/components/schemas/MemReaderConfigFactory",
+            "$ref": "#/components/schemas/MemReaderConfigFactory"
           },
           "mem_scheduler": {
             "anyOf": [
@@ -902,6 +902,9 @@
               }
             ],
             "description": "Memory scheduler configuration for managing memory operations"
+          },
+          "user_manager": {
+            "$ref": "#/components/schemas/UserManagerConfigFactory"
           },
           "max_turns_window": {
             "type": "integer",
@@ -937,6 +940,12 @@
             "type": "boolean",
             "title": "Enable Mem Scheduler",
             "description": "Enable memory scheduler for automated memory management",
+            "default": false
+          },
+          "PRO_MODE": {
+            "type": "boolean",
+            "title": "Pro Mode",
+            "description": "Enable PRO mode for complex query decomposition",
             "default": false
           }
         },
@@ -1361,6 +1370,25 @@
         ],
         "title": "UserListResponse",
         "description": "Response model for user list operations."
+      },
+      "UserManagerConfigFactory": {
+        "properties": {
+          "backend": {
+            "type": "string",
+            "title": "Backend",
+            "description": "Backend for user manager",
+            "default": "sqlite"
+          },
+          "config": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Config",
+            "description": "Configuration for the user manager backend"
+          }
+        },
+        "type": "object",
+        "title": "UserManagerConfigFactory",
+        "description": "Factory for user manager configurations."
       },
       "UserResponse": {
         "properties": {

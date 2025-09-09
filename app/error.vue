@@ -1,9 +1,16 @@
 <script setup lang="ts">
 import type { NuxtError } from '#app'
 
-defineProps<{
+const { locale } = useI18n()
+
+const props = defineProps<{
   error: NuxtError
 }>()
+
+// Immediately redirect to /home/overview if it's a 404 error
+if (props.error?.statusCode === 404) {
+  navigateTo(getLangPath('/home/overview', locale.value))
+}
 
 useHead({
   htmlAttrs: {
@@ -11,7 +18,6 @@ useHead({
     class: 'dark'
   }
 })
-
 
 const { data: navigation } = await useAsyncData('navigation', () => queryCollectionNavigation('docs'))
 const { data: files } = useLazyAsyncData('search', () => queryCollectionSearchSections('docs'), {
@@ -25,7 +31,9 @@ provide('navigation', navigation)
   <UApp>
     <AppHeader />
 
-    <UError :error="error" />
+    <template v-if="error?.statusCode !== 404">
+      <UError :error="error" />
+    </template>
 
     <AppFooter />
 

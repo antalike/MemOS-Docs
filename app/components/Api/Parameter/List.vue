@@ -1,0 +1,28 @@
+<script setup lang="ts">
+import type { ParametersProp } from './index.vue'
+
+defineProps<{
+  title: string
+  data: ParametersProp[]
+}>()
+</script>
+
+<template>
+  <div>
+    <ApiSectionHeader :title="title" />
+    <template
+      v-for="(param, index) in data"
+      :key="index"
+    >
+      <div class="border-gray-100 dark:border-gray-800 border-b last:border-b-0">
+        <div class="py-6">
+          <ApiParameterLine
+            :name="param.name"
+            :required="param.required"
+            :schema="param.schema"
+          />
+        </div>
+      </div>
+    </template>
+  </div>
+</template>

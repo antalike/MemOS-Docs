@@ -1,6 +1,39 @@
 import yaml from '@rollup/plugin-yaml'
+import type { NuxtConfig } from '@nuxt/schema'
+import pkg from './package.json'
+import { getCnRoutes } from './scripts/extract-routes.mjs'
 
-const config = {
+const cnRoutes = getCnRoutes()
+// Get locale from command line arguments or environment variable
+const env = process.env.NUXT_ENV_CONFIG || 'prod'
+
+const armsScript = process.env.NODE_ENV === 'production'
+  ? [{ innerHTML: `var _czc = _czc || [];
+        (function () {
+          var um = document.createElement("script");
+          um.src = "https://v1.cnzz.com/z.js?id=1281423419&async=1";
+          var s = document.getElementsByTagName("script")[0];
+          s.parentNode.insertBefore(um, s);
+        })();`,
+    type: 'text/javascript' }]
+  : []
+
+const envConfig = await import(`./envConfig/config.${env}.ts`).then(m => m.default).catch(() => {
+  return {
+    env: 'prod',
+    enDomain: 'https://memos-docs.openmem.net'
+  }
+})
+
+const config: NuxtConfig = {
+  app: {
+    head: {
+      script: [
+        ...armsScript
+      ]
+    }
+  },
+
   modules: [
     '@nuxt/eslint',
     '@nuxt/image',
@@ -19,8 +52,42 @@ const config = {
           }
         }
       }
-    ]
+    ],
+    '@nuxtjs/i18n'
   ],
+
+  runtimeConfig: {
+    public: {
+      ...envConfig,
+      version: pkg.version
+    }
+  },
+
+  i18n: {
+    locales: [
+      {
+        code: 'cn',
+        iso: 'zh-CN',
+        name: '中文'
+      },
+      {
+        code: 'en',
+        iso: 'en-US',
+        name: 'English'
+      }
+    ],
+    defaultLocale: 'en',
+    // locale prefix added for every locale except default
+    strategy: 'prefix_except_default',
+    vueI18n: './i18n.config.ts',
+    detectBrowserLanguage: {
+      useCookie: true,
+      cookieKey: 'MEMOS_LANG',
+      cookieDomain: 'openmem.net',
+      fallbackLocale: 'en'
+    },
+    pages: undefined
+  },
 
   devtools: {
     enabled: true
@@ -45,7 +112,7 @@ const config = {
     build: {
       markdown: {
         highlight: {
-          langs: ['bash', 'ts', 'typescript', 'diff', 'vue', 'json', 'yml', 'css', 'mdc']
+          langs: ['bash', 'ts', 'typescript', 'diff', 'vue', 'json', 'yml', 'css', 'mdc', 'python', 'py', 'mermaid']
         }
       }
     }
@@ -60,9 +127,20 @@ const config = {
   nitro: {
     prerender: {
       routes: [
-        '/'
+        '/',
+        '/cn',
+        ...cnRoutes
       ],
       crawlLinks: true
+    }
+  },
+
+  routeRules: {
+    '/': {
+      redirect: '/home/overview'
+    },
+    '/cn': {
+      redirect: '/cn/home/overview'
     }
   },
 
@@ -80,9 +158,8 @@ const config = {
   },
 
   uiPro: {
-    licenseKey: process.env.NUXT_UI_PRO_LICENSE
+    license: process.env.NUXT_UI_PRO_LICENSE
   }
 }
 
-// @see https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig(config)

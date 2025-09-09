@@ -1,4 +1,4 @@
-import { defineContentConfig, defineCollection, z } from '@nuxt/content'
+import { defineCollection, defineContentConfig, z } from '@nuxt/content'
 
 const schema = z.object({
   title: z.string(),
@@ -27,12 +27,24 @@ const schema = z.object({
 export default defineContentConfig({
   collections: {
     docs: defineCollection({
-      type: 'page',
       source: {
-        include: '**',
-        exclude: ['index.md']
+        include: '**'
       },
+      type: 'page',
       schema
+    }),
+    openapi: defineCollection({
+      type: 'data',
+      source: 'api.json',
+      schema: z.object({
+        openapi: z.string(),
+        info: z.record(z.string(), z.any()).optional(),
+        paths: z.record(
+          z.string(),
+          z.record(z.string(), z.any())
+        ),
+        components: z.record(z.string(), z.any()).optional()
+      }).passthrough()
     })
   }
 })

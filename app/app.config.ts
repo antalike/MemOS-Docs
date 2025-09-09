@@ -28,27 +28,19 @@ export default defineAppConfig({
       'to': 'https://github.com/MemTensor/MemOS',
       'target': '_blank',
       'aria-label': 'GitHub'
-    }],
-    memu: [{
-      to: 'https://memos.openmem.net',
-      label: 'Home'
-    }, {
-      label: 'Research',
-      target: '_blank',
-      to: 'https://memos.openmem.net/paper_memos_v2'
     }]
   },
   footer: {
-    credits: '© 2025 Memtensor, Inc. All rights reserved.',
+    credits: 'footer.copyright',
     colorMode: false
   },
   toc: {
     bottom: {
-      title: 'Community',
+      title: 'community.title',
       edit: 'https://github.com/MemTensor/MemOS-Docs/edit/main/content',
       links: [{
         icon: 'i-lucide-star',
-        label: 'Star on GitHub',
+        label: 'community.stars',
         to: 'https://github.com/MemTensor/MemOS',
         target: '_blank'
       }]

@@ -1,9 +1,24 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
 const route = useRoute()
 
-const contentNavigation = useContentNavigation()
-const { data: files } = useLazyAsyncData('search', () => queryCollectionSearchSections('docs'), {
-  server: false
+const { locale } = useI18n()
+const contentNavigation = useContentNavigation(locale)
+
+const { data: files } = useLazyAsyncData(`search`, () => queryCollectionSearchSections('docs'), {
+  server: false,
+  watch: [locale]
+})
+
+// Process files to remove en language prefix
+const processedFiles = computed(() => {
+  if (!files.value) return []
+
+  return files.value.filter(file => file.id.startsWith(`/${locale.value}`)).map(file => ({
+    ...file,
+    id: locale.value === 'en' ? file.id.replace(`/${locale.value}`, '') : file.id
+  }))
 })
 
 useHead({
@@ -19,6 +34,17 @@ useHead({
   }
 })
 
+function showContentNavigation() {
+  return route.path !== '/' && !isApiPage() && !route.path.includes('changelog')
+}
+
+function isApiPage() {
+  return route.path.startsWith('/docs/api')
+    || route.path.startsWith('/cn/docs/api/')
+    || route.path.startsWith('/api-reference')
+    || route.path.startsWith('/cn/api-reference')
+}
+
 provide('navigation', contentNavigation)
 </script>
 
@@ -26,9 +52,10 @@ provide('navigation', contentNavigation)
   <UApp>
     <NuxtLoadingIndicator />
 
-    <AppHeader v-if="!route.path.startsWith('/docs/api/')"/>
+    <AppHeader v-if="!isApiPage()" />
 
-    <template v-if="route.path !== '/' && !route.path.startsWith('/docs/api')">
+    <!-- Document pages -->
+    <template v-if="showContentNavigation()">
       <UMain>
         <UContainer>
           <UPage>
@@ -74,18 +101,28 @@ provide('navigation', contentNavigation)
       </UMain>
     </template>
 
-    <!-- Document home page -->
-    <template v-else>
+    <!-- Changelog page -->
+    <template v-if="!showContentNavigation() && route.path !== '/'">
       <NuxtLayout>
         <NuxtPage />
       </NuxtLayout>
     </template>
 
-    <AppFooter v-if="!route.path.startsWith('/docs/api')"/>
+    <!-- Document home page -->
+    <template v-if="route.path === '/'">
+      <ClientOnly>
+        <NuxtLayout>
+          <NuxtPage />
+        </NuxtLayout>
+      </ClientOnly>
+    </template>
+
+    <!-- Document footer -->
+    <AppFooter v-if="!isApiPage" />
 
     <ClientOnly>
       <LazyUContentSearch
-        :files="files"
+        :files="processedFiles"
         :navigation="contentNavigation"
       />
     </ClientOnly>

@@ -1,5 +1,6 @@
 import type { ContentNavigationItem } from '@nuxt/content'
-import settings from '../../content/settings.yml'
+import enSettings from '../../content/en/settings.yml'
+import cnSettings from '../../content/cn/settings.yml'
 
 interface ParsedTitle {
   icon?: string
@@ -19,7 +20,7 @@ const parseIconAndTitle = (raw: string): ParsedTitle => {
 type RawNav = string | Record<string, RawNav[] | string>
 
 // Recursively convert yml nav structure to @nuxt/content navigation structure
-const toContentNav = (node: RawNav): ContentNavigationItem | null => {
+const toContentNav = (node: RawNav, locale: string): ContentNavigationItem | null => {
   // String form: "(icon) title: path.md"
   if (typeof node === 'string') {
     const [rawTitle, mdPath] = node.split(': ')
@@ -30,7 +31,7 @@ const toContentNav = (node: RawNav): ContentNavigationItem | null => {
 
     return {
       title,
-      path: `/${stem}`,
+      path: locale === 'cn' ? `/cn/${stem}` : `/${stem}`,
       stem,
       ...(icon ? { icon } : {}),
       framework: null,
@@ -51,40 +52,75 @@ const toContentNav = (node: RawNav): ContentNavigationItem | null => {
     const stem = title.toLowerCase().replace(/\s+/g, '_')
     return {
       title,
-      path: `/${stem}`,
+      path: locale === 'cn' ? `/cn/${stem}` : `/${stem}`,
       stem,
       ...(icon ? { icon } : {}),
-      children: childrenOrPath.map(toContentNav).filter(Boolean) as ContentNavigationItem[],
+      children: childrenOrPath.map((item) => { return toContentNav(item, locale) }).filter(Boolean) as ContentNavigationItem[],
       page: false,
-      class: [],
+      class: []
     }
   }
 
   const stem = (childrenOrPath as string).replace(/\.md$/, '')
-  const isApiReference = title === 'API Reference' || rawTitle.includes('API Reference')
+  const isApiReference = stem.includes('api-reference')
 
   return {
     title,
-    path: `/${stem}`,
+    path: locale === 'cn' ? `/cn/${stem}` : `/${stem}`,
     stem,
     ...(icon ? { icon } : {}),
     framework: null,
     module: null,
     class: [],
-    target: isApiReference ? '_blank' : undefined,
+    target: isApiReference ? '_blank' : undefined
   }
 }
 
-const parseNavigation = (navItems: RawNav[]): ContentNavigationItem[] =>
-  navItems.map(toContentNav).filter(Boolean) as ContentNavigationItem[]
+const parseNavigation = (navItems: RawNav[], locale: string): ContentNavigationItem[] => {
+  if (!Array.isArray(navItems)) {
+    console.warn('parseNavigation received non-array input:', navItems)
+    return []
+  }
+  return navItems.map((item) => {
+    return toContentNav(item, locale)
+  }).filter(Boolean) as ContentNavigationItem[]
+}
 
-export const useContentNavigation = () => {
-  return parseNavigation((settings as any).nav || [])
+export const useContentNavigation = (locale: Ref<string>) => {
+  const navigation = computed(() => {
+    try {
+      const settings = locale.value === 'cn' ? cnSettings : enSettings
+      if (!settings || typeof settings !== 'object') {
+        console.error('Invalid settings object:', settings)
+        return []
+      }
+
+      const navItems = (settings as { nav?: RawNav[] }).nav
+      if (!navItems) {
+        console.error('No nav items found in settings:', settings)
+        return []
+      }
+
+      return parseNavigation(navItems, locale.value)
+    } catch (error) {
+      console.error('Error in useContentNavigation:', error)
+      return []
+    }
+  })
+  return navigation
 }
 
 // Flatten navigation tree into a linear list (pages only)
-export const flattenNavigation = (items: ContentNavigationItem[] = []): ContentNavigationItem[] =>
-  items.flatMap(item => [item, ...(item.children ? flattenNavigation(item.children) : [])])
+export const flattenNavigation = (items: ContentNavigationItem[] = []): ContentNavigationItem[] => {
+  if (!Array.isArray(items)) {
+    console.warn('flattenNavigation received non-array input:', items)
+    return []
+  }
+  return items.flatMap((item) => {
+    if (!item) return []
+    return [item, ...(item.children ? flattenNavigation(item.children) : [])]
+  })
+}
 
 // Get previous and next items (surround) for a given path
 export const getSurround = (
@@ -104,18 +140,22 @@ export type SurroundItem = ContentNavigationItem & { description?: string }
 // Enrich surround items with front-matter description field
 export const useSurroundWithDesc = async (
   path: string,
-  navItems: ContentNavigationItem[] = []
+  navItems: ContentNavigationItem[] = [],
+  locale: string = 'en',
+  env: string = 'prod'
 ): Promise<SurroundItem[]> => {
   const base = getSurround(path, navItems)
+
   if (base.length === 0) return []
 
   const docs = await Promise.all(
-    base.map(item =>
-      // Fetch only the description of the neighbour page
-      queryCollection('docs')
-        .path(item.path)
-        .first()
-    )
+    base.map((item) => {
+      if (env === 'dev' && item.path.startsWith('/cn')) {
+        return queryCollection('docs').path(`${item.path}`).first()
+      }
+
+      return queryCollection('docs').path(`/${locale}${item.path}`).first()
+    })
   )
 
   return base.map((item, i) => ({

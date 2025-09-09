@@ -1,0 +1,138 @@
+versions:
+  - name: v1.0.0
+    date: 2025-08-07
+    changedInfo:
+      New Features:
+        - type: Playground
+          changedInfo:
+            - Expanded Playground features and algorithm performance.
+        - type: MemCube Construction
+          changedInfo:
+            - Added a text game demo based on the MemCube novel.
+        - type: Extended Evaluation Set
+          changedInfo:
+            - Added LongMemEval evaluation results and scripts.
+      Improvements:
+        - type: Plaintext Memory
+          changedInfo:
+            - Integrated internet search with Bocha.
+            - Added support for Nebula database.
+            - Added contextual understanding for the tree-structured plaintext memory search interface.
+      Bug Fixes:
+        - type: KV Cache Concatenation
+          changedInfo:
+            - Fixed the concat_cache method.
+        - type: Plaintext Memory
+          changedInfo:
+            - Fixed Nebula search-related issues.
+  - name: v0.2.2
+    date: 2025-07-29
+    changedInfo:
+      New Features:
+        - type: Explicit Memory
+          changedInfo:
+            - Implemented internet search integration with Nebula database support
+            - Enhanced contextual understanding for memory extraction
+            - Deployed internet search interface integrated with memreader for web message processing
+        - type: KV Cache
+          changedInfo:
+            - Conducted KV Cache evaluation including LMCache comprehensive research and performance testing
+            - Completed stress testing for MemOS vllm (v0.2.1) in specific environments and models
+            - Refined ttft test data for preloaded KV Cache on Qwen2.5-72B-Instruct model and updated report
+            - Completed initial research and design for high-ROI inference service system using domestic hardware
+        - type: Memory Operation Model
+          changedInfo:
+            - Completed model training evaluation and release
+            - Released 4b, 1.7b and 0.6b models supporting memory extraction and integration
+      Improvements:
+        - type: Documentation
+          changedInfo:
+            - Added English version for first three chapters of Cookbook
+        - type: Memory Scheduling
+          changedInfo:
+            - Performed code refactoring and functionality improvements
+            - Refactored functional modules including monitor, dispatcher and retriever
+            - Added major code categories: schemas and utils
+            - Enhanced network logging functionality
+            - Improved scheduler robustness with new exception-catching decorators
+            - Implemented locking for shared resources
+        - type: Development Environment
+          changedInfo:
+            - Updated Docker configuration
+            - Updated dim environment configuration
+        - type: API Enhancements
+          changedInfo:
+            - Added playground context support
+            - Enhanced product API functionality
+            - Rewrote query module
+            - Implemented chat history feature
+      Bug Fixes:
+        - type: Data Parsing
+          changedInfo:
+            - Fixed date parsing error
+            - Fixed memos_w_scheduler example code issues
+            - Fixed fine-grained search bug in Nebula graph database
+            - Fixed metadata filter retrieval logic
+        - type: System Integration
+          changedInfo:
+            - Aligned MOSProduct._build_system_prompt signature with MOSCore
+        - type: Explicit Memory
+          changedInfo:
+            - Fixed general text memory processing logic
+            - Fixed memreader component issues
+
+  - name: v0.2.1
+    date: 2025-07-21
+    changedInfo:
+      New Features:
+        - type: MemCube Features
+          changedInfo:
+            - Added plaintext memory + KV Cache functionality with reasoning and decoding performance report
+            - Completed development of interactive cube feature with full workflow support and embedding model switching
+        - type: MemOS System
+          changedInfo:
+            - Released MemOS Neo lightweight version with simplified architecture and core API modules
+            - Added MCP support research and preparation work, expanding MCP capabilities
+            - Created embedded Agent flow Pipeline documentation with Coze framework integration
+        - type: Deployment & Environment
+          changedInfo:
+            - Added Docker deployment support
+            - Enhanced API layer with multi-model support, compatible with OpenAI/Qwen/DeepSeek and other mainstream models
+            - Improved embedding model support
+            - Added neo4j Community Edition/Nebular database support
+            - Implemented multi-tenant architecture support within single database
+        - type: Evaluation & Testing
+          changedInfo:
+            - Adapted and evaluated memos API interface format, updated evaluation code
+        - type: Documentation & Examples
+          changedInfo:
+            - Added new Cookbook content
+            - Included Mud game example
+
+  - name: v0.2.0
+    date: 2025-07-11
+    changedInfo:
+      New Features:
+        - type: Website Usability Updates
+          changedInfo:
+            - Added documentation search functionality
+            - Implemented Chinese/English documentation switching
+            - Enhanced footer navigation links and page editing features
+        - type: Memory Operator Model
+          changedInfo:
+            - Introduced MemReader-4B small model for memory extraction operations
+            - Enabled fully local deployment for restricted network environments
+            - Achieved lower cost and faster memory operations with performance exceeding GPT-4o-mini
+            - Fine-tuned based on Qwen3-4b with human and model annotation data using supervised fine-tuning
+        - type: Cross-Platform Framework Adaptation
+          changedInfo:
+            - Added Windows platform deployment support
+            - Added Mac platform deployment support
+            - Completed adaptation for Linux, Windows, and macOS mainstream operating systems
+            - Passed testing on Ubuntu 20.04+/CentOS, Windows 10+/11, macOS 14 Ventura+ platforms
+            - Supports stable operation of core modules (memory lifecycle management, MIP protocol, memory cache scheduling)
+        - type: Playground Progress
+          changedInfo:
+            - Completed engineering, front-end, and algorithm end-to-end connection, and bug fixing and optimization in progress
+
+
