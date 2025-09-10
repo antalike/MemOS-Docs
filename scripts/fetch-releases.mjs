@@ -63,7 +63,6 @@ function processReleases(data) {
 async function fetchReleases() {
   try {
     const token = process.env.GITHUB_TOKEN
-    console.log('GITHUB_TOKEN:', token)
     if (!token) {
       console.warn('Warning: GITHUB_TOKEN not set. API rate limits may apply.')
     }
