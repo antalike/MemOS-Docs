@@ -235,7 +235,7 @@ function handleTabChange(val: string | number) {
       </div>
     </UContainer>
 
-    <LayzyStarsBg />
+    <StarsBg />
   </UPage>
 </template>
 

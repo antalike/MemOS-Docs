@@ -37,7 +37,7 @@ import pageYml from './.index.yml'
           />
         </template>
       </template>
-      <LazyStarsBg />
+      <StarsBg />
     </UPageHero>
   </UPage>
 </template>

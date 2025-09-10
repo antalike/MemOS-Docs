@@ -24,15 +24,15 @@ versions:
     date: 2025-08-07
     changedInfo:
       New Features:
+        - type: Playground
+          changedInfo:
+            - Expanded Playground features and algorithm performance.
         - type: MemCube Construction
           changedInfo:
             - Added a text game demo based on the MemCube novel.
         - type: Extended Evaluation Set
           changedInfo:
             - Added LongMemEval evaluation results and scripts.
-        - type: Playground
-          changedInfo:
-            - Expanded Playground features and algorithm performance.
       Improvements:
         - type: Plaintext Memory
           changedInfo:
@@ -101,7 +101,7 @@ versions:
           changedInfo:
             - Fixed general text memory processing logic
             - Fixed memreader component issues
-            -
+
   - name: v0.2.1
     date: 2025-07-21
     changedInfo:
