@@ -1,6 +1,265 @@
 {
   "versions": [
     {
+      "releaseUrl": "https://github.com/MemTensor/MemOS/releases/tag/v1.0.1",
+      "name": "v1.0.1",
+      "date": "2025-09-10",
+      "changedInfo": [
+        {
+          "type": "feat",
+          "description": "use different template for different language input",
+          "author": "Nyakult",
+          "pr": 232,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/232"
+        },
+        {
+          "type": "fix",
+          "description": "time hullucination",
+          "author": "CaralHsi",
+          "pr": 234,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/234"
+        },
+        {
+          "type": "fix",
+          "description": "chat time bug",
+          "author": "CaralHsi",
+          "pr": 235,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/235"
+        },
+        {
+          "type": "push",
+          "description": "locomo rag eval code",
+          "author": "CSLiuPeng",
+          "pr": 180,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/180"
+        },
+        {
+          "type": "feat",
+          "description": "add further questions for dialogue",
+          "author": "fridayL",
+          "pr": 236,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/236"
+        },
+        {
+          "type": "fix",
+          "description": "fix list user bugs and multi-user-examples get_all args",
+          "author": "fridayL",
+          "pr": 237,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/237"
+        },
+        {
+          "type": "fix",
+          "description": "nebula bug",
+          "author": "CaralHsi",
+          "pr": 242,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/242"
+        },
+        {
+          "type": "feat",
+          "description": "change reference position and reorganize code",
+          "author": "fridayL",
+          "pr": 240,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/240"
+        },
+        {
+          "type": "feat",
+          "description": "reject answer",
+          "author": "CaralHsi",
+          "pr": 243,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/243"
+        },
+        {
+          "type": "feat",
+          "description": "support retrieval from specified memos_cube",
+          "author": "CaralHsi",
+          "pr": 244,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/244"
+        },
+        {
+          "type": "feat",
+          "description": "modify product answer prompt",
+          "author": "CaralHsi",
+          "pr": 245,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/245"
+        },
+        {
+          "type": "feat",
+          "description": "modify reference format",
+          "author": "CaralHsi",
+          "pr": 246,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/246"
+        },
+        {
+          "type": "feat",
+          "description": "memos add moscube turnoff",
+          "author": "fridayL",
+          "pr": 247,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/247"
+        },
+        {
+          "type": "fix",
+          "description": "fix memcube path bug for docker and change further question prompt",
+          "author": "fridayL",
+          "pr": 248,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/248"
+        },
+        {
+          "type": "feat",
+          "description": "add chat complete api for no-stream and  rewrite chat func for moscore",
+          "author": "fridayL",
+          "pr": 253,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/253"
+        },
+        {
+          "type": "fix",
+          "description": "mem-reader bug",
+          "author": "CaralHsi",
+          "pr": 255,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/255"
+        },
+        {
+          "type": "feat",
+          "description": "modify nebula session pool",
+          "author": "CaralHsi",
+          "pr": 259,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/259"
+        },
+        {
+          "type": "fix",
+          "description": "general_text add user_id",
+          "author": "fridayL",
+          "pr": 260,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/260"
+        },
+        {
+          "type": "feat",
+          "description": "Asynchronous processing of logs, notifications and memory addit…",
+          "author": "lijicode",
+          "pr": 261,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/261"
+        },
+        {
+          "type": "feat",
+          "description": "mos add load sdk for user",
+          "author": "fridayL",
+          "pr": 263,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/263"
+        },
+        {
+          "type": "feat",
+          "description": "enhance NebulaGraph pool management & improve Searcher usage logging",
+          "author": "CaralHsi",
+          "pr": 265,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/265"
+        },
+        {
+          "type": "feat",
+          "description": "add custom logger",
+          "author": "CarltonXiang",
+          "pr": 217,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/217"
+        },
+        {
+          "type": "feat",
+          "description": "update chatbot for postprocessing memory",
+          "author": "fridayL",
+          "pr": 267,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/267"
+        },
+        {
+          "type": "feat",
+          "description": "modify mem-reader prompt",
+          "author": "CaralHsi",
+          "pr": 273,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/273"
+        },
+        {
+          "type": "feat",
+          "description": "fix stream output and add openai stream",
+          "author": "fridayL",
+          "pr": 276,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/276"
+        },
+        {
+          "type": "feat",
+          "description": "add reranker",
+          "author": "CaralHsi",
+          "pr": 277,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/277"
+        },
+        {
+          "type": "fix",
+          "description": "reranker config bug",
+          "author": "CaralHsi",
+          "pr": 278,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/278"
+        },
+        {
+          "type": "feat",
+          "description": "adjust similarity threshold",
+          "author": "CaralHsi",
+          "pr": 279,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/279"
+        },
+        {
+          "type": "feat",
+          "description": "set minimun returned memories back to 3",
+          "author": "CaralHsi",
+          "pr": 280,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/280"
+        },
+        {
+          "type": "feat",
+          "description": "change mem prompt",
+          "author": "fridayL",
+          "pr": 281,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/281"
+        },
+        {
+          "type": "feat",
+          "description": "internet search speed and reranker",
+          "author": "CaralHsi",
+          "pr": 282,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/282"
+        },
+        {
+          "type": "feat",
+          "description": "update filter mem",
+          "author": "fridayL",
+          "pr": 285,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/285"
+        },
+        {
+          "type": "feat",
+          "description": "updatebug",
+          "author": "fridayL",
+          "pr": 287,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/287"
+        },
+        {
+          "type": "feat",
+          "description": "modify self intro",
+          "author": "CaralHsi",
+          "pr": 288,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/288"
+        },
+        {
+          "type": "chore",
+          "description": "Change version to v1.0.1",
+          "author": "fridayL",
+          "pr": 290,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/290"
+        },
+        {
+          "type": "chore",
+          "description": "bump version to v1.0.1",
+          "author": "CaralHsi",
+          "pr": 275,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/275"
+        }
+      ]
+    },
+    {
       "releaseUrl": "https://github.com/MemTensor/MemOS/releases/tag/v1.0.0",
       "name": "v1.0.0",
       "date": "2025-08-07",
