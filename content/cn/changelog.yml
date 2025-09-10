@@ -1,4 +1,25 @@
 versions:
+  - name: v1.0.1
+    date: 2025-09-10
+    changedInfo:
+      New Features:
+        - type: 群答疑机器人
+          changedInfo:
+            - 基于MemOS Cube构建群答疑机器人上线
+        - type: KV-Cache性能优化
+          changedInfo:
+            - 更新Kv-Cache在不同GPU部署方案上的对比实验数据
+            - 优化测试benchmark与统计方式
+        - type: 明文记忆增强
+          changedInfo:
+            - 增加明文记忆Reranker排序功能
+        - type: Playground更新
+          changedInfo:
+            - PlayGround版本更新，同步更新以上新特性
+      Improvements:
+        - type: 明文记忆优化
+          changedInfo:
+            - 优化明文记忆幻觉问题
   - name: v1.0.0
     date: 2025-08-07
     changedInfo:
