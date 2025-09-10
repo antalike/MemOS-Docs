@@ -1,4 +1,25 @@
 versions:
+  - name: v1.0.1
+    date: 2025-09-10
+    changedInfo:
+      New Features:
+        - type: Group Q&A Bot
+          changedInfo:
+            - Launched group Q&A bot based on MemOS Cube
+        - type: KV-Cache Performance Optimization
+          changedInfo:
+            - Updated comparative experimental data for KV-Cache on different GPU deployment schemes
+            - Optimized test benchmarks and statistical methods
+        - type: Plaintext Memory Enhancement
+          changedInfo:
+            - Added Reranker sorting functionality for plaintext memory
+        - type: Playground Updates
+          changedInfo:
+            - Updated Playground version with all the above new features
+      Improvements:
+        - type: Plaintext Memory Optimization
+          changedInfo:
+            - Optimized plaintext memory hallucination issues
   - name: v1.0.0
     date: 2025-08-07
     changedInfo:

@@ -62,10 +62,16 @@ function processReleases(data) {
 
 async function fetchReleases() {
   try {
+    const token = process.env.GITHUB_TOKEN
+    if (!token) {
+      console.warn('Warning: GITHUB_TOKEN not set. API rate limits may apply.')
+    }
+
     console.log('Fetching releases from MemOS repository...')
     const response = await fetch('https://api.github.com/repos/MemTensor/MemOS/releases', {
       headers: {
-        Accept: 'application/vnd.github.v3+json'
+        Accept: 'application/vnd.github.v3+json',
+        ...(token && { Authorization: `token ${token}` })
       }
     })
     if (!response.ok) {

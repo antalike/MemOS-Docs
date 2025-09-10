@@ -40,7 +40,7 @@ console.log('🏗️ Starting documentation build...')
 try {
   const buildCommand = process.platform === 'win32'
     ? `set NUXT_ENV_CONFIG=${env}&& set NUXT_PUBLIC_LOCALE=${locale}&& nuxt generate`
-    : `NUXT_ENV_CONFIG=${env} NUXT_PUBLIC_LOCALE=${locale} nuxt generate`
+    : `NUXT_ENV_CONFIG=${env} nuxt generate`
 
   execSync(buildCommand, {
     stdio: 'inherit',
