@@ -2,27 +2,26 @@ nav:
   # You can include icons using the syntax `(ri:icon-name)`.
   # The frontend will render these as actual icons.
   # You can find available icons at https://icones.js.org/
-  
-  # - "(ri:book-line) 概览":
-  #   - "(ri:home-line) MemOS简介": overview/index.md
-  #   - "(ri:cpu-line) 算法原理概述": overview/algorithm.md
-  #   - "(ri:question-line) 常见问题": overview/faq.md
-  #   - "(ri:rocket-line) 快速开始":
-  #     - "(ri:add-line) 记忆生产": overview/quick_start/mem_create.md
-  #     - "(ri:calendar-line) 记忆调度": overview/quick_start/mem_schedule.md
-  #     - "(ri:refresh-line) 记忆生命周期管理": overview/quick_start/mem_lifecycle.md
-  #     - "(ri:search-line) 记忆召回和指令补全": overview/quick_start/mem_recall.md
-  
-  # - "(ri:dashboard-line) 云服务平台":
-  #   - "(ri:eye-line) 概览": dashboard/overview.md
-  #   - "(ri:play-line) 快速开始": dashboard/quick_start.md
-  #   - "(ri:shield-line) 配额和限制": dashboard/limit.md
+  - "(ri:book-line) 概览":
+    - "(ri:home-line) MemOS简介": overview/introduction.md
+    - "(ri:cpu-line) 算法原理概述": overview/algorithm.md
+    - "(ri:question-line) 常见问题": overview/faq.md
+    - "(ri:rocket-line) 快速开始":
+      - "(ri:add-line) 记忆生产": overview/quick_start/mem_production.md
+      - "(ri:calendar-line) 记忆调度": overview/quick_start/mem_schedule.md
+      - "(ri:refresh-line) 记忆生命周期管理": overview/quick_start/mem_lifecycle.md
+      - "(ri:search-line) 记忆召回和指令补全": overview/quick_start/mem_recall.md
 
-  # - "(ri:lightbulb-line) 使用场景":
-  #   - "(ri:money-dollar-circle-line) 理财助手": usecase/financial_assistant.md
-  #   - "(ri:heart-line) 生活助手": usecase/life_assistant.md
-  #   - "(ri:edit-line) 写作助手": usecase/writting_assistant.md
+  - "(ri:dashboard-line) 云服务平台":
+    - "(ri:eye-line) 概览": dashboard/overview.md
+    - "(ri:play-line) 快速开始": dashboard/quick_start.md
+    - "(ri:shield-line) 配额和限制": dashboard/limit.md
 
+  - "(ri:lightbulb-line) 使用场景":
+    - "(ri:money-dollar-circle-line) 理财助手": usecase/financial_assistant.md
+    - "(ri:heart-line) 生活助手": usecase/life_assistant.md
+    - "(ri:edit-line) 写作助手": usecase/writting_assistant.md
+  
   - "(ri:open-source-line) 开源项目":
     - "(ri:home-line) 首页":
       - "(ri:eye-line) 概览": open_source/home/overview.md
