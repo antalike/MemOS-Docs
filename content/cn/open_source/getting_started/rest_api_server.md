@@ -74,7 +74,7 @@ cd docker
 docker compose up
 ```
 
-#### 通过 [http://localhost:8000](http://localhost:8000) 访问 API。
+#### 通过 [http://localhost:8000/docs](http://localhost:8000/docs) 访问 API。
 
 #### 示例流程
 
@@ -220,7 +220,7 @@ docker run --env-file .env -p 8000:8000 memos-api-server
 ```
 
 
-#### 通过 [http://localhost:8000](http://localhost:8000) 访问 API。
+#### 通过 [http://localhost:8000/docs](http://localhost:8000/docs) 访问 API。
 
 
 #### 测试用例 (注册用户->添加用户记忆->查询用户记忆) 参考Docker Compose up测试用例

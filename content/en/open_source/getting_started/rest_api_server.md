@@ -70,7 +70,7 @@ cd docker
 ```bash
 docker compose up
 ```
-#### Access the API at http://localhost:8000.
+#### Access the API at [http://localhost:8000/docs](http://localhost:8000/docs).
 
 #### Example process
 
@@ -208,7 +208,7 @@ docker build -t memos-api-server .
 docker run --env-file .env -p 8000:8000 memos-api-server
 ```
 
-#### Access the API at http://localhost:8000.
+#### Access the API at [http://localhost:8000/docs](http://localhost:8000/docs).
 
 
 #### Test cases (register user ->add user memory ->query user memory) refer to Docker Compose up test cases
@@ -314,7 +314,7 @@ make install
 ```bash
 uvicorn memos.api.product_api:app --host 0.0.0.0 --port 8000 --reload
 ```
-#### Access the API at http://localhost:8000
+#### After the server is running, you can use OpenAPI documentation to test the API [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
 
 #### Test cases (register user ->add user memory ->query user memory) refer to Docker Compose up test cases
 
