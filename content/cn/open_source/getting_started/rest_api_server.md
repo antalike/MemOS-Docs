@@ -31,7 +31,7 @@ desc: MemOS 提供了一个使用 FastAPI 编写的 REST API 服务。用户可�
 OPENAI_API_KEY=your-openai-api-key  
 
 # OpenAI 接口地址，默认 https://api.openai.com/v1。如走代理或自建兼容服务，改这里。
-OPENAI_API_BASE=http://123.129.219.111:3000/v1
+OPENAI_API_BASE=your-openai-ip
 
 # http_bge（HTTP 服务版 BGE 重排）或 cosine_local（本地余弦）。
 MOS_RERANKER_BACKEND=cosine_local
@@ -44,7 +44,7 @@ MOS_EMBEDDER_BACKEND=universal_api
 MOS_EMBEDDER_MODEL=bge-m3
 
 # 接口地址（OpenAI 为 https://api.openai.com/v1；Azure 为你的 endpoint）
-MOS_EMBEDDER_API_BASE=http://106.75.235.231:8081/v1
+MOS_EMBEDDER_API_BASE=your-openai-ip
 
 # 对应 provider 的 Key
 MOS_EMBEDDER_API_KEY=EMPTY
@@ -234,7 +234,7 @@ docker run --env-file .env -p 8000:8000 memos-api-server
 ```bash
 OPENAI_API_KEY=your-openai-api-key  
 
-OPENAI_API_BASE=http://123.129.219.111:3000/v1
+OPENAI_API_BASE=your-openai-ip
 
 MOS_RERANKER_BACKEND=cosine_local
 
@@ -242,7 +242,7 @@ MOS_EMBEDDER_BACKEND=universal_api
 
 MOS_EMBEDDER_MODEL=bge-m3
 
-MOS_EMBEDDER_API_BASE=http://106.75.235.231:8081/v1
+MOS_EMBEDDER_API_BASE=your-openai-ip
 
 MOS_EMBEDDER_API_KEY=EMPTY
 
@@ -287,7 +287,7 @@ nano ~/.bashrc
 3. 添加 PATH 环境变量
 
 # 在打开的文件的最末尾，新起一行，粘贴安装提示给你的那行命令：
-export PATH="/Users/jinyunyuan/.local/bin:$PATH"
+export PATH="/you-path/.local/bin:$PATH"
 
 4. 保存并退出编辑器
 

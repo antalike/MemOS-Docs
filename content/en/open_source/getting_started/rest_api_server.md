@@ -28,7 +28,7 @@ The required environment variable to run the server is OPENAI_API_KEY.
 OPENAI_API_KEY=your-openai-api-key  
 
 # OpenAI interface address, default https://api.openai.com/v1. If using proxy or self built compatible services, change here.
-OPENAI_API_BASE=http://123.129.219.111:3000/v1
+OPENAI_API_BASE=your-openai-ip
 
 # Http-bge (HTTP Service BGE rearrangement) or cosine local (local cosine).
 MOS_RERANKER_BACKEND=cosine_local
@@ -41,7 +41,7 @@ MOS_EMBEDDER_BACKEND=universal_api
 MOS_EMBEDDER_MODEL=bge-m3
 
 # Interface address (OpenAI is) https://api.openai.com/v1 Azure for your endpoint
-MOS_EMBEDDER_API_BASE=http://106.75.235.231:8081/v1
+MOS_EMBEDDER_API_BASE=your-openai-ip
 
 # Corresponding provider's key
 MOS_EMBEDDER_API_KEY=EMPTY
@@ -222,7 +222,7 @@ docker run --env-file .env -p 8000:8000 memos-api-server
 ```bash
 OPENAI_API_KEY=your-openai-api-key
 
-OPENAI_API_BASE=http://123.129.219.111:3000/v1
+OPENAI_API_BASE=your-openai-ip
 
 MOS_RERANKER_BACKEND=cosine_local
 
@@ -230,7 +230,7 @@ MOS_EMBEDDER_BACKEND=universal_api
 
 MOS_EMBEDDER_MODEL=bge-m3
 
-MOS_EMBEDDER_API_BASE=http://106.75.235.231:8081/v1
+MOS_EMBEDDER_API_BASE=your-openai-ip
 
 MOS_EMBEDDER_API_KEY=EMPTY
 
@@ -274,7 +274,7 @@ nano ~/.bashrc
 3. Add the PATH environment variable
 
 # At the end of the opened file, add a new line and paste the command suggested by the installer:
-export PATH="/Users/jinyunyuan/.local/bin:$PATH"
+export PATH="/your-path/.local/bin:$PATH"
 
 4. Save and exit the editor
 
