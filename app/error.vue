@@ -9,7 +9,7 @@ const props = defineProps<{
 
 // Immediately redirect to /home/overview if it's a 404 error
 if (props.error?.statusCode === 404) {
-  navigateTo(getLangPath('/home/overview', locale.value))
+  navigateTo(getLangPath('/open_source/home/overview', locale.value))
 }
 
 useHead({

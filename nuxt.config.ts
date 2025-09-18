@@ -137,10 +137,10 @@ const config: NuxtConfig = {
 
   routeRules: {
     '/': {
-      redirect: '/home/overview'
+      redirect: '/open_source/home/overview'
     },
     '/cn': {
-      redirect: '/cn/home/overview'
+      redirect: '/cn/open_source/home/overview'
     }
   },
 
