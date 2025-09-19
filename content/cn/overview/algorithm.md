@@ -4,8 +4,7 @@ desc: 让大模型从一次性对话工具，进化为真正具有长期记忆�
 ---
 
 ::note 
-提示<br>
-论文地址：https://arxiv.org/abs/2507.03724
+提示 论文地址：https://arxiv.org/abs/2507.03724
 ::
 
 ## 1. 什么是 MemOS？
