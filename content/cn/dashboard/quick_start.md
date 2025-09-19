@@ -1,30 +1,76 @@
 ---
 title: 快速开始
+desc: 欢迎访问 MemOS 云平台，可参考本新手指南，快速接入记忆能力。本示例基于 Curl 命令行，您需要完成以下步骤
 ---
 
-
-欢迎访问 MemOS 云平台，可参考本新手指南，快速接入记忆能力。本示例基于 Curl 命令行，您需要完成以下步骤：
-
-## 获取接口密钥
+## 1. 获取接口密钥
 
 注册并登录 [MemOS 云平台](https://memos-dashboard.openmem.net/quickstart)，此时系统已为您创建一个默认项目，从控制台复制您的默认 API Key。
 
 ![image.png](https://cdn.memtensor.com.cn/img/1758184757210_hksk0g_compressed.png)
 
-## 核心记忆操作
+<br />
 
-### 添加原始对话（addMessage）
+## 2. 核心记忆操作
+
+### 2.1 添加原始对话（addMessage）
 
 只需要把`原始的对话记录`给到MemOS，MemOS 会<code style="font-weight: bold;">自动抽象加工并保存为记忆</code>**。**
 
-```shell
+::code-group
+```python [Python (HTTP)]
+import os
+import requests
+import json
+
+os.environ["MEMOS_API_KEY"] = "mpg-xxx"
+os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem"
+
+data = {
+  "messages": [
+    {"role": "user", "content": "我计划下个月去法国旅行，需要准备什么？"},
+    {"role": "assistant", "content": "法国旅行需要准备护照、签证、欧元现金等。具体需要什么帮助？"},
+    {"role": "user", "content": "主要是巴黎和尼斯，大概7天行程"},
+    {"role": "assistant", "content": "巴黎和尼斯是很好的选择！建议预订酒店和查看当地天气。"}
+  ],
+  "use_id": "memos_user_123",
+  "conversation_id": "memos_conversation_123"
+}
+headers = {
+  "Content-Type": "application/json",
+  "Authorization": f"Token {os.environ['MEMOS_API_KEY']}"
+}
+url = f"{os.environ['MEMOS_BASE_URL']}/add/message"
+
+requests.post(url=url, headers=headers, data=json.dumps(data))
+
+```
+```python [Python (SDK)]
+from memos.api.client import MemOSClient 
+
+client = MemOSClient(api_key="mpg-xx")
+
+messages = [
+  {"role": "user", "content": "我想暑假出去玩，你能帮我推荐下吗？"},
+  {"role": "assistant", "content": "好的！是自己出行还是和家人朋友一起呢？"},
+  {"role": "user", "content": "肯定要带孩子啊，我们家出门都是全家一起。"},
+  {"role": "assistant", "content": "明白了，所以你们是父母带孩子一块儿旅行，对吗？"},
+  {"role": "user", "content": "对，带上孩子和老人，一般都是全家行动。"},
+  {"role": "assistant", "content": "收到，那我会帮你推荐适合家庭出游的目的地。"}
+]
+use_id = "memos_user_123"
+conversation_id = "memos_conversationId_123"
+
+client.add(messages=messages, user_id=use_id, conversation_id=conversation_id)
+```
+```bash [curl]
 curl --request POST \
   --url https://memos.memtensor.cn/api/openmem/add/message \
   --header 'Authorization: Token YOUR_API_KEY' \
   --header 'Content-Type: application/json' \
   --data '{
-    "userId": "10957920147993223",
-    "conversationId": "23857920147993225",
+    "use_id": "memos_user_123",
+    "conversation_id": "memos_conversation_123",
     "messages": [
       {"role": "user", "content": "我想暑假出去玩，你能帮我推荐下吗？"},
       {"role": "assistant", "content": "好的！是自己出行还是和家人朋友一起呢？"},
@@ -35,7 +81,8 @@ curl --request POST \
     ]
   }'
 ```
-```json
+::
+```json [add_message_res.json]
 {
 	"code": 0,
 	"data": {
@@ -45,7 +92,9 @@ curl --request POST \
 }
 ```
 
-### 查询记忆（searchMemory）
+<br />
+
+### 2.2 查询记忆（searchMemory）
 
 使用用户的发言查询记忆，MemOS 会自动召回最相关的记忆供 AI 参考。
 
@@ -60,22 +109,56 @@ curl --request POST \
 
 > **为什么要这样设计**：大多数记忆系统只停留在“召回事实”，但事实并不等于可执行的 Prompt.MemOS 独有的指令补全链路，帮你省去复杂的拼接与调优，把记忆转译成模型可直接理解和执行的提示。
 
-```shell
+::code-group
+```python [Python (HTTP)]
+import os
+import requests
+import json
+
+os.environ["MEMOS_API_KEY"] = "mpg-xxx"
+os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem"
+
+data = {
+  "query": "国庆去哪玩",
+  "user_id": "memos_user_123",
+  "conversation_id": "memos_conversation_123"
+}
+headers = {
+  "Content-Type": "application/json",
+  "Authorization": f"Token {os.environ['MEMOS_API_KEY']}"
+}
+url = f"{os.environ['MEMOS_BASE_URL']}/search/memory"
+
+requests.post(url=url, headers=headers, data=json.dumps(data))
+
+```
+```python [Python (SDK)]
+from memos.api.client import MemOSClient 
+
+client = MemOSClient(api_key="mpg-xx")
+query = "国庆去哪玩"
+user_id = "memos_user_123"
+conversation_id ="memos_conversation_123"
+
+client.search(query=query, user_id=user_id, conversation_id=conversation_id)
+```
+```bash [Curl]
 curl --request POST \
   --url https://memos.memtensor.cn/api/openmem/search/memory \
   --header 'Authorization: Token YOUR_API_KEY' \
   --header 'Content-Type: application/json' \
   --data '{
     "query": "国庆去哪玩好？",
-    "userId": "10957920147993223",
-    "conversationId": "23857920147993225"
+    "user_id": "memos_user_123",
+    "conversation_id": "memos_conversation_123"
   }'
 # MemOS 未来将支持返回 相关记忆（matches）、拼接指令（instruction）与完整指令（full_instruction）：
 # "returnmatches": true
 # "returnInstruction": true
 # "returnFullInstruction": true
 ```
-```shell
+::
+```json [search_memory_res.json]
 {
     "code": 0,
     "data": {
@@ -86,7 +169,7 @@ curl --request POST \
                 "memoryValue": "[user观点]用户计划在暑假进行一次家庭旅行，携带孩子和老人，全家一起行动。",
                 "memoryType": "WorkingMemory",
                 "memoryTime": null,
-                "conversationId": "23857920147993225",
+                "conversationId": "memos_conversation_123",
                 "status": "activated",
                 "confidence": 0.0,
                 "tags": [
@@ -103,7 +186,7 @@ curl --request POST \
                 "memoryValue": "[assistant观点]助手了解到用户将和家人，包括孩子和老人一起旅行，并计划为其推荐适合家庭出游的目的地。",
                 "memoryType": "WorkingMemory",
                 "memoryTime": null,
-                "conversationId": "23857920147993225",
+                "conversationId": "memos_conversation_123",
                 "status": "activated",
                 "confidence": 0.0,
                 "tags": [
@@ -125,21 +208,57 @@ curl --request POST \
 # "fullinstruction": "你是一名旅游顾问。\n用户在规划旅行时总是全家一起出游（包括孩子和老人）。\n请直接回答“国庆去哪玩好？”，并优先推荐适合家庭出游的目的地。\n如果信息不足，请先提出澄清问题，再给出建议。"
 ```
 
-### 获取原始对话（getMessage）
+<br />
+
+### 2.3 获取原始对话（getMessage）
 
 获取指定用户和会话的**原始对话消息**，用于查看或参考完整聊天记录。
 
-```shell
+::code-group
+```python [Python (HTTP)]
+import os
+import requests
+import json
+
+os.environ["MEMOS_API_KEY"] = "mpg-xxx"
+os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem"
+
+data = {
+  "query": "国庆去哪玩",
+  "user_id": "memos_user_123",
+  "conversation_id": "memos_conversation_123"
+}
+headers = {
+  "Content-Type": "application/json",
+  "Authorization": f"Token {os.environ['MEMOS_API_KEY']}"
+}
+url = f"{os.environ['MEMOS_BASE_URL']}/search/memory"
+
+requests.post(url=url, headers=headers, data=json.dumps(data))
+
+```
+```python [Python (SDK)]
+from memos.api.client import MemOSClient 
+
+client = MemOSClient(api_key="mpg-xx")
+user_id = "memos_user_123"
+conversation_id ="memos_conversation_123"
+
+client.get(user_id=user_id, conversation_id=conversation_id)
+```
+```bash [Curl]
 curl --request POST \
   --url https://memos.memtensor.cn/api/openmem/get/message \
   --header 'Authorization: Token YOUR_API_KEY' \
   --header 'Content-Type: application/json' \
   --data '{
-    "userId": "10957920147993223",
-    "conversationId": "23857920147993225"
+    "user_id": "memos_user_123",
+    "conversation_id": "memos_conversation_123"
   }'
 ```
-```shell
+::
+
+```json [get_message_res.json]
 {
   "code": 0,
   "data": {
@@ -174,10 +293,14 @@ curl --request POST \
 }
 ```
 
-## 下一步行动
+<br />
+
+## 3. 下一步行动
 
 👉 现在你已经能够运行 MemOS，查看完整的[**<u>API 文档</u>**](/api-reference/search-memories)，探索更多功能吧！
 
-## 联系我们
+<br />
+
+## 4. 联系我们
 
 ![image.png](https://cdn.memtensor.com.cn/img/1758251354703_v1nwkz_compressed.png)
