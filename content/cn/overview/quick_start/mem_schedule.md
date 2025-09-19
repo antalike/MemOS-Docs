@@ -4,7 +4,7 @@ title: 记忆调度
 
 # 能力介绍
 
-在 MemOS 中，**记忆调度（Memory Scheduling）**通过对【不同使用效率（参数>激活>工作>其他明文）的记忆】的相互调度，让模型能更高效、准确地获取用户所需的记忆。在对话和任务进行时，通过预测用户后续对话所需记忆并提前调入高效率记忆类型如激活记忆工作记忆，加速推理链路
+在 MemOS 中，**记忆调度（Memory Scheduling）** 通过对【不同使用效率（参数>激活>工作>其他明文）的记忆】的相互调度，让模型能更高效、准确地获取用户所需的记忆。在对话和任务进行时，通过预测用户后续对话所需记忆并提前调入高效率记忆类型如激活记忆工作记忆，加速推理链路
 
 :::note{icon="ri:triangular-flag-fill"}
 **为什么需要调度**
@@ -172,4 +172,4 @@ title: 记忆调度
 
 # 联系我们
 
-![image.png](https://cdn.memtensor.com.cn/img/1758162167215_udkt1k_compressed.png)
+![image.png](https://cdn.memtensor.com.cn/img/1758251354703_v1nwkz_compressed.png)
