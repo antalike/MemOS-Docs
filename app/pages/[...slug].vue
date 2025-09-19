@@ -21,7 +21,8 @@ watch(locale, async (_newLocale: string) => {
   await refreshNuxtData(normalizedPath)
 })
 
-useContent(page.value)
+const pageValue = page.value as unknown as { body: { value: [string, object][] }, path: string };
+useContent(pageValue)
 
 if (!page.value) {
   throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
