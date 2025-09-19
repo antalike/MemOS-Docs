@@ -1,13 +1,13 @@
 ---
 title: MemOS算法原理概述
-links:
-  - label: 'Research'
-    to: https://arxiv.org/abs/2507.03724
-    target: _blank
+desc: 让大模型从一次性对话工具，进化为真正具有长期记忆和自适应能力的智能体。
 ---
 
+:::note 提示
+论文地址：https://arxiv.org/abs/2507.03724
+:::
 
-# 什么是 MemOS？
+## 1. 什么是 MemOS？
 
 当下的大语言模型（LLM）已经展现出强大的生成和推理能力，但它们普遍缺乏真正的「记忆」。
 
@@ -16,9 +16,11 @@ links:
 *   在应用场景中，它们无法沉淀用户的个性化偏好；
     
 *   在知识迭代时，它们更新缓慢，无法灵活应对新需求。
-    
 
 这使得 LLM 虽然“聪明”，却难以成为真正的 **老师、同事或助手**。
+
+
+<br>
 
 **MemOS（Memory Operating System）** 正是为了解决这一根本性缺陷而提出。  
 它把「记忆」从一个零散的功能，提升为与算力同等重要的 **系统资源**，为 LLM 提供：
@@ -30,6 +32,8 @@ links:
 *   **记忆增强推理**：在推理时调用历史经验和偏好，生成更符合用户需求的答案。
     
 
+<br>
+
 相比传统的做法（如单纯依赖参数记忆或临时 KV 缓存），MemOS 的价值在于：
 
 *   它让 AI 不再是“看过就忘”，而是能持续进化和学习；
@@ -39,10 +43,15 @@ links:
 *   它为开发者提供了统一接口，把“记忆”从复杂的自研逻辑变成标准化能力。
     
 
+<br>
+
 简而言之，MemOS 的目标是：  
 **让大模型从一次性对话工具，进化为真正具有长期记忆和自适应能力的智能体。**
 
-# MemOS架构设计
+
+<br>
+
+## 2. MemOS架构设计
 
 MemOS 的设计核心，是把「记忆」作为一个独立系统层，和计算、存储一样，成为 AI 应用的基础能力。它的整体架构可以概括为 **三层结构**： <span style="color: rgb(61, 170, 214);">**API 与应用接口层、记忆调度与管理层、记忆存储与基础设施层**</span>
 
@@ -53,8 +62,13 @@ MemOS 的设计核心，是把「记忆」作为一个独立系统层，和计�
 
 > 这里的 `_API 层_` 指的是框架内部的标准化接口设计，用于阐述系统原理与能力边界。<span style="color: #ff7100;">**<u>不同于云服务对外提供的开发接口</u>** </span>（如 `add`、`search` 等简化封装），后者是基于 MemOS 能力在后端抽象后的统一入口。
 
+
+<br>
+
 *   在记忆调度与管理层，MemOS 提出了<span style="color: rgb(61, 170, 214);">**记忆调度（Memory Scheduling）**</span>的全新范式，支持基于上下文的 <span style="color: rgb(61, 170, 214);">**“下一场景预测”（Next-Scene Prediction），**</span>可以在模型生成时提前加载潜在需要的记忆片段，显著降低响应延迟、提升推理效率。
+
     
+<br>
 
 *   而在<span style="color: rgb(61, 170, 214);">**记忆存储与基础设施层，**</span>MemOS 通过标准化的 <span style="color: rgb(61, 170, 214);">**MemCube**</span> 封装，将明文记忆、激活记忆和参数记忆三种形态有机整合。它支持多种持久化存储方式，包括 Graph 数据库、向量数据库等，并具备<span style="color: rgb(61, 170, 214);">**跨模型的记忆迁移与复用能力。**</span>
     
@@ -65,7 +79,10 @@ MemOS 的设计核心，是把「记忆」作为一个独立系统层，和计�
 </figure>
 <br>
 
-# MemOS为什么高效？
+
+<br>
+
+## 3. MemOS为什么高效？
 
 :::note{icon="ri:message-2-line"}
 从Next-Token Prediction到Next-Scene Prediction
@@ -91,9 +108,11 @@ MemOS 的设计核心，是把「记忆」作为一个独立系统层，和计�
 <br>
 
 
-# MemOS-Preview 版本性能详细评估结果
+<br>
 
-## LoCoMo记忆评测
+## 4. MemOS-Preview 版本性能详细评估结果
+
+### 4.1 LoCoMo记忆评测
 
 *   为系统性验证MemOS在真实应用场景下的表现，MemOS团队基于**LoCoMo数据集**进行了全面评测。
     
@@ -104,7 +123,10 @@ MemOS 的设计核心，是把「记忆」作为一个独立系统层，和计�
 
 ![image.png](https://cdn.memtensor.com.cn/img/1758184331868_djlvc5_compressed.png)
 
-## KV Cache记忆评测
+
+<br>
+
+### 4.2 KV Cache记忆评测
 
 *   除了通用的记忆能力评估，研究团队还重点考察了MemOS所提出的KV Cache记忆机制在推理加速方面的实际效果。
     
@@ -115,13 +137,18 @@ MemOS 的设计核心，是把「记忆」作为一个独立系统层，和计�
 
 ![image.png](https://cdn.memtensor.com.cn/img/1758184346453_5nlqyz_compressed.png)
 
-# 下一步行动
+
+<br>
+
+## 5. 下一步行动
 
 *   快使用我们的云服务体验MemOS的强大之处吧 [《云平台简介》](/dashboard/overview)
     
 *   或使用MemOS开源项目自行部署体验 [《开源项目概览》](/home/overview)
     
 
-# 联系我们
+<br>
 
-![image.png](https://cdn.memtensor.com.cn/img/1758251354703_v1nwkz_compressed.png)
+## 6. 联系我们
+
+<img src="https://cdn.memtensor.com.cn/img/1758251354703_v1nwkz_compressed.png" alt="image" style="width:70%;">
