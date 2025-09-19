@@ -224,7 +224,6 @@ os.environ["MEMOS_API_KEY"] = "mpg-xxx"
 os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem"
 
 data = {
-  "query": "国庆去哪玩",
   "user_id": "memos_user_123",
   "conversation_id": "memos_conversation_123"
 }
@@ -232,7 +231,7 @@ headers = {
   "Content-Type": "application/json",
   "Authorization": f"Token {os.environ['MEMOS_API_KEY']}"
 }
-url = f"{os.environ['MEMOS_BASE_URL']}/search/memory"
+url = f"{os.environ['MEMOS_BASE_URL']}/get/message"
 
 requests.post(url=url, headers=headers, data=json.dumps(data))
 
