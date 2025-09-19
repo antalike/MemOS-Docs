@@ -5,15 +5,15 @@ title: 快速开始
 
 欢迎访问 MemOS 云平台，可参考本新手指南，快速接入记忆能力。本示例基于 Curl 命令行，您需要完成以下步骤：
 
-# 获取接口密钥
+## 获取接口密钥
 
 注册并登录 [MemOS 云平台](https://memos-dashboard.openmem.net/quickstart)，此时系统已为您创建一个默认项目，从控制台复制您的默认 API Key。
 
 ![image.png](https://cdn.memtensor.com.cn/img/1758184757210_hksk0g_compressed.png)
 
-# 核心记忆操作
+## 核心记忆操作
 
-## 添加原始对话（addMessage）
+### 添加原始对话（addMessage）
 
 只需要把`原始的对话记录`给到MemOS，MemOS 会<code style="font-weight: bold;">自动抽象加工并保存为记忆</code>**。**
 
@@ -45,7 +45,7 @@ curl --request POST \
 }
 ```
 
-## 查询记忆（searchMemory）
+### 查询记忆（searchMemory）
 
 使用用户的发言查询记忆，MemOS 会自动召回最相关的记忆供 AI 参考。
 
@@ -125,7 +125,7 @@ curl --request POST \
 # "fullinstruction": "你是一名旅游顾问。\n用户在规划旅行时总是全家一起出游（包括孩子和老人）。\n请直接回答“国庆去哪玩好？”，并优先推荐适合家庭出游的目的地。\n如果信息不足，请先提出澄清问题，再给出建议。"
 ```
 
-## 获取原始对话（getMessage）
+### 获取原始对话（getMessage）
 
 获取指定用户和会话的**原始对话消息**，用于查看或参考完整聊天记录。
 
@@ -174,10 +174,10 @@ curl --request POST \
 }
 ```
 
-# 下一步行动
+## 下一步行动
 
 👉 现在你已经能够运行 MemOS，查看完整的[**<u>API 文档</u>**](/api-reference/search-memories)，探索更多功能吧！
 
-# 联系我们
+## 联系我们
 
 ![image.png](https://cdn.memtensor.com.cn/img/1758251354703_v1nwkz_compressed.png)

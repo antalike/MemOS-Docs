@@ -3,7 +3,7 @@ title: 让理财助手读懂客户行为背后的偏好
 ---
 
 
-# 概述
+## 概述
 
 在智能投顾产品中，用户会留下大量**行为轨迹**：
 
@@ -16,7 +16,7 @@ title: 让理财助手读懂客户行为背后的偏好
 
 这些只是原始行为，如果直接保存成日志，对大模型帮助有限。**关键在于如何把行为抽象成“记忆”**：
 
-## 行为如何抽象为记忆？
+### 行为如何抽象为记忆？
 
 | 用户行为（原始轨迹） | 对应的记忆（语义抽象） |
 | --- | --- |
@@ -27,7 +27,7 @@ title: 让理财助手读懂客户行为背后的偏好
 
 当用户后续再问「我适合什么投资？」时，投顾助手不需要翻一堆日志，而是直接用这些语义化记忆来驱动模型生成个性化的回答。
 
-## 为什么不用传统 RAG？
+### 为什么不用传统 RAG？
 
 RAG 更适合做知识问答，例如解释「什么是债券」。但它不会从用户的行为里总结出偏好：
 
@@ -36,7 +36,7 @@ RAG 更适合做知识问答，例如解释「什么是债券」。但它不会
 | 返回静态理财知识片段 | 将用户行为抽象为语义化记忆（兴趣、偏好、画像） |
 | 不能回答「我适合什么投资？」 | 能结合记忆生成个性化建议 |
 
-## 为什么不自己造轮子？
+### 为什么不自己造轮子？
 
 开发者当然也可以自己存行为，但会遇到三个挑战：
 
@@ -47,7 +47,7 @@ RAG 更适合做知识问答，例如解释「什么是债券」。但它不会
 *   **扩展性差**：随着渠道、产品、沟通场景增加，代码就会迅速失控。
     
 
-## 为什么要用 MemOS？
+### 为什么要用 MemOS？
 
 在做选型时，可以直观对比三种方案：
 
@@ -57,7 +57,7 @@ RAG 更适合做知识问答，例如解释「什么是债券」。但它不会
 | **自研存储** | 直接存储行为日志 | 需要自行抽象行为→记忆；拼 Prompt 成本高 | 要开发大量 glue code |
 | **MemOS** | 两个接口：`addMessage` 写入、`searchMemory` 检索 | —— | 自动把行为轨迹抽象成记忆，供模型直接使用 |
 
-## 本案例会展示什么？
+### 本案例会展示什么？
 
 本案例展示如何用 MemOS 云服务，快速实现一个「会把用户行为转成记忆」的智能投顾助手。
 
@@ -86,9 +86,9 @@ RAG 更适合做知识问答，例如解释「什么是债券」。但它不会
 *   模型最终输出的个性化投资建议
     
 
-# 示例
+## 示例
 
-## 环境准备
+### 环境准备
 
 使用pip安装所需的依赖项
 
@@ -96,7 +96,7 @@ RAG 更适合做知识问答，例如解释「什么是债券」。但它不会
 pip install MemoryOS -U
 ```
 
-## 完整代码
+### 完整代码
 
 ```python
 import os
@@ -181,48 +181,41 @@ def demo_questions():
       "推荐一些适合我的投资"
     ]
 
-def pre_configured_conversations():
-    """返回预配置的对话对"""
-    return [
-        {
-            "user": "我在理财APP上会看'稳健'、'低风险'的产品，还收藏了几个养老理财的基金",
-            "description": "投资偏好设置"
-        },
-        {
-            "user": "每次看到股市大涨大跌的新闻我就紧张，我不想冒太大风险",
-            "description": "风险承受能力设置"
-        }
+def preset_user_behaviors():
+    """显示预设的用户行为记忆"""
+    print("\n📊 已预设的用户行为记忆:")
+    print("=" * 60)
+    behaviors = [
+      "点击「养老理财」广告进入 APP",
+      "浏览并收藏低风险基金", 
     ]
 
-def execute_pre_conversations():
-    """执行预配置的对话"""
-    conversations = pre_configured_conversations()
+    users_messages = [
+      '我不想冒太大风险'
+    ]
     
-    print("\n🔄 正在执行预配置对话...")
+    for i, behavior in enumerate(behaviors, 1):
+        print(f"{i}. {behavior}")
+        ai_assistant.add_messages(behavior, user_id, conversation_id)
+
+    for i, message in enumerate(users_messages, 1):
+        print(f"{i}. {message}")
+        ai_assistant.chat(message, user_id, conversation_id)
+
+    
     print("=" * 60)
-    
-    for i, conv in enumerate(conversations, 1):
-        print(f"\n💬 对话 {i}: {conv['description']}")
-        print(f"👤 用户: {conv['user']}")
-        
-        # 执行对话
-        answer = ai_assistant.chat(conv['user'], user_id, conversation_id)
-        print(f"🤖 助手: {answer}")
-        print("-" * 40)
-    
-    print("\n✅ 预配置对话执行完毕！")
-    print("=" * 60)
+    print("💡 以上行为记忆已自动加载，助手会基于这些信息提供个性化建议")
 
 def main():
-    print("💰 欢迎查看MemOS在财务管理助手中的使用示例！")
-    print("💡 在MemOS的加持下，让您的财务助手更智能、更贴心！ 😊 \n")
+    print("💰 欢迎查看MemOS在理财管理助手中的使用示例！")
+    print("💡 在MemOS的加持下，让您的理财助手更智能、更贴心！ 😊 \n")
     
     # 询问用户是否要先执行预配置对话
     while True:
         pre_chat = input("🤔 您想先执行预配置对话吗？预计消耗2次add和2次search的调用额度，是否执行？(y/n): ").strip().lower()
         
         if pre_chat in ['y', 'yes', '是', 'Y']:
-            execute_pre_conversations()
+            preset_user_behaviors()
             break
         elif pre_chat in ['n', 'no', '否', 'N']:
             print("📝 开始全新对话...")
@@ -238,7 +231,7 @@ def main():
         user_query = input("\n🤔 请输入您的问题 (或输入 'exit' 退出): ").strip()
         
         if user_query.lower() in ['quit', 'exit', 'q', '退出']:
-            print("👋 感谢使用财务管理助手！")
+            print("👋 感谢使用理财管理助手！")
             break
         
         if not user_query:
@@ -254,7 +247,7 @@ if __name__ == "__main__":
     main()
 ```
 
-## 代码说明
+### 代码说明
 
 1.   在环境变量中设置您的MemOS API秘钥以及Open AI秘钥
     

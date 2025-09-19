@@ -2,7 +2,7 @@
 title: 有记忆的写作助手更好用
 ---
 
-# 概述
+## 概述
 
 在写作助手这类产品中，用户往往希望助手能够**记住自己的写作风格和习惯**，而不是每次都从零开始。
 
@@ -21,7 +21,7 @@ title: 有记忆的写作助手更好用
 
 如果没有记忆，这些信息在会话结束后就会丢失。用户不得不反复提醒助手，体验会显得割裂、不专业。
 
-## 为什么不用传统 RAG？
+### 为什么不用传统 RAG？
 
 在写作助手场景里，RAG 并不适用
 
@@ -31,7 +31,7 @@ title: 有记忆的写作助手更好用
 | 检索结果通常是通用知识片段 | 可以存储并调取个性化风格、语气、常用表达 |
 | 更适合“公司文档/百科知识”类场景 | 更适合“持续迭代、个性化”写作助手 |
 
-## 为什么不自己造轮子？
+### 为什么不自己造轮子？
 
 当然，你也可以尝试在数据库里保存用户偏好和上下文，但这会带来几个挑战：
 
@@ -42,7 +42,7 @@ title: 有记忆的写作助手更好用
 *   **可扩展性差**：随着用户需求增加（写作风格、常用短语、上下文关联），代码会迅速膨胀。
     
 
-## 为什么要用 MemOS？
+### 为什么要用 MemOS？
 
 在做选型时，可以直观对比三种方案：
 
@@ -52,7 +52,7 @@ title: 有记忆的写作助手更好用
 | **自研存储方案** | 自己建表/缓存，把偏好与内容保存下来 | 逻辑复杂：要区分正文/偏好/画像；还需手动拼 Prompt；扩展困难 | MemOS 封装存储+检索+Prompt 注入，减少开发负担 |
 | **MemOS** | 两个接口即可：`addMessage` 写入、`searchMemory` 检索 | —— | 支持长期追踪写作风格、复用常用信息；开箱即用、易扩展 |
 
-## 本案例会展示什么？
+### 本案例会展示什么？
 
 本案例展示如何用 MemOS 云服务，快速实现一个“会记住用户”的写作助手。
 
@@ -83,9 +83,9 @@ title: 有记忆的写作助手更好用
 *   模型生成的最终回答（若未接入大模型，则会提示【未接入大模型】）
     
 
-#  示例
+##  示例
 
-## 环境准备
+### 环境准备
 
 使用pip安装所需的依赖项
 
@@ -93,7 +93,7 @@ title: 有记忆的写作助手更好用
 pip install MemoryOS -U
 ```
 
-## 完整代码
+### 完整代码
 
 ```python
 import os
@@ -111,9 +111,9 @@ class WritingAssistant:
         self.openai_client = OpenAI(api_key=os.getenv("OPEN_API_KEY"))
     
     def search_memories(self, query, user_id, conversation_id):
-        """根据查询搜索相关记忆"""
-        response = self.memos_client.search(query, user_id, conversation_id)
-        return [m['memoryValue'] for m in response.data.memoryDetailList]
+      response = self.memos_client.search(query, user_id, conversation_id)   
+
+      return [memory_detail.memory_value for memory_detail in response.data.memory_detail_list]
 
     def build_system_prompt(self, memories):
         """构建包含格式化记忆的系统提示"""
@@ -139,8 +139,9 @@ class WritingAssistant:
         self.memos_client.add(messages, user_id, conversation_id)
 
     def get_messages(self, user_id, conversation_id):
-        response = self.memos_client.get_messages(user_id, conversation_id)
-        return response.data.messageDetailList
+      response = self.memos_client.get_messages(user_id, conversation_id)
+
+      return response.data.message_detail_list
 
     def chat(self, query, user_id, conversation_id):
         """处理包含记忆集成的对话的主要聊天函数"""
@@ -253,7 +254,7 @@ if __name__ == "__main__":
     main()
 ```
 
-## 代码说明
+### 代码说明
 
 1.   在环境变量中设置您的MemOS API秘钥以及Open AI秘钥
     

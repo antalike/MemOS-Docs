@@ -5,7 +5,7 @@ desc: 我们面向开发者提供托管服务，这也是将 MemOS 添加到�
 
 
 
-# 为什么选择 MemOS 云平台
+## 为什么选择 MemOS 云平台
 
 *   **专注记忆优化：** MemOS 专注于长期与短期记忆的管理与优化，支持上下文保持、用户个性化和跨会话追踪，帮助应用真正具备“记忆能力”。
     
@@ -14,14 +14,14 @@ desc: 我们面向开发者提供托管服务，这也是将 MemOS 添加到�
 *   **零成本试用：** MemOS 提供免费的试用额度，让您能够快速体验和验证想法。对于更深度的开发需求，MemOS 还提供开源版本，您可以自由查看、定制和扩展功能，以满足特定业务场景。
     
 
-# 下一步行动
+## 下一步行动
 
 *   注册并登录 [MemOS 云平台](https://memos-dashboard.openmem.net/quickstart)
     
 *   👉 进入 [**快速入门指南**](/dashboard/quick_start)**，** 快速开始使用 API，体验 MemOS 的“记忆能力”。
     
 
-# 联系我们
+## 联系我们
 
 ![image.png](https://cdn.memtensor.com.cn/img/1758251354703_v1nwkz_compressed.png)
 
