@@ -150,11 +150,9 @@ export const useSurroundWithDesc = async (
 
   const docs = await Promise.all(
     base.map((item) => {
-      if (env === 'dev' && item.path.startsWith('/cn')) {
-        return queryCollection('docs').path(`${item.path}`).first()
-      }
+      const docsPath = locale === 'cn' ? item.path : `/en${item.path}`
 
-      return queryCollection('docs').path(`/${locale}${item.path}`).first()
+      return queryCollection('docs').path(`${docsPath}`).first()
     })
   )
 

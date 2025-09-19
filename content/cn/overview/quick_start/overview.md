@@ -33,14 +33,11 @@ MemOS 提供了两个核心接口帮助你实现：
 - `searchMemories` —— 在后续对话中召回相关记忆和建议指令（可选），让 AI 回答更贴近用户需求
 
 ![image.svg](https://cdn.memtensor.com.cn/img/1758180109237_8ubv8n.svg)
-2
-<br>
 
 ### 步骤 1. 获取 API Key
 
 在 [MemOS Cloud 平台](https://memos-dashboard.openmem.net/quickstart) 注册账号，获取默认API Key
 
-<br>
 
 ### 步骤 2. 存储原始对话（addMessages）
 
@@ -83,7 +80,6 @@ resp = requests.post(
 
 print(resp.json())
 ```
-<br>
 
 ### 步骤 3. 在会话中调用MemOS查询相关记忆（searchMemories）
 
@@ -164,8 +160,6 @@ print("相关记忆：", results["data"]["memoryDetailList"])
 # 如果信息不足，请先提出澄清问题，再给出建议。
 ```
 
-<br>
-
 ## 2. 方式二：开源框架
 
 在需要本地化部署或深度定制时，可以直接使用 MemOS 的开源框架。与云服务相比，开源框架没有额外的抽象封装，开发者需要显式完成 **记忆的抽取、存储与检索**，这些操作均在一个 **MemCube（记忆立方）** 上进行。
@@ -174,7 +168,6 @@ print("相关记忆：", results["data"]["memoryDetailList"])
 
 具体操作步骤详见：[https://memos-docs.openmem.net/cn/getting_started/quick_start](https://memos-docs.openmem.net/cn/getting_started/quick_start)
 
-<br>
 
 ## 3. 下一步行动
 
@@ -196,8 +189,6 @@ MemOS 的记忆机制可以理解为一条完整的「工作流」：
 - [记忆召回与指令补全](/overview/quick_start/mem_recall)
 - [记忆生命周期管理](/overview/quick_start/mem_lifecycle)
 
-<br>
-
 ### 3.2 使用MemOS进行实战
 
 我们提供了3个具体的业务参考案例供您查看
@@ -216,8 +207,6 @@ MemOS 的记忆机制可以理解为一条完整的「工作流」：
   - 写作助手不仅要帮你生成内容，还要保持一致的语气和风格
   - 通过 MemOS，用户的写作偏好、常用信息、上下文指令都能被记住
   - 下次写总结或邮件时无需反复强调，实现连贯又个性化的创作体验。
-
-<br>
 
 ## 4. 联系我们
 

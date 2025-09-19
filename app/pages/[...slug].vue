@@ -21,6 +21,8 @@ watch(locale, async (_newLocale: string) => {
   await refreshNuxtData(normalizedPath)
 })
 
+useContent(page.value)
+
 if (!page.value) {
   throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
 }
