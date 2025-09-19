@@ -1,11 +1,11 @@
 ---
 title: MemOS算法原理概述
+links:
+  - label: 'Research'
+    to: https://arxiv.org/abs/2507.03724
+    target: _blank
 ---
 
-
-:::note
-**论文地址：**[https://arxiv.org/abs/2507.03724](https://arxiv.org/abs/2507.03724)
-:::
 
 # 什么是 MemOS？
 
@@ -59,9 +59,9 @@ MemOS 的设计核心，是把「记忆」作为一个独立系统层，和计�
 *   而在<span style="color: rgb(61, 170, 214);">**记忆存储与基础设施层，**</span>MemOS 通过标准化的 <span style="color: rgb(61, 170, 214);">**MemCube**</span> 封装，将明文记忆、激活记忆和参数记忆三种形态有机整合。它支持多种持久化存储方式，包括 Graph 数据库、向量数据库等，并具备<span style="color: rgb(61, 170, 214);">**跨模型的记忆迁移与复用能力。**</span>
     
 
-<figure>
+<figure style="width: fit-content">
   <img src="https://cdn.memtensor.com.cn/img/1758183504775_2ehjk2_compressed.png" alt="标准化 MemCube（记忆立方体）的基础构成" />
-  <figcaption>标准化 MemCube（记忆立方体）的基础构成</figcaption>
+  <center><figcaption>标准化 MemCube（记忆立方体）的基础构成</figcaption></center>
 </figure>
 <br>
 
@@ -81,18 +81,14 @@ MemOS 的设计核心，是把「记忆」作为一个独立系统层，和计�
     
 *   依托对对话轮次与时间差的精准感知，系统能够智能预测下一个场景中可能被调用的记忆内容，并动态路由与预加载所需的明文、参数和激活记忆，从而在生成阶段即刻命中，最大化信息引入的效率和推理的流畅性。
     
-::card-group
 
-    ::card
-    ![640.gif](https://statics.memtensor.com.cn/memos/ani.gif)
-    ::
+![640.gif](https://statics.memtensor.com.cn/memos/ani.gif)
 
-    ::card
-    ![image.png](https://cdn.memtensor.com.cn/img/1758183837895_i87vyb_compressed.png "记忆调度的核心思路")
-    <center> 记忆调度的核心思路 </center>
-    ::
-
-::
+<figure style="width: fit-content">
+  <img src="https://cdn.memtensor.com.cn/img/1758183837895_i87vyb_compressed.png " alt="记忆调度的核心思路" />
+  <center><figcaption>记忆调度的核心思路</figcaption></center>
+</figure>
+<br>
 
 
 # MemOS-Preview 版本性能详细评估结果
@@ -128,4 +124,4 @@ MemOS 的设计核心，是把「记忆」作为一个独立系统层，和计�
 
 # 联系我们
 
-![image.png](https://cdn.memtensor.com.cn/img/1758162167215_udkt1k_compressed.png)
+![image.png](https://cdn.memtensor.com.cn/img/1758251354703_v1nwkz_compressed.png)

@@ -1,47 +1,27 @@
 ---
-title: MemOS 文档
-desc: 欢迎来到 MemOS 官方文档 – 一个专为大型语言模型 (LLMs) 提供高级模块化记忆功能的 Python 包。
-banner: https://statics.memtensor.com.cn/memos/memos-banner.gif
-links:
-  - label: 'PyPI'
-    to: https://pypi.org/project/MemoryOS/
-    target: _blank
-    avatar:
-      src: https://statics.memtensor.com.cn/icon/pypi.svg
-      alt: PyPI logo
-  - label: 'Open Source'
-    to: https://github.com/MemTensor/MemOS
-    target: _blank
-    icon: i-simple-icons-github
+title: 云平台简介
+desc: 我们面向开发者提供托管服务，这也是将 MemOS 添加到您的应用程序最简单的方法。
 ---
 
-## 什么是 MemOS？
-
-随着大型语言模型（LLMs）的不断演进，其所承担的任务日益复杂，包括多轮对话、规划、决策制定以及个性化代理等。在此背景下，如何高效管理和利用记忆，成为实现长期智能与适应性能力的关键因素。
-然而，主流 LLM 架构往往在记忆结构化、管理和集成方面存在不足，导致知识更新成本高、行为状态不可持续以及难以积累用户偏好。
-
-**MemOS** 通过将记忆重新定义为具有统一结构、生命周期管理和调度策略的核心一级资源来解决这些挑战。它提供了一个 Python 包，为基于 LLM 的应用程序提供统一的记忆层，实现持久化、结构化和高效的记忆操作。这使 LLMs 具备长期知识保留、强大的上下文管理和记忆增强推理能力，支持更智能和自适应的行为。
-
-![MemOS Architecture](https://statics.memtensor.com.cn/memos/memos-architecture.png)
-
-## 主要特性
-
-- **模块化记忆架构**：支持明文、激活（KV cache）和参数（适配器/LoRA）记忆。
-- **MemCube**：所有记忆类型的统一容器，易于加载/保存和 API 访问。
-- **MOS**：LLMs 的记忆增强系统，具有即插即用的记忆模块。
-- **基于图的后端**：原生支持 Neo4j 和其他图数据库，用于结构化、可解释的记忆。
-- **易于集成**：与 HuggingFace、Ollama 和自定义 LLMs 兼容。
-- **可扩展**：添加您自己的记忆模块或后端。
 
 
-## 安装
+# 为什么选择 MemOS 云平台
 
-请参阅我们的 [安装指南](/getting_started/installation) 获取完整的安装说明，包括基础安装、可选依赖项和外部依赖项。
+*   **专注记忆优化：** MemOS 专注于长期与短期记忆的管理与优化，支持上下文保持、用户个性化和跨会话追踪，帮助应用真正具备“记忆能力”。
+    
+*   **简化开发：** MemOS 提供了清晰一致的 API 接口，仅需几行代码就能快速运行。让您能够专注于实现应用功能，无需在记忆的存储与管理上投入精力。
+    
+*   **零成本试用：** MemOS 提供免费的试用额度，让您能够快速体验和验证想法。对于更深度的开发需求，MemOS 还提供开源版本，您可以自由查看、定制和扩展功能，以满足特定业务场景。
+    
 
-## 贡献
+# 下一步行动
 
-我们欢迎贡献！请参阅 [贡献指南](/contribution/overview) 了解设置环境和提交 pull request 的详细信息。
+*   注册并登录 [MemOS 云平台](https://memos-dashboard.openmem.net/quickstart)
+    
+*   👉 进入 [**快速入门指南**](/dashboard/quick_start)**，** 快速开始使用 API，体验 MemOS 的“记忆能力”。
+    
 
-## 许可证
+# 联系我们
 
-MemOS 在 Apache 2.0 许可证下发布。
+![image.png](https://cdn.memtensor.com.cn/img/1758251354703_v1nwkz_compressed.png)
+

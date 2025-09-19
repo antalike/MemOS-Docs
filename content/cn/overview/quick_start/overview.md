@@ -207,4 +207,4 @@ MemOS 的记忆机制可以理解为一条完整的「工作流」：
 
 # 联系我们
 
-![image.png](https://cdn.memtensor.com.cn/img/1758162167215_udkt1k_compressed.png)
+![image.png](https://cdn.memtensor.com.cn/img/1758251354703_v1nwkz_compressed.png)
