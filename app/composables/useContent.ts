@@ -1,3 +1,4 @@
+// add br to the content
 export function useContent(pageValue: { body: { value: Array<[string, object]> }, path: string }) {
   try {
     const { body, path } = pageValue

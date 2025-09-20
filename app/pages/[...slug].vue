@@ -22,7 +22,9 @@ watch(locale, async (_newLocale: string) => {
 })
 
 const pageValue = page.value as unknown as { body: { value: [string, object][] }, path: string };
-useContent(pageValue)
+if (import.meta.server) {
+  useContent(pageValue)
+}
 
 if (!page.value) {
   throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
