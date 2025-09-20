@@ -8,7 +8,6 @@ desc: MemOS（Memory Operating System）是一个面向 AI 应用的记忆�
 对于开发者来说，MemOS 就像数据库之于应用：你不需要重复造轮子去解决“AI怎么记忆”的问题，只要调用 MemOS 提供的服务，就能轻松给你的 Agent 或应用装上“记忆能力”。
 
 <img src="https://cdn.memtensor.com.cn/img/1758267737066_157s7j_compressed.png" alt="记忆对比" style="width:70%;">
-<br>
 
 ## 1. 为什么需要MemOS
 

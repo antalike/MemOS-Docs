@@ -75,7 +75,6 @@ MemOS 的设计核心，是把「记忆」作为一个独立系统层，和计�
   <img src="https://cdn.memtensor.com.cn/img/1758183504775_2ehjk2_compressed.png" alt="标准化 MemCube（记忆立方体）的基础构成" />
   <center><figcaption>标准化 MemCube（记忆立方体）的基础构成</figcaption></center>
 </figure>
-<br>
 
 
 ## 3. MemOS为什么高效？
@@ -101,7 +100,6 @@ MemOS 的设计核心，是把「记忆」作为一个独立系统层，和计�
   <img src="https://cdn.memtensor.com.cn/img/1758183837895_i87vyb_compressed.png " alt="记忆调度的核心思路" />
   <center><figcaption>记忆调度的核心思路</figcaption></center>
 </figure>
-<br>
 
 
 ## 4. MemOS-Preview 版本性能详细评估结果

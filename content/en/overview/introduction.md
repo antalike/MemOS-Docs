@@ -31,7 +31,6 @@ MemOS 的价值在于，它**抽象出记忆层**，让你只关注业务逻辑
 简单来说：**MemOS 让 AI 不再是一次性的对话机器，而是能持续成长的伙伴**。
 
 <img src="https://cdn.memtensor.com.cn/img/1758265722040_2oue1m_compressed.png" alt="image" style="width:70%;">
-<br>
 
 ## 2. MemOS能做些什么
 
