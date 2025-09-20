@@ -80,7 +80,7 @@ docker compose up
 
 #####  (注册用户->查询用户记忆（没有继续往后）->添加用户记忆->查询用户记忆)
 
-##### 注册用户 [http://localhost:8000/product/users/register](post)
+##### 注册用户 http://localhost:8000/product/users/register (POST)
 ```bash
 # 响应
 {
@@ -93,7 +93,7 @@ docker compose up
 }
 ```
 
-##### 添加用户记忆 [http://localhost:8000/product/add](post)
+##### 添加用户记忆 http://localhost:8000/product/add (POST)
 ```bash
 # 请求参数
 {
@@ -118,7 +118,7 @@ docker compose up
 }
 ```
 
-##### 查询用户记忆 [http://localhost:8000/product/search](post)
+##### 查询用户记忆 http://localhost:8000/product/search (POST)
 ```bash
 # 请求参数
 {
@@ -211,7 +211,7 @@ NEO4J_URI=bolt://host.docker.internal:7687
 docker build -t memos-api-server .  
 ```
 
-#### 先在docker中启动 [neo4j](neo4j) 和 [qdrant](qdrant)
+#### 先在docker中启动 neo4j 和 qdrant
 
 #### 运行 Docker 容器：
 
@@ -321,7 +321,7 @@ poetry --version
 make install  
 ```
 
-#### 先在docker中启动 [neo4j](neo4j) 和 [qdrant](qdrant)
+#### 先在docker中启动 neo4j 和 qdrant
 
 #### 启动 FastAPI 服务器（在MomOS目录下）：
 

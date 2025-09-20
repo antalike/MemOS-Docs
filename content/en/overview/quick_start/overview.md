@@ -34,13 +34,11 @@ MemOS 提供了两个核心接口帮助你实现：
 
 ![image.svg](https://cdn.memtensor.com.cn/img/1758180109237_8ubv8n.svg)
 2
-<br>
 
 ### 步骤 1. 获取 API Key
 
 在 [MemOS Cloud 平台](https://memos-dashboard.openmem.net/quickstart) 注册账号，获取默认API Key
 
-<br>
 
 ### 步骤 2. 存储原始对话（addMessages）
 
@@ -83,7 +81,6 @@ resp = requests.post(
 
 print(resp.json())
 ```
-<br>
 
 ### 步骤 3. 在会话中调用MemOS查询相关记忆（searchMemories）
 
@@ -164,7 +161,6 @@ print("相关记忆：", results["data"]["memoryDetailList"])
 # 如果信息不足，请先提出澄清问题，再给出建议。
 ```
 
-<br>
 
 ## 2. 方式二：开源框架
 
@@ -172,9 +168,8 @@ print("相关记忆：", results["data"]["memoryDetailList"])
 
 > MemCube 是记忆的基本容器，负责承载用户的记忆条目。云服务中的 `addMessages` 和 `searchMemories` 接口，本质上就是对 MemCube 内部操作的抽象封装。在开源框架中，开发者可以直接控制这些步骤。
 
-具体操作步骤详见：[https://memos-docs.openmem.net/cn/getting_started/quick_start](https://memos-docs.openmem.net/cn/getting_started/quick_start)
+具体操作步骤详见：[https://memos-docs.openmem.net/cn/open_source/open_source/getting_started/quick_start](https://memos-docs.openmem.net/cn/getting_started/quick_start)
 
-<br>
 
 ## 3. 下一步行动
 
@@ -196,7 +191,6 @@ MemOS 的记忆机制可以理解为一条完整的「工作流」：
 - [记忆召回与指令补全](/overview/quick_start/mem_recall)
 - [记忆生命周期管理](/overview/quick_start/mem_lifecycle)
 
-<br>
 
 ### 3.2 使用MemOS进行实战
 
@@ -207,7 +201,7 @@ MemOS 的记忆机制可以理解为一条完整的「工作流」：
   - MemOS 能把这些行为抽象成记忆，例如「风险偏好=保守」
   - 并在用户提问「我适合什么投资？」时直接发挥作用，让投顾建议更专业、更贴合实际。
 
-- [构建拥有记忆的家庭生活助手](/usecase/life_assistant)
+- [构建拥有记忆的家庭生活助手](/usecase/home_assistant)
   - 家庭助手不只是回答即时问题，它还能记住你说过的待办、偏好和家庭信息。
   - 比如「周六带孩子去动物园」或「提醒时要先列要点」，MemOS 会把这些转成记忆
   - 在后续对话中自动发挥作用，让助手更贴近真实生活
@@ -217,7 +211,6 @@ MemOS 的记忆机制可以理解为一条完整的「工作流」：
   - 通过 MemOS，用户的写作偏好、常用信息、上下文指令都能被记住
   - 下次写总结或邮件时无需反复强调，实现连贯又个性化的创作体验。
 
-<br>
 
 ## 4. 联系我们
 

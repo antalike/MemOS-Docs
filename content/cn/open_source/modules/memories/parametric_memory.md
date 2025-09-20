@@ -33,9 +33,9 @@ title: 参数化记忆 (正在开发中)
 ## 相关模块
 
 虽然参数记忆正在开发中，但今天就可以尝试这些:
-- **[GeneralTextMemory](/modules/memories/general_textual_memory)**: 基于向量的灵活语义存储
-- **[TreeTextMemory](/modules/memories/tree_textual_memory)**: 结构化、层次化和知识图谱
-- **[Activation Memory](/modules/memories/kv_cache_memory)**: 高效的运行时状态缓存
+- **[GeneralTextMemory](/open_source/modules/memories/general_textual_memory)**: 基于向量的灵活语义存储
+- **[TreeTextMemory](/open_source/modules/memories/tree_textual_memory)**: 结构化、层次化和知识图谱
+- **[Activation Memory](/open_source/modules/memories/kv_cache_memory)**: 高效的运行时状态缓存
 
 ## 开发者注意事项
 

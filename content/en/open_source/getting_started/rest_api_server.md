@@ -76,7 +76,7 @@ docker compose up
 
 #### Test case (registered user ->add user memory ->query user memory)
 
-###### Registered [http://localhost:8000/product/users/register](post)
+###### Registered http://localhost:8000/product/users/register (POST)
 ```bash
 # response
 {
@@ -89,7 +89,7 @@ docker compose up
 }
 ```
 
-###### Add User Memory [http://localhost:8000/product/add](post)
+###### Add User Memory http://localhost:8000/product/add (POST)
 ```bash
 # request params
 {
@@ -114,7 +114,7 @@ docker compose up
 }
 ```
 
-###### Query User Memory [http://localhost:8000/product/search](post)
+###### Query User Memory http://localhost:8000/product/search (POST)
 ```bash
 # request params
 {
@@ -199,7 +199,7 @@ NEO4J_URI=bolt://host.docker.internal:7687
 docker build -t memos-api-server .
 ```
 
-#### Start in Docker first [neo4j](neo4j) and [qdrant](qdrant)
+#### Start in Docker first neo4j and qdrant
 
 
 #### Run the Docker container:
@@ -307,7 +307,7 @@ poetry --version
 make install
 ```
 
-#### Start in Docker first [neo4j](neo4j) and [qdrant](qdrant)
+#### Start in Docker first neo4j and qdrant
 
 
 #### Start the FastAPI server:

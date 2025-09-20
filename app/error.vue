@@ -7,7 +7,6 @@ const props = defineProps<{
   error: NuxtError
 }>()
 
-// Immediately redirect to /home/overview if it's a 404 error
 if (props.error?.statusCode === 404) {
   navigateTo(getLangPath('/open_source/home/overview', locale.value))
 }

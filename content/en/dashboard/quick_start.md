@@ -9,7 +9,6 @@ desc: 欢迎访问 MemOS 云平台，可参考本新手指南，快速接入�
 
 ![image.png](https://cdn.memtensor.com.cn/img/1758184757210_hksk0g_compressed.png)
 
-<br />
 
 ## 2. 核心记忆操作
 
@@ -91,8 +90,6 @@ curl --request POST \
 	"message": "ok"
 }
 ```
-
-<br />
 
 ### 2.2 查询记忆（searchMemory）
 
@@ -208,8 +205,6 @@ curl --request POST \
 # "fullinstruction": "你是一名旅游顾问。\n用户在规划旅行时总是全家一起出游（包括孩子和老人）。\n请直接回答“国庆去哪玩好？”，并优先推荐适合家庭出游的目的地。\n如果信息不足，请先提出澄清问题，再给出建议。"
 ```
 
-<br />
-
 ### 2.3 获取原始对话（getMessage）
 
 获取指定用户和会话的**原始对话消息**，用于查看或参考完整聊天记录。
@@ -293,13 +288,11 @@ curl --request POST \
 }
 ```
 
-<br />
 
 ## 3. 下一步行动
 
 👉 现在你已经能够运行 MemOS，查看完整的[**<u>API 文档</u>**](/api-reference/search-memories)，探索更多功能吧！
 
-<br />
 
 ## 4. 联系我们
 

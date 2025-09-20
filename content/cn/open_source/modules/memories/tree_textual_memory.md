@@ -6,7 +6,7 @@ title: "TreeTextMemory: 分层结构的明文记忆"
 
 **TreeTextMemory** 支持以结构化方式组织、关联并检索记忆，同时保留丰富的上下文信息与良好的可解释性。
 
-当前使用[Neo4j](/modules/memories/neo4j_graph_db)作为后端，未来计划支持更多图数据库。
+当前使用[Neo4j](/open_source/modules/memories/neo4j_graph_db)作为后端，未来计划支持更多图数据库。
 
 
 ## 你将学习到:
@@ -325,8 +325,8 @@ my_tree_textual_memory.drop()
 
 ## 下一步是什么?
 
-- **了解更多[Neo4j](/modules/memories/neo4j_graph_db):** treeTextMemory由图数据库后端提供支持。了解Neo4j如何处理节点、边和遍历将帮助您设计更有效的记忆层次结构、多跳推理和上下文链接策略。
-- **添加 [Activation Memory](/modules/memories/kv_cache_memory):** 使用运行时KV-cache来测试会话状态。
+- **了解更多[Neo4j](/open_source/modules/memories/neo4j_graph_db):** treeTextMemory由图数据库后端提供支持。了解Neo4j如何处理节点、边和遍历将帮助您设计更有效的记忆层次结构、多跳推理和上下文链接策略。
+- **添加 [Activation Memory](/open_source/modules/memories/kv_cache_memory):** 使用运行时KV-cache来测试会话状态。
 - **探索图推理:** 为多跳检索和答案合成构建工作流。
 - **更进一步:** 为高级应用检查 [API Reference](/api-reference/configure-memos), 或者在 `examples/`运行更多的示例.
 

@@ -288,7 +288,7 @@ curl --request POST \
 
 ## 3. 下一步行动
 
-👉 现在你已经能够运行 MemOS，查看完整的[**<u>API 文档</u>**](/api-reference/search-memories)，探索更多功能吧！
+👉 现在你已经能够运行 MemOS，查看完整的[**<u>API 文档</u>**](/api)，探索更多功能吧！
 
 
 ## 4. 联系我们

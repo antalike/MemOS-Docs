@@ -29,7 +29,7 @@ title: MemOS 场景案例
 
 ## 📚 完整章节导航
 
-### [第一章：入门：你的第一个 MemCube](/cookbook/chapter1/api)
+### [第一章：入门：你的第一个 MemCube](/open_source/cookbook/chapter1/api)
 
 **核心技能**：环境配置、MemCube 基础操作、数据导入与管理
 
@@ -42,7 +42,7 @@ title: MemOS 场景案例
   - **配方 1.2**: 从文档构建简单的 MemCube (Ollama版)
   - **配方 1.3**: MemCube 基础操作 (Ollama版)
 
-### [第二章：结构化记忆：TreeNodeTextualMemoryMetadata](/cookbook/chapter2/api)
+### [第二章：结构化记忆：TreeNodeTextualMemoryMetadata](/open_source/cookbook/chapter2/api)
 
 **核心技能**：结构化记忆、元数据管理、多源追踪
 
@@ -55,7 +55,7 @@ title: MemOS 场景案例
   - **配方 2.2**: 创建基础的结构化记忆 (Ollama版)
   - **配方 2.3**: 常用字段说明和配置
 
-### [第三章：使用 MemOS 构建智能小说分析系统](/cookbook/chapter3/overview)
+### [第三章：使用 MemOS 构建智能小说分析系统](/open_source/cookbook/chapter3/overview)
 
 **核心技能**：文本预处理、AI驱动记忆抽取、智能推理系统、创意应用开发
 
@@ -71,7 +71,7 @@ title: MemOS 场景案例
   - 动态Working Memory世界背景
   - MemOS驱动的互动文字游戏
 
-### [第四章：使用 MemOS 构建生产级知识问答系统](/cookbook/chapter4/overview)
+### [第四章：使用 MemOS 构建生产级知识问答系统](/open_source/cookbook/chapter4/overview)
 
 **核心技能**：概念图谱构建、知识工程、生产级部署、小模型增强
 
@@ -206,7 +206,7 @@ print(f"MemOS版本: {memos.__version__}")
 - **GitHub Issues**: 在 [MemOS Issues](https://github.com/MemTensor/MemOS/issues) 提交技术问题和bug报告
 - **GitHub Discussions**: 在 [MemOS Discussions](https://github.com/MemTensor/MemOS/discussions) 进行使用经验交流和提问
 - **Discord社区**: 加入 [MemOS Discord服务器](https://discord.gg/Txbx3gebZR) 实时交流
-- **官方文档**: 查看 [MemOS官方文档](https://memos-docs.openmem.net/home/overview/) 了解详细使用指南
+- **官方文档**: 查看 [MemOS官方文档](https://memos-docs.openmem.net/open_source/home/overview/) 了解详细使用指南
 - **API参考**: 查看 [MemOS API文档](https://memos-docs.openmem.net/api-reference/configure-memos/) 获取接口详情
 - **微信群**: 扫描 [二维码](https://statics.memtensor.com.cn/memos/qr-code.png) 加入微信技术交流群
 

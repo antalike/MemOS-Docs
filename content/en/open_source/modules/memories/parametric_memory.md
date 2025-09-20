@@ -35,9 +35,9 @@ Stay tuned!
 ## Related Modules
 
 While parametric memory is under development, try out these today:
-- **[GeneralTextMemory](/modules/memories/general_textual_memory)**: Flexible vector-based semantic storage.
-- **[TreeTextMemory](/modules/memories/tree_textual_memory)**: Structured, hierarchical knowledge graphs.
-- **[Activation Memory](/modules/memories/kv_cache_memory)**: Efficient runtime state caching.
+- **[GeneralTextMemory](/open_source/modules/memories/general_textual_memory)**: Flexible vector-based semantic storage.
+- **[TreeTextMemory](/open_source/modules/memories/tree_textual_memory)**: Structured, hierarchical knowledge graphs.
+- **[Activation Memory](/open_source/modules/memories/kv_cache_memory)**: Efficient runtime state caching.
 
 ## Developer Note
 

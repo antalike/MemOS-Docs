@@ -49,8 +49,6 @@ desc: 让大模型从一次性对话工具，进化为真正具有长期记忆�
 **让大模型从一次性对话工具，进化为真正具有长期记忆和自适应能力的智能体。**
 
 
-<br>
-
 ## 2. MemOS架构设计
 
 MemOS 的设计核心，是把「记忆」作为一个独立系统层，和计算、存储一样，成为 AI 应用的基础能力。它的整体架构可以概括为 **三层结构**： <span style="color: rgb(61, 170, 214);">**API 与应用接口层、记忆调度与管理层、记忆存储与基础设施层**</span>
@@ -80,8 +78,6 @@ MemOS 的设计核心，是把「记忆」作为一个独立系统层，和计�
 <br>
 
 
-<br>
-
 ## 3. MemOS为什么高效？
 
 :::note{icon="ri:message-2-line"}
@@ -108,8 +104,6 @@ MemOS 的设计核心，是把「记忆」作为一个独立系统层，和计�
 <br>
 
 
-<br>
-
 ## 4. MemOS-Preview 版本性能详细评估结果
 
 ### 4.1 LoCoMo记忆评测
@@ -124,8 +118,6 @@ MemOS 的设计核心，是把「记忆」作为一个独立系统层，和计�
 ![image.png](https://cdn.memtensor.com.cn/img/1758184331868_djlvc5_compressed.png)
 
 
-<br>
-
 ### 4.2 KV Cache记忆评测
 
 *   除了通用的记忆能力评估，研究团队还重点考察了MemOS所提出的KV Cache记忆机制在推理加速方面的实际效果。
@@ -138,16 +130,12 @@ MemOS 的设计核心，是把「记忆」作为一个独立系统层，和计�
 ![image.png](https://cdn.memtensor.com.cn/img/1758184346453_5nlqyz_compressed.png)
 
 
-<br>
-
 ## 5. 下一步行动
 
 *   快使用我们的云服务体验MemOS的强大之处吧 [《云平台简介》](/dashboard/overview)
     
-*   或使用MemOS开源项目自行部署体验 [《开源项目概览》](/home/overview)
+*   或使用MemOS开源项目自行部署体验 [《开源项目概览》](/open_source/home/overview)
     
-
-<br>
 
 ## 6. 联系我们
 

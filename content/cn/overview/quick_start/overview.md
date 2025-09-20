@@ -166,7 +166,7 @@ print("相关记忆：", results["data"]["memoryDetailList"])
 
 > MemCube 是记忆的基本容器，负责承载用户的记忆条目。云服务中的 `addMessages` 和 `searchMemories` 接口，本质上就是对 MemCube 内部操作的抽象封装。在开源框架中，开发者可以直接控制这些步骤。
 
-具体操作步骤详见：[https://memos-docs.openmem.net/cn/getting_started/quick_start](https://memos-docs.openmem.net/cn/getting_started/quick_start)
+具体操作步骤详见：[https://memos-docs.openmem.net/cn/open_source/getting_started/quick_start](https://memos-docs.openmem.net/cn/getting_started/quick_start)
 
 
 ## 3. 下一步行动
@@ -198,7 +198,7 @@ MemOS 的记忆机制可以理解为一条完整的「工作流」：
   - MemOS 能把这些行为抽象成记忆，例如「风险偏好=保守」
   - 并在用户提问「我适合什么投资？」时直接发挥作用，让投顾建议更专业、更贴合实际。
 
-- [构建拥有记忆的家庭生活助手](/usecase/life_assistant)
+- [构建拥有记忆的家庭生活助手](/usecase/home_assistant)
   - 家庭助手不只是回答即时问题，它还能记住你说过的待办、偏好和家庭信息。
   - 比如「周六带孩子去动物园」或「提醒时要先列要点」，MemOS 会把这些转成记忆
   - 在后续对话中自动发挥作用，让助手更贴近真实生活

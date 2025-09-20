@@ -262,9 +262,9 @@ print("Memory dumped to tmp/mem")
 准备进阶了吗？
 
 - **尝试自己的 LLM 后端：** 切换到 OpenAI、HuggingFace 或 Ollama。
-- **探索 [TreeTextMemory](/modules/memories/tree_textual_memory)：** 构建基于图的层级记忆。
-- **添加 [Activation Memory](/modules/memories/kv_cache_memory)：** 缓存键值状态，加速推理。
-- **深入学习：** 查看 [API Reference](/api-reference/configure-memos) 和 [Examples](/getting_started/examples) 了解高级工作流程。
+- **探索 [TreeTextMemory](/open_source/modules/memories/tree_textual_memory)：** 构建基于图的层级记忆。
+- **添加 [Activation Memory](/open_source/modules/memories/kv_cache_memory)：** 缓存键值状态，加速推理。
+- **深入学习：** 查看 [API Reference](/api-reference/configure-memos) 和 [Examples](/open_source/getting_started/examples) 了解高级工作流程。
 
 ::note
 **试试基于图的明文记忆**

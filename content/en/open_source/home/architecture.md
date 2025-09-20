@@ -85,6 +85,6 @@ Add your own memory types, storage backends, or LLM connectors with minimal chan
 
 ::note
 **Pro Tip**<br>
-[Contribute](/contribution/overview) a new backend or share your custom memory
+[Contribute](/open_source/contribution/overview) a new backend or share your custom memory
 type — it’s easy to plug in.
 ::

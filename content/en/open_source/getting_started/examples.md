@@ -9,7 +9,7 @@ desc: "Congratulations - you've mastered the Quick Start and built your first wo
   ---
   icon: ri:play-line
   title: Minimal Pipeline
-  to: /getting_started/examples#example-1-minimal-pipeline
+  to: /open_source/getting_started/examples#example-1-minimal-pipeline
   ---
   The smallest working pipeline — add, search, update and dump plaintext memories.
   :::
@@ -18,7 +18,7 @@ desc: "Congratulations - you've mastered the Quick Start and built your first wo
   ---
   icon: ri:tree-line
   title: TreeTextMemory Only
-  to: /getting_started/examples#example-2-treetextmemory-only
+  to: /open_source/getting_started/examples#example-2-treetextmemory-only
   ---
   Use Neo4j-backed hierarchical memory to build structured, multi-hop knowledge graphs.
   :::
@@ -27,7 +27,7 @@ desc: "Congratulations - you've mastered the Quick Start and built your first wo
   ---
   icon: ri:database-2-line
   title: KVCacheMemory Only
-  to: /getting_started/examples#example-3-kvcachememory-only
+  to: /open_source/getting_started/examples#example-3-kvcachememory-only
   ---
   Speed up sessions with short-term KV cache for fast context injection.
   :::
@@ -36,7 +36,7 @@ desc: "Congratulations - you've mastered the Quick Start and built your first wo
   ---
   icon: hugeicons:share-07
   title: Hybrid TreeText + KVCache
-  to: /getting_started/examples#example-4-hybrid
+  to: /open_source/getting_started/examples#example-4-hybrid
   ---
   Combine explainable graph memory with fast KV caching in a single MemCube.
   :::
@@ -45,7 +45,7 @@ desc: "Congratulations - you've mastered the Quick Start and built your first wo
   ---
   icon: ri:calendar-check-line
   title: Multi-Memory Scheduling
-  to: /getting_started/examples#example-5-multi-memory-scheduling
+  to: /open_source/getting_started/examples#example-5-multi-memory-scheduling
   ---
   Run dynamic memory orchestration for multi-user, multi-session agents.
   :::

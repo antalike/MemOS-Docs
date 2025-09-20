@@ -256,11 +256,11 @@ Now your agent remembers — no more stateless chatbots!
 Ready to level up?
 
 - **Try your own LLM backend:** Swap to OpenAI, HuggingFace, or Ollama.
-- **Explore [TreeTextMemory](/modules/memories/tree_textual_memory):** Build a graph-based,
+- **Explore [TreeTextMemory](/open_source/modules/memories/tree_textual_memory):** Build a graph-based,
   hierarchical memory.
-- **Add [Activation Memory](/modules/memories/kv_cache_memory):** Cache key-value
+- **Add [Activation Memory](/open_source/modules/memories/kv_cache_memory):** Cache key-value
   states for faster inference.
-- **Dive deeper:** Check the [API Reference](/api-reference/configure-memos) and [Examples](/getting_started/examples) for advanced workflows.
+- **Dive deeper:** Check the [API Reference](/api-reference/configure-memos) and [Examples](/open_source/getting_started/examples) for advanced workflows.
 
 ::note
 **Try Graph Textual Memory**<br>Try switching to

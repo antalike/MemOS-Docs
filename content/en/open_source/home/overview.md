@@ -34,11 +34,11 @@ As large language models (LLMs) evolve to tackle advanced tasks—such as multi-
 
 ## Installation
 
-Please refer to our [installation guide](/getting_started/installation) for complete installation instructions, including basic installation, optional dependencies, and external dependencies.
+Please refer to our [installation guide](/open_source/getting_started/installation) for complete installation instructions, including basic installation, optional dependencies, and external dependencies.
 
 ## Contributing
 
-We welcome contributions! Please see the [contribution guidelines](/contribution/overview) for details on setting up your environment and
+We welcome contributions! Please see the [contribution guidelines](/open_source/contribution/overview) for details on setting up your environment and
 submitting pull requests.
 
 ## License

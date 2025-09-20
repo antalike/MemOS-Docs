@@ -11,7 +11,7 @@ The simplest way to install MemOS is using pip:
 pip install MemoryOS -U
 ```
 
-For detailed development environment setup, workflow guidelines, and contribution best practices, please see our [Contribution Guide](/contribution/overview).
+For detailed development environment setup, workflow guidelines, and contribution best practices, please see our [Contribution Guide](/open_source/contribution/overview).
 
 ## Optional Dependencies
 

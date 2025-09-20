@@ -36,11 +36,11 @@ links:
 
 ## 安装
 
-请参阅我们的 [安装指南](/getting_started/installation) 获取完整的安装说明，包括基础安装、可选依赖项和外部依赖项。
+请参阅我们的 [安装指南](/open_source/getting_started/installation) 获取完整的安装说明，包括基础安装、可选依赖项和外部依赖项。
 
 ## 贡献
 
-我们欢迎贡献！请参阅 [贡献指南](/contribution/overview) 了解设置环境和提交 pull request 的详细信息。
+我们欢迎贡献！请参阅 [贡献指南](/open_source/contribution/overview) 了解设置环境和提交 pull request 的详细信息。
 
 ## 许可证
 
