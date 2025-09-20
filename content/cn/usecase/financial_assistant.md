@@ -191,15 +191,17 @@ def preset_user_behaviors():
     """显示预设的用户行为记忆"""
     print("\n📊 已预设的用户行为记忆:")
     print("=" * 60)
-    behaviors = [
-      "点击「养老理财」广告进入 APP",
-      "浏览并收藏低风险基金", 
-    ]
+    behaviors = [{
+      "role": "user",
+      "content": "点击「养老理财」广告进入 APP"
+    }, {
+      "role": "assistant",
+      "content": "浏览并收藏低风险基金"
+    }]
     
     for i, behavior in enumerate(behaviors, 1):
-        print(f"{i}. {behavior}")
-        ai_assistant.add_messages(behavior, user_id, conversation_id)
-
+        print(f"{i}. {behavior['content']}")
+    ai_assistant.add_messages(behaviors, user_id, conversation_id)
     
     print("=" * 60)
     print("💡 以上行为记忆已自动加载，助手会基于这些信息提供个性化建议")
@@ -210,7 +212,7 @@ def main():
     
     # 询问用户是否要先执行预配置对话
     while True:
-        pre_chat = input("🤔 您想先预加载用户行为记忆吗？预计消耗2次add额度，是否执行？(y/n): ").strip().lower()
+        pre_chat = input("🤔 您想先预加载用户行为记忆吗？预计消耗1次add额度，是否执行？(y/n): ").strip().lower()
         
         if pre_chat in ['y', 'yes', '是', 'Y']:
             preset_user_behaviors()

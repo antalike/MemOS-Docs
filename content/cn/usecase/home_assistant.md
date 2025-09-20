@@ -183,8 +183,8 @@ conversation_id = "memos_home_management_conversation_123"
 
 def demo_questions():
     return [
-      "周六要带孩子去动物园，别忘了",
-      "我周末要做什么？",
+      "周六要对装修方案，确认下行程",
+      "我周末有哪些安排？",
       "装修房子时要注意什么？"
     ]
 
@@ -196,8 +196,8 @@ def pre_configured_conversations():
             "description": "家庭装修计划设置"
         },
         {
-            "user": "提醒我周末要对装修方案",
-            "description": "周末装修提醒"
+            "user": "周六要带孩子去动物园，别忘了",
+            "description": "周末任务提醒"
         }
     ]
 
