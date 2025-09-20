@@ -8,7 +8,7 @@ const props = defineProps<{
 }>()
 
 if (props.error?.statusCode === 404) {
-  navigateTo(getLangPath('/open_source/home/overview', locale.value))
+  navigateTo(getLangPath('/overview/introduction', locale.value))
 }
 
 useHead({
