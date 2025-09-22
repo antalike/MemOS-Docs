@@ -1,5 +1,6 @@
 ---
 title: 让理财助手读懂客户行为背后的偏好
+desc: 借助 MemOS，将用户的操作与对话行为抽象为“记忆”，从而识别并提炼背后的投资偏好，实现更懂客户的个性化服务。
 ---
 
 
@@ -33,7 +34,7 @@ title: 让理财助手读懂客户行为背后的偏好
 
 RAG 更适合做知识问答，例如解释「什么是债券」。但它不会从用户的行为里总结出偏好：
 
-| 传统 RAG | MemOS |
+| 传统RAG | MemOS |
 | --- | --- |
 | 返回静态理财知识片段 | 将用户行为抽象为语义化记忆（兴趣、偏好、画像） |
 | 不能回答「我适合什么投资？」 | 能结合记忆生成个性化建议 |
@@ -183,7 +184,7 @@ conversation_id = "memos_financial_management_conversation_123"
 
 def demo_questions():
     return [
-      '我不想冒太大风险'
+      '我的风险偏好是什么'
       "推荐一些适合我的投资"
     ]
 
@@ -253,7 +254,7 @@ if __name__ == "__main__":
     
 2.   实例化<code style="font-weight: bold;">FinancialManagementAssistant </code>
     
-3.   选择是否执行预设值的对话，会消耗2次add和2次search的额度
+3.   选择是否执行预设值的对话，会消耗1次add和2次search的额度
     
 4.   使用`main()`函数通过对话循环与助手进行交互
     
