@@ -23,7 +23,6 @@ MemOS 提供两种使用方式：
 > 无论是 **云服务** 还是 **开源框架**，MemOS 都能让你的 AI **轻松获得持久记忆**。<br>你可以先用云服务快速体验，再根据业务需要切换到本地化部署。
 
 ---
-
 ## 1. 方式一：云服务平台
 
 在使用大模型构建应用时，一个常见问题是：**如何让 AI 记住用户的长期偏好？**  
@@ -95,7 +94,7 @@ print(resp.json())
 > - **想省去拼接工作，但还需叠加业务规则** → 用 **instruction**，系统已将记忆与用户问题拼接为半成品指令，开发者可在此基础上再加工；
 > - **追求一键直连** → 用 **full_instruction**，系统已生成完整可直接下发给大模型的终端指令。
 
-> **为什么要这样设计**：大多数记忆系统只停留在“召回事实”，但事实并不等于可执行的 Prompt.MemOS 独有的指令补全链路，帮你省去复杂的拼接与调优，把记忆转译成模型可直接理解和执行的提示。
+> **为什么要这样设计**：大多数记忆系统只停留在“召回事实”，但事实并不等于可执行的 Prompt。 MemOS 独有的指令补全链路，帮你省去复杂的拼接与调优，把记忆转译成模型可直接理解和执行的提示。
 
 ```python
 import requests
@@ -166,7 +165,7 @@ print("相关记忆：", results["data"]["memoryDetailList"])
 
 > MemCube 是记忆的基本容器，负责承载用户的记忆条目。云服务中的 `addMessages` 和 `searchMemories` 接口，本质上就是对 MemCube 内部操作的抽象封装。在开源框架中，开发者可以直接控制这些步骤。
 
-具体操作步骤详见：[https://memos-docs.openmem.net/cn/open_source/getting_started/quick_start](https://memos-docs.openmem.net/cn/getting_started/quick_start)
+具体操作步骤详见：[开源项目→快速开始](https://memos-docs.openmem.net/cn/getting_started/quick_start)
 
 
 ## 3. 下一步行动
@@ -178,9 +177,6 @@ print("相关记忆：", results["data"]["memoryDetailList"])
 ::note
 **深入理解**<br>
 MemOS 的记忆机制可以理解为一条完整的「工作流」：
-
----
-
 你提交原始消息 → 对记忆进行加工生产 → 调度机制根据任务和上下文安排调用与存储，并可动态调整记忆形态 → 在需要时被召回相关记忆注入为上下文或指令 → 同时由生命周期管理维持演化与更新。
 ::
 
