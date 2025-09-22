@@ -1,5 +1,6 @@
 ---
 title: 让理财助手读懂客户行为背后的偏好
+desc: 借助 MemOS，将用户的操作与对话行为抽象为“记忆”，从而识别并提炼背后的投资偏好，实现更懂客户的个性化服务。
 ---
 
 
@@ -55,7 +56,7 @@ RAG 更适合做知识问答，例如解释「什么是债券」。但它不会
 
 | 方案 | 特点 | 局限 | MemOS 的优势 |
 | --- | --- | --- | --- |
-| **传统 RAG** | 检索知识库文档 | 不会处理用户行为，无法形成画像 | 适合做 FAQ，但不能做个性化投顾 |
+| **传统RAG** | 检索知识库文档 | 不会处理用户行为，无法形成画像 | 适合做 FAQ，但不能做个性化投顾 |
 | **自研存储** | 直接存储行为日志 | 需要自行抽象行为→记忆；拼 Prompt 成本高 | 要开发大量 glue code |
 | **MemOS** | 两个接口：`addMessage` 写入、`searchMemory` 检索 | —— | 自动把行为轨迹抽象成记忆，供模型直接使用 |
 
@@ -183,7 +184,7 @@ conversation_id = "memos_financial_management_conversation_123"
 
 def demo_questions():
     return [
-      '我不想冒太大风险'
+      '我的风险偏好是什么'
       "推荐一些适合我的投资"
     ]
 
@@ -195,7 +196,7 @@ def preset_user_behaviors():
       "role": "user",
       "content": "点击「养老理财」广告进入 APP"
     }, {
-      "role": "assistant",
+      "role": "user",
       "content": "浏览并收藏低风险基金"
     }]
     
@@ -253,7 +254,7 @@ if __name__ == "__main__":
     
 2.   实例化<code style="font-weight: bold;">FinancialManagementAssistant </code>
     
-3.   选择是否执行预设值的对话，会消耗2次add和2次search的额度
+3.   选择是否执行预设值的对话，会消耗1次add和2次search的额度
     
 4.   使用`main()`函数通过对话循环与助手进行交互
     
