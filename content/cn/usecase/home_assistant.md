@@ -1,5 +1,6 @@
 ---
 title: 构建拥有记忆的家庭生活助手
+desc: 在MemOS的加持下，家庭助手能把日常琐事与长期计划串联起来，快速理解并回应用户真正的需求。
 ---
 
 ## 1. 概述
@@ -183,21 +184,18 @@ conversation_id = "memos_home_management_conversation_123"
 
 def demo_questions():
     return [
-      "周六要对装修方案，确认下行程",
       "我周末有哪些安排？",
-      "装修房子时要注意什么？"
+      "帮我规划下周家务分工"
     ]
 
 def pre_configured_conversations():
     """返回预配置的对话对"""
     return [
         {
-            "user": "我们家要装修，计划下个月开工，风格偏好简约风，预算不超过20万",
-            "description": "家庭装修计划设置"
+            "user": "周六要带孩子去动物园，帮我记一下。",
         },
         {
-            "user": "周六要带孩子去动物园，别忘了",
-            "description": "周末任务提醒"
+            "user": "以后提醒或安排，请先列三条要点，再补一句简短建议。",
         }
     ]
 
@@ -209,7 +207,7 @@ def execute_pre_conversations():
     print("=" * 60)
     
     for i, conv in enumerate(conversations, 1):
-        print(f"\n💬 对话 {i}: {conv['description']}")
+        print(f"\n💬 对话 {i}")
         print(f"👤 用户: {conv['user']}")
         
         # 执行对话
