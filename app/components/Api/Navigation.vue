@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { FlatPathProps } from '@/utils/openapi'
-
-const { paths } = useOpenApi()
+defineProps<{
+  navigation?: Record<string, any>
+}>()
 
 const methodColor = {
   post: {
@@ -21,73 +21,10 @@ const methodColor = {
     active: 'bg-[#C28C30] text-[#FFFFFF]'
   }
 }
-
-type NavLink = {
-  title: string
-  path?: string
-  method?: 'get' | 'post' | 'put' | 'delete'
-  children?: NavLink[]
-}
-
-const navigationData = computed(() => {
-  // Group by first-level segment of apiUrl
-  const groupMap = new Map<string, FlatPathProps[]>()
-
-  paths.value.forEach((item: FlatPathProps) => {
-    const firstSegment = item.apiUrl.split('/').filter(Boolean)[0] ?? ''
-    const groupKey = firstSegment ? `/${firstSegment}` : '/'
-
-    if (!groupMap.has(groupKey)) {
-      groupMap.set(groupKey, [])
-    }
-    groupMap.get(groupKey)!.push(item)
-  })
-
-  const items: NavLink[] = []
-  const singleItems: NavLink[] = []
-
-  groupMap.forEach((groupItems, groupKey) => {
-    if (groupItems.length === 1) {
-      const item = groupItems[0]
-      singleItems.push({
-        title: item.summary,
-        path: item.routePath,
-        method: item.method
-      })
-    } else {
-      const groupTitle = prettifyGroupTitle(groupKey)
-      items.push({
-        title: groupTitle,
-        children: groupItems
-          .map(p => ({
-            title: p.summary,
-            path: p.routePath,
-            method: p.method
-          }))
-      })
-    }
-  })
-
-  return [{
-    title: 'API Reference',
-    children: singleItems.concat(items)
-  }]
-})
-
-function prettifyGroupTitle(key: string) {
-  const base = key.replace(/^\//, '')
-  if (!base) return '/'
-  return base
-    .replace(/[\-_]+/g, ' ')
-    .split(' ')
-    .filter(Boolean)
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ')
-}
 </script>
 
 <template>
-  <UContentNavigation :navigation="navigationData">
+  <UContentNavigation :navigation="navigation">
     <template #link-leading="{ link, active }">
       <span
         v-if="link.method"

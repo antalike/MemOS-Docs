@@ -79,17 +79,17 @@ export function resolveSchemaRef(
 }
 
 // Flatten OpenAPI paths
-export function flattenPaths(paths: Record<string, PathsProps>) {
+export function flattenPaths(paths: Record<string, PathsProps>, parentPath?: string) {
   const results: FlatPathProps[] = []
 
   Object.entries(paths).forEach(([apiUrl, methods]) => {
     Object.entries(methods).forEach(([method, operation]) => {
-      const routePath = operation.summary.split(' ').map(s => s.toLowerCase()).join('-')
+      const routePath = operation.operationId.split('_').map(s => s.toLowerCase()).join('-')
 
       results.push({
         apiUrl,
         method: method as MethodType,
-        routePath: `/api-reference/${routePath}`,
+        routePath: `/${parentPath}/${routePath}`,
         ...operation
       })
     })

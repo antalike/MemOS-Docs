@@ -17,7 +17,7 @@ function onToggle() {
         class="ease-linear"
         :class="isExpanded ? '' : 'rotate-270'"
       />
-      <span>{{ isExpanded ? 'Hide' : 'Show' }} child attributes</span>
+      <span>{{ isExpanded ? $t('api.hideChildAttrs') : $t('api.showChildAttrs') }}</span>
     </div>
     <div
       v-show="isExpanded"

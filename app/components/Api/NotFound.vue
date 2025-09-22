@@ -23,7 +23,9 @@ const description = computed(
           />
         </div>
         <div class="flex-1 min-w-0">
-          <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">{{ heading }}</h2>
+          <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+            {{ heading }}
+          </h2>
           <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
             {{ description }}
           </p>
