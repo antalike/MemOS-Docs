@@ -1,15 +1,19 @@
 <script setup lang="ts">
 import { resolveSchemaRef } from '@/utils/openapi'
+import type { Collections } from '@nuxt/content'
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   name: string
   parentName?: string | undefined
   required?: boolean
   defaultValue?: unknown
   schema?: Record<string, unknown>
-}>()
+  apiName?: keyof Collections
+}>(), {
+  apiName: 'openapi'
+})
 
-const { schemas } = useOpenApi()
+const { schemas } = useOpenApi(props.apiName)
 
 function mapSimpleType(t?: string): string {
   if (!t) return 'any'

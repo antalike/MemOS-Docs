@@ -2,6 +2,7 @@
 import type { JSONValue } from '@/utils/jsonHighlight'
 import { renderHighlightedJson } from '@/utils/jsonHighlight'
 import { resolveSchemaRef } from '@/utils/openapi'
+import type { Collections } from '@nuxt/content'
 
 type JSONValueLocal = JSONValue
 
@@ -25,11 +26,14 @@ interface ResponseItem {
   contentType?: string
   data?: SchemaLike
 }
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   responses: ResponseItem[]
-}>()
+  apiName?: keyof Collections
+}>(), {
+  apiName: 'openapi'
+})
 
-const { schemas } = useOpenApi()
+const { schemas } = useOpenApi(props.apiName)
 
 const active = ref<number>(0)
 

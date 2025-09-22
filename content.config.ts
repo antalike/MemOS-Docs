@@ -45,6 +45,19 @@ export default defineContentConfig({
         ),
         components: z.record(z.string(), z.any()).optional()
       }).passthrough()
+    }),
+    dashboardApi: defineCollection({
+      type: 'data',
+      source: '**/dashboard/api/api.json',
+      schema: z.object({
+        openapi: z.string(),
+        info: z.record(z.string(), z.any()).optional(),
+        paths: z.record(
+          z.string(),
+          z.record(z.string(), z.any())
+        ),
+        components: z.record(z.string(), z.any()).optional()
+      }).passthrough()
     })
   }
 })

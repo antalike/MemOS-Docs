@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { resolveSchemaRef } from '@/utils/openapi'
+import type { Collections } from '@nuxt/content'
 
 type VariantDescriptor = { type?: string, title?: string, $ref?: string }
 
@@ -15,11 +16,14 @@ interface ArrayItemType {
   enum?: unknown[]
 }
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   items: ArrayItemType
-}>()
+  apiName?: keyof Collections
+}>(), {
+  apiName: 'openapi'
+})
 
-const { schemas } = useOpenApi()
+const { schemas } = useOpenApi(props.apiName)
 
 function resolveRef(ref?: string) {
   return resolveSchemaRef(ref, schemas.value)
@@ -68,7 +72,6 @@ const displaySchema = computed(() => {
         </div>
       </div>
     </template>
-
     <!-- Resolved schema (from $ref or selected anyOf/oneOf) -->
     <template v-if="displaySchema && displaySchema.properties">
       <template
@@ -82,6 +85,7 @@ const displaySchema = computed(() => {
               :required="displaySchema?.required?.includes(prop)"
               :default-value="subitem.default"
               :schema="subitem"
+              :api-name="apiName"
             />
             <div class="mt-3">
               <p
@@ -105,7 +109,10 @@ const displaySchema = computed(() => {
               </div>
             </div>
             <template v-if="subitem.items">
-              <ApiResponseSubItem :items="subitem.items" />
+              <ApiResponseSubItem
+                :items="subitem.items"
+                :api-name="apiName"
+              />
             </template>
           </div>
         </div>

@@ -18,5 +18,18 @@ export default {
     title: 'Changelog',
     description: 'All notable changes to MemOS will be documented here',
     releaseNotes: 'Release Notes'
+  },
+  dashboard: {
+    nav: {
+      apiReference: 'API Reference',
+      overview: 'Overview',
+      errorcode: 'Error Code Query'
+    }
+  },
+  api: {
+    body: 'Body',
+    response: 'Response',
+    showChildAttrs: 'Show child attributes',
+    hideChildAttrs: 'Hide child attributes'
   }
 }
