@@ -329,7 +329,7 @@ make install
 uvicorn memos.api.product_api:app --host 0.0.0.0 --port 8000 --reload
 ```
 
-#### 服务器运行后,您可以使用OpenAPI文档测试API，网址为 [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+#### 服务器运行后,您可以使用OpenAPI文档测试API，网址为 [http://localhost:8000/docs](http://localhost:8000/docs) 或者 [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
 
 #### 测试用例 (注册用户->添加用户记忆->查询用户记忆) 参考Docker Compose up测试用例
 

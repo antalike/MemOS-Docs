@@ -314,7 +314,7 @@ make install
 ```bash
 uvicorn memos.api.product_api:app --host 0.0.0.0 --port 8000 --reload
 ```
-#### After the server is running, you can use OpenAPI documentation to test the API [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+#### After the server is running, you can use OpenAPI documentation to test the API [http://localhost:8000/docs](http://localhost:8000/docs) or [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
 
 #### Test cases (register user ->add user memory ->query user memory) refer to Docker Compose up test cases
 
