@@ -17,7 +17,7 @@ const localizedMenus = computed(() => {
       label: t('header.home')
     },
     {
-      to: getLangPath('/open_source/home/overview', locale.value),
+      to: getLangPath('/overview/introduction', locale.value),
       label: t('header.docs'),
       active: !route.path.includes('/changelog')
     },

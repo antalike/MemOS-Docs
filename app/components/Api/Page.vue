@@ -39,7 +39,6 @@ const isMarkdown = computed(() => {
 
 <template>
   <div>
-    <!-- 移动端头部 -->
     <UHeader class="block lg:hidden">
       <template #left>
         <NuxtLink :to="homePath">
