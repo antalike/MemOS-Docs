@@ -1,6 +1,6 @@
 ---
 title: MemOS简介
-desc: MemOS（Memory Operating System）是一个面向 AI 应用的记忆管理层。  
+desc: MemOS（Memory Operating System）是一个面向 AI 应用的记忆管理操作系统。  
 ---
 
 它的目标是：让你的 AI 系统 **像人一样拥有长期记忆**，不仅能记住用户说过的话，还能主动调用、更新和调度这些记忆。
