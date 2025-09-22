@@ -319,3 +319,25 @@ uvicorn memos.api.product_api:app --host 0.0.0.0 --port 8000 --reload
 #### Test cases (register user ->add user memory ->query user memory) refer to Docker Compose up test cases
 
 ::
+
+### Start using pyCharm
+
+#### run start_api
+```bash
+1、 Enter the MemOS/dock/Dockerfile file and modify the running configuration
+# Start the docker
+CMD ["uvicorn", "memos.api.start_api:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+
+2、Go to the MemOS/src/emos/API directory and run start_api.py directly
+
+```
+
+#### run product_api
+```bash
+1、 Enter the MemOS/dock/Dockerfile file and modify the running configuration
+# Start the docker
+CMD ["uvicorn", "memos.api.product_api:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+
+2、 Go to the MemOS/src/emos/API directory and run product_api.py directly
+
+```

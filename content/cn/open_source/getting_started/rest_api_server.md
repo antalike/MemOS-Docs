@@ -334,3 +334,26 @@ uvicorn memos.api.product_api:app --host 0.0.0.0 --port 8000 --reload
 #### 测试用例 (注册用户->添加用户记忆->查询用户记忆) 参考Docker Compose up测试用例
 
 ::
+
+
+### 使用 pyCharm 启动
+
+#### 运行 start_api
+```bash
+1、进入MemOS/docker/Dockerfile文件，修改运行配置
+# Start the docker
+CMD ["uvicorn", "memos.api.start_api:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+
+2、进入目录MemOS/src/memos/api 直接运行start_api.py
+
+```
+
+#### 运行 product_api
+```bash
+1、进入MemOS/docker/Dockerfile文件，修改运行配置
+# Start the docker
+CMD ["uvicorn", "memos.api.product_api:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+
+2、进入目录MemOS/src/memos/api 直接运行product_api.py
+
+```
