@@ -1,5 +1,6 @@
 ---
 title: 有记忆的写作助手更好用
+desc: 借助 MemOS，你的产品将自动记住用户的写作习惯与上下文，让创作过程更连贯、更省心。
 ---
 
 ## 1. 概述
@@ -180,21 +181,18 @@ conversation_id = "memos_writing_conversation_123"
 
 def demo_questions():
     return [
-      "写封产品介绍邮件",
-      "你记得我的写作风格吧，这次会议纪要怎么写？",
-      "还记得昨天那份推广方案吗？帮我加上预算部分",
+      "帮我写一封团队聚餐的通知邮件",
+      "帮我写一封客户邮件，内容是总结我们即将上线的理财App新功能",
     ]
 
 def pre_configured_conversations():
     """返回预配置的对话对"""
     return [
         {
-            "user": "我在互联网公司市场部工作，写总结时语气要轻松点，写邮件开头加'尊敬的客户'",
-            "description": "工作信息和写作风格设置"
+            "user": "我在互联网公司市场部工作，写邮件时语气要轻松点，开头加'亲爱的XX'"
         },
         {
-            "user": "我昨天写了份市场推广方案，今天想继续优化，记住我们之前的讨论内容",
-            "description": "上下文延续设置"
+            "user": "写总结时我习惯先列三条要点"
         }
     ]
 
@@ -206,7 +204,7 @@ def execute_pre_conversations():
     print("=" * 60)
     
     for i, conv in enumerate(conversations, 1):
-        print(f"\n💬 对话 {i}: {conv['description']}")
+        print(f"\n💬 对话 {i}")
         print(f"👤 用户: {conv['user']}")
         
         # 执行对话
