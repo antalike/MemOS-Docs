@@ -24,7 +24,7 @@ desc: 我们集中整理了使用 MemOS 过程中最常见的困惑，不用到�
 
 我们的云服务平台为您提供了两个核心接口：
 
-`addMessages` —— 把原始对话交给我们，我们自动加工并存储记忆；
+`addMessages` —— 把原始信息（用户与 AI 的对话、用户在APP上的操作日志 / 行动轨迹等）交给我们，我们自动加工并存储记忆；
 
 `searchMemories` —— 在后续对话中召回相关记忆并完成指令拼接（可选），让 AI 回答更贴近用户需求。
 
@@ -95,7 +95,7 @@ desc: 我们集中整理了使用 MemOS 过程中最常见的困惑，不用到�
 
 *   快使用我们的云服务体验MemOS的强大之处吧 [云平台简介](/dashboard/overview)
     
-*   想要更加深度的理解MemOS算法原理，您可以前往查看[MemOS算法原理概述](/overview/algorithm)
+*   想要更加深度的理解MemOS算法原理，您可以前往查看 [MemOS算法原理概述](/overview/algorithm)
 
 
 ## 3. 联系我们
