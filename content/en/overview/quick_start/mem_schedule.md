@@ -39,7 +39,7 @@ The role of scheduling is to give the system “instant readiness and fast respo
 | Who to schedule for? | Current user, specific role agent, or shared cross-task context |
 | What form to schedule into? | Memories are tagged with indicators such as heat, timeliness, and importance. The scheduler decides which to load first, which to cool down, and which to archive. |
 
-When using MemOS cloud services, the role of scheduling can be observed through the performance of the `searchMemories` API:
+When using MemOS cloud services, the role of scheduling can be observed through the performance of the `searchMemory` API:
 
 *   It quickly returns relevant memories, avoiding context breaks.
     
