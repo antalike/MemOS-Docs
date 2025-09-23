@@ -67,6 +67,13 @@ export interface FlatPathProps extends PathProps {
   routePath: string
 }
 
+export interface SecurityProps {
+  type: 'apiKey' | 'http' | 'oauth2' | 'openIdConnect'
+  name: string
+  in?: 'query' | 'header' | 'cookie'
+  description?: string
+}
+
 // Resolve schema $ref
 export function resolveSchemaRef(
   ref: string | undefined | null,

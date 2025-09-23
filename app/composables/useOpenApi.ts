@@ -1,12 +1,19 @@
-import type { PathsProps, FlatPathProps } from '@/utils/openapi'
+import type { PathsProps, FlatPathProps, SecurityProps } from '@/utils/openapi'
 import type { Collections } from '@nuxt/content'
 import type { RouteLocation } from 'vue-router'
 
 interface OpenApiProps {
   components?: {
     schemas?: Record<string, SchemaProps>
+    securitySchemes?: Record<string, SecurityProps>
   }
   paths?: Record<string, PathsProps>
+  meta: {
+    body: {
+      security: any[]
+      servers: any[]
+    }
+  }
 }
 
 type NavLink = {
@@ -29,7 +36,10 @@ function prettifyGroupTitle(key: string) {
 
 const useOpenApi = (apiName: keyof Collections = 'openapi', parentPath: string = 'api-reference') => {
   const openapi = useState<OpenApiProps | null>(apiName, () => null)
+  const server = useState<Record<string, any> | null>(`${apiName}Server`, () => null)
   const schemas = useState<Record<string, SchemaProps>>(`${apiName}Schemas`, () => ({}))
+  const securitySchemes = useState<Record<string, SecurityProps>>(`${apiName}SecuritySchemas`, () => ({}))
+  const globalSecurity = useState<any[]>(`${apiName}Security`, () => ([]))
   const paths = useState<FlatPathProps[]>(`${apiName}Paths`, () => ([]))
   const apiNavData = computed(() => {
     // Group by first-level segment of apiUrl
@@ -93,7 +103,10 @@ const useOpenApi = (apiName: keyof Collections = 'openapi', parentPath: string =
     }
 
     openapi.value = doc ?? null
+    globalSecurity.value = openapi.value?.meta.body.security?.[0] ?? null
+    server.value = openapi.value?.meta.body.servers?.[0] ?? null
     schemas.value = openapi.value?.components?.schemas ?? {}
+    securitySchemes.value = openapi.value?.components?.securitySchemes ?? {}
     paths.value = flattenPaths(openapi.value?.paths ?? {}, parentPath)
   }
 
@@ -134,6 +147,9 @@ const useOpenApi = (apiName: keyof Collections = 'openapi', parentPath: string =
   return {
     openapi,
     schemas,
+    server,
+    securitySchemes,
+    globalSecurity,
     paths,
     apiNavData,
     getOpenApi,

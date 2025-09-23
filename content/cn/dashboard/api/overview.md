@@ -36,7 +36,7 @@ MemOS 支持以项目为维度管理资源、权限和调用日志。一个项�
 ❕删除项目将清空该项目下的所有记忆、消息及相关数据，该操作**不可恢复**。
 ::
 
-![image.png](https://alidocs.oss-cn-zhangjiakou.aliyuncs.com/res/8oLl952mYW6Kdlap/img/ff3b3e71-c0a8-493d-a971-0e7b61094a14.png?x-oss-process=image/crop,x_0,y_0,w_2880,h_1083/ignore-error,1)
+![image.png](https://cdn.memtensor.com.cn/img/1758595933287_286261_compressed.png)
 
 <br>
 
@@ -45,7 +45,7 @@ MemOS 支持以项目为维度管理资源、权限和调用日志。一个项�
 - 每个项目拥有独立的接口密钥列表，用于访问该项目下的所有记忆、消息和数据。
 - 在控制台左上角切换项目，即可查看对应密钥。
 
-![image.png](https://alidocs.oss-cn-zhangjiakou.aliyuncs.com/res/8oLl952mYW6Kdlap/img/5b289923-24b0-495c-bb69-053cfa1618b7.png?x-oss-process=image/crop,x_0,y_0,w_2880,h_1141/ignore-error,1)
+![image.png](https://cdn.memtensor.com.cn/img/1758596003390_f084vw_compressed.png)
 
 <br>
 
@@ -53,7 +53,7 @@ MemOS 支持以项目为维度管理资源、权限和调用日志。一个项�
 
 - 在控制台左上角切换项目，监控接口调用情况与历史记录。
 
-![image.png](https://alidocs.oss-cn-zhangjiakou.aliyuncs.com/res/8oLl952mYW6Kdlap/img/e2fb3b06-61be-4700-bba1-5e57cb4940c2.png?x-oss-process=image/crop,x_0,y_0,w_2880,h_1214/ignore-error,1)
+![image.png](https://cdn.memtensor.com.cn/img/1758596026089_503m42_compressed.png)
 
 <br>
 
@@ -61,14 +61,14 @@ MemOS 支持以项目为维度管理资源、权限和调用日志。一个项�
 
 - 注册并登录 [MemOS 云平台](https://memos-dashboard.openmem.net/quickstart/)，获取您的接口密钥。
 - 浏览每个接口的详细文档，详细了解请求 & 响应格式、参数和示例用法。
-  - [添加消息](https://alidocs.dingtalk.com/i/nodes/QPGYqjpJYr4pmOa4T2KzMOMN8akx1Z5N?utm_scene=team_space)
-  - [查询记忆](https://alidocs.dingtalk.com/i/nodes/vNG4YZ7JnPYAbkNYiZAraYOYW2LD0oRE?utm_scene=team_space)
-  - [获取消息](https://alidocs.dingtalk.com/i/nodes/3NwLYZXWynMqb0RMiYGkBopzVkyEqBQm?utm_scene=team_space)
-  - [错误码查询](https://alidocs.dingtalk.com/i/nodes/NkDwLng8ZLv2KPmvizpGoD7KVKMEvZBY?utm_scene=team_space)
+  - [添加消息](/dashboard/api/add-message-api-add-message-post)
+  - [查询记忆](/dashboard/api/search-memory-api-search-memory-post)
+  - [获取消息](/dashboard/api/get-message-api-get-message-get)
+  - [错误码查询](/dashboard/api/error_code)
 - 进行第一次接口调用，添加或检索记忆。
 
 <br>
 
 ## 5. 联系我们
 
-![image.png](https://alidocs.oss-cn-zhangjiakou.aliyuncs.com/res/4maOgXb0JEDR9lWN/img/0dcb729a-8897-4ced-a836-c8e33ae346dd.png)
+![image.png](https://statics.memtensor.com.cn/memos/contact-ui.png)

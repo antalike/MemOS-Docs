@@ -81,4 +81,4 @@ nav:
       - "(ri:article-line) Writing Docs": open_source/contribution/writing_docs.md
       - "(ri:flask-line) Writing Tests": open_source/contribution/writing_tests.md
 
-    - "(ri:file-code-line) API Reference": api-reference/configure-memos
+    - "(ri:file-code-line) API Reference": api-reference/set-config-configure-post
