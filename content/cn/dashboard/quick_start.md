@@ -19,7 +19,7 @@ desc: 欢迎访问 MemOS 云平台，可参考本新手指南，快速接入�
 
 - 设置环境变量
 
-::code-group
+::
 ```python [Python (HTTP)]
 import os
 import requests
@@ -34,14 +34,14 @@ os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
 - 安装SDK
 
-::code-group
+::
 ```bash
 pip install MemoryOS -U
 ```
   
 - 初始化客户端
 
-::code-group
+::
 ```python [Python (SDK)]
 from memos.api import MemOSClient
 
