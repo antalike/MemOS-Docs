@@ -66,7 +66,7 @@ Instruction completion works through both **offline chain** and **real-time chai
 | **Real-time Chain** (Dynamic Decision) | Select which memories and templates to activate based on task intent.<br><br>Resolve conflicts (e.g., “likes poetic openings” vs. “requires conciseness”).<br><br>Perform compression and degradation based on token budget and model characteristics. |
 
 
-## 2. Example (Pending Instruction Completion Launch) — Personalized Tutoring in AI Education
+## 2. Example (Try after instruction completion is launched) — Personalized Tutoring in AI Education
 
 ### 2.1 Historical Dialogue Input (Raw Material)
 
