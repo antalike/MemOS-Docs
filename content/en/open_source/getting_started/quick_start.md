@@ -97,5 +97,5 @@ knowledge.
 ## Need Help?
 Check out:
 - [Core Concepts](/open_source/home/core_concepts)
-- [API Reference](/api-reference/configure-memos)
+- [API Reference](/api-reference/set-config-configure-post)
 - [Contribution Guide](/open_source/contribution/overview)
