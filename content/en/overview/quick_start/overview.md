@@ -28,8 +28,8 @@ MemOS provides two usage options:
 When building applications with large models, a common problem is: **How can AI remember users’ long-term preferences?**  
 MemOS provides two core APIs to help you achieve this:
 
-- `addMessages` — Submit raw conversations to us, we automatically process and store them as memory  
-- `searchMemories` — Recall relevant memories and optional suggested instructions in subsequent conversations, making AI responses more aligned with user needs  
+- `addMessage` — Submit raw conversations to us, we automatically process and store them as memory  
+- `searchMemory` — Recall relevant memories and optional suggested instructions in subsequent conversations, making AI responses more aligned with user needs  
 
 ![image.svg](https://cdn.memtensor.com.cn/img/1758180109237_8ubv8n.svg)
 
@@ -37,7 +37,7 @@ MemOS provides two core APIs to help you achieve this:
 
 Register an account on the [MemOS Cloud Platform](https://memos-dashboard.openmem.net/quickstart) to obtain the default API Key.
 
-### Step 2. Store raw conversations (addMessages)
+### Step 2. Store raw conversations (addMessage)
 
 ::note
 **Conversation A: occurred on 2025-06-10**<br>
@@ -79,7 +79,7 @@ resp = requests.post(
 print(resp.json())
 ```
 
-### Step 3. Query MemOS for relevant memories within conversations (searchMemories)
+### Step 3. Query MemOS for relevant memories within conversations (searchMemory)
 
 ::note
 **Conversation B: occurred on 2025-09-28**<br>
@@ -162,7 +162,7 @@ print("Related Memories:", results["data"]["memoryDetailList"])
 
 For local deployment or deep customization, you can directly use MemOS’s open-source framework. Compared with cloud services, the open-source framework has no extra abstraction layer. Developers need to explicitly handle **memory extraction, storage, and retrieval**, all of which operate on a **MemCube**.
 
-> MemCube is the basic container of memory, responsible for storing user memory items. The `addMessages` and `searchMemories` APIs in the cloud service are essentially abstracted wrappers around internal operations of MemCube. In the open-source framework, developers can directly control these steps.
+> MemCube is the basic container of memory, responsible for storing user memory items. The `addMessage` and `searchMemory` APIs in the cloud service are essentially abstracted wrappers around internal operations of MemCube. In the open-source framework, developers can directly control these steps.
 
 For detailed operation steps, see: [Open-source Project → Quick Start](https://memos-docs.openmem.net/cn/getting_started/quick_start)
 
