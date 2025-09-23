@@ -141,10 +141,10 @@ requests.post(url=url, headers=headers, data=json.dumps(data))
 ```
 ```python [Python (SDK)]
 # 请确保已安装MemoS (pip install MemoryOS -U)
-from memos.api.client import MemOSClient
+from memos.api.client import MemOSAPIClient
 
 # 使用 API Key 初始化客户端
-client = MemOSClient(api_key=YOUR_API_KEY)
+client = MemOSClient(api_key=YOUR_API_KEY)
 
 query = "国庆去哪玩"
 user_id = "memos_user_123"
@@ -251,10 +251,10 @@ requests.post(url=url, headers=headers, data=json.dumps(data))
 ```
 ```python [Python (SDK)]
 # 请确保已安装MemoS (pip install MemoryOS -U)
-from memos.api.client import MemOSClient
+from memos.api.client import MemOSAPIClient
 
 # 使用 API Key 初始化客户端
-client = MemOSClient(api_key=YOUR_API_KEY)
+client = MemOSAPIClient(api_key=YOUR_API_KEY)
 
 user_id = "memos_user_123"
 conversation_id ="memos_conversation_123"

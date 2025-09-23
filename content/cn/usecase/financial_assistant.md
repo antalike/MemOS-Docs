@@ -105,7 +105,7 @@ pip install MemoryOS -U
 ```python
 import os
 from openai import OpenAI
-from memos.api.client import MemOSAPIClient
+from memos.api.client import MemOSClient
 
 os.environ["MEMOS_API_KEY"] = "mpg-xx"
 os.environ["OPEN_API_KEY"] = "sk-xx"
@@ -114,12 +114,12 @@ class FinancialManagementAssistant:
     """AI财务管理助手，具备记忆能力"""
     
     def __init__(self):
-        self.memos_api_client = MemOSAPIClient(api_key=os.getenv("MEMOS_API_KEY"))
+        self.memos_client = MemOSClient(api_key=os.getenv("MEMOS_API_KEY"))
         self.openai_client = OpenAI(api_key=os.getenv("OPEN_API_KEY"))
     
     def search_memory(self, query, user_id, conversation_id):
         """根据查询搜索相关记忆"""
-        response = self.memos_api_client.search(query, user_id, conversation_id)
+        response = self.memos_client.search(query, user_id, conversation_id)
 
         return [memory_detail.memory_value for memory_detail in response.data.memory_detail_list]
 
@@ -144,10 +144,10 @@ class FinancialManagementAssistant:
         
 
     def add_message(self, messages, user_id, conversation_id):
-        self.memos_api_client.add(messages, user_id, conversation_id)
+        self.memos_client.add(messages, user_id, conversation_id)
 
     def get_message(self, user_id, conversation_id):
-        response = self.memos_api_client.get(user_id, conversation_id)
+        response = self.memos_client.get(user_id, conversation_id)
         
         return response.data.message_detail_list
 
@@ -174,7 +174,7 @@ class FinancialManagementAssistant:
             {"role": "user", "content": query},
             {"role": "assistant", "content": answer}
         ]
-        self.memos_api_client.add(messages, user_id, conversation_id)
+        self.memos_client.add(messages, user_id, conversation_id)
         
         return answer
 
