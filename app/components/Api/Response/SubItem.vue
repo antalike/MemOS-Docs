@@ -48,7 +48,10 @@ const displaySchema = computed(() => {
 </script>
 
 <template>
-  <ApiCollapse class="mt-4">
+  <ApiCollapse
+    v-if="displaySchema"
+    class="mt-4"
+  >
     <!-- anyOf / oneOf selector -->
     <template v-if="variantList && variantList.length">
       <div class="py-6">
