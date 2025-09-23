@@ -25,16 +25,13 @@ nav:
     - "(ri:heart-line) 构建拥有记忆的家庭生活助手": usecase/home_assistant.md
 
   - "(ri:open-source-line) 开源项目":
-    - "(ri:home-line) 首页":
-      - "(ri:eye-line) 概览": open_source/home/overview.md
-      - "(ri:information-line) 什么是 MemOS？": open_source/home/memos_intro.md
-      - "(ri:lightbulb-line) 核心概念": open_source/home/core_concepts.md
-      - "(ri:building-2-line) 架构设计": open_source/home/architecture.md
 
     - "(ri:rocket-line) 快速入门":
       - "(ri:install-line) 安装指南": open_source/getting_started/installation.md
       - "(ri:play-line) 快速启动": open_source/getting_started/quick_start.md
       - "(ri:bookmark-line) 创建你的第一个记忆": open_source/getting_started/your_first_memory.md
+      - "(ri:lightbulb-line) 核心概念": open_source/home/core_concepts.md
+      - "(ri:building-2-line) 架构设计": open_source/home/architecture.md
       - "(ri:file-code-line) REST API 服务": open_source/getting_started/rest_api_server.md
       - "(ri:code-line) 示例": open_source/getting_started/examples.md
 
