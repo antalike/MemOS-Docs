@@ -11,6 +11,7 @@ interface colorsProps {
 const props = defineProps<{
   path: string
   method: string
+  server: Record<string, any>
 }>()
 
 const colorsMap: colorsProps = {
@@ -50,7 +51,13 @@ function isParameter(path: string) {
 
 // Copy full path
 function handleCopy() {
-  copyText(props.path)
+  let baseUrl = ''
+
+  if (props.server) {
+    baseUrl = props.server?.url
+  }
+
+  copyText(baseUrl + props.path)
   isCopy.value = true
   timer = setTimeout(() => {
     isCopy.value = false

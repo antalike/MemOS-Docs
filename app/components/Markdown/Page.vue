@@ -11,7 +11,6 @@ const config = useRuntimeConfig()
 const normalizedPath = route.path.replace(/\/$/, '') || '/'
 const { data: page } = await useAsyncData(normalizedPath, () => {
   const docsPath = locale.value === 'cn' ? normalizedPath : `/en${normalizedPath}`
-  console.log('docs', queryCollection('docs'))
   return queryCollection('docs').path(docsPath).first()
 })
 

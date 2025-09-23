@@ -8,7 +8,7 @@ const props = withDefaults(defineProps<{
   apiName: 'openapi'
 })
 
-const { schemas } = useOpenApi(props.apiName)
+const { schemas, globalSecurity, server } = useOpenApi(props.apiName)
 
 const flattenResponses = computed(() => {
   const responses = props.apiData?.responses || {}
@@ -48,6 +48,7 @@ const flattenResponses = computed(() => {
     <ApiPath
       :path="apiData?.apiUrl"
       :method="apiData?.method"
+      :server="server"
     />
     <!-- Mobile/tablet: show the code panel inline above the body -->
     <div class="xl:hidden mt-6">
@@ -58,6 +59,10 @@ const flattenResponses = computed(() => {
     </div>
 
     <div class="mdx-content relative mt-8 prose prose-gray dark:prose-invert">
+      <ApiAuthorizations
+        v-if="globalSecurity"
+        :api-name="apiName"
+      />
       <ApiParameter
         v-if="apiData?.parameters"
         :data="apiData.parameters"
