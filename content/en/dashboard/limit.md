@@ -19,8 +19,6 @@ The MemOS Cloud Service currently provides all developers with the following fre
 - Failed requests (authentication failure, parameter error, exceeding limits, etc.) **do not consume quota**.
 ::
 
-<br>
-
 ## 2. Resource Limits
 
 To ensure stable and secure service, MemOS Cloud Service enforces the following limits on API calls, calculated at the account level:
@@ -37,16 +35,12 @@ To ensure stable and secure service, MemOS Cloud Service enforces the following 
 - Additionally, we recommend a maximum QPS ≤ 10 (i.e., up to 10 requests per second). This is not a strict limit, but high concurrency may be affected by platform capacity, so control request frequency according to actual needs.
 ::
 
-<br>
-
 ## 3. Usage Monitoring
 
 You can view the remaining quota for each API through the **API Console**, with filters for project, API key, and date to facilitate tracking and managing usage.
 
 <img width="3024" height="1890" alt="image" src="https://github.com/user-attachments/assets/49cddd25-6fbf-40d4-a750-58c3b2ac5547" />
 
-
-<br>
 
 ## 4. Obtaining More Quota
 
@@ -55,8 +49,6 @@ To help developers quickly try and validate features while considering resource 
 If your business requires more calls, scan the Enterprise WeChat QR code below to contact customer support and obtain additional free quota.
 
 ![image.png](https://cdn.memtensor.com.cn/img/1758251897005_7xgrmm_compressed.png)
-
-<br>
 
 ## 5. Contact Us
 

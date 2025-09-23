@@ -9,13 +9,9 @@ MemOS currently provides two types of APIs to help developers store and retrieve
 - **Memory API**: Retrieves relevant memory fragments of the user so that model-generated responses can incorporate user history, preferences, and context;  
 - **Message API**: Adds and retrieves raw conversation messages between the user and system, supporting storage of complete conversation records.
 
-<br>
-
 ## 2. Authentication
 
 All API requests require authentication. Ensure that each request includes your API key in the Authorization header.
-
-<br>
 
 ## 3. Project Management
 
@@ -55,8 +51,6 @@ Deleting a project will erase all memories, messages, and related data under tha
 
 <img width="3024" height="1040" alt="image" src="https://github.com/user-attachments/assets/7cb2e857-28e6-431c-993a-d96c5dfe373a" />
 
-<br>
-
 ## 4. Next Steps
 
 - Register and log in to the [MemOS Cloud Platform](https://memos-dashboard.openmem.net/quickstart/) to obtain your API key.  
@@ -66,8 +60,6 @@ Deleting a project will erase all memories, messages, and related data under tha
   - [Get Message](/dashboard/api/get-message-api-get-message-get)  
   - [Error Codes](/dashboard/api/error_code)  
 - Make your first API call to add or retrieve memory.
-
-<br>
 
 ## 5. Contact Us
 

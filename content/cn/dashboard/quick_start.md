@@ -9,7 +9,6 @@ desc: 欢迎访问 MemOS 云平台，可参考本新手指南，快速接入�
 
 ![image.png](https://cdn.memtensor.com.cn/img/1758184757210_hksk0g_compressed.png)
 
-<br>
 
 ## 2.核心记忆操作
 
@@ -98,8 +97,6 @@ curl --request POST \
 }
 ```
 
-<br>
-
 ### 2.2 查询记忆（searchMemory）
 
 使用用户的发言查询记忆，MemOS 会自动召回最相关的记忆供 AI 参考。
@@ -120,7 +117,7 @@ import json
 
 # 替换成你的 API Key
 os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
-os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
+os.environ["MEMOS_BASE_URL"] = "https://apigw-pre.memtensor.cn/api/openmem/v1"
 
 data = {
   "query": "国庆去哪玩",
@@ -310,13 +307,9 @@ curl --request POST \
 }
 ```
 
-<br>
-
 ## 4. 下一步行动
 
 👉 现在你已经能够运行 MemOS，查看完整的[**<u>API 文档</u>**](/api)，探索更多功能吧！
-
-<br>
 
 
 ## 5. 联系我们

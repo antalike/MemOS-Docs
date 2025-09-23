@@ -9,13 +9,10 @@ title: 概览
 - **记忆 API**：检索召回用户的相关记忆片段，模型生成回答时能够结合用户历史、偏好、上下文；
 - **消息 API**：添加与获取用户与系统的原始对话消息，支持储存完整的对话记录。
 
-<br>
-
 ## 2. 鉴权认证
 
 所有接口请求都需要认证，请确保每个请求的 Authorization 头中包含您的接口密钥。
 
-<br>
 
 ## 3. 项目管理
 
@@ -55,8 +52,6 @@ MemOS 支持以项目为维度管理资源、权限和调用日志。一个项�
 
 ![image.png](https://cdn.memtensor.com.cn/img/1758596026089_503m42_compressed.png)
 
-<br>
-
 ## 4. 下一步行动
 
 - 注册并登录 [MemOS 云平台](https://memos-dashboard.openmem.net/quickstart/)，获取您的接口密钥。
@@ -66,8 +61,6 @@ MemOS 支持以项目为维度管理资源、权限和调用日志。一个项�
   - [获取消息](/dashboard/api/get-message-api-get-message-get)
   - [错误码查询](/dashboard/api/error_code)
 - 进行第一次接口调用，添加或检索记忆。
-
-<br>
 
 ## 5. 联系我们
 
