@@ -262,11 +262,11 @@ This is a `callout` with full **markdown** support.
     Basic note content
     ::::
 
-    ::::note{.w-full.my-0 to="/getting_started/quick_start"}
+    ::::note{.w-full.my-0 to="/open_source/getting_started/quick_start"}
     Note with link - click to navigate to quick start guide
     ::::
 
-    ::::note{.w-full.my-0 to="/modules/mem_cube" icon="ri:database-line"}
+    ::::note{.w-full.my-0 to="/open_source/modules/mem_cube" icon="ri:database-line"}
     Note with custom icon - learn more about MemCube
     ::::
   
@@ -289,11 +289,11 @@ This is a `callout` with full **markdown** support.
 Basic note content
 ::
 
-::note{to="/getting_started/quick_start"}
+::note{to="/open_source/getting_started/quick_start"}
 Note with link - click to navigate to quick start guide
 ::
 
-::note{to="/modules/mem_cube" icon="ri:database-line"}
+::note{to="/open_source/modules/mem_cube" icon="ri:database-line"}
 Note with custom icon - learn more about MemCube
 ::
 
@@ -355,7 +355,7 @@ Use `card-group` to arrange cards in a grid layout. `card-group` is ideal for di
     ---
     icon: ri:play-line
     title: Minimal Pipeline
-    to: /getting_started/examples#example-1-minimal-pipeline
+    to: /open_source/getting_started/examples#example-1-minimal-pipeline
     ---
     The smallest working pipeline — add, search, update and dump plaintext memories.
     ::::
@@ -364,7 +364,7 @@ Use `card-group` to arrange cards in a grid layout. `card-group` is ideal for di
     ---
     icon: ri:tree-line
     title: TreeTextMemory Only
-    to: /getting_started/examples#example-2-treetextmemory-only
+    to: /open_source/getting_started/examples#example-2-treetextmemory-only
     ---
     Use Neo4j-backed hierarchical memory to build structured, multi-hop knowledge graphs.
     ::::
@@ -373,7 +373,7 @@ Use `card-group` to arrange cards in a grid layout. `card-group` is ideal for di
     ---
     icon: ri:database-2-line
     title: KVCacheMemory Only
-    to: /getting_started/examples#example-3-kvcachememory-only
+    to: /open_source/getting_started/examples#example-3-kvcachememory-only
     ---
     Speed up sessions with short-term KV cache for fast context injection.
     ::::
@@ -382,7 +382,7 @@ Use `card-group` to arrange cards in a grid layout. `card-group` is ideal for di
     ---
     icon: hugeicons:share-07
     title: Hybrid TreeText + KVCache
-    to: /getting_started/examples#example-4-hybrid
+    to: /open_source/getting_started/examples#example-4-hybrid
     ---
     Combine explainable graph memory with fast KV caching in a single MemCube.
     ::::
@@ -396,7 +396,7 @@ Use `card-group` to arrange cards in a grid layout. `card-group` is ideal for di
 ---
 icon: ri:play-line
 title: Minimal Pipeline
-to: /getting_started/examples#example-1-minimal-pipeline
+to: /open_source/getting_started/examples#example-1-minimal-pipeline
 ---
 The smallest working pipeline — add, search, update and dump plaintext memories.
 :::
@@ -405,7 +405,7 @@ The smallest working pipeline — add, search, update and dump plaintext memorie
 ---
 icon: ri:tree-line
 title: TreeTextMemory Only
-to: /getting_started/examples#example-2-treetextmemory-only
+to: /open_source/getting_started/examples#example-2-treetextmemory-only
 ---
 Use Neo4j-backed hierarchical memory to build structured, multi-hop knowledge graphs.
 :::
@@ -414,7 +414,7 @@ Use Neo4j-backed hierarchical memory to build structured, multi-hop knowledge gr
 ---
 icon: ri:database-2-line
 title: KVCacheMemory Only
-to: /getting_started/examples#example-3-kvcachememory-only
+to: /open_source/getting_started/examples#example-3-kvcachememory-only
 ---
 Speed up sessions with short-term KV cache for fast context injection.
 :::
@@ -423,7 +423,7 @@ Speed up sessions with short-term KV cache for fast context injection.
 ---
 icon: hugeicons:share-07
 title: Hybrid TreeText + KVCache
-to: /getting_started/examples#example-4-hybrid
+to: /open_source/getting_started/examples#example-4-hybrid
 ---
 Combine explainable graph memory with fast KV caching in a single MemCube.
 :::

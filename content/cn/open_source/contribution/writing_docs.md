@@ -263,11 +263,11 @@ class: "[&>div]:*:my-0 [&>div]:*:w-full"
     基础备注内容
     ::::
 
-    ::::note{.w-full.my-0 to="/getting_started/quick_start"}
+    ::::note{.w-full.my-0 to="/open_source/getting_started/quick_start"}
     带链接的备注 —— 点击跳转到快速开始指南
     ::::
     
-    ::::note{.w-full.my-0 to="/modules/mem_cube" icon="ri:database-line"}
+    ::::note{.w-full.my-0 to="/open_source/modules/mem_cube" icon="ri:database-line"}
     带自定义图标的备注 —— 了解更多关于 MemCube 的信息
     ::::
     
@@ -290,11 +290,11 @@ class: "[&>div]:*:my-0 [&>div]:*:w-full"
 基础备注内容
 ::
 
-::note{to="/getting_started/quick_start"}
+::note{to="/open_source/getting_started/quick_start"}
 带链接的备注 —— 点击跳转到快速开始指南
 ::
 
-::note{to="/modules/mem_cube" icon="ri:database-line"}
+::note{to="/open_source/modules/mem_cube" icon="ri:database-line"}
 带自定义图标的备注 —— 了解更多关于 MemCube 的信息
 ::
 
@@ -356,7 +356,7 @@ target: _blank
     ---
     icon: ri:play-line
     title: 最简Pipeline 
-    to: /getting_started/examples#example-1-minimal-pipeline
+    to: /open_source/getting_started/examples#example-1-minimal-pipeline
     ---
     最小可用Pipeline  — 添加、搜索、更新和导出明文记忆。
     ::::
@@ -365,7 +365,7 @@ target: _blank
     ---
     icon: ri:tree-line
     title: 仅 TreeTextMemory
-    to: /getting_started/examples#example-2-treetextmemory-only
+    to: /open_source/getting_started/examples#example-2-treetextmemory-only
     ---
     使用基于 Neo4j 的分层记忆，构建结构化、多跳的知识图谱。
     ::::
@@ -374,7 +374,7 @@ target: _blank
     ---
     icon: ri:database-2-line
     title: 仅 KVCacheMemory
-    to: /getting_started/examples#example-3-kvcachememory-only
+    to: /open_source/getting_started/examples#example-3-kvcachememory-only
     ---
     通过短期 KV cache加速会话，实现快速上下文注入。
     ::::
@@ -383,7 +383,7 @@ target: _blank
     ---
     icon: hugeicons:share-07
     title: 混合 TreeText + KVCache
-    to: /getting_started/examples#example-4-hybrid
+    to: /open_source/getting_started/examples#example-4-hybrid
     ---
     在单一 MemCube 中结合可解释的图记忆与快速 KV cache。
     ::::
@@ -397,7 +397,7 @@ target: _blank
 ---
 icon: ri:play-line
 title: 最简Pipeline 示例
-to: /getting_started/examples#example-1-minimal-pipeline
+to: /open_source/getting_started/examples#example-1-minimal-pipeline
 ---
 最小可运行的Pipeline 示例——添加、搜索、更新及导出明文记忆。
 :::
@@ -406,7 +406,7 @@ to: /getting_started/examples#example-1-minimal-pipeline
 ---
 icon: ri:tree-line
 title: 仅使用 TreeTextMemory
-to: /getting_started/examples#example-2-treetextmemory-only
+to: /open_source/getting_started/examples#example-2-treetextmemory-only
 ---
 使用基于 Neo4j 的层级记忆构建结构化的多跳知识图谱。
 :::
@@ -415,7 +415,7 @@ to: /getting_started/examples#example-2-treetextmemory-only
 ---
 icon: ri:database-2-line
 title: 仅使用 KVCacheMemory
-to: /getting_started/examples#example-3-kvcachememory-only
+to: /open_source/getting_started/examples#example-3-kvcachememory-only
 ---
 通过短期KV cache加速会话，实现快速上下文注入。
 :::
@@ -424,7 +424,7 @@ to: /getting_started/examples#example-3-kvcachememory-only
 ---
 icon: hugeicons:share-07
 title: 混合使用 TreeText 和 KVCache
-to: /getting_started/examples#example-4-hybrid
+to: /open_source/getting_started/examples#example-4-hybrid
 ---
 在单一 MemCube 中结合可解释的图记忆与高速KV cache。
 :::

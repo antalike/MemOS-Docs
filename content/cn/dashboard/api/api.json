@@ -1,0 +1,464 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "MemOS Dashboard APIs",
+    "description": "Dashboard API for managing messages and searching memories in MemOS.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://memos.memtensor.cn",
+      "description": "Production server"
+    }
+  ],
+  "security": [
+    {
+      "TokenAuth": []
+    }
+  ],
+  "paths": {
+    "/add/message": {
+      "post": {
+        "summary": "添加消息",
+        "description": "向指定会话添加一条或多条消息。支持用户消息与助手消息，可自定义创建时间。",
+        "operationId": "add_message_api_add_message_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddMessageRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddMessageResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/get/message": {
+      "post": {
+        "summary": "获取消息",
+        "description": "查询指定用户的记忆，返回与查询内容最相关的记忆片段。",
+        "operationId": "get_message_api_get_message_get",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetMessageRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetMessageResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/search/memory": {
+      "post": {
+        "summary": "查询记忆",
+        "description": "从指定会话中获取用户与助手的历史对话记录，可按数量限制返回结果。",
+        "operationId": "search_memory_api_search_memory_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchMemoryRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchMemoryResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "TokenAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "Token",
+        "description": "Token API_key, can be viewed in API Console > Interface Key"
+      }
+    },
+    "schemas": {
+      "AddMessageRequest": {
+        "type": "object",
+        "required": [
+          "userId",
+          "conversationId",
+          "messages"
+        ],
+        "properties": {
+          "userId": {
+            "type": "string",
+            "title": "User ID",
+            "description": "与添加消息关联的用户的唯一标识符。"
+          },
+          "conversationId": {
+            "type": "string",
+            "title": "Conversation ID",
+            "description": "与添加消息关联的会话的唯一标识符。"
+          },
+          "messages": {
+            "type": "array",
+            "title": "Messages",
+            "description": "表示内存内容的消息对象数组。",
+            "items": {
+              "$ref": "#/components/schemas/MessageInput"
+            }
+          }
+        },
+        "title": "AddMessageRequest"
+      },
+      "MessageInput": {
+        "type": "object",
+        "required": [
+          "role",
+          "content"
+        ],
+        "properties": {
+          "role": {
+            "type": "string",
+            "enum": [
+              "user",
+              "assistant"
+            ],
+            "title": "Role",
+            "description": "消息发送者的角色。"
+          },
+          "content": {
+            "type": "string",
+            "title": "Content",
+            "description": "消息内容文本。"
+          },
+          "chatTime": {
+            "type": "string",
+            "title": "Chat Time",
+            "description": "消息创建的时间，结构化时间或者中文，不传则使用当前时间。"
+          }
+        },
+        "title": "MessageInput"
+      },
+      "AddMessageResponse": {
+        "type": "object",
+        "required": [
+          "code",
+          "message"
+        ],
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32",
+            "title": "Code",
+            "description": "接口状态码。 0: 表示成功，1000: 未知错误",
+            "example": 0
+          },
+          "data": {
+            "$ref": "#/components/schemas/OpenMemAddMessageResponse"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "description": "接口提示信息，如 \"消息添加成功\"。",
+            "example": "ok"
+          }
+        },
+        "title": "AddMessageResponse"
+      },
+      "OpenMemAddMessageResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "title": "Success",
+            "description": "是否添加成功。true 表示成功，false 表示失败。",
+            "example": true
+          }
+        },
+        "title": "OpenMemAddMessageResponse"
+      },
+      "GetMessageRequest": {
+        "type": "object",
+        "required": [
+          "userId"
+        ],
+        "properties": {
+          "userId": {
+            "type": "string",
+            "title": "User ID",
+            "description": "与添加消息关联的用户的唯一标识符。"
+          },
+          "conversationId": {
+            "type": "string",
+            "title": "Conversation ID",
+            "description": "与获取消息关联的会话的唯一标识符。如果不传，默认返回最近一次活跃会话的消息。"
+          },
+          "messageLimitNumber": {
+            "type": "integer",
+            "format": "int32",
+            "title": "Message Limit Number",
+            "description": "限定返回的消息条数，用于控制消息列表的长度，不传时使用系统默认值 6。",
+            "default": 6
+          }
+        },
+        "title": "GetMessageRequest"
+      },
+      "GetMessageResponse": {
+        "type": "object",
+        "required": [
+          "code",
+          "message"
+        ],
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32",
+            "title": "Code",
+            "description": "接口状态码。 0: 表示成功，1000: 未知错误",
+            "example": 0
+          },
+          "data": {
+            "$ref": "#/components/schemas/GetMessageResponseData"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "description": "接口提示信息。"
+          }
+        },
+        "title": "GetMessageResponse"
+      },
+      "GetMessageResponseData": {
+        "type": "object",
+        "properties": {
+          "messageDetailList": {
+            "type": "array",
+            "title": "Message Detail List",
+            "description": "消息添加结果对象。",
+            "items": {
+              "$ref": "#/components/schemas/MessageDetail"
+            }
+          }
+        },
+        "title": "GetMessageResponseData"
+      },
+      "MessageDetail": {
+        "type": "object",
+        "properties": {
+          "role": {
+            "type": "string",
+            "enum": [
+              "user",
+              "assistant"
+            ],
+            "title": "Role",
+            "description": "消息发送者的角色。",
+            "example": "user"
+          },
+          "content": {
+            "type": "string",
+            "title": "Content",
+            "description": "消息内容文本。"
+          },
+          "createTime": {
+            "type": "string",
+            "title": "Create Time",
+            "description": "消息创建时间。"
+          },
+          "updateTime": {
+            "type": "string",
+            "title": "Update Time",
+            "description": "消息最近一次更新时间。"
+          }
+        },
+        "title": "MessageDetail"
+      },
+      "SearchMemoryRequest": {
+        "type": "object",
+        "required": [
+          "userId",
+          "query"
+        ],
+        "properties": {
+          "userId": {
+            "type": "string",
+            "title": "User ID",
+            "description": "与查询的记忆关联的用户的唯一标识符。"
+          },
+          "conversationId": {
+            "type": "string",
+            "title": "Conversation ID",
+            "description": "查询内容所在会话的唯一标识符，传入可以明确当前会话，本会话的记忆应当比其他历史会话的权重高。"
+          },
+          "query": {
+            "type": "string",
+            "title": "Query",
+            "description": "要在记忆中查询的文本内容"
+          },
+          "memoryLimitNumber": {
+            "type": "integer",
+            "format": "int32",
+            "title": "Memory Limit Number",
+            "description": "L限定返回的记忆条数，用于控制记忆片段的长度，不传时使用系统默认值 6。",
+            "default": 6
+          }
+        },
+        "title": "SearchMemoryRequest"
+      },
+      "SearchMemoryResponse": {
+        "type": "object",
+        "required": [
+          "code",
+          "message"
+        ],
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32",
+            "title": "Code",
+            "description": "接口状态码。 0: 表示成功，1000: 未知错误",
+            "example": 0
+          },
+          "data": {
+            "$ref": "#/components/schemas/SearchMemoryResponseData"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "description": "接口提示信息。"
+          }
+        },
+        "title": "SearchMemoryResponse"
+      },
+      "SearchMemoryResponseData": {
+        "type": "object",
+        "properties": {
+          "memoryDetailList": {
+            "type": "array",
+            "title": "Memory Detail List",
+            "description": "返回的记忆片段详情列表。",
+            "items": {
+              "$ref": "#/components/schemas/MemoryDetail"
+            }
+          }
+        }
+      },
+      "MemoryDetail": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "ID",
+            "description": "记忆的唯一标识符，系统内部用于区分不同的记忆条目。"
+          },
+          "memoryKey": {
+            "type": "string",
+            "title": "Memory Key",
+            "description": "记忆的标题或关键词，用于概括该记忆的主要内容。"
+          },
+          "memoryValue": {
+            "type": "string",
+            "title": "Memory Value",
+            "description": "记忆的具体内容。"
+          },
+          "memoryType": {
+            "type": "string",
+            "enum": [
+              "WorkingMemory",
+              "LongTermMemory",
+              "UserMemory"
+            ],
+            "title": "Memory Type",
+            "description": "WorkingMemory (工作记忆，临时存储的短期信息), LongTermMemory (长期记忆，持久保存的重要信息或事实), UserMemory (用户记忆，与特定用户相关的个性化信息)",
+            "example": "LongTermMemory"
+          },
+          "memoryTime": {
+            "type": "string",
+            "title": "Memory Time",
+            "description": "记忆内容创建的时间，通常为 ISO 8601 格式。"
+          },
+          "conversationId": {
+            "type": "string",
+            "title": "Conversation ID",
+            "description": "与该记忆关联的会话的唯一标识符。"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "activated"
+            ],
+            "title": "Status",
+            "description": "记忆的状态，当前所有检索到的记忆都是 activated",
+            "example": "activated"
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "title": "Confidence",
+            "description": "记忆的置信度分数，范围 0~1，数值越接近 1 表示该记忆越准确可靠。置信度分数会随着模型对该记忆的推理次数增加而逐渐衰减，用于反映记忆随着时间或使用频率可能产生的不确定性。",
+            "example": 0.95
+          },
+          "tags": {
+            "type": "array",
+            "title": "Tags",
+            "description": "与记忆相关的标签列表，用于分类、检索或主题标记。数组中的每个元素都是string，例如 [\"人物\", \"事件\", \"工作\"]。",
+            "items": {
+              "type": "string"
+            }
+          },
+          "updateTime": {
+            "type": "string",
+            "title": "Update Time",
+            "description": "记忆最后一次被修改或更新的时间，通常为 ISO 8601 格式。"
+          },
+          "relativity": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "title": "Relativity",
+            "description": "查询内容与该记忆的相关性分数，范围 0~1，数值越接近 1 表示越相关。",
+            "example": 0.87
+          }
+        },
+        "title": "MemoryDetail"
+      },
+      "title": "SearchMemoryResponseData",
+      "description": "消息添加结果对象。"
+    }
+  }
+}

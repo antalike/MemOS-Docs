@@ -4,6 +4,10 @@ defineProps<{
   required?: string[] | undefined
   parentProp?: string | undefined
 }>()
+
+defineOptions({
+  inheritAttrs: false
+})
 </script>
 
 <template>
@@ -12,6 +16,7 @@ defineProps<{
     :key="prop"
   >
     <ApiRequestBodyParam
+      v-bind="$attrs"
       :param="param"
       :prop="prop"
       :required="required"

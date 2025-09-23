@@ -1,47 +1,56 @@
 ---
-title: MemOS 文档
-desc: 欢迎来到 MemOS 官方文档 – 一个专为大型语言模型 (LLMs) 提供高级模块化记忆功能的 Python 包。
-banner: https://statics.memtensor.com.cn/memos/memos-banner.gif
-links:
-  - label: 'PyPI'
-    to: https://pypi.org/project/MemoryOS/
-    target: _blank
-    avatar:
-      src: https://statics.memtensor.com.cn/icon/pypi.svg
-      alt: PyPI logo
-  - label: 'Open Source'
-    to: https://github.com/MemTensor/MemOS
-    target: _blank
-    icon: i-simple-icons-github
+title: MemOS简介
+desc: MemOS（Memory Operating System）是一个面向 AI 应用的记忆管理层。  
 ---
 
-## 什么是 MemOS？
+它的目标是：让你的 AI 系统 **像人一样拥有长期记忆**，不仅能记住用户说过的话，还能主动调用、更新和调度这些记忆。
 
-随着大型语言模型（LLMs）的不断演进，其所承担的任务日益复杂，包括多轮对话、规划、决策制定以及个性化代理等。在此背景下，如何高效管理和利用记忆，成为实现长期智能与适应性能力的关键因素。
-然而，主流 LLM 架构往往在记忆结构化、管理和集成方面存在不足，导致知识更新成本高、行为状态不可持续以及难以积累用户偏好。
+对于开发者来说，MemOS 就像数据库之于应用：你不需要重复造轮子去解决“AI怎么记忆”的问题，只要调用 MemOS 提供的服务，就能轻松给你的 Agent 或应用装上“记忆能力”。
 
-**MemOS** 通过将记忆重新定义为具有统一结构、生命周期管理和调度策略的核心一级资源来解决这些挑战。它提供了一个 Python 包，为基于 LLM 的应用程序提供统一的记忆层，实现持久化、结构化和高效的记忆操作。这使 LLMs 具备长期知识保留、强大的上下文管理和记忆增强推理能力，支持更智能和自适应的行为。
+<img src="https://cdn.memtensor.com.cn/img/1758267737066_157s7j_compressed.png" alt="记忆对比" style="width:70%;">
 
-![MemOS Architecture](https://statics.memtensor.com.cn/memos/memos-architecture.png)
+## 1. 为什么需要MemOS
 
-## 主要特性
+大模型原生的记忆存在局限：
 
-- **模块化记忆架构**：支持明文、激活（KV cache）和参数（适配器/LoRA）记忆。
-- **MemCube**：所有记忆类型的统一容器，易于加载/保存和 API 访问。
-- **MOS**：LLMs 的记忆增强系统，具有即插即用的记忆模块。
-- **基于图的后端**：原生支持 Neo4j 和其他图数据库，用于结构化、可解释的记忆。
-- **易于集成**：与 HuggingFace、Ollama 和自定义 LLMs 兼容。
-- **可扩展**：添加您自己的记忆模块或后端。
+* **上下文有限**：一次对话的 Token 窗口再大，也无法承载长期知识。
 
+* **遗忘严重**：用户上周说过的偏好，下次对话就消失了。
 
-## 安装
+* **难以管理**：随着交互增多，记忆混乱，开发者需要额外逻辑处理。
+<br>
 
-请参阅我们的 [安装指南](/getting_started/installation) 获取完整的安装说明，包括基础安装、可选依赖项和外部依赖项。
+MemOS 的价值在于，它**抽象出记忆层**，让你只关注业务逻辑：
 
-## 贡献
+* 不再手写繁琐的“长文本拼接”或“额外数据库调用”。
 
-我们欢迎贡献！请参阅 [贡献指南](/contribution/overview) 了解设置环境和提交 pull request 的详细信息。
+* 记忆可以像模块一样复用、扩展，甚至在不同 Agent、不同系统之间共享。
 
-## 许可证
+* 通过主动调度和多层管理，记忆调用更快、更准，显著降低幻觉。
 
-MemOS 在 Apache 2.0 许可证下发布。
+简单来说：**MemOS 让 AI 不再是一次性的对话机器，而是能持续成长的伙伴**。
+
+<img src="https://cdn.memtensor.com.cn/img/1758265722040_2oue1m_compressed.png" alt="image" style="width:70%;">
+
+## 2. MemOS能做些什么
+
+*   **个性化对话**：记住用户的姓名、习惯、兴趣、指令偏好，下次自动补充。
+    
+*   **团队知识库**：把碎片对话转化为结构化知识，供多个 Agent 协作使用。
+    
+*   **任务连续性**：跨会话、跨应用保持记忆，让 AI 从容处理长流程任务。
+    
+*   **多层记忆调度**：针对不同需求调用最合适的记忆，提升性能与准确率。
+    
+*   **开放扩展**：支持单独作为 API 使用，也能接入现有的框架（官方使用指导即将上线，着急的老师们也可以先自己动手哦~）
+
+## 3. 下一步行动
+
+👉 进入 [快速开始](/overview/quick_start/overview)，通过一个最小示例展示如何给你的 Agent 加上“记忆能力”
+
+👉 或直接开始开发业务应用，我们提供了几个小案例供您参考 [让理财助手读懂客户行为背后的偏好](/usecase/financial_assistant)、[有记忆的写作助手更好用](/usecase/writting_assistant)、[构建拥有记忆的家庭生活助手](/usecase/home_assistant)
+
+## 4. 联系我们
+
+<img src="https://cdn.memtensor.com.cn/img/1758251354703_v1nwkz_compressed.png" alt="image" style="width:70%;">
+

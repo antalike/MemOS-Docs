@@ -77,5 +77,5 @@ MemOS 是**模块化设计的**。
 
 ::note
 **专业提示**<br>
-[贡献](/contribution/overview) 一个新的后端或分享您的自定义记忆类型——这很容易插入。
+[贡献](/open_source/contribution/overview) 一个新的后端或分享您的自定义记忆类型——这很容易插入。
 ::

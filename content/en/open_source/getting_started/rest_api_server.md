@@ -76,7 +76,7 @@ docker compose up
 
 #### Test case (registered user ->add user memory ->query user memory)
 
-###### Registered [http://localhost:8000/product/users/register](post)
+###### Registered http://localhost:8000/product/users/register (POST)
 ```bash
 # response
 {
@@ -89,7 +89,7 @@ docker compose up
 }
 ```
 
-###### Add User Memory [http://localhost:8000/product/add](post)
+###### Add User Memory http://localhost:8000/product/add (POST)
 ```bash
 # request params
 {
@@ -114,7 +114,7 @@ docker compose up
 }
 ```
 
-###### Query User Memory [http://localhost:8000/product/search](post)
+###### Query User Memory http://localhost:8000/product/search (POST)
 ```bash
 # request params
 {
@@ -199,7 +199,7 @@ NEO4J_URI=bolt://host.docker.internal:7687
 docker build -t memos-api-server .
 ```
 
-#### Start in Docker first [neo4j](neo4j) and [qdrant](qdrant)
+#### Start in Docker first neo4j and qdrant
 
 
 #### Run the Docker container:
@@ -307,15 +307,37 @@ poetry --version
 make install
 ```
 
-#### Start in Docker first [neo4j](neo4j) and [qdrant](qdrant)
+#### Start in Docker first neo4j and qdrant
 
 
 #### Start the FastAPI server:
 ```bash
 uvicorn memos.api.product_api:app --host 0.0.0.0 --port 8000 --reload
 ```
-#### After the server is running, you can use OpenAPI documentation to test the API [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+#### After the server is running, you can use OpenAPI documentation to test the API [http://localhost:8000/docs](http://localhost:8000/docs) or [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
 
 #### Test cases (register user ->add user memory ->query user memory) refer to Docker Compose up test cases
 
 ::
+
+### Start using pyCharm
+
+#### run start_api
+```bash
+1、 Enter the MemOS/dock/Dockerfile file and modify the running configuration
+# Start the docker
+CMD ["uvicorn", "memos.api.start_api:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+
+2、Go to the MemOS/src/emos/API directory and run start_api.py directly
+
+```
+
+#### run product_api
+```bash
+1、 Enter the MemOS/dock/Dockerfile file and modify the running configuration
+# Start the docker
+CMD ["uvicorn", "memos.api.product_api:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+
+2、 Go to the MemOS/src/emos/API directory and run product_api.py directly
+
+```

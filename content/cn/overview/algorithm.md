@@ -49,8 +49,6 @@ desc: 让大模型从一次性对话工具，进化为真正具有长期记忆�
 **让大模型从一次性对话工具，进化为真正具有长期记忆和自适应能力的智能体。**
 
 
-<br>
-
 ## 2. MemOS架构设计
 
 MemOS 的设计核心，是把「记忆」作为一个独立系统层，和计算、存储一样，成为 AI 应用的基础能力。它的整体架构可以概括为 **三层结构**： <span style="color: rgb(61, 170, 214);">**API 与应用接口层、记忆调度与管理层、记忆存储与基础设施层**</span>
@@ -60,7 +58,7 @@ MemOS 的设计核心，是把「记忆」作为一个独立系统层，和计�
 *   在 <span style="color: rgb(61, 170, 214);">**API 与应用接口层**</span>，MemOS 提供了标准化的 Memory API，开发者可以通过简单的接口实现<span style="color: rgb(61, 170, 214);">**记忆创建、删除、更新**</span>等操作，让大模型具备易于调用和扩展的持久记忆能力，支持多轮对话、长期任务和跨会话个性化等复杂应用场景。
     
 
-> 这里的 `_API 层_` 指的是框架内部的标准化接口设计，用于阐述系统原理与能力边界。<span style="color: #ff7100;">**<u>不同于云服务对外提供的开发接口</u>** </span>（如 `add`、`search` 等简化封装），后者是基于 MemOS 能力在后端抽象后的统一入口。
+> 这里的 `API 层` 指的是框架内部的标准化接口设计，用于阐述系统原理与能力边界。<span style="color: #ff7100;">**<u>不同于云服务对外提供的开发接口</u>** </span>（如 `add`、`search` 等简化封装），后者是基于 MemOS 能力在后端抽象后的统一入口。
 
 
 <br>
@@ -77,10 +75,7 @@ MemOS 的设计核心，是把「记忆」作为一个独立系统层，和计�
   <img src="https://cdn.memtensor.com.cn/img/1758183504775_2ehjk2_compressed.png" alt="标准化 MemCube（记忆立方体）的基础构成" />
   <center><figcaption>标准化 MemCube（记忆立方体）的基础构成</figcaption></center>
 </figure>
-<br>
 
-
-<br>
 
 ## 3. MemOS为什么高效？
 
@@ -105,10 +100,7 @@ MemOS 的设计核心，是把「记忆」作为一个独立系统层，和计�
   <img src="https://cdn.memtensor.com.cn/img/1758183837895_i87vyb_compressed.png " alt="记忆调度的核心思路" />
   <center><figcaption>记忆调度的核心思路</figcaption></center>
 </figure>
-<br>
 
-
-<br>
 
 ## 4. MemOS-Preview 版本性能详细评估结果
 
@@ -124,8 +116,6 @@ MemOS 的设计核心，是把「记忆」作为一个独立系统层，和计�
 ![image.png](https://cdn.memtensor.com.cn/img/1758184331868_djlvc5_compressed.png)
 
 
-<br>
-
 ### 4.2 KV Cache记忆评测
 
 *   除了通用的记忆能力评估，研究团队还重点考察了MemOS所提出的KV Cache记忆机制在推理加速方面的实际效果。
@@ -138,16 +128,12 @@ MemOS 的设计核心，是把「记忆」作为一个独立系统层，和计�
 ![image.png](https://cdn.memtensor.com.cn/img/1758184346453_5nlqyz_compressed.png)
 
 
-<br>
-
 ## 5. 下一步行动
 
 *   快使用我们的云服务体验MemOS的强大之处吧 [《云平台简介》](/dashboard/overview)
     
-*   或使用MemOS开源项目自行部署体验 [《开源项目概览》](/home/overview)
+*   或使用MemOS开源项目自行部署体验 [《开源项目概览》](/open_source/home/overview)
     
-
-<br>
 
 ## 6. 联系我们
 

@@ -29,7 +29,7 @@ Traditional documentation tells you **what it is**, API references tell you **ho
 
 ## 📚 Complete Chapter Navigation
 
-### [Chapter 1: Getting Started: Your First MemCube](/cookbook/chapter1/api)
+### [Chapter 1: Getting Started: Your First MemCube](/open_source/cookbook/chapter1/api)
 
 **Core Skills**: Environment configuration, MemCube basic operations, data import and management
 
@@ -42,7 +42,7 @@ Traditional documentation tells you **what it is**, API references tell you **ho
   - **Recipe 1.2**: Build a Simple MemCube from Documents (Ollama Version)
   - **Recipe 1.3**: MemCube Basic Operations (Ollama Version)
 
-### [Chapter 2: Structured Memory: TreeNodeTextualMemoryMetadata](/cookbook/chapter2/api)
+### [Chapter 2: Structured Memory: TreeNodeTextualMemoryMetadata](/open_source/cookbook/chapter2/api)
 
 **Core Skills**: Structured memory, metadata management, multi-source tracking
 
@@ -55,7 +55,7 @@ Traditional documentation tells you **what it is**, API references tell you **ho
   - **Recipe 2.2**: Creating Basic Structured Memory (Ollama Version)
   - **Recipe 2.3**: Common Field Descriptions and Configuration
 
-### [Chapter 3: Building an Intelligent Novel Analysis System with MemOS](/cookbook/chapter3/overview)
+### [Chapter 3: Building an Intelligent Novel Analysis System with MemOS](/open_source/cookbook/chapter3/overview)
 
 **Core Skills**: Text preprocessing, AI-driven memory extraction, intelligent reasoning systems, creative application development
 
@@ -71,7 +71,7 @@ Traditional documentation tells you **what it is**, API references tell you **ho
   - Dynamic Working Memory World Background
   - MemOS-Driven Interactive Text Game
 
-### [Chapter 4: Using MemOS to Build a Production-Grade Knowledge Q&A System](/cookbook/chapter4/overview)
+### [Chapter 4: Using MemOS to Build a Production-Grade Knowledge Q&A System](/open_source/cookbook/chapter4/overview)
 
 **Core Skills**: Concept graph construction, knowledge engineering, production deployment, small model enhancement
 
@@ -206,8 +206,8 @@ print(f"MemOS Version: {memos.__version__}")
 - **GitHub Issues**: Submit technical issues and bug reports at [MemOS Issues](https://github.com/MemTensor/MemOS/issues)
 - **GitHub Discussions**: Exchange experiences and ask questions at [MemOS Discussions](https://github.com/MemTensor/MemOS/discussions)
 - **Discord Community**: Join [MemOS Discord Server](https://discord.gg/Txbx3gebZR) for real-time communication
-- **Official Documentation**: Check [MemOS Official Documentation](https://memos-docs.openmem.net/home/overview/) for detailed usage guides
-- **API Reference**: Check [MemOS API Documentation](https://memos-docs.openmem.net/api-reference/configure-memos/) for interface details
+- **Official Documentation**: Check [MemOS Official Documentation](https://memos-docs.openmem.net/open_source/home/overview/) for detailed usage guides
+- **API Reference**: Check [MemOS API Documentation](https://memos-docs.openmem.net/api/) for interface details
 - **WeChat Group**: Scan [QR Code](https://statics.memtensor.com.cn/memos/qr-code.png) to join WeChat technical exchange group
 
 ---

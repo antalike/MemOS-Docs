@@ -11,7 +11,7 @@ desc: "MemOS 完整安装指南。"
 pip install MemoryOS -U
 ```
 
-有关详细的开发环境设置、工作流程指南和贡献最佳实践，请参阅我们的 [贡献指南](/contribution/overview)。
+有关详细的开发环境设置、工作流程指南和贡献最佳实践，请参阅我们的 [贡献指南](/open_source/contribution/overview)。
 
 ## 可选依赖
 

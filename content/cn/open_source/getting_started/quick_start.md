@@ -13,7 +13,7 @@ title: "快速开始：启动并运行MemOS"
 
 ### 安装 MemOS
 
-开始之前，请按照我们的 [安装指南](/getting_started/installation) 安装 MemOS 和您可能需要的任何依赖。
+开始之前，请按照我们的 [安装指南](/open_source/getting_started/installation) 安装 MemOS 和您可能需要的任何依赖。
 
 ### 创建最简配置
 
@@ -96,6 +96,6 @@ mos.load("tmp/my_mem_cube")
 
 请查看：
 
-* [核心概念](/home/core_concepts)
+* [核心概念](/open_source/home/core_concepts)
 * [API 参考](/api-reference/configure-memos)
-* [贡献指南](/contribution/overview)
+* [贡献指南](/open_source/contribution/overview)

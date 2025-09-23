@@ -6,7 +6,7 @@ Let’s build your first **graph-based, tree-structured memory** in MemOS!
 
 **TreeTextMemory** helps you organize, link, and retrieve memories with rich context and explainability.
 
-[Neo4j](/modules/memories/neo4j_graph_db) is the current backend, with support for additional graph stores planned in the future.
+[Neo4j](/open_source/modules/memories/neo4j_graph_db) is the current backend, with support for additional graph stores planned in the future.
 
 
 ## What You’ll Learn
@@ -330,9 +330,9 @@ manually or auto-merge similar nodes!
 
 ## What’s Next?
 
-- **Know more about [Neo4j](/modules/memories/neo4j_graph_db):** TreeTextMemory is powered by a graph database backend.
+- **Know more about [Neo4j](/open_source/modules/memories/neo4j_graph_db):** TreeTextMemory is powered by a graph database backend.
   Understanding how Neo4j handles nodes, edges, and traversal will help you design more efficient memory hierarchies, multi-hop reasoning, and context linking strategies.
-- **Add [Activation Memory](/modules/memories/kv_cache_memory):**
+- **Add [Activation Memory](/open_source/modules/memories/kv_cache_memory):**
   Experiment with
   runtime KV-cache for session
   state.

@@ -1,6 +1,6 @@
 ---
 title: MemOS简介
-desc: MemOS（Memory Operating System）是一个面向 AI 应用的记忆管理层。  
+desc: MemOS（Memory Operating System）是一个面向 AI 应用的记忆管理操作系统。  
 ---
 
 它的目标是：让你的 AI 系统 **像人一样拥有长期记忆**，不仅能记住用户说过的话，还能主动调用、更新和调度这些记忆。
@@ -8,7 +8,6 @@ desc: MemOS（Memory Operating System）是一个面向 AI 应用的记忆�
 对于开发者来说，MemOS 就像数据库之于应用：你不需要重复造轮子去解决“AI怎么记忆”的问题，只要调用 MemOS 提供的服务，就能轻松给你的 Agent 或应用装上“记忆能力”。
 
 <img src="https://cdn.memtensor.com.cn/img/1758267737066_157s7j_compressed.png" alt="记忆对比" style="width:70%;">
-<br>
 
 ## 1. 为什么需要MemOS
 
@@ -32,7 +31,6 @@ MemOS 的价值在于，它**抽象出记忆层**，让你只关注业务逻辑
 简单来说：**MemOS 让 AI 不再是一次性的对话机器，而是能持续成长的伙伴**。
 
 <img src="https://cdn.memtensor.com.cn/img/1758265722040_2oue1m_compressed.png" alt="image" style="width:70%;">
-<br>
 
 ## 2. MemOS能做些什么
 
@@ -45,14 +43,12 @@ MemOS 的价值在于，它**抽象出记忆层**，让你只关注业务逻辑
 *   **多层记忆调度**：针对不同需求调用最合适的记忆，提升性能与准确率。
     
 *   **开放扩展**：支持单独作为 API 使用，也能接入现有的框架（官方使用指导即将上线，着急的老师们也可以先自己动手哦~）
-<br>
 
 ## 3. 下一步行动
 
 👉 进入 [快速开始](/overview/quick_start/overview)，通过一个最小示例展示如何给你的 Agent 加上“记忆能力”
 
-👉 或直接开始开发业务应用，我们提供了几个小案例供您参考 [让理财助手读懂客户行为背后的偏好](/usecase/financial_assistant)、[有记忆的写作助手更好用](/usecase/writting_assistant)、[构建拥有记忆的家庭生活助手](/usecase/life_assistant)
-<br>
+👉 或直接开始开发业务应用，我们提供了几个小案例供您参考 [让理财助手读懂客户行为背后的偏好](/usecase/financial_assistant)、[有记忆的写作助手更好用](/usecase/writting_assistant)、[构建拥有记忆的家庭生活助手](/usecase/home_assistant)
 
 ## 4. 联系我们
 

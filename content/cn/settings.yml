@@ -17,11 +17,12 @@ nav:
     - "(ri:eye-line) 云平台简介": dashboard/overview.md
     - "(ri:play-line) 快速开始": dashboard/quick_start.md
     - "(ri:shield-line) 配额和限制": dashboard/limit.md
+    - "(ri:file-code-line) API 文档": dashboard/api/overview.md
 
   - "(ri:lightbulb-line) 最佳实践":
     - "(ri:money-dollar-circle-line) 让理财助手读懂客户行为背后的偏好": usecase/financial_assistant.md
     - "(ri:edit-line) 有记忆的写作助手更好用": usecase/writting_assistant.md
-    - "(ri:heart-line) 构建拥有记忆的家庭生活助手": usecase/life_assistant.md
+    - "(ri:heart-line) 构建拥有记忆的家庭生活助手": usecase/home_assistant.md
 
   - "(ri:open-source-line) 开源项目":
     - "(ri:home-line) 首页":

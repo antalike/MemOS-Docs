@@ -80,7 +80,7 @@ docker compose up
 
 #####  (注册用户->查询用户记忆（没有继续往后）->添加用户记忆->查询用户记忆)
 
-##### 注册用户 [http://localhost:8000/product/users/register](post)
+##### 注册用户 http://localhost:8000/product/users/register (POST)
 ```bash
 # 响应
 {
@@ -93,7 +93,7 @@ docker compose up
 }
 ```
 
-##### 添加用户记忆 [http://localhost:8000/product/add](post)
+##### 添加用户记忆 http://localhost:8000/product/add (POST)
 ```bash
 # 请求参数
 {
@@ -118,7 +118,7 @@ docker compose up
 }
 ```
 
-##### 查询用户记忆 [http://localhost:8000/product/search](post)
+##### 查询用户记忆 http://localhost:8000/product/search (POST)
 ```bash
 # 请求参数
 {
@@ -211,7 +211,7 @@ NEO4J_URI=bolt://host.docker.internal:7687
 docker build -t memos-api-server .  
 ```
 
-#### 先在docker中启动 [neo4j](neo4j) 和 [qdrant](qdrant)
+#### 先在docker中启动 neo4j 和 qdrant
 
 #### 运行 Docker 容器：
 
@@ -321,7 +321,7 @@ poetry --version
 make install  
 ```
 
-#### 先在docker中启动 [neo4j](neo4j) 和 [qdrant](qdrant)
+#### 先在docker中启动 neo4j 和 qdrant
 
 #### 启动 FastAPI 服务器（在MomOS目录下）：
 
@@ -329,8 +329,31 @@ make install
 uvicorn memos.api.product_api:app --host 0.0.0.0 --port 8000 --reload
 ```
 
-#### 服务器运行后,您可以使用OpenAPI文档测试API，网址为 [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+#### 服务器运行后,您可以使用OpenAPI文档测试API，网址为 [http://localhost:8000/docs](http://localhost:8000/docs) 或者 [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
 
 #### 测试用例 (注册用户->添加用户记忆->查询用户记忆) 参考Docker Compose up测试用例
 
 ::
+
+
+### 使用 pyCharm 启动
+
+#### 运行 start_api
+```bash
+1、进入MemOS/docker/Dockerfile文件，修改运行配置
+# Start the docker
+CMD ["uvicorn", "memos.api.start_api:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+
+2、进入目录MemOS/src/memos/api 直接运行start_api.py
+
+```
+
+#### 运行 product_api
+```bash
+1、进入MemOS/docker/Dockerfile文件，修改运行配置
+# Start the docker
+CMD ["uvicorn", "memos.api.product_api:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+
+2、进入目录MemOS/src/memos/api 直接运行product_api.py
+
+```

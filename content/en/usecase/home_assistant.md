@@ -2,7 +2,7 @@
 title: 构建拥有记忆的家庭生活助手
 ---
 
-# 概述
+## 概述
 
 在做家庭生活助手这类产品时，开发者经常会遇到一个问题：**对话上下文一旦结束，用户信息就丢失了**。
 
@@ -15,7 +15,7 @@ title: 构建拥有记忆的家庭生活助手
 
 如果助手不能记住这些信息，就会显得「没心没肺」：用户第二天再问「我周末安排了啥？」时，助手完全不知道在说什么。
 
-## 为什么不用传统 RAG？
+### 为什么不用传统 RAG？
 
 很多人第一反应是：能不能用 RAG（检索增强生成）？  
 但传统 RAG 的特点决定了它并不适合这种「个性化助手」场景：
@@ -26,7 +26,7 @@ title: 构建拥有记忆的家庭生活助手
 | 只能机械返回片段，不会自动学习偏好 | 会随对话自动形成待办、偏好、画像等记忆 |
 | 面向“共性知识”，不适合存储个人化信息 | 专门为个体化场景设计，支持长期追踪与调用 |
 
-## 为什么不自己造轮子？
+### 为什么不自己造轮子？
 
 当然，你也可以尝试自己存储这些信息，但这会带来几个挑战：
 
@@ -37,7 +37,7 @@ title: 构建拥有记忆的家庭生活助手
 *   **可扩展性差**：随着功能增加（待办、偏好、画像），代码会变得越来越难维护。
     
 
-## 为什么要用 MemOS？
+### 为什么要用 MemOS？
 
 在做选型时，可以直观对比三种方案：
 
@@ -75,7 +75,7 @@ title: 构建拥有记忆的家庭生活助手
     *   再问「周末给家里安排个活动？」 → 给出贴合亲子家庭的活动方案
         
 
-## 本案例会展示什么？
+### 本案例会展示什么？
 
 我们将用 MemOS 云服务快速实现一个“会记住用户”的家庭生活助手。  
 在运行案例脚本时，开发者能看到完整日志：
@@ -84,14 +84,14 @@ title: 构建拥有记忆的家庭生活助手
     
 *   命中的记忆条目
     
-*   // 拼接指令和完整指令  ← TODO: 即将上线敬请期待
+*   拼接指令和完整指令  ← TODO: 即将上线敬请期待
     
 *   模型生成的回答（未接入大模型时会提示【未接入大模型】）
     
 
-# 示例
+## 示例
 
-## 环境准备
+### 环境准备
 
 使用pip安装所需的依赖项
 
@@ -99,7 +99,7 @@ title: 构建拥有记忆的家庭生活助手
 pip install MemoryOS -U
 ```
 
-## 完整代码
+### 完整代码
 
 ```python
 import os
@@ -152,7 +152,6 @@ class HomeAssistant:
         # 1. 搜索相关记忆
         memories = self.search_memories(query, user_id, conversation_id)
         
-        print(f"======memories: {memories}")
         # 构建包含记忆的系统提示
         system_prompt = self.build_system_prompt(memories)
         
@@ -176,13 +175,13 @@ class HomeAssistant:
         return answer
 
 ai_assistant = HomeAssistant()
-user_id = "memos_home_management_user_1234"
-conversation_id = "memos_home_management_conversation_1234"
+user_id = "memos_home_management_user_123"
+conversation_id = "memos_home_management_conversation_123"
 
 def demo_questions():
     return [
-      "周六要带孩子去动物园，别忘了",
-      "我周末要做什么？",
+      "周六要对装修方案，确认下行程",
+      "我周末有哪些安排？",
       "装修房子时要注意什么？"
     ]
 
@@ -194,8 +193,8 @@ def pre_configured_conversations():
             "description": "家庭装修计划设置"
         },
         {
-            "user": "提醒我周末要对装修方案",
-            "description": "周末装修提醒"
+            "user": "周六要带孩子去动物园，别忘了",
+            "description": "周末任务提醒"
         }
     ]
 
@@ -262,11 +261,11 @@ if __name__ == "__main__":
     main()
 ```
 
-## 代码说明
+### 代码说明
 
 1.   在环境变量中设置您的MemOS API秘钥以及Open AI秘钥
     
-2.   实例化`WritingAssistant` 
+2.   实例化`HomeAssistant` 
     
 3.   选择是否执行预设值的对话，会消耗2次add和2次search的额度
     

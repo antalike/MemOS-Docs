@@ -4,22 +4,24 @@ nav:
   # You can find available icons at https://icones.js.org/
   - "(ri:book-line) Overview":
     - "(ri:home-line) Introduction": overview/introduction.md
-    - "(ri:cpu-line) Algorithm Overview": overview/algorithm.md
-    - "(ri:question-line) FAQs": overview/faq.md
     - "(ri:rocket-line) Quick Start":
+      - "(ri:eye-line) Overview": overview/quick_start/overview.md
       - "(ri:add-line) Memory Production": overview/quick_start/mem_production.md
       - "(ri:calendar-line) Memory Schedule": overview/quick_start/mem_schedule.md
-      - "(ri:refresh-line) Memory Lifecycle": overview/quick_start/mem_lifecycle.md
       - "(ri:search-line) Memory Recall and Instruction Completion": overview/quick_start/mem_recall.md
+      - "(ri:refresh-line) Memory Lifecycle": overview/quick_start/mem_lifecycle.md
+    - "(ri:question-line) FAQs": overview/faq.md
+    - "(ri:cpu-line) Algorithm Overview": overview/algorithm.md
   
   - "(ri:dashboard-line) Dashboard":
     - "(ri:eye-line) Introduction": dashboard/overview.md
     - "(ri:play-line) Quick Start": dashboard/quick_start.md
     - "(ri:shield-line) Limitations and Quotas": dashboard/limit.md
+    - "(ri:file-code-line) API Reference": dashboard/api/overview.md
 
   - "(ri:lightbulb-line) Use Cases":
     - "(ri:money-dollar-circle-line) Financial Assistant": usecase/financial_assistant.md
-    - "(ri:heart-line) Life Assistant": usecase/life_assistant.md
+    - "(ri:heart-line) Life Assistant": usecase/home_assistant.md
     - "(ri:edit-line) Writing Assistant": usecase/writting_assistant.md
 
 
