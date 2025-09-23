@@ -24,9 +24,9 @@ Yes. MemOS memory units can interface with the vector recall layer of RAG or cal
 
 Our cloud service platform provides two core interfaces:
 
-`addMessages` — Submit raw information (user-AI conversations, user action logs/traces within the app, etc.) to us, and we automatically process and store it as memories.
+`addMessage` — Submit raw information (user-AI conversations, user action logs/traces within the app, etc.) to us, and we automatically process and store it as memories.
 
-`searchMemories` — Recall relevant memories in subsequent conversations and optionally complete instruction assembly, making AI responses closer to user needs.
+`searchMemory` — Recall relevant memories in subsequent conversations and optionally complete instruction assembly, making AI responses closer to user needs.
 
 
 ### Q: What are the core functions of MemOS?
