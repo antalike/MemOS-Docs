@@ -1,140 +1,141 @@
 ---
-title: MemOS算法原理概述
-desc: 让大模型从一次性对话工具，进化为真正具有长期记忆和自适应能力的智能体。
+title: MemOS Algorithm Overview
+desc: Transforming large models from disposable dialogue tools into intelligent agents with true long-term memory and adaptive capabilities.
 ---
 
 ::note 
-提示 论文地址：https://arxiv.org/abs/2507.03724
+Reference: Paper link https://arxiv.org/abs/2507.03724
 ::
 
-## 1. 什么是 MemOS？
+## 1. What is MemOS?
 
-当下的大语言模型（LLM）已经展现出强大的生成和推理能力，但它们普遍缺乏真正的「记忆」。
+Today’s large language models (LLMs) have demonstrated strong generative and reasoning capabilities, but they generally lack true “memory.”
 
-*   在多轮对话中，它们常常遗忘早期信息；
+*   In multi-turn conversations, they often forget earlier information;
     
-*   在应用场景中，它们无法沉淀用户的个性化偏好；
+*   In application scenarios, they fail to retain users’ personalized preferences;
     
-*   在知识迭代时，它们更新缓慢，无法灵活应对新需求。
+*   During knowledge iteration, they update slowly and cannot flexibly adapt to new requirements.
 
-这使得 LLM 虽然“聪明”，却难以成为真正的 **老师、同事或助手**。
+This makes LLMs “smart,” but not yet capable of becoming true **teachers, colleagues, or assistants**.
 
 
 <br>
 
-**MemOS（Memory Operating System）** 正是为了解决这一根本性缺陷而提出。  
-它把「记忆」从一个零散的功能，提升为与算力同等重要的 **系统资源**，为 LLM 提供：
+**MemOS (Memory Operating System)** was created to address this fundamental gap.  
+It elevates “memory” from a fragmented function to a **system resource** as important as computation, providing LLMs with:
 
-*   **统一的记忆层**：跨越单一对话，支撑长期知识沉淀和上下文管理；
+*   **A unified memory layer**: supporting long-term knowledge retention and context management beyond single conversations;
     
-*   **持久化与结构化能力**：让记忆能够被保存、追溯和复用；
+*   **Persistence and structuring**: enabling memory to be stored, traced, and reused;
     
-*   **记忆增强推理**：在推理时调用历史经验和偏好，生成更符合用户需求的答案。
-    
-
-<br>
-
-相比传统的做法（如单纯依赖参数记忆或临时 KV 缓存），MemOS 的价值在于：
-
-*   它让 AI 不再是“看过就忘”，而是能持续进化和学习；
-    
-*   它不仅能回答当下的问题，更能利用过去的积累改善未来的表现；
-    
-*   它为开发者提供了统一接口，把“记忆”从复杂的自研逻辑变成标准化能力。
+*   **Memory-augmented reasoning**: recalling historical experiences and preferences during inference to generate answers better aligned with user needs.
     
 
 <br>
 
-简而言之，MemOS 的目标是：  
-**让大模型从一次性对话工具，进化为真正具有长期记忆和自适应能力的智能体。**
+Compared with traditional approaches (e.g., purely relying on parameter memory or temporary KV cache), the value of MemOS lies in:
+
+*   Allowing AI to continuously evolve and learn instead of “forgetting after seeing”;
+    
+*   Not only answering the present question, but also improving future performance through accumulated knowledge;
+    
+*   Providing developers with unified APIs that turn “memory” from complex self-built logic into standardized capabilities.
+    
+
+<br>
+
+In short, MemOS aims to:  
+**Transform large models from disposable dialogue tools into intelligent agents with true long-term memory and adaptive capabilities.**
 
 
-## 2. MemOS架构设计
+## 2. MemOS Architecture Design
 
-MemOS 的设计核心，是把「记忆」作为一个独立系统层，和计算、存储一样，成为 AI 应用的基础能力。它的整体架构可以概括为 **三层结构**： <span style="color: rgb(61, 170, 214);">**API 与应用接口层、记忆调度与管理层、记忆存储与基础设施层**</span>
+At its core, MemOS treats “memory” as an independent system layer—like computation and storage—becoming a fundamental capability for AI applications.  
+Its overall architecture can be summarized as a **three-layer structure**: <span style="color: rgb(61, 170, 214);">**API & Application Interface Layer, Memory Scheduling & Management Layer, Memory Storage & Infrastructure Layer**</span>
 
 ![art.gif](https://statics.memtensor.com.cn/memos/art.gif)
 
-*   在 <span style="color: rgb(61, 170, 214);">**API 与应用接口层**</span>，MemOS 提供了标准化的 Memory API，开发者可以通过简单的接口实现<span style="color: rgb(61, 170, 214);">**记忆创建、删除、更新**</span>等操作，让大模型具备易于调用和扩展的持久记忆能力，支持多轮对话、长期任务和跨会话个性化等复杂应用场景。
+*   In the <span style="color: rgb(61, 170, 214);">**API & Application Interface Layer**</span>, MemOS provides standardized Memory APIs. Developers can perform operations such as <span style="color: rgb(61, 170, 214);">**memory creation, deletion, and updating**</span> through simple interfaces, giving large models persistent memory capabilities for multi-turn conversations, long-term tasks, and cross-session personalization.
     
 
-> 这里的 `_API 层_` 指的是框架内部的标准化接口设计，用于阐述系统原理与能力边界。<span style="color: #ff7100;">**<u>不同于云服务对外提供的开发接口</u>** </span>（如 `add`、`search` 等简化封装），后者是基于 MemOS 能力在后端抽象后的统一入口。
+> Here, the `API layer` refers to standardized interface design within the framework, illustrating system principles and capability boundaries. <span style="color: #ff7100;">**<u>This is different from cloud service developer APIs</u>** </span> (e.g., simplified wrappers like `add`, `search`), which serve as unified endpoints abstracted from MemOS backend capabilities.
 
 
 <br>
 
-*   在记忆调度与管理层，MemOS 提出了<span style="color: rgb(61, 170, 214);">**记忆调度（Memory Scheduling）**</span>的全新范式，支持基于上下文的 <span style="color: rgb(61, 170, 214);">**“下一场景预测”（Next-Scene Prediction），**</span>可以在模型生成时提前加载潜在需要的记忆片段，显著降低响应延迟、提升推理效率。
+*   In the Memory Scheduling & Management Layer, MemOS introduces a new paradigm of <span style="color: rgb(61, 170, 214);">**Memory Scheduling**</span>, enabling context-based <span style="color: rgb(61, 170, 214);">**“Next-Scene Prediction”**</span>. This allows memory fragments likely to be needed to be preloaded during generation, significantly reducing response latency and improving inference efficiency.
 
     
 <br>
 
-*   而在<span style="color: rgb(61, 170, 214);">**记忆存储与基础设施层，**</span>MemOS 通过标准化的 <span style="color: rgb(61, 170, 214);">**MemCube**</span> 封装，将明文记忆、激活记忆和参数记忆三种形态有机整合。它支持多种持久化存储方式，包括 Graph 数据库、向量数据库等，并具备<span style="color: rgb(61, 170, 214);">**跨模型的记忆迁移与复用能力。**</span>
+*   In the <span style="color: rgb(61, 170, 214);">**Memory Storage & Infrastructure Layer**</span>, MemOS integrates plaintext memory, activating memory, and parameter memory through the standardized <span style="color: rgb(61, 170, 214);">**MemCube**</span>. It supports multiple persistent storage methods, including graph databases and vector databases, and offers <span style="color: rgb(61, 170, 214);">**cross-model memory transfer and reuse**</span>.
     
 
 <figure style="width: fit-content">
-  <img src="https://cdn.memtensor.com.cn/img/1758183504775_2ehjk2_compressed.png" alt="标准化 MemCube（记忆立方体）的基础构成" />
-  <center><figcaption>标准化 MemCube（记忆立方体）的基础构成</figcaption></center>
+  <img src="https://cdn.memtensor.com.cn/img/1758183504775_2ehjk2_compressed.png" alt="Basic structure of standardized MemCube (Memory Cube)" />
+  <figcaption style="text-align: center;">Basic structure of standardized MemCube (Memory Cube)</figcaption>
 </figure>
 
 
-## 3. MemOS为什么高效？
+## 3. Why is MemOS Efficient?
 
 :::note{icon="ri:message-2-line"}
-从Next-Token Prediction到Next-Scene Prediction
+From Next-Token Prediction to Next-Scene Prediction
 :::
 
-*   在传统的大模型问答系统中，生成流程依然遵循**同步的Next-Token机制**：模型接收用户问题→实时检索外部片段→按token逐字生成答案。
+*   In traditional LLM Q&A systems, the generation process still follows the **synchronous Next-Token mechanism**: the model receives the user’s query → retrieves external fragments in real time → generates the answer token by token.
     
-*   检索或计算产生的任何停顿，都会直接拉长整条推理链路，知识注入与生成紧密耦合，导致GPU容易出现空等，用户端响应时延明显。
+*   Any pauses caused by retrieval or computation directly extend the reasoning chain, tightly coupling knowledge injection and generation. This leads to GPU idle waiting and noticeable response delays for users.
     
-*   与这种传统范式不同，MemOS 从记忆建模的视角出发，提出了**记忆调度范式**，通过设计异步调度框架，提前预测模型可能需要的记忆信息，显著降低实时生成中的效率损耗。
+*   Unlike this traditional paradigm, MemOS approaches from the perspective of memory modeling and introduces a **memory scheduling paradigm**. By designing an asynchronous scheduling framework, it predicts memory information likely to be needed, significantly reducing efficiency loss during real-time generation.
     
-*   MemOS 实现了针对MemCube中的三种核心记忆类型（参数记忆、激活记忆、明文记忆），以及外部知识库（包括互联网检索与超大规模本地知识）等多元知识的**联合调度**。
+*   MemOS jointly schedules the three core memory types in MemCube (parameter memory, activating memory, plaintext memory) along with external knowledge bases (including internet retrieval and massive local knowledge).
     
-*   依托对对话轮次与时间差的精准感知，系统能够智能预测下一个场景中可能被调用的记忆内容，并动态路由与预加载所需的明文、参数和激活记忆，从而在生成阶段即刻命中，最大化信息引入的效率和推理的流畅性。
+*   With precise awareness of conversation turns and time gaps, the system intelligently predicts which memory elements may be needed in the next scene. It dynamically routes and preloads the required plaintext, parameter, and activating memories, ensuring immediate hits during generation and maximizing efficiency and fluency of reasoning.
     
 
 ![640.gif](https://statics.memtensor.com.cn/memos/ani.gif)
 
 <figure style="width: fit-content">
-  <img src="https://cdn.memtensor.com.cn/img/1758183837895_i87vyb_compressed.png " alt="记忆调度的核心思路" />
-  <center><figcaption>记忆调度的核心思路</figcaption></center>
+  <img src="https://cdn.memtensor.com.cn/img/1758183837895_i87vyb_compressed.png " alt="Core idea of memory scheduling" />
+  <figcaption style="text-align: center;">Core idea of memory scheduling</figcaption>
 </figure>
 
 
-## 4. MemOS-Preview 版本性能详细评估结果
+## 4. MemOS-Preview Performance Evaluation
 
-### 4.1 LoCoMo记忆评测
+### 4.1 LoCoMo Memory Benchmark
 
-*   为系统性验证MemOS在真实应用场景下的表现，MemOS团队基于**LoCoMo数据集**进行了全面评测。
+*   To systematically validate MemOS in real application scenarios, the MemOS team conducted comprehensive evaluations using the **LoCoMo dataset**.
     
-*   作为当前业界广泛认可的记忆管理基准，LoCoMo已被多种主流框架采用，用于检验模型的记忆存取能力与多轮对话一致性。
+*   As an industry-recognized benchmark for memory management, LoCoMo has been adopted by multiple mainstream frameworks to test models’ memory access and multi-turn dialogue consistency.
     
-*   从官方公开的评测数据来看，**MemOS在准确率和计算效率上均实现了显著提升**，相较于OpenAI的全局记忆方案，在关键指标上展现出更优的性能表现，进一步验证了其在记忆调度、管理与推理融合方面的技术领先性。
+*   Public results show that **MemOS achieves significant improvements in both accuracy and computational efficiency**. Compared with OpenAI’s global memory approach, it demonstrates superior performance on key metrics, further verifying its technological leadership in memory scheduling, management, and reasoning integration.
     
 
 ![image.png](https://cdn.memtensor.com.cn/img/1758184331868_djlvc5_compressed.png)
 
 
-### 4.2 KV Cache记忆评测
+### 4.2 KV Cache Memory Evaluation
 
-*   除了通用的记忆能力评估，研究团队还重点考察了MemOS所提出的KV Cache记忆机制在推理加速方面的实际效果。
+*   Beyond general memory ability assessments, the research team specifically examined the effectiveness of MemOS’s KV Cache mechanism in accelerating inference.
     
-*   通过在不同上下文长度（Short/Medium/Long）以及不同模型规模（8B/32B/72B）下进行对比测试，系统性评估了缓存构建时间（Build）、**首Token响应时间（TTFT）以及整体加速比（Speedup）**等关键指标。
+*   Tests were conducted across different context lengths (Short/Medium/Long) and model sizes (8B/32B/72B), systematically evaluating cache build time (Build), **Time-To-First-Token (TTFT), and overall Speedup**.
     
-*   实验结果（见图10）表明，**MemOS在多种配置下均显著优化了KV Cache的构建与复用效率**，使推理过程更加高效流畅，有效缩短了用户的等待时延，并在大规模模型场景中实现了可观的性能加速。
+*   Results (see Figure 10) show that **MemOS significantly optimizes KV Cache build and reuse efficiency across configurations**, making inference more efficient and smooth. This reduces user waiting latency and achieves substantial performance acceleration in large-scale model scenarios.
     
 
 ![image.png](https://cdn.memtensor.com.cn/img/1758184346453_5nlqyz_compressed.png)
 
 
-## 5. 下一步行动
+## 5. Next Steps
 
-*   快使用我们的云服务体验MemOS的强大之处吧 [《云平台简介》](/dashboard/overview)
+*   Try our cloud service to experience the power of MemOS [《Cloud Platform Overview》](/dashboard/overview)
     
-*   或使用MemOS开源项目自行部署体验 [《开源项目概览》](/open_source/home/overview)
+*   Or deploy and explore with the MemOS open-source project [《Open-Source Project Overview》](/open_source/home/overview)
     
 
-## 6. 联系我们
+## 6. Contact Us
 
 <img src="https://cdn.memtensor.com.cn/img/1758251354703_v1nwkz_compressed.png" alt="image" style="width:70%;">

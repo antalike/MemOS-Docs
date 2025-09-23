@@ -1,293 +1,287 @@
 ---
-title: 记忆召回和指令补全
-desc: 在 MemOS 中，记忆不仅仅是信息的存档，还要能够在需要时被动态取用，并转化为可执行的输入。这一过程由两个紧密衔接的环节完成：记忆召回 与 指令补全。
+title: Memory Recall and Instruction Completion
+desc: "In MemOS, memory is not just about archiving information, but also about being dynamically retrieved when needed and transformed into executable input. This process is achieved through two closely connected steps: Memory Recall and Instruction Completion."
 ---
 
-## 1. 能力介绍
+## 1. Capability Overview
 
-### 1.1 记忆召回
+### 1.1 Memory Recall
 
-记忆召回负责在用户发起新请求时，快速检索出与任务最相关的记忆片段。
+Memory recall is responsible for quickly retrieving the most relevant memory fragments when the user initiates a new request.
 
-*   **作用**：确保模型在生成回答时，不是“从零开始”，而是结合用户历史、偏好、上下文。
+*   **Role**: Ensures that the model does not start “from scratch” when generating responses, but instead integrates the user's history, preferences, and context.
     
-*   **返回结果**：召回的内容以明文事实形式呈现
+*   **Returned Results**: The recalled content is presented as plaintext facts.
     
-    *   可溯源：每条记忆均附带来源、时间戳和置信度。
+    *   Traceable: Each memory is accompanied by its source, timestamp, and confidence level.
         
-    *   高可控：开发者可以完全掌握哪些记忆进入下游逻辑。
+    *   Highly controllable: Developers have full control over which memories enter downstream logic.
 
 
-### 1.2 指令补全（敬请期待）
+### 1.2 Instruction Completion (Coming Soon)
 
-需要注意的是，“事实”并不等于“指令”。开发者若只得到明文记忆，还需要额外写规则，才能将这些信息转译成大模型能直接执行的 Prompt。
+It is important to note that “facts” are not the same as “instructions.” If developers only obtain plaintext memory, they must write additional rules to translate this information into prompts that large models can directly execute.
 
 :::note
-**指令补全的作用，** 就是在召回结果的基础上，自动生成不同粒度的指令
+**The role of instruction completion** is to automatically generate instructions of different granularity based on recall results.
 :::
 
-*   **在多数系统里，开发者只能拿到“记忆事实”，然后自己拼接 Prompt。但这会遇到几个痛点：**
+*   **In most systems, developers can only get “memory facts” and then manually piece together prompts. This leads to several challenges:**
     
-    *   任务感知：同一条记忆，在不同任务下需要不同表述；
+    *   Task awareness: The same memory may require different phrasing under different tasks;
         
-    *   个性化偏好：用户风格、习惯需要被即时补齐；
+    *   Personalization: User style and habits need to be instantly supplemented;
         
-    *   动态优化：不同模型对 Prompt 的最优写法不同；
+    *   Dynamic optimization: Different models require different optimal prompt formulations;
         
-    *   高效压缩：需要去除冗余，降低 token 消耗。
+    *   Efficient compression: Redundancy must be removed to reduce token consumption.
 
       
 <br>
 
-*   **MemOS 的指令补全帮开发者完成这部分“最后一公里”的工作：**
+*   **MemOS instruction completion helps developers cover this “last mile”:**
     
-    *   省去规则拼接和调优成本；
+    *   Saves the cost of rules assembly and tuning;
         
-    *   确保召回的记忆能被真正有效利用；
+    *   Ensures that recalled memories are effectively utilized;
         
-    *   提供 matches / instruction / full\_instruction 三种模式，满足不同程度的控制需求。
+    *   Provides three modes: matches / instruction / full_instruction, to meet different levels of control needs.
         
-        *   记忆事实（matchs）：召回当前Query的相关记忆
+        *   Memory facts (matches): Recall relevant memories for the current query.
             
-        *   半成品指令（instruction）：将召回的记忆与用户当前问题拼接，形成基础 Prompt，开发者可在此之上继续添加业务逻辑。
+        *   Semi-finished instruction (instruction): Combine recalled memories with the user’s current question to form a basic prompt, upon which developers can add business logic.
             
-        *   完整指令（full\_instruction）：在半成品的基础上，结合上下文、偏好、合规约束等，生成可直接下发给模型的终端 Prompt。
+        *   Full instruction (full_instruction): Based on the semi-finished version, integrate context, preferences, compliance constraints, etc., to generate a terminal prompt directly executable by the model.
             
 
 <br>
 
 :::note
-指令补全由 **离线链路** 与 **实时链路** 共同作用
+Instruction completion works through both **offline chain** and **real-time chain**.
 :::
 
-| **链路** | **说明** |
+| **Chain** | **Description** |
 | --- | --- |
-| **离线链路**（沉淀与准备） |    抽取用户偏好，形成档案。<br>    <br>  构建 few-shot 样例库。<br>    <br>   固化品牌、合规、风格等长期规则。 |
-| **实时链路**（动态决策） |    根据任务意图，选择当前要启用的记忆与模板。<br>    <br>   裁决冲突（如“喜欢诗经开头” vs “要求简洁”）。<br>    <br>   根据 token 预算和模型特性，做压缩与降级。 |
+| **Offline Chain** (Accumulation & Preparation) | Extract user preferences to form a profile.<br><br>Build a few-shot sample library.<br><br>Solidify long-term rules such as brand, compliance, and style. |
+| **Real-time Chain** (Dynamic Decision) | Select which memories and templates to activate based on task intent.<br><br>Resolve conflicts (e.g., “likes poetic openings” vs. “requires conciseness”).<br><br>Perform compression and degradation based on token budget and model characteristics. |
 
 
+## 2. Example (Pending Instruction Completion Launch) — Personalized Tutoring in AI Education
 
-## 2. 案例（需待指令补全上线）——AI教育中的个性化辅导
-
-### 2.1 历史对话输入（原始材料）
+### 2.1 Historical Dialogue Input (Raw Material)
 
 ```json
 2025-06-10
-  学生：老师你好我叫小明，今年初三  
-  老师：你好小明，很高兴认识你
+  Student: Hello teacher, my name is Xiao Ming, I am in 9th grade  
+  Teacher: Hello Xiao Ming, nice to meet you
   ……
 
 2025-08-01
-  学生：老师，这题我总算不出来，能不能讲清楚点？  
-  老师：好的，我会一步一步给你解释。 
+  Student: Teacher, I really can’t solve this problem, can you explain more clearly?  
+  Teacher: Sure, I will explain step by step. 
   ……
 
 2025-09-03
   ……
-  学生：你刚刚讲得太长了，我有点跟不上。能不能简单一点？  
-  老师：行，那我用更简短的方法告诉你。
+  Student: You just explained too long, I couldn’t keep up. Can you make it simpler?  
+  Teacher: Okay, I’ll tell you in a simpler way.
   ……
 
 2025-10-09
-  学生：我还是分不清一次函数和二次函数……  
-  老师：一次函数的图像是直线，二次函数是抛物线，你要记住这个区别。
+  Student: I still can’t distinguish between linear and quadratic functions…  
+  Teacher: The graph of a linear function is a straight line, while a quadratic function is a parabola. You need to remember this difference.
   ……
 ```
 
+### 2.2 MemOS Instruction Preference Modeling (Offline Chain)
 
-### 2.2 MemOS指令偏好建模（离线链路）
-
-*   **偏好抽取**
+*   **Preference Extraction**
     
-    *   喜欢分步骤讲解（来自“能不能一步一步讲”）。
+    *   Likes step-by-step explanations (from “can you explain step by step”).
         
-    *   偏好简洁（来自“你刚刚讲得太长了”）。
+    *   Prefers concise answers (from “you just explained too long”).
         
-    *   容易混淆相似概念（来自“我还是分不清一次函数和二次函数”）
+    *   Easily confuses similar concepts (from “I still can’t distinguish between linear and quadratic functions”).
         
-*   **few-shot 挑选**：挑出带分步骤、简洁解释、概念澄清的对话。
+*   **Few-shot Selection**: Pick dialogues with step-by-step, concise explanations, and concept clarification.
     
-*   **策略总结**：总结为“分步骤 + 简洁 + 澄清常见混淆”。
+*   **Strategy Summary**: Summarized as “step-by-step + concise + clarify common confusions”.
     
 
 ```yaml
 user_teaching_template_u123:
-  audience: "初三学生"
-  task: "解答数学题"
+  audience: "9th grade student"
+  task: "Solve math problems"
   structure:
-    - "分步骤讲解（3–4 步）"
-    - "必要时先纠正一次函数与二次函数的混淆"
+    - "Step-by-step explanation (3–4 steps)"
+    - "Correct confusion between linear and quadratic functions when necessary"
   constraints:
-    - "讲解简洁，不要太长"
-    - "重点突出，避免大段公式推导"
+    - "Keep explanations concise, not too long"
+    - "Highlight key points, avoid lengthy formula derivations"
 
 fewshot_examples_u123:
   - id: "fs-step-01"
-    user: "老师，这题我总算不出来，能不能讲清楚点？"
-    assistant: "好的，我会一步一步给你解释……"
-    tag: "分步骤讲解"
+    user: "Teacher, I really can’t solve this problem, can you explain more clearly?"
+    assistant: "Sure, I will explain step by step…"
+    tag: "Step-by-step explanation"
 
   - id: "fs-brief-02"
-    user: "你刚刚讲得太长了，我有点跟不上。能不能简单一点？"
-    assistant: "行，那我用更简短的方法告诉你……"
-    tag: "简洁表达"
+    user: "You just explained too long, I couldn’t keep up. Can you make it simpler?"
+    assistant: "Okay, I’ll tell you in a simpler way…"
+    tag: "Concise expression"
 
   - id: "fs-contrast-03"
-    user: "我还是分不清一次函数和二次函数……"
-    assistant: "一次函数的图像是直线，二次函数是抛物线，你要记住这个区别……"
-    tag: "概念澄清"
+    user: "I still can’t distinguish between linear and quadratic functions…"
+    assistant: "The graph of a linear function is a straight line, while a quadratic function is a parabola. You need to remember this difference…"
+    tag: "Concept clarification"
 ```
 
-
-### 2.3 实时链路（指令补全）
+### 2.3 Real-time Chain (Instruction Completion)
 
 :::note{icon="ri:message-2-line"}
-用户提问【老师，你能教我解一下这个题吗？2x² - 3x - 5 = 0】
+User query: [Teacher, can you teach me how to solve this problem? 2x² - 3x - 5 = 0]
 :::
 
-*   **召回记忆matches：** 只返回事实，未加工。开发者需要自行拼接 Prompt、决定如何引导学生解题。
+*   **Recalled matches:** Only returns facts, unprocessed. Developers need to piece together the prompt and decide how to guide the student.
     
 
 ```yaml
 matches:
-  - content: "初三学生"
+  - content: "9th grade student"
     score: 0.95
-    source: "对话记录#2025-06-10"
+    source: "Dialogue record#2025-06-10"
     
-  - content: "偏好分步骤讲解"
+  - content: "Prefers step-by-step explanations"
     score: 0.94
-    source: "对话记录#2025-08-01"
+    source: "Dialogue record#2025-08-01"
     
-  - content: "喜欢简洁的解释"
+  - content: "Likes concise explanations"
     score: 0.92
-    source: "对话记录#2025-09-03"
+    source: "Dialogue record#2025-09-03"
     
-  - content: "分不清一次函数和二次函数概念"
+  - content: "Confuses linear and quadratic functions"
     score: 0.90
-    source: "对话记录#2025-10-09"
+    source: "Dialogue record#2025-10-09"
 
-user_query: "老师，你能教我解一下这个题吗？2x² - 3x - 5 = 0"
+user_query: "Teacher, can you teach me how to solve this problem? 2x² - 3x - 5 = 0"
 ```
 
 <br>
 
-*   **半成品指令 instruction：** 将事实转译成结构化要求：任务 / 受众 / 步骤 / 限制
+*   **Semi-finished instruction:** Translate facts into structured requirements: task / audience / steps / constraints
     
 
 ```yaml
 instruction: |
-  任务：帮学生解答二次函数题目  
-  受众：初三学生  
-  要求：  
-  - 分 3–4 步讲解  
-  - 在讲解过程中纠正一次函数/二次函数的常见混淆  
-  - 保持简洁，避免冗长推导  
-  备注：如题目不完整，请先提出澄清问题
+  Task: Help student solve a quadratic equation problem  
+  Audience: 9th grade student  
+  Requirements:  
+  - Explain in 3–4 steps  
+  - Correct common confusion between linear/quadratic functions during explanation  
+  - Keep it concise, avoid lengthy derivations  
+  Note: If the question is incomplete, please ask for clarification first
 
-user_query: "老师，你能教我解一下这个题吗？2x² - 3x - 5 = 0"
+user_query: "Teacher, can you teach me how to solve this problem? 2x² - 3x - 5 = 0"
 ```
 
 <br>
 
-*   **完整指令 full\_instruction：** 在半成品基础上进一步加工
+*   **Full instruction:** Further refined from the semi-finished version
     
-    *   将“常混淆”转化为具体教学动作（在讲解时必须强调二次函数与一次函数的区别）
+    *   Convert “often confuses” into explicit teaching action (must emphasize difference between quadratic and linear functions during explanation).
         
-    *   把“分步骤讲解”的偏好转译为明确的解题方式（用分步骤的形式进行说明）
+    *   Translate “prefers step-by-step explanations” into a clear problem-solving method (use step-by-step explanation).
         
-    *   将“初三学生”改写为教学场景中的角色关系（你是一名初三学生的数学老师）
+    *   Rewrite “9th grade student” into the teaching role relationship (you are the math teacher of a 9th grade student).
         
-    *   从历史对话中挑选 few-shot 示例，补充到最终指令中，帮助模型更好学习解题和澄清的模式
+    *   Select few-shot examples from historical dialogue and include them in the final instruction to help the model learn explanation and clarification patterns.
         
 
-> 半成品偏结构化，方便开发者二次加工；完整指令偏自然语言，更贴近模型直接执行。
+> Semi-finished instructions are more structured for developer customization; full instructions are closer to natural language and directly executable by models.
 
 ```yaml
 final_prompt_to_model:
   - role: system
     content: |
-      你是一名初三学生的数学老师。  
-      学生在学习时经常把一次函数和二次函数混淆，且更喜欢简洁、分步骤的讲解。  
-      请参考以下历史示例的风格：  
+      You are the math teacher of a 9th grade student.  
+      The student often confuses linear and quadratic functions, and prefers concise, step-by-step explanations.  
+      Please follow the style of the following historical examples:  
 
-      【示例 1】  
-      学生：老师，这题我总算不出来，能不能讲清楚点？  
-      老师：好的，我会一步一步给你解释。  
+      [Example 1]  
+      Student: Teacher, I really can’t solve this problem, can you explain more clearly?  
+      Teacher: Sure, I will explain step by step.  
 
-      【示例 2】  
-      学生：你刚刚讲得太长了，我有点跟不上。能不能简单一点？  
-      老师：行，那我用更简短的方法告诉你。  
+      [Example 2]  
+      Student: You just explained too long, I couldn’t keep up. Can you make it simpler?  
+      Teacher: Okay, I’ll tell you in a simpler way.  
 
-      【示例 3】  
-      学生：我还是分不清一次函数和二次函数……  
-      老师：一次函数的图像是直线，二次函数是抛物线，你要记住这个区别。  
+      [Example 3]  
+      Student: I still can’t distinguish between linear and quadratic functions…  
+      Teacher: The graph of a linear function is a straight line, while a quadratic function is a parabola. You need to remember this difference.  
 
-      现在请回答学生问题：“解 2x² - 3x - 5 = 0”。  
-      要求：  
-      - 用分步骤方式解题（3–4 步）；  
-      - 在讲解中指出一次函数与二次函数的区别；  
-      - 保持答案简洁清晰，避免冗长推导；  
-      - 如果题目信息不足，请先提出澄清问题。
+      Now please answer the student’s question: “Solve 2x² - 3x - 5 = 0.”  
+      Requirements:  
+      - Solve the problem step-by-step (3–4 steps);  
+      - Point out the difference between linear and quadratic functions during the explanation;  
+      - Keep the answer concise and clear, avoid lengthy derivations;  
+      - If the problem statement is incomplete, please ask for clarification first.
   - role: user
-    content: "老师，你能教我解一下这个题吗？2x² - 3x - 5 = 0"
+    content: "Teacher, can you teach me how to solve this problem? 2x² - 3x - 5 = 0"
 ```
-> 案例总结：在“初三学生解二次函数”的场景中，指令补全相比只返回原始记忆有如下增益
 
-*   **从事实到可执行**
-    
+> Case Summary: In the “9th grade student solving quadratic equation” scenario, instruction completion provides the following benefits over returning raw memory only:
 
-    *   原始记忆只有“学生常混淆二次函数和一次函数”，开发者需要自己转化为教学动作。
+*   **From facts to executable**
     
-    *   指令补全直接生成“讲解时必须强调关键区别”，避免开发者额外写规则。
+    *   Raw memory only has “student often confuses linear and quadratic functions,” developers must convert this into a teaching action.
     
-*   **上下文融合**
+    *   Instruction completion directly generates “must emphasize the key difference during explanation,” avoiding extra developer rules.
     
-    *   原始记忆是零散片段，开发者要自己判断如何放进 Prompt。
+*   **Context integration**
     
-    *   指令补全自动把记忆和用户问题融合成一个连贯的任务描述，模型可直接使用。
+    *   Raw memory is fragmented; developers must decide how to place them into prompts.
     
-*   **优化与裁剪**
+    *   Instruction completion automatically merges memories with the user query into a coherent task description for direct model use.
     
-    *   如果开发者直接拼接记忆，结果往往冗余或冲突。
+*   **Optimization and pruning**
+    
+    *   If developers directly concatenate memories, the result is often redundant or conflicting.
  
-    *   指令补全自动压缩为简洁的步骤要求，减少 token 消耗，也提升回答聚焦度。
+    *   Instruction completion compresses into concise step-by-step requirements, reducing token consumption and improving focus.
+    
+*   **Robustness assurance**
 
-*   **健壮性保障**
-
-    *   开发者如果只拿到记忆，还得考虑“题目不完整怎么办”。
+    *   If developers only get memories, they must consider “what if the question is incomplete.”
   
-    *   指令补全内置了澄清策略，让输出更稳健，无需开发者重复造轮子。
+    *   Instruction completion includes clarification strategies, making outputs more robust without reinventing the wheel.
 
 
+## 3. Advanced: Deep Customization
 
-## 3. 进阶：如果你想做深度定制
+In MemOS, recall and completion are not achieved through a single path, but through combinations of multiple strategies and components. Different scenarios may require different configurations. This section lists the main steps and customizable points for you to flexibly choose according to business needs.
 
-在 MemOS 中，召回与补全的实现方式并非单一路径，而是由多种策略与组件组合完成。不同场景可能需要不同的配置，本节列出主要环节与可定制点，供你根据业务需要灵活选择。
-
-| **层次** | **可定制点** | **示例** |
+| **Layer** | **Customizable Points** | **Example** |
 | --- | --- | --- |
-| 记忆召回 | 调整召回策略 | 提高相似度阈值，只返回置信度 ≥0.9 的记忆 |
-|  | 设置过滤器 | 仅检索最近 30 天的对话；只要偏好类记忆，不要事实类 |
-| 半成品指令<br>instruction | 扩展结构化字段 | 在默认字段外加上「输出格式：Markdown」「必须包含：安全提醒」 |
-|  | 自定义拼接模板 | 替换默认拼接逻辑，生成带品牌语气的半成品指令 |
-| 完整指令<br>full\_instruction | Few-shot 策略 | 使用自家示例库替换默认历史消息，固定每次返回 2 个示例 |
-|  | 角色与语气控制 | 强制设定为“金融顾问”，输出风格为“正式专业” |
-|  | Token 成本优化 | 定义压缩规则：保留核心偏好，裁剪掉冗余背景信息 |
-|  | 多模型适配 | 针对 GPT 输出带 LaTeX，对 LLaMA 输出纯文本，自动切换 |
-| 输出治理与审计 | 安全兜底 | 在补全指令前自动加一句「回答请遵守合规规范」 |
-|  | 日志与回溯 | 每次调用记录下使用的记忆条目与 few-shot 选择 |
-|  | A/B 测试 | 同时运行两套拼接模板，比较用户满意度差异 |
+| Memory Recall | Adjust recall strategy | Raise similarity threshold to only return memories with confidence ≥0.9 |
+|  | Set filters | Only retrieve the last 30 days of conversations; only preference memories, not factual ones |
+| Semi-finished Instruction<br>instruction | Extend structured fields | Add extra fields such as “Output format: Markdown”, “Must include: Safety reminder” |
+|  | Custom concatenation template | Replace default concatenation logic to generate semi-finished instructions with brand tone |
+| Full Instruction<br>full_instruction | Few-shot strategy | Replace default historical messages with your own example library, fix to 2 examples each time |
+|  | Role and tone control | Force setting to “Financial Advisor”, output style as “formal professional” |
+|  | Token cost optimization | Define compression rules: keep core preferences, prune redundant background information |
+|  | Multi-model adaptation | For GPT output with LaTeX, for LLaMA output plain text, auto-switch |
+| Output Governance & Audit | Compliance fallback | Automatically prepend “Answer must comply with regulations” before completion |
+|  | Logging & traceability | Record used memories and few-shot selection each call |
+|  | A/B testing | Run two concatenation templates simultaneously, compare user satisfaction differences |
 
 
+## 4. Next Steps
 
-## 4. 下一步行动
+Learn more about MemOS core capabilities:
 
-了解MemOS更多核心能力
-
-*   [记忆生命周期管理](/overview/quick_start/mem_lifecycle)
+*   [Memory Lifecycle Management](/overview/quick_start/mem_lifecycle)
     
 
-
-## 5. 联系我们
+## 5. Contact Us
 
 <img src="https://cdn.memtensor.com.cn/img/1758251354703_v1nwkz_compressed.png" alt="image" style="width:70%;">

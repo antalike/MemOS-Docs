@@ -12,7 +12,7 @@ nav:
       - "(ri:refresh-line) Memory Lifecycle": overview/quick_start/mem_lifecycle.md
     - "(ri:question-line) FAQs": overview/faq.md
     - "(ri:cpu-line) Algorithm Overview": overview/algorithm.md
-  
+
   - "(ri:dashboard-line) Dashboard":
     - "(ri:eye-line) Introduction": dashboard/overview.md
     - "(ri:play-line) Quick Start": dashboard/quick_start.md
@@ -26,16 +26,12 @@ nav:
 
 
   - "(ri:open-source-line) Open Source":
-    - "(ri:home-line) Home":
-      - "(ri:eye-line) Overview": open_source/home/overview.md
-      - "(ri:information-line) What Is MemOS?": open_source/home/memos_intro.md
-      - "(ri:lightbulb-line) Core Concepts": open_source/home/core_concepts.md
-      - "(ri:building-2-line) Architecture": open_source/home/architecture.md
-
     - "(ri:rocket-line) Getting Started":
       - "(ri:install-line) Installation": open_source/getting_started/installation.md
       - "(ri:play-line) Quick Start": open_source/getting_started/quick_start.md
       - "(ri:bookmark-line) Your First Memory": open_source/getting_started/your_first_memory.md
+      - "(ri:lightbulb-line) Core Concepts": open_source/home/core_concepts.md
+      - "(ri:building-2-line) Architecture": open_source/home/architecture.md
       - "(ri:file-code-line) REST API Server": open_source/getting_started/rest_api_server.md
       - "(ri:code-line) Examples": open_source/getting_started/examples.md
 
@@ -64,8 +60,8 @@ nav:
       - "(ri:seedling-line) Chapter 1: Your First MemCube":
         - "(ri:cloud-line) API": open_source/cookbook/chapter1/api.md
         - "(ri:node-tree) OLLAMA": open_source/cookbook/chapter1/ollama.md
-      - "(ri:database-2-line) Chapter 2: TreeNodeTextualMemoryMetadata": 
-        - "(ri:cloud-line) API": open_source/cookbook/chapter2/api.md 
+      - "(ri:database-2-line) Chapter 2: TreeNodeTextualMemoryMetadata":
+        - "(ri:cloud-line) API": open_source/cookbook/chapter2/api.md
         - "(ri:node-tree) OLLAMA": open_source/cookbook/chapter2/ollama.md
       - "(ri:search-2-line) Chapter 3: Intelligent Novel Analysis System": open_source/cookbook/chapter3/overview.md
       - "(ri:graduation-cap-line) Chapter 4: Using MemOS to Build a Production-Grade Knowledge Q&A System": open_source/cookbook/chapter4/overview.md

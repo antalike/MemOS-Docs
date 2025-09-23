@@ -1,76 +1,75 @@
 ---
-title: 记忆调度
-desc: 记忆调度就像大脑的注意力机制，动态决定在合适的时刻调用合适的记忆。
+title: Memory Scheduling
+desc: Memory Scheduling is like the brain's attention mechanism, dynamically deciding which memory to call at the right moment.
 ---
 
-## 1. 能力介绍
+## 1. Capability Introduction
 
-在 MemOS 中，**记忆调度（Memory Scheduling）** 通过对【不同使用效率（参数>激活>工作>其他明文）的记忆】的相互调度，让模型能更高效、准确地获取用户所需的记忆。在对话和任务进行时，通过预测用户后续对话所需记忆并提前调入高效率记忆类型如激活记忆工作记忆，加速推理链路
+In MemOS, **Memory Scheduling** improves efficiency and accuracy by dynamically coordinating memories of different usage efficiencies (Parameter > Activated > Working > Other Plaintext). During conversations and tasks, it predicts which memories will be needed and preloads high-efficiency types like activated and working memories, accelerating the reasoning chain.
 
 :::note{icon="ri:triangular-flag-fill"}
-**为什么需要调度**
+**Why Scheduling Is Needed**
 :::
 
-在复杂的交互里，如果每次过来只靠简单的全局搜索，系统可能会：
+In complex interactions, if the system only relies on simple global search each time, it may:
 
-*   **太慢**：等到用户问完再临时搜索，首 Token 延迟高。
+*   **Be too slow**: Waiting until after the user finishes asking to search causes high first-token latency.
     
-*   **不准**：太多历史，反而淹没了关键信息，难以检索。
+*   **Be inaccurate**: Too much history overwhelms key information, making retrieval difficult.
     
 <br>
 
-调度的作用就是让系统具备“即时准备、快速响应”的能力：
+The role of scheduling is to give the system “instant readiness and fast response” capabilities:
 
-*   **预加载**：在对话一开始，就加载用户的常用背景。
+*   **Preloading**: At the start of the conversation, load the user’s commonly used background.
     
-*   **预测调用**：在用户还没输入完时，提前准备可能要用的记忆。
+*   **Predictive invocation**: Before the user finishes typing, prepare the memories that may be needed.
     
     
 <br>
 
 :::note
-**怎么调——结合任务语义、上下文、访问频率、生命周期等信息，动态安排记忆的调用与存储**
+**How Scheduling Works — Dynamically arrange memory invocation and storage based on task semantics, context, access frequency, and lifecycle.**
 :::
 
-| 维度 | 说明 |
+| Dimension | Explanation |
 | --- | --- |
-| 调什么？ |    参数记忆（长期知识与技能）<br>    <br>   激活记忆（运行时的 KV 缓存与隐层状态）<br>    <br>   明文记忆（外部可编辑的事实、用户偏好、检索片段）<br>    <br> 支持`明文 ⇆ 激活 ⇆ 参数`的动态迁移，高频使用的明文片段可以提前编译成 KV 缓存；长期稳定的模板可以沉淀到参数中。 |
-| 什么时候调？ |    上下文和高效记忆不足以支撑回答用户提问时进行记忆结构的优化<br>    <br>   根据用户的意图和需求，对用户可能需要的记忆内容进行提前的准备<br>    <br>   在连续提问过程中，调度记忆保持对话场景的高效准确 |
-| 调给谁？ | 当前用户、特定角色代理（Agent）、或跨任务的共享上下文 |
-| 调成什么样？ | 记忆会被打上热度、时效性、重要性等指标。调度器据此决定先加载谁、谁放冷存、谁需要归档。 |
+| What to schedule? | Parameter memory (long-term knowledge and skills)<br><br>Activated memory (runtime KV cache and hidden states)<br><br>Plaintext memory (externally editable facts, user preferences, retrieval snippets)<br><br>Supports dynamic migration among `Plaintext ⇆ Activated ⇆ Parameter`; frequently used plaintext snippets can be compiled into KV cache in advance; stable templates can be deposited into parameters. |
+| When to schedule? | When context and efficient memory are insufficient to support answering user queries, memory structures are optimized.<br><br>Prepare memory content in advance according to the user’s intent and needs.<br><br>During continuous queries, scheduling ensures high efficiency and accuracy in conversation scenarios. |
+| Who to schedule for? | Current user, specific role agent, or shared cross-task context |
+| What form to schedule into? | Memories are tagged with indicators such as heat, timeliness, and importance. The scheduler decides which to load first, which to cool down, and which to archive. |
 
-使用 MemOS 云服务时，调度的作用可以从 `searchMemories` API 的表现中观测到：
+When using MemOS cloud services, the role of scheduling can be observed through the performance of the `searchMemories` API:
 
-*   它能快速返回相关记忆，避免上下文断裂。
+*   It quickly returns relevant memories, avoiding context breaks.
     
-*   返回的内容已经过调度器优化，确保结果既相关又不会过载模型输入。
+*   Returned content is already optimized by the scheduler, ensuring results are relevant without overloading model input.
 
         
+## 2. Example: Memory Scheduling in a Household Assistant Scenario
 
-## 2. 案例：家庭助理场景中的记忆调度
-
-*   前段时间：用户忙着买房
+*   Some time ago: the user was busy buying a house
     
 ::card-group
 
   :::card
   ---
-  title: 用户经常说：
+  title: "User often said:"
   ---
-  *   “帮我查一下 XX 小区的二手房均价。”
+  *   “Check the average second-hand housing price in XX community.”
     
-  *   “提醒我周六去看房。”
+  *   “Remind me to view the house on Saturday.”
     
-  *   “记录一下房贷利率的最新变化。”
+  *   “Record the latest change in mortgage rates.”
   :::
 
   :::card
   ---
-  title: MemOS系统操作
+  title: MemOS System Operation
   ---
-  *   系统最初将这些条目都生成 **明文记忆**。
+  *   Initially, the system generated these items as **Plaintext Memories**.
     
-  *   因为“买房”相关信息被频繁提及，调度器在后台判断它是近期的**核心主题**，于是将这些明文迁移为 **激活记忆**，让后续查询更快更直接。
+  *   Since house-buying information was frequently mentioned, the scheduler judged it as a **core theme** and migrated these plaintexts into **Activated Memories**, making subsequent queries faster and more direct.
   :::
 
 ::
@@ -78,30 +77,30 @@ desc: 记忆调度就像大脑的注意力机制，动态决定在合适的时�
         
 <br>
 
-*   最近：用户房子买好了开始装修
+*   Recently: the user bought the house and started decorating
     
 ::card-group
 
   :::card
   ---
-  title: 用户开始频繁提到：
+  title: "User frequently mentioned:"
   ---
-  *   “周末要去看瓷砖。”
+  *   “Going to check tiles this weekend.”
     
-  *   “提醒我和装修公司确认水电改造。”
+  *   “Remind me to confirm water and electricity work with the renovation company.”
     
-  *   “记一下下周家具送货时间。”
+  *   “Record next week’s furniture delivery time.”
   :::
 
   :::card
   ---
-  title: MemOS系统操作
+  title: MemOS System Operation
   ---
-  *   系统继续生成新的 **明文记忆**。
+  *   The system continued to generate new **Plaintext Memories**.
     
-  *   调度器检测到“装修”已经成为新的高频主题，于是把这些条目迁移为 **激活记忆**。
+  *   The scheduler detected that “renovation” had become the new high-frequency theme and migrated these entries into **Activated Memories**.
     
-  *   同时，之前“买房”相关激活记忆不再被频繁使用，会被自动**降级回明文层**，以减少活跃占用。
+  *   Meanwhile, previous “house-buying” activated memories were no longer frequently used and were automatically **downgraded back to plaintext**, reducing active memory usage.
   :::
 
 ::
@@ -109,79 +108,76 @@ desc: 记忆调度就像大脑的注意力机制，动态决定在合适的时�
     
 <br>
 
-*   **当前时刻：用户随口说——我感觉好多事堆在一起，你帮我理一下**
+*   **At the current moment: the user casually says—“I feel like too many things are piling up, help me organize them.”**
     
 ::card-group
 
   :::card
   ---
-  title: 如果没有调度，系统只能全库检索，把所有可能相关的记忆拉出来：
+  title: "Without scheduling, the system can only do a full-library retrieval, pulling out all possibly relevant memories:"
   ---
-  *   看瓷砖（装修）
+  *   Checking tiles (renovation)
     
-*   确认水电改造（装修）
+*   Confirming water/electricity work (renovation)
     
-*   家具送货（装修）
+*   Furniture delivery (renovation)
     
-*   查房价（买房时期，过时）
+*   Checking housing prices (house-buying, outdated)
     
-*   看房（买房时期，过时）
+*   Viewing houses (house-buying, outdated)
     
-*   买菜（生活琐事）
+*   Grocery shopping (daily life)
     
-*   看电影（生活琐事）
+*   Watching a movie (daily life)
   :::
 
   :::card
   ---
-  title: 有调度时，系统可以更快速返回
+  title: With scheduling, the system can return more quickly
   ---
-  *   看瓷砖
+  *   Checking tiles
     
-*   确认水电改造
+*   Confirming water/electricity work
     
-*   家具送货
+*   Furniture delivery
 
-
-
-*   👉 **用户体感 UP**
-
-*   响应更快（因为不需要全库检索）。
     
-*   列出的就是自己最挂念的事 → 感觉助理“很懂我”
+<br>
+
+   👉 **User experience UP**
+
+*   Faster response (no need for full-library search).
+    
+*   The listed items are exactly what they care about most → makes the assistant feel “very understanding.”
   :::
 
 ::
 
     
 
-    
-    
+        
 
-## 3. 进阶：如果你想做深度定制
+## 3. Advanced: Deep Customization
 
-开发者可以通过 **扩展调度策略** 来定制系统行为，主要包括：
+Developers can **extend scheduling strategies** to customize system behavior, mainly including:
 
-| **扩展点** | **可配置内容** | **示例场景** |
+| **Extension Point** | **Configurable Content** | **Example Scenario** |
 | --- | --- | --- |
-| 调度策略 | 定义不同任务下的记忆选择逻辑 | 对话系统优先用激活记忆；科研系统优先检索最新明文 |
-| 转换规则 | 设定跨类型迁移条件 | 高频 FAQ → KV 缓存；稳定范式 → 参数模块 |
-| 上下文绑定 | 将记忆与角色/用户挂钩 | 学生用户自动加载学习偏好；企业用户加载项目档案 |
-| 权限与治理 | 调度时结合访问控制与合规检查 | 医疗记录仅医生可见；敏感内容不可跨域共享 |
-| 调度指标 | 基于访问频率、延迟需求优化调度 | 高频热记忆提升优先级；低频冷记忆降级存档 |
+| Scheduling Strategy | Define memory selection logic for different tasks | Conversation systems prioritize activated memories; research systems prioritize retrieving the latest plaintexts |
+| Transformation Rules | Set conditions for cross-type migration | High-frequency FAQs → KV cache; stable paradigms → parameter modules |
+| Context Binding | Bind memories to roles/users | Student users automatically load learning preferences; enterprise users load project archives |
+| Permissions & Governance | Combine scheduling with access control and compliance checks | Medical records visible only to doctors; sensitive content not shareable across domains |
+| Scheduling Metrics | Optimize scheduling based on access frequency and latency needs | High-frequency hot memories prioritized; low-frequency cold memories downgraded to archive |
 
     
+## 4. Next Steps
 
-## 4. 下一步行动
+Learn more about MemOS core capabilities:
 
-了解MemOS更多核心能力
-
-*   [记忆召回与指令补全](/overview/quick_start/mem_recall)
+*   [Memory Recall and Instruction Completion](/overview/quick_start/mem_recall)
     
-*   [记忆生命周期管理](/overview/quick_start/mem_lifecycle)
+*   [Memory Lifecycle Management](/overview/quick_start/mem_lifecycle)
+      
 
-        
-
-## 5. 联系我们
+## 5. Contact Us
 <img src="https://cdn.memtensor.com.cn/img/1758251354703_v1nwkz_compressed.png" alt="image" style="width:70%;">
-
