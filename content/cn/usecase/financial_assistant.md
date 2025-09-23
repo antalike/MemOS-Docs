@@ -105,7 +105,7 @@ pip install MemoryOS -U
 ```python
 import os
 from openai import OpenAI
-from memos.api.client import MemOSClient
+from memos.api.client import MemOSAPIClient
 
 os.environ["MEMOS_API_KEY"] = "mpg-xx"
 os.environ["OPEN_API_KEY"] = "sk-xx"
@@ -114,12 +114,12 @@ class FinancialManagementAssistant:
     """AI财务管理助手，具备记忆能力"""
     
     def __init__(self):
-        self.memos_client = MemOSClient(api_key=os.getenv("MEMOS_API_KEY"))
+        self.memos_api_client = MemOSAPIClient(api_key=os.getenv("MEMOS_API_KEY"))
         self.openai_client = OpenAI(api_key=os.getenv("OPEN_API_KEY"))
     
-    def search_memories(self, query, user_id, conversation_id):
+    def search_memory(self, query, user_id, conversation_id):
         """根据查询搜索相关记忆"""
-        response = self.memos_client.search(query, user_id, conversation_id)
+        response = self.memos_api_client.search(query, user_id, conversation_id)
 
         return [memory_detail.memory_value for memory_detail in response.data.memory_detail_list]
 
@@ -143,18 +143,18 @@ class FinancialManagementAssistant:
             return base_prompt
         
 
-    def add_messages(self, messages, user_id, conversation_id):
-        self.memos_client.add(messages, user_id, conversation_id)
+    def add_message(self, messages, user_id, conversation_id):
+        self.memos_api_client.add(messages, user_id, conversation_id)
 
-    def get_messages(self, user_id, conversation_id):
-        response = self.memos_client.get_messages(user_id, conversation_id)
+    def get_message(self, user_id, conversation_id):
+        response = self.memos_api_client.get(user_id, conversation_id)
         
         return response.data.message_detail_list
 
     def chat(self, query, user_id, conversation_id):
         """处理包含记忆集成的对话的主要聊天函数"""
         # 1. 搜索相关记忆
-        memories = self.search_memories(query, user_id, conversation_id)
+        memories = self.search_memory(query, user_id, conversation_id)
         
         # 构建包含记忆的系统提示
         system_prompt = self.build_system_prompt(memories)
@@ -174,7 +174,7 @@ class FinancialManagementAssistant:
             {"role": "user", "content": query},
             {"role": "assistant", "content": answer}
         ]
-        self.memos_client.add(messages, user_id, conversation_id)
+        self.memos_api_client.add(messages, user_id, conversation_id)
         
         return answer
 
@@ -202,7 +202,7 @@ def preset_user_behaviors():
     
     for i, behavior in enumerate(behaviors, 1):
         print(f"{i}. {behavior['content']}")
-    ai_assistant.add_messages(behaviors, user_id, conversation_id)
+    ai_assistant.add_message(behaviors, user_id, conversation_id)
     
     print("=" * 60)
     print("💡 以上行为记忆已自动加载，助手会基于这些信息提供个性化建议")
