@@ -25,7 +25,6 @@ nav:
     - "(ri:heart-line) 构建拥有记忆的家庭生活助手": usecase/home_assistant.md
 
   - "(ri:open-source-line) 开源项目":
-
     - "(ri:rocket-line) 快速入门":
       - "(ri:install-line) 安装指南": open_source/getting_started/installation.md
       - "(ri:play-line) 快速启动": open_source/getting_started/quick_start.md

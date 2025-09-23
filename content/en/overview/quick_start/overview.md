@@ -1,67 +1,64 @@
 ---
-title: 概览
-desc: 快速开始模块为你提供最简洁的入门指引，帮助你在几分钟内上手 MemOS 的核心能力。
+title: Overview
+desc: The Quick Start module provides you with the simplest onboarding guide to help you get started with MemOS’s core capabilities within minutes.
 ---
 
 ::note
-**提示**<br> 在写第一行代码之前，你可以先通过 **MemOS Playground** 快速体验“记忆能力”带来的效果。<br>
+**Tip**<br> Before writing the first line of code, you can quickly experience the effect of “memory capability” through **MemOS Playground**.<br>
 
-* **无需安装**：直接在浏览器中打开即可使用<br>
+* **No installation required**: Simply open in the browser to use<br>
 
-* **真实交互**：像和普通 Chatbot 一样对话，但系统会自动记住你说过的话<br>
+* **Real interaction**: Chat just like with a normal Chatbot, but the system will automatically remember what you said<br>
 
-* **可视化记忆**：你能看到哪些内容被加工成了记忆、是如何被调度、召回的<br>
+* **Visualized memory**: You can see which content has been processed into memory, and how it is scheduled and recalled<br>
 
-👉 [立即体验 Playground](https://memos-playground.openmem.net/)
+👉 [Try Playground now](https://memos-playground.openmem.net/)
 ::
 
-MemOS 提供两种使用方式：
+MemOS provides two usage options:
 
-1. **云服务平台** —— 最快上手，只需 API Key。
-2. **开源框架** —— 本地/私有化部署，方便二次开发和深度集成。
+1. **Cloud Service Platform** — the fastest way to get started, only requires an API Key.  
+2. **Open-source Framework** — for local/private deployment, convenient for secondary development and deep integration.  
 
-> 无论是 **云服务** 还是 **开源框架**，MemOS 都能让你的 AI **轻松获得持久记忆**。<br>你可以先用云服务快速体验，再根据业务需要切换到本地化部署。
+> Whether **Cloud Service** or **Open-source Framework**, MemOS enables your AI to **easily obtain persistent memory**.<br>You can start with the cloud service for a quick experience, then switch to localized deployment as needed.
 
 ---
+## 1. Option One: Cloud Service Platform
 
-## 1. 方式一：云服务平台
+When building applications with large models, a common problem is: **How can AI remember users’ long-term preferences?**  
+MemOS provides two core APIs to help you achieve this:
 
-在使用大模型构建应用时，一个常见问题是：**如何让 AI 记住用户的长期偏好？**  
-MemOS 提供了两个核心接口帮助你实现：
-
-- `addMessages` —— 把原始对话交给我们，我们自动加工并存储记忆
-- `searchMemories` —— 在后续对话中召回相关记忆和建议指令（可选），让 AI 回答更贴近用户需求
+- `addMessages` — Submit raw conversations to us, we automatically process and store them as memory  
+- `searchMemories` — Recall relevant memories and optional suggested instructions in subsequent conversations, making AI responses more aligned with user needs  
 
 ![image.svg](https://cdn.memtensor.com.cn/img/1758180109237_8ubv8n.svg)
-2
 
-### 步骤 1. 获取 API Key
+### Step 1. Get API Key
 
-在 [MemOS Cloud 平台](https://memos-dashboard.openmem.net/quickstart) 注册账号，获取默认API Key
+Register an account on the [MemOS Cloud Platform](https://memos-dashboard.openmem.net/quickstart) to obtain the default API Key.
 
-
-### 步骤 2. 存储原始对话（addMessages）
+### Step 2. Store raw conversations (addMessages)
 
 ::note
-**会话 A：2025-06-10 发生**<br>
+**Conversation A: occurred on 2025-06-10**<br>
 
-你只需要把`原始的对话记录`给到MemOS，MemOS 会`自动抽象加工并保存为记忆`
+You only need to provide the `raw conversation logs` to MemOS, and MemOS will `automatically abstract, process, and save them as memory`.
 ::
 
 ```python
 import requests
 
-BASE_URL = "https://your-host.com"   # 换成你的服务域名
+BASE_URL = "https://your-host.com"   # Replace with your service domain
 API_PATH = "/api/openmem/add/message"
-API_KEY = "your_api_key_here"        # 从控制台获取的 API Key
+API_KEY = "your_api_key_here"        # API Key from console
 
 conversation = [
-    {"role": "user", "content": "我想暑假出去玩，你能帮我推荐下吗？"},
-    {"role": "assistant", "content": "好的！是自己出行还是和家人朋友一起呢？"},
-    {"role": "user", "content": "肯定要带孩子啊，我们家出门都是全家一起。"},
-    {"role": "assistant", "content": "明白了，所以你们是父母带孩子一块儿旅行，对吗？"},
-    {"role": "user", "content": "对，带上孩子和老人，一般都是全家行动。"},
-    {"role": "assistant", "content": "收到，那我会帮你推荐适合家庭出游的目的地。"}
+    {"role": "user", "content": "I want to travel during summer vacation, can you recommend something?"},
+    {"role": "assistant", "content": "Sure! Are you traveling alone or with family/friends?"},
+    {"role": "user", "content": "Of course I’m bringing my kid, our family always travels together."},
+    {"role": "assistant", "content": "Got it, so you’re traveling with your children as a family, right?"},
+    {"role": "user", "content": "Yes, with both kids and elderly, we usually travel as a whole family."},
+    {"role": "assistant", "content": "Understood, I’ll recommend destinations suitable for family trips."}
 ]
 
 payload = {
@@ -82,21 +79,21 @@ resp = requests.post(
 print(resp.json())
 ```
 
-### 步骤 3. 在会话中调用MemOS查询相关记忆（searchMemories）
+### Step 3. Query MemOS for relevant memories within conversations (searchMemories)
 
 ::note
-**会话 B：2025-9-28 发生**<br>
+**Conversation B: occurred on 2025-09-28**<br>
 
-用户在一个新的会话中，提出让AI推荐国庆旅游计划，MemOS 会自动召回相关记忆供AI参考，从而推荐更加个性化的旅游计划
+In a new conversation, when the user asks AI to recommend a National Day trip plan, MemOS automatically recalls relevant memories for AI reference, enabling more personalized recommendations.
 ::
 
-> MemOS 支持同时返回 **` 相关记忆（matches）`**、**`拼接指令（instruction）`（敬请期待） **与** `完整指令（full_instruction）`（敬请期待）** 。实际使用中，你只需根据业务需求选择其一即可
+> MemOS supports returning **`related memories (matches)`**, **`stitched instructions (instruction)` (coming soon)**, and **`full instructions (full_instruction)` (coming soon)** simultaneously. In practice, you only need to choose one based on your business needs.
 
-> - **需要完全掌控** → 用 **matches**，只返回记忆条目，由开发者自行拼接成指令；
-> - **想省去拼接工作，但还需叠加业务规则** → 用 **instruction**，系统已将记忆与用户问题拼接为半成品指令，开发者可在此基础上再加工；
-> - **追求一键直连** → 用 **full_instruction**，系统已生成完整可直接下发给大模型的终端指令。
+> - **Need full control** → use **matches**, only returns memory items, developers manually stitch them into instructions;  
+> - **Want to save stitching work, but still need to add business rules** → use **instruction**, system has combined memories and user query into semi-finished instructions, developers can further refine them;  
+> - **Pursue one-click direct use** → use **full_instruction**, system has generated complete terminal instructions ready to be sent to the model.
 
-> **为什么要这样设计**：大多数记忆系统只停留在“召回事实”，但事实并不等于可执行的 Prompt.MemOS 独有的指令补全链路，帮你省去复杂的拼接与调优，把记忆转译成模型可直接理解和执行的提示。
+> **Why this design**: Most memory systems stop at “recalling facts”, but facts ≠ executable Prompts. MemOS’s unique instruction completion chain saves you from complex stitching and fine-tuning, directly converting memories into model-readable and executable prompts.
 
 ```python
 import requests
@@ -105,15 +102,15 @@ BASE_URL = "https://your-host.com"
 API_PATH = "/api/openmem/search/memory"
 API_KEY = "your_api_key_here"
 
-user_query = "国庆去哪玩好？"
+user_query = "Where to go for National Day travel?"
 
 payload = {
     "userId": "u123",
     "query": user_query,
-    "memoryLimitNumber": 6  # 可选，不传默认6
+    "memoryLimitNumber": 6  # Optional, default is 6 if not provided
 
-    # ==== 敬请期待 ====
-    # 以下参数在未来版本中会支持，目前请勿传递
+    # ==== Coming Soon ====
+    # The following parameters will be supported in future versions, please do not pass them now
     # "return_matches": True,
     # "return_instruction": True,
     # "return_full_instruction": True
@@ -130,88 +127,81 @@ resp = requests.post(
 
 results = resp.json()
 
-# 模式一：相关记忆（matches）
-print("相关记忆：", results["data"]["memoryDetailList"])
-# 示例输出：
+# Mode 1: Related Memories (matches)
+print("Related Memories:", results["data"]["memoryDetailList"])
+# Example output:
 # [
 #   {
-#     "memoryKey": "出行习惯",
-#     "memoryValue": "全家一起出游（包含孩子与老人）",
+#     "memoryKey": "Travel Habit",
+#     "memoryValue": "Travel with whole family (including kids and elderly)",
 #     "confidence": 0.97,
 #     "updateTime": "2025-06-10T10:00:00Z"
 #   }
 # ]
 
-# 模式二（敬请期待）：拼接指令（半成品，结构化，便于二次加工）
-# print("拼接指令：", results["data"]["instruction"])
-# 示例输出：
-# 任务：回答用户“国庆去哪玩好？”
-# 受众：全家出游（包含孩子与老人）
-# 要求：
-# - 回答时显式考虑儿童与老人的出行需求
-# - 目的地建议需与“家庭友好”一致
-# 备注：如关键信息不足（出发地/预算/行程天数），可由业务逻辑追加澄清策略
+# Mode 2 (coming soon): Stitched Instruction (semi-finished, structured, easy for further processing)
+# print("Instruction:", results["data"]["instruction"])
+# Example output:
+# Task: Answer user’s “Where to go for National Day travel?”
+# Audience: Family trip (including kids and elderly)
+# Requirements:
+# - Explicitly consider the needs of children and elderly in the response
+# - Destination suggestions must align with “family-friendly”
+# Notes: If key information is missing (departure, budget, duration), add clarification strategies via business logic
 
-# 模式三（敬请期待）：完整指令（终端态，可直接给模型）
-# print("完整指令：", results["data"]["full_instruction"])
-# 示例输出：
-# 你是一名旅游顾问。
-# 用户在规划旅行时总是全家一起出游（包括孩子和老人）。
-# 请直接回答“国庆去哪玩好？”，并优先推荐适合家庭出游的目的地。
-# 如果信息不足，请先提出澄清问题，再给出建议。
+# Mode 3 (coming soon): Full Instruction (terminal form, can be directly sent to model)
+# print("Full Instruction:", results["data"]["full_instruction"])
+# Example output:
+# You are a travel consultant.
+# The user always travels with their whole family (including kids and elderly).
+# Directly answer “Where to go for National Day travel?” and prioritize family-friendly destinations.
+# If information is insufficient, first ask clarification questions before giving suggestions.
 ```
 
+## 2. Option Two: Open-source Framework
 
-## 2. 方式二：开源框架
+For local deployment or deep customization, you can directly use MemOS’s open-source framework. Compared with cloud services, the open-source framework has no extra abstraction layer. Developers need to explicitly handle **memory extraction, storage, and retrieval**, all of which operate on a **MemCube**.
 
-在需要本地化部署或深度定制时，可以直接使用 MemOS 的开源框架。与云服务相比，开源框架没有额外的抽象封装，开发者需要显式完成 **记忆的抽取、存储与检索**，这些操作均在一个 **MemCube（记忆立方）** 上进行。
+> MemCube is the basic container of memory, responsible for storing user memory items. The `addMessages` and `searchMemories` APIs in the cloud service are essentially abstracted wrappers around internal operations of MemCube. In the open-source framework, developers can directly control these steps.
 
-> MemCube 是记忆的基本容器，负责承载用户的记忆条目。云服务中的 `addMessages` 和 `searchMemories` 接口，本质上就是对 MemCube 内部操作的抽象封装。在开源框架中，开发者可以直接控制这些步骤。
+For detailed operation steps, see: [Open-source Project → Quick Start](https://memos-docs.openmem.net/cn/getting_started/quick_start)
 
-具体操作步骤详见：[https://memos-docs.openmem.net/cn/open_source/open_source/getting_started/quick_start](https://memos-docs.openmem.net/cn/getting_started/quick_start)
+## 3. Next Steps
 
+### 3.1 Learn about MemOS Memory Production Process
 
-## 3. 下一步行动
-
-### 3.1 了解MemOS记忆生产流程
-
-来我们将详细介绍【当一条消息进入系统时，它是如何被加工成记忆，并在未来对话中被有效使用的】，以帮助您更好的理解MemOS的记忆机制与优势
+Here we will explain in detail **how a message entering the system is processed into memory and effectively used in future conversations**, to help you better understand MemOS’s memory mechanism and advantages.
 
 ::note
-**深入理解**<br>
-MemOS 的记忆机制可以理解为一条完整的「工作流」：
-
----
-
-你提交原始消息 → 对记忆进行加工生产 → 调度机制根据任务和上下文安排调用与存储，并可动态调整记忆形态 → 在需要时被召回相关记忆注入为上下文或指令 → 同时由生命周期管理维持演化与更新。
+**Deep Understanding**<br>
+MemOS’s memory mechanism can be understood as a complete “workflow”:  
+You submit raw messages → Processed into memory → Scheduling mechanism arranges invocation and storage based on task and context, and dynamically adjusts memory forms → Relevant memories are recalled when needed and injected as context or instructions → Lifecycle management ensures evolution and updates.
 ::
 
-- [记忆生产](/overview/quick_start/mem_production)
-- [记忆调度](/overview/quick_start/mem_schedule)
-- [记忆召回与指令补全](/overview/quick_start/mem_recall)
-- [记忆生命周期管理](/overview/quick_start/mem_lifecycle)
+- [Memory Production](/overview/quick_start/mem_production)  
+- [Memory Scheduling](/overview/quick_start/mem_schedule)  
+- [Memory Recall & Instruction Completion](/overview/quick_start/mem_recall)  
+- [Memory Lifecycle Management](/overview/quick_start/mem_lifecycle)  
 
+### 3.2 Practice with MemOS
 
-### 3.2 使用MemOS进行实战
+We provide three concrete business reference cases for you to review:
 
-我们提供了3个具体的业务参考案例供您查看
+- [Help financial assistant understand client preferences behind behaviors](/usecase/financial_assistant)  
+  - In intelligent investment advisory, user clicks, browsing, bookmarks, and communication all form behavioral traces for profiling.  
+  - MemOS can abstract these behaviors into memories, e.g. “Risk preference = Conservative”.  
+  - When the user asks “What kind of investment suits me?”, the assistant can directly leverage them to provide more professional and personalized advice.  
 
-- [让理财助手读懂客户行为背后的偏好](/usecase/financial_assistant)
-  - 在智能投顾场景里，用户的点击、浏览、收藏和沟通，都是构建画像的行为轨迹。
-  - MemOS 能把这些行为抽象成记忆，例如「风险偏好=保守」
-  - 并在用户提问「我适合什么投资？」时直接发挥作用，让投顾建议更专业、更贴合实际。
+- [Build a family life assistant with memory](/usecase/home_assistant)  
+  - A family assistant doesn’t just answer immediate questions, it also remembers your to-dos, preferences, and family information.  
+  - For example: “Take kids to the zoo on Saturday” or “Remind me by listing key points first”, MemOS converts these into memories.  
+  - In later conversations, they automatically take effect, making the assistant closer to real life.  
 
-- [构建拥有记忆的家庭生活助手](/usecase/home_assistant)
-  - 家庭助手不只是回答即时问题，它还能记住你说过的待办、偏好和家庭信息。
-  - 比如「周六带孩子去动物园」或「提醒时要先列要点」，MemOS 会把这些转成记忆
-  - 在后续对话中自动发挥作用，让助手更贴近真实生活
+- [A writing assistant with memory is more useful](/usecase/writting_assistant)  
+  - A writing assistant should not only generate content but also maintain consistent tone and style.  
+  - With MemOS, user writing preferences, frequently used information, and contextual instructions can all be remembered.  
+  - Next time, when writing a summary or email, no need to repeat reminders—achieve coherent and personalized writing experience.  
 
-- [有记忆的写作助手更好用](/usecase/writting_assistant)
-  - 写作助手不仅要帮你生成内容，还要保持一致的语气和风格
-  - 通过 MemOS，用户的写作偏好、常用信息、上下文指令都能被记住
-  - 下次写总结或邮件时无需反复强调，实现连贯又个性化的创作体验。
-
-
-## 4. 联系我们
+## 4. Contact Us
 
 <img src="https://cdn.memtensor.com.cn/img/1758251354703_v1nwkz_compressed.png" alt="image" style="width:70%;">

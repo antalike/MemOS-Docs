@@ -1,89 +1,83 @@
 ---
-title: 记忆生产
-desc: 记忆生产模块将原始消息或事件转化为可存储、可检索的记忆单元，作为MemOS全流程的起点。
+title: Memory Production
+desc: The Memory Production module transforms raw messages or events into storable and retrievable memory units, serving as the starting point of the entire MemOS workflow.
 ---
 
-## 1. 能力介绍：为什么要将原始消息加工为记忆
+## 1. Capability Introduction: Why Process Raw Messages into Memory
 
-在 MemOS 里，你提交的是 **原始消息**（用户与 AI 的对话），系统会自动完成“记忆化”的过程。
+In MemOS, what you submit is **raw information** (conversations between users and AI, user operation logs/action traces in the app, etc.), and the system will automatically complete the process of “memorization.”
 
 ::note{icon="ri:triangular-flag-fill"}
-**为什么要进行记忆加工？**
+**Why process memory?**
 ::
 
-如果只是简单地把原始对话全部保存，再次使用时直接丢给大模型，会出现几个问题：
+If you simply save all the raw conversations and directly feed them to the large model, several problems will occur:
 
-- **上下文过长**：原始消息往往冗长、重复，把整段上下文都传给模型既低效，又浪费 Token；
-- **检索不精准**：没有加工的原始文本难以快速定位关键信息，检索往往会召回大量噪音；
-- **调用成本高**：直接拼接原始消息会显著增加模型输入长度，带来 Token 成本和延迟。
+- **Overlong context**: Raw messages are often lengthy and repetitive. Feeding the entire context to the model is inefficient and wastes tokens.
+- **Inaccurate retrieval**: Unprocessed raw text makes it difficult to quickly locate key information, and retrieval often recalls large amounts of noise.
+- **High invocation cost**: Directly concatenating raw messages significantly increases model input length, leading to token costs and latency.
 
 <br>
 
 ::note
-**加工后有什么不同？**
+**What’s different after processing?**
 ::
 
-MemOS 会把原始消息转化为结构化记忆单元，自动提炼：
+MemOS transforms raw messages into structured memory units, automatically extracting:
 
-- **关键事实**：如“用户在旅行时通常是全家出游（带孩子和父母）”；
-- **任务线索**：提炼出用户的目标意图，比如“规划一次家庭旅游”，而不仅仅是“暑假出去玩”。
-- **用户偏好**：
-  - 不仅是显式表述（“我喜欢全家出游”），还包括隐含的推理范式。
-  - 例如，如果用户在 让AI给10 篇文章评分过程中，展现出“偏向逻辑清晰的写法”，那么在未来的 20 篇文章评分任务中，MemOS 会保留这种偏好模式，引导模型保持一致性；
-
-<br>
-
-这样一来：
-
-- **检索更快更准**：直接定位到事实 / 偏好 / 任务，而不是一整段原始消息。
-- **调用更高效**：拼接给大模型时只需传递精炼记忆，减少 Token 消耗。
-- **体验更稳定**：模型能持续保持对用户习惯的理解，不会因上下文丢失而偏离。
-
+- **Key facts**: e.g., “The user usually travels with the whole family (children and parents).”
+- **Task clues**: Extracting the user’s goal intent, such as “planning a family trip,” rather than just “going out during summer vacation.”
+- **User preferences**:
+  - Not only explicit expressions (“I like traveling with my family”), but also implicit reasoning patterns.
+  - For example, if the user shows a preference for “clear logic in writing” while asking AI to rate 10 articles, MemOS will preserve this preference pattern for the next 20 article rating tasks, guiding the model to remain consistent.
 
 <br>
 
-**例子**：
+As a result:
+
+- **Faster and more accurate retrieval**: Directly locate facts/preferences/tasks instead of parsing a whole raw conversation.
+- **More efficient invocation**: Only concise memory needs to be passed to the model, reducing token consumption.
+- **More stable experience**: The model can continuously maintain its understanding of user habits without drifting due to lost context.
+
+<br>
+
+**Example**:
 
 ```json
-User：我想暑假出去玩，你能帮我推荐下吗？
-AI：好的！是自己出行还是和家人朋友一起呢？
-User：肯定要带孩子啊，我们家出门都是全家一起。
-AI：明白了，所以你们是父母带孩子一块儿旅行，对吗？
-User：对，带上孩子和老人，一般都是全家行动。
-AI：收到，那我会帮你推荐适合家庭出游的目的地。
+User: I want to go on a trip during the summer vacation. Can you recommend something?
+AI: Sure! Will you be traveling alone or with family and friends?
+User: Of course with kids. Our family always travels together.
+AI: Got it. So, you travel with both kids and parents, right?
+User: Yes, we usually bring the kids and elders—traveling as a whole family.
+AI: Understood. I’ll recommend destinations suitable for family trips.
 ```
 
 ```json
-记忆：用户在旅行时通常是全家出游（带孩子和父母）
-元数据：时间戳=2025-06-10，来源=对话A……
+Memory: The user usually travels with the whole family (children and parents)
+Metadata: timestamp=2025-06-10, source=Conversation A…
 ```
 
-> 对你来说，这意味着：只要存原始对话，不必自己写“关键词提取”或“意图识别”的逻辑，就能得到可被长期调用的用户偏好。
+> For you, this means: as long as you store raw conversations, you don’t need to write your own “keyword extraction” or “intent recognition” logic—you can directly obtain reusable long-term user preferences.
 
+## 2. Advanced: If You Want Deep Customization
 
-## 2. 进阶：如果你想做深度定制
+In MemOS, **memory production** is the full process of converting raw input into schedulable and retrievable memory units. The specific pipeline details (such as extraction methods, embedding models, storage backends) evolve with versions and community practices—so this section does not provide a fixed unique workflow, but instead explains **extensible components** where you can make adjustments.
 
-在 MemOS 中，**记忆生产**是将原始输入加工为可调度、可检索的记忆单元的全过程。具体的流水线细节（如抽取方式、嵌入模型、存储后端）会随着版本和社区实践不断演进——因此，本节不提供固定的唯一流程，而是说明 **可扩展的环节**，你可以根据需求在这些位置上动手。
+| **Extensible Component Examples** | **Default Behavior**                                        | **Customizable Options**                                                       |
+| --------------------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| Extraction & Structuring          | Generates MemoryItem (including content, timestamp, source) | Replace the extraction model or template, or add domain-specific fields to schema |
+| Chunking & Embedding              | System chunks long text and feeds it into embedding models  | Adjust chunking granularity, or replace with better-suited embedding models (e.g., bge, e5) |
+| Storage Backend                   | Defaults to a vector database (e.g., Qdrant)                | Switch to a graph database, or use a hybrid of both                            |
+| Merging & Governance              | Automatically handles duplicates and conflicts              | Add custom rules (e.g., time priority, source priority), or governance logic (deduplication, filtering, etc.) |
 
-| **可扩展点举例** | **默认行为**                                        | **可定制方式**                                                               |
-| ---------------- | --------------------------------------------------- | ---------------------------------------------------------------------------- |
-| 抽取与结构化     | 默认会生成 MemoryItem（包含内容、时间戳、来源等）。 | 可以替换抽取模型或模板，或在 schema 中增加领域字段。                         |
-| 切分与嵌入       | 系统会对长文本切分并送入嵌入模型。                  | 可以调整切分粒度，或替换为更适合的 embedding 模型（如 bge、e5）。            |
-| 存储后端         | 默认使用向量数据库（如 Qdrant）。                   | 可切换为图数据库，或混合使用两者。                                           |
-| 合并与治理       | 系统会自动处理重复与冲突                            | 可以编写自定义规则（如时间优先、来源优先），或增加治理逻辑（去重、过滤等）。 |
+## 3. Next Steps
 
+Learn more about MemOS core capabilities:
 
+- [Memory Scheduling](/overview/quick_start/mem_schedule)
+- [Memory Recall & Instruction Completion](/overview/quick_start/mem_recall)
+- [Memory Lifecycle Management](/overview/quick_start/mem_lifecycle)
 
-## 3. 下一步行动
-
-了解MemOS更多核心能力
-
-- [记忆调度](/overview/quick_start/mem_schedule)
-- [记忆召回与指令补全](/overview/quick_start/mem_recall)
-- [记忆生命周期管理](/overview/quick_start/mem_lifecycle)
-
-
-## 4. 联系我们
+## 4. Contact Us
 
 <img src="https://cdn.memtensor.com.cn/img/1758251354703_v1nwkz_compressed.png" alt="image" style="width:70%;">
-

@@ -1,145 +1,138 @@
 ---
-title: 记忆生命周期管理
-desc: 在 MemOS 中，记忆并不是静态存放的，而是会随着时间和使用情况不断演化。
+title: Memory Lifecycle Management
+desc: In MemOS, memories are not stored statically; they continuously evolve over time and through usage.
 ---
 
-
-## 1. 能力介绍
-一条记忆从被生成开始，可能会逐步沉淀为稳定的长期偏好，也可能因过时或无效而被清理。
+## 1. Capability Overview
+A memory, once generated, may gradually consolidate into a stable long-term preference, or be removed if it becomes outdated or invalid.  
 :::note
-**提示**<br>
-这套演化过程称为 **记忆生命周期管理**，它的目标是保持记忆库“干净而有序”<br>
+**Tip**<br>
+This evolutionary process is called **Memory Lifecycle Management**, and its goal is to keep the memory base “clean and organized.”<br>
 
-* **近期有用的条目**保持活跃，方便随时调用；<br>
+* **Recently useful entries** remain active for easy retrieval;<br>
 
-* **长期稳定的事实**被沉淀，减少重复和噪音；<br>
+* **Long-term stable facts** are consolidated to reduce duplication and noise;<br>
 
-* **过时或冲突的信息**会被归档或删除，保证一致性和合规性。<br>
+* **Outdated or conflicting information** is archived or deleted to ensure consistency and compliance.<br>
 :::
-> 需要注意的是，生命周期管理关注的是**记忆条目在存储层面的演化**；而具体一次推理里“是否调用某条记忆”，仍由调度机制决定。
+> Note that lifecycle management focuses on **the evolution of memory entries at the storage layer**; whether a specific memory is invoked during reasoning is still determined by the scheduling mechanism.
 
 <br>
 
 :::note{icon="ri:customer-service-2-fill"}
-**生命周期阶段简介**
+**Lifecycle Stage Overview**
 :::
 
-| **阶段** | **说明** | **系统行为** |
+| **Stage** | **Description** | **System Behavior** |
 | --- | --- | --- |
-| Generated<br>生成 | 新产生的记忆对象，带有来源、时间戳、置信度等元信息 | 初始存入存储层，等待后续使用 |
-| Activated<br>激活 | 在推理或任务中被引用，进入高频活跃状态 | 更容易被调度机制选中 |
-| Merged<br>合并 | 与历史记忆存在语义重叠或用户补充数据，系统将其整合为新版本 | 多条记录被压缩合并，形成更新后的稳定条目 |
-| Archived<br>归档 | 长期未被访问，自动降级为冷存储状态 | 仅在特殊检索或回溯时启用 |
-| Expired<br>过期，可选 | 归档后进一步超时或被策略判定为无效 | 被清理出索引，不再参与推理，仅留最小日志 |
-| Frozen<br>冻结，特殊状态 | 关键或合规性记忆被锁定，不允许修改 | 保留完整历史版本，支持审计与合规追踪 |
+| Generated | Newly created memory object, with metadata such as source, timestamp, and confidence | Initially stored in the storage layer, awaiting future use |
+| Activated | Referenced during reasoning or tasks, entering a high-frequency active state | More likely to be selected by the scheduling mechanism |
+| Merged | Semantically overlaps with historical memories or user-provided data, integrated into a new version | Multiple records are compressed and merged into an updated stable entry |
+| Archived | Not accessed for a long period, downgraded to cold storage | Only enabled during special retrievals or backtracking |
+| Expired (optional) | After archiving, further timeout or policy judgment marks it invalid | Removed from the index, no longer used in reasoning, only minimal logs retained |
+| Frozen (special state) | Critical or compliance-related memories are locked and cannot be modified | Full historical versions are preserved for audit and compliance tracking |
 
-
-## 2. 案例：在线教育助手的记忆生命周期
+## 2. Example: Memory Lifecycle of an Online Education Assistant
 
 :::note{icon="ri:message-2-line"}
-假设你正在用 MemOS 构建一个 **在线教育助手**，帮助学生解答数学题。
+Suppose you are building an **online education assistant** with MemOS to help students solve math problems.
 :::
 
-**生成（Generated）**
+**Generated**
 
-*   学生第一次使用时说：“我总是把二次函数和一次函数搞混。”
+*   A student says for the first time: “I always confuse quadratic functions with linear functions.”
     
-*   系统抽取出记忆：
-    
-
-```json
-{"fact": "学生常混淆二次函数与一次函数", "confidence": 0.8, "timestamp": "2025-09-11"}
-
-```
-
-*   状态：**Generated**
-    
-*   行为：被存储进记忆库，等待后续使用。
-    
-
----
-
-**激活（Activated）**
-
-*   在接下来的多次答题中，系统频繁调用这条记忆来辅助解题。
-    
-*   状态：**Activated**
-    
-*   行为：被调度机制优先缓存进 MemoryCube，提高检索速度。
-    
-
----
-
-**合并（Merged）**
-
-*   随着更多交互，系统发现学生不仅混淆一次函数和二次函数，还对指数函数也容易混淆。
-    
-*   系统将多条相似记忆合并为：
+*   The system extracts the memory:
     
 
 ```json
-{"fact": "该学生在函数知识点上存在混淆，尤其是一元一次、二次和指数函数", "confidence": 0.95}
-
+{"fact": "The student often confuses quadratic and linear functions", "confidence": 0.8, "timestamp": "2025-09-11"}
 ```
 
-*   状态：**Merged**
+*   Status: **Generated**
     
-*   行为：旧条目被压缩，形成新版本，减少冗余。
-    
-
----
-
-**归档（Archived）**
-
-*   三个月后，学生已掌握函数相关知识点，系统很久没有再调度到这条记忆。
-    
-*   状态：**Archived**
-    
-*   行为：被迁移至 MemVault（冷存储），默认不参与推理，但可在“学习轨迹回溯”中被调用。
+*   Behavior: Stored into the memory base, awaiting future use.
     
 
 ---
 
-**过期（Expired）**
+**Activated**
 
-*   又过了一年，该学生升级到新的学段，旧的“初中函数混淆”记忆被策略判定为无效。
+*   In the following problem-solving sessions, the system frequently calls this memory to assist with answers.
     
-*   状态：**Expired**
+*   Status: **Activated**
     
-*   行为：从索引中彻底清理，仅保留最小审计信息：
+*   Behavior: Prioritized by the scheduling mechanism and cached into the MemoryCube to improve retrieval speed.
+    
+
+---
+
+**Merged**
+
+*   With more interactions, the system discovers that the student not only confuses linear and quadratic functions, but also struggles with exponential functions.
+    
+*   The system merges multiple similar memories into:
+    
+
+```json
+{"fact": "This student is confused about function concepts, especially linear, quadratic, and exponential functions", "confidence": 0.95}
+```
+
+*   Status: **Merged**
+    
+*   Behavior: Old entries are compressed to form a new version, reducing redundancy.
+    
+
+---
+
+**Archived**
+
+*   Three months later, the student has mastered function-related concepts, and this memory hasn’t been scheduled for a long time.
+    
+*   Status: **Archived**
+    
+*   Behavior: Migrated into MemVault (cold storage), excluded from reasoning by default, but available in “learning trajectory backtracking.”
+    
+
+---
+
+**Expired**
+
+*   A year later, the student advances to a new grade level. The old “junior high function confusion” memory is judged invalid by policy.
+    
+*   Status: **Expired**
+    
+*   Behavior: Fully removed from the index, retaining only minimal audit info:
     
 
 ```json
 {"deleted_fact_id": "12345", "deleted_at": "2026-09-11"}
-
 ```
 ---
 
-**冻结（Frozen，特殊状态）**
+**Frozen (special state)**
 
-*   与此同时，该学生的“期末成绩评估报告”属于合规性文件，不允许修改。
+*   Meanwhile, the student’s “final exam evaluation report” is a compliance-related file that must not be modified.
     
-*   状态：**Frozen**
+*   Status: **Frozen**
     
-*   行为：被锁定，禁止更新，仅保留完整修改历史，便于审计与合规检查。
+*   Behavior: Locked against updates, retaining full history for audit and compliance inspection.
     
 
-## 3. 进阶：如果你想做深度定制
+## 3. Advanced: Deep Customization Options
 
-| **可扩展点** | **描述** | **示例** |
+| **Extension Point** | **Description** | **Example** |
 | --- | --- | --- |
-| 状态转换条件 | 控制各个状态触发条件 | “若 7 天未使用 → 归档” |
-| 合并与压缩 | 定义相似记忆的处理方式 | 多条“喜欢科幻片”合并为一条置信度更高的事实 |
-| 冲突解决 | 处理时间戳或来源矛盾的记忆 | 选择“最新覆盖旧条目”或“并列保留” |
-| 清理机制 | 设置删除条件，控制索引规模 | 删除低置信度或用户撤回的记忆 |
-| 审计追踪 | 决定是否保留被删除条目的最小元信息 | 在合规要求下开启“溯源日志” |
+| State transition conditions | Control the triggers for each state | “If unused for 7 days → Archive” |
+| Merge and compression | Define how similar memories are handled | Multiple “likes sci-fi movies” entries merged into one with higher confidence |
+| Conflict resolution | Handle memory conflicts in timestamps or sources | Choose “latest entry overrides” or “preserve in parallel” |
+| Cleanup mechanism | Set deletion rules to control index size | Remove low-confidence or user-retracted memories |
+| Audit trail | Decide whether to retain minimal metadata of deleted items | Enable “trace logs” under compliance requirements |
 
+## 4. Next Steps
 
-## 4. 下一步行动
+Still have questions? Check out [FAQs](/overview/faq) to see if they can help.
 
-还有疑惑？去看看 [FAQs](/overview/faq)能不能为您解答~
-
-
-## 5. 联系我们
+## 5. Contact Us
 
 <img src="https://cdn.memtensor.com.cn/img/1758251354703_v1nwkz_compressed.png" alt="image" style="width:70%;">

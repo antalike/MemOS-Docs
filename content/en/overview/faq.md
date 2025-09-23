@@ -1,103 +1,96 @@
 ---
 title: FAQs
-desc: 我们集中整理了使用 MemOS 过程中最常见的困惑，不用到处翻资料，就能快速找到答案。
+desc: We have compiled the most common questions about using MemOS. No need to search around; you can quickly find the answers here.
 ---
 
-## 1. 常见问题
+## 1. Frequently Asked Questions
 
-### Q：MemOS 和普通 RAG 框架有什么区别？
+### Q: What is the difference between MemOS and a standard RAG framework?
 
-| **对比维度** | **RAG** | **MemOS** | **MemOS 的优势** |
+| **Comparison Dimension** | **RAG** | **MemOS** | **Advantages of MemOS** |
 | --- | --- | --- | --- |
-| 精准度 | 语料越多，噪声越大 |    通过生产阶段的抽取、图式化/关系建模，再配合调度与生命周期管理，形成结构化组织，记忆条理更清晰<br>    <br>   能够基于用户反馈驱动自我进化 | **更准**：减少噪声，降低幻觉 |
-| 结果组织 | 直接拿原文段落，内容冗余 | 将原始信息加工为记忆，提炼成事实/偏好等单元，内容更短、更纯粹 | **更省**：同等信息量下更少 token |
-| 搜索范围 | 每次都在全量语料里搜，语料越大越慢 | 记忆动态更新，分层管理，逐层召回 | **更快**：避免全局扫描，小范围命中 |
-| 理解力 | 不能从用户历史对话中沉淀偏好（无个性化），仅依赖静态知识库的相似度匹配 | 会自动提取记忆做偏好建模，并在召回时转化为可执行的指令，让模型真正理解到位。 | **更懂**：回答更贴近真实需求 |
+| Accuracy | The more corpus, the more noise | Extracted and modeled during the production stage, structured through schematization/relational modeling, combined with scheduling and lifecycle management, resulting in more organized memories<br><br>Capable of self-evolution driven by user feedback | **More Accurate**: Less noise, fewer hallucinations |
+| Result Organization | Directly returns raw text paragraphs, redundant content | Processes raw information into memories, distilled into units like facts/preferences, shorter and purer | **More Efficient**: Fewer tokens for the same information |
+| Search Scope | Always searches the entire corpus, slower with larger data | Memories dynamically update, managed in layers, recalled progressively | **Faster**: Avoids global scan, hits within smaller ranges |
+| Understanding | Cannot accumulate preferences from user history (no personalization), relies only on similarity matching with static knowledge base | Automatically extracts preferences into memories, transforms them into executable instructions during recall, enabling the model to truly understand | **More Understanding**: Responses closer to real needs |
 
 
-### Q：MemOS 可以和已有 RAG 或知识图谱结合吗？
+### Q: Can MemOS be combined with existing RAG or knowledge graphs?
 
-可以。MemOS 的记忆单元可与 RAG 的向量召回层对接，也可以调用外部知识图谱。区别在于，MemOS 管理的是动态演化的“记忆”，而不是固定的知识库。
-
-
-### Q：MemOS如何工作？
-
-我们的云服务平台为您提供了两个核心接口：
-
-`addMessages` —— 把原始对话交给我们，我们自动加工并存储记忆；
-
-`searchMemories` —— 在后续对话中召回相关记忆并完成指令拼接（可选），让 AI 回答更贴近用户需求。
+Yes. MemOS memory units can interface with the vector recall layer of RAG or call external knowledge graphs. The difference is that MemOS manages dynamic, evolving “memories,” not a static knowledge base.
 
 
-### Q：MemOS核心功能有哪些？
+### Q: How does MemOS work?
 
-*   **用户/Agent记忆管理**：支持长期保存用户与 AI 的交互内容，并能在多代理协同场景下共享或隔离记忆，保证任务连续。
+Our cloud service platform provides two core interfaces:
+
+`addMessages` — Submit raw information (user-AI conversations, user action logs/traces within the app, etc.) to us, and we automatically process and store it as memories.
+
+`searchMemories` — Recall relevant memories in subsequent conversations and optionally complete instruction assembly, making AI responses closer to user needs.
+
+
+### Q: What are the core functions of MemOS?
+
+*   **User/Agent Memory Management**: Supports long-term preservation of user-AI interactions, with the ability to share or isolate memories across multi-agent collaboration, ensuring task continuity.
+    
+*   **Dynamic Layered Scheduling**: Unlike static RAG, MemOS dynamically switches between activating memory and plaintext memory based on task priorities, avoiding global scanning and enabling faster, more accurate calls.
+    
+*   **Personalized Preference Modeling**: Automatically extracts user preferences from historical interactions and supplements instructions in real time, making outputs closer to user habits.
+    
+*   **Memory Lifecycle Governance**: Prevents memory inflation through merging, compression, and archiving mechanisms, maintaining an efficient and stable knowledge base in the long run.
+    
+*   **Developer-Friendly API**: Provides a unified interface that can call open-source frameworks or directly connect to cloud services with low integration costs.
+    
+*   **Cross-Platform Consistency**: Ensures consistent memory scheduling behavior and data formats, whether deployed locally or hosted in the cloud.
+    
+*   **Hosted Service Support**: Provides cloud hosting with built-in monitoring and elastic scaling, reducing operational costs.
+    
+*   **Cost Savings**: By processing memories and scheduling by priority, only necessary information is injected, saving tokens compared to directly appending raw text.
     
 
-*   **动态分层调度**：区别于静态 RAG，MemOS 会根据任务优先级在激活记忆、明文记忆之间动态切换，避免全局扫描，让调用更快更准。
-    
+### Q: How to evaluate the ROI of using MemOS?
 
-*   **个性化偏好建模**：自动从历史交互中抽取用户偏好，并在实时生成中补全指令，使模型输出更贴近用户习惯。
-    
-
-*   **记忆生命周期治理**：通过合并、压缩、归档机制避免记忆膨胀，长期保持高效而稳定的知识库。
-    
-
-*   **开发者友好 API**：开放统一接口，既能调用开源框架，也能直接接入云服务，集成成本低。
-    
-
-*   **跨平台一致性**：无论本地部署还是云端托管，都能保持一致的记忆调度行为和数据格式。
-    
-
-*   **托管服务支持**：提供云服务托管，内置监控、弹性扩展，降低运维成本。
-    
-
-*   **成本节约**：通过记忆加工与优先级调度，只注入必要信息，比直接拼接原文更节省 token。
-    
-
-### Q：如何评估使用 MemOS 带来的 ROI？
-
-典型指标包括：token 消耗下降（更省）、输出相关度提高（更准）、用户留存率提升（更懂）、知识沉淀率（多少被长期固化）。
+Typical metrics include: token consumption reduction (more efficient), improved output relevance (more accurate), increased user retention (more understanding), and knowledge solidification rate (how much is consolidated long-term).
 
 
-### Q：如何进一步提升MemOS在具体业务场景中的的效果？
+### Q: How to further improve MemOS effectiveness in specific business scenarios?
 
-您可以联系我们做商业化定制（最快最好），另一方面MemOS本身开源，您的团队可深入研究自行改造（有理解成本可能会走弯路）
-
-
-### Q：MemOS 是否支持私有化部署？
-支持
+You can contact us for commercial customization (fastest and best). Alternatively, since MemOS is open source, your team can dive in and modify it (though with higher learning costs and possible detours).
 
 
-### Q：生命周期和调度有什么关系？ 
-生命周期负责“记忆单元的状态流转”，调度负责“在任意时刻选中合适的记忆单元并送入模型”。两者互补，但不等价
+### Q: Does MemOS support on-premise deployment?
+Yes.
 
 
-### Q：MemOS 如何避免记忆膨胀？
-通过合并、压缩、归档机制：低价值记忆被下调频率，高价值记忆被合并或沉淀。最终保证存储和推理都保持高效。
+### Q: What is the relationship between lifecycle and scheduling?
+The lifecycle manages “state transitions of memory units,” while scheduling is responsible for “selecting the right memory units at any moment and feeding them into the model.” They complement each other but are not equivalent.
+
+
+### Q: How does MemOS avoid memory inflation?
+Through merging, compression, and archiving: low-value memories are down-ranked, high-value memories are merged or solidified. This ensures storage and inference remain efficient.
 
 
 <br>
 
-**Q：KV-Cache 和激活记忆是一回事吗？**  
-不是。KV-Cache 是底层计算实现，激活记忆是业务层概念。当前激活记忆主要依托 KV-Cache，但未来也可能有其他实现方式。
+**Q: Are KV-Cache and activating memory the same thing?**  
+No. KV-Cache is the underlying computational implementation, while activating memory is a business-level concept. Currently, activating memory mainly relies on KV-Cache, but other implementations may emerge in the future.
 
 
-### Q：MemOS 会不会拖慢推理？
-不会。调度器异步运行，并采用缓存稳定策略，保证记忆更新与调用的平衡。实际测试中，延迟提升通常在可接受范围内。
+### Q: Will MemOS slow down inference?
+No. The scheduler runs asynchronously and adopts cache stability strategies to balance memory updates with calls. In practice, latency increases are usually within an acceptable range.
 
 
-### Q：如果用户请求的信息已经很近，比如“昨天做的事”，还需要调度吗？
-是的。调度不仅仅解决“找得到”，更解决“快而准、少冗余”。即使时间接近，调度器依然会评估是否需要融合成完整上下文。
+### Q: If the requested information is very recent, like “what I did yesterday,” is scheduling still needed?
+Yes. Scheduling is not only about “retrievability” but also about being “fast, accurate, and concise.” Even with recent events, the scheduler still evaluates whether to fuse them into a complete context.
 
 
-## 2. 下一步行动
+## 2. Next Steps
 
-*   快使用我们的云服务体验MemOS的强大之处吧 [云平台简介](/dashboard/overview)
+*   Start using our cloud service to experience the power of MemOS [Cloud Platform Overview](/dashboard/overview)
     
-*   想要更加深度的理解MemOS算法原理，您可以前往查看[MemOS算法原理概述](/overview/algorithm)
+*   For a deeper understanding of MemOS algorithms, see [Overview of MemOS Algorithm Principles](/overview/algorithm)
 
 
-## 3. 联系我们
+## 3. Contact Us
 
 <img src="https://cdn.memtensor.com.cn/img/1758251354703_v1nwkz_compressed.png" alt="image" style="width:70%;">
