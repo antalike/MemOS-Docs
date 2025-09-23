@@ -214,18 +214,19 @@
       "GetMessageRequest": {
         "type": "object",
         "required": [
-          "user_id"
+          "user_id",
+          "conversation_id"
         ],
         "properties": {
           "user_id": {
             "type": "string",
             "title": "User ID",
-            "description": "与添加消息关联的用户的唯一标识符。"
+            "description": "与获取消息关联的用户的唯一标识符。"
           },
           "conversation_id": {
             "type": "string",
             "title": "Conversation ID",
-            "description": "与获取消息关联的会话的唯一标识符。如果不传，默认返回最近一次活跃会话的消息。"
+            "description": "与获取消息关联的会话的唯一标识符。"
           },
           "message_limit_number": {
             "type": "integer",
@@ -333,7 +334,7 @@
             "type": "integer",
             "format": "int32",
             "title": "Memory Limit Number",
-            "description": "L限定返回的记忆条数，用于控制记忆片段的长度，不传时使用系统默认值 6。",
+            "description": "限定返回的记忆条数，用于控制记忆片段的长度，不传时使用系统默认值 6。",
             "default": 6
           }
         },
