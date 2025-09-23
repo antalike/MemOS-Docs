@@ -106,9 +106,8 @@ const selectedResponse = computed<FlatResponse | undefined>(() => {
                   <p
                     v-if="item.description"
                     class="whitespace-pre-line text-gray-400 text-sm"
-                  >
-                    {{ item.description }}
-                  </p>
+                    v-html="item.description"
+                  />
                   <div
                     v-if="item.example !== undefined && item.example !== null"
                     class="flex mt-6 gap-1.5 text-sm text-gray-400"

@@ -36,24 +36,24 @@ const description = computed(() => {
     .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="text-primary hover:underline">$1</a>')
 })
 
-const links = computed(() => {
-  const links = []
-  if (toc?.bottom?.edit) {
-    links.push({
-      icon: 'i-lucide-external-link',
-      label: 'community.edit',
-      to: `${toc.bottom.edit}/${page?.value?.stem}.${page?.value?.extension}`,
-      target: '_blank'
-    })
-  }
+// const links = computed(() => {
+//   const links = []
+//   if (toc?.bottom?.edit) {
+//     links.push({
+//       icon: 'i-lucide-external-link',
+//       label: 'community.edit',
+//       to: `${toc.bottom.edit}/${page?.value?.stem}.${page?.value?.extension}`,
+//       target: '_blank'
+//     })
+//   }
 
-  return [...links, ...(toc?.bottom?.links || [])].filter(Boolean).map((item) => {
-    return {
-      ...item,
-      label: t(`${item.label}`)
-    }
-  })
-})
+//   return [...links, ...(toc?.bottom?.links || [])].filter(Boolean).map((item) => {
+//     return {
+//       ...item,
+//       label: t(`${item.label}`)
+//     }
+//   })
+// })
 </script>
 
 <template>
@@ -103,7 +103,7 @@ const links = computed(() => {
           :title="toc?.title"
           :links="page.body?.toc?.links"
         >
-          <template
+          <!-- <template
             v-if="toc?.bottom"
             #bottom
           >
@@ -121,7 +121,7 @@ const links = computed(() => {
                 :links="links"
               />
             </div>
-          </template>
+          </template> -->
         </UContentToc>
       </template>
     </UPage>

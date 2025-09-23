@@ -94,9 +94,8 @@ const displaySchema = computed(() => {
               <p
                 v-if="subitem.description"
                 class="whitespace-pre-line text-gray-400 text-sm"
-              >
-                {{ subitem.description }}
-              </p>
+                v-html="subitem.description"
+              />
               <div
                 v-if="subitem.enum && subitem.enum.length"
                 class="flex flex-wrap gap-1.5 mt-2 text-xs"

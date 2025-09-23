@@ -40,12 +40,12 @@ const fields = computed(() => {
             </div>
           </div>
         </div>
-        <p
-          v-if="field.description"
-          class="mt-4 whitespace-pre-line text-gray-400 text-sm"
-        >
-          {{ field.description }}
-        </p>
+        <template v-if="field?.description">
+          <p
+            class="mt-4 whitespace-pre-line text-gray-400 text-sm"
+            v-html="field.description"
+          />
+        </template>
       </div>
     </template>
   </div>
