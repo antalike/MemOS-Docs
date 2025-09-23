@@ -28,8 +28,8 @@ MemOS 提供两种使用方式：
 在使用大模型构建应用时，一个常见问题是：**如何让 AI 记住用户的长期偏好？**  
 MemOS 提供了两个核心接口帮助你实现：
 
-- `addMessages` —— 把原始对话交给我们，我们自动加工并存储记忆
-- `searchMemories` —— 在后续对话中召回相关记忆和建议指令（可选），让 AI 回答更贴近用户需求
+- `addMessage` —— 把原始对话交给我们，我们自动加工并存储记忆
+- `searchMemory` —— 在后续对话中召回相关记忆和建议指令（可选），让 AI 回答更贴近用户需求
 
 ![image.svg](https://cdn.memtensor.com.cn/img/1758180109237_8ubv8n.svg)
 
@@ -38,7 +38,7 @@ MemOS 提供了两个核心接口帮助你实现：
 在 [MemOS Cloud 平台](https://memos-dashboard.openmem.net/quickstart) 注册账号，获取默认API Key
 
 
-### 步骤 2. 存储原始对话（addMessages）
+### 步骤 2. 存储原始对话（addMessage）
 
 ::note
 **会话 A：2025-06-10 发生**<br>
@@ -80,7 +80,7 @@ resp = requests.post(
 print(resp.json())
 ```
 
-### 步骤 3. 在会话中调用MemOS查询相关记忆（searchMemories）
+### 步骤 3. 在会话中调用MemOS查询相关记忆（searchMemory）
 
 ::note
 **会话 B：2025-9-28 发生**<br>
@@ -163,7 +163,7 @@ print("相关记忆：", results["data"]["memoryDetailList"])
 
 在需要本地化部署或深度定制时，可以直接使用 MemOS 的开源框架。与云服务相比，开源框架没有额外的抽象封装，开发者需要显式完成 **记忆的抽取、存储与检索**，这些操作均在一个 **MemCube（记忆立方）** 上进行。
 
-> MemCube 是记忆的基本容器，负责承载用户的记忆条目。云服务中的 `addMessages` 和 `searchMemories` 接口，本质上就是对 MemCube 内部操作的抽象封装。在开源框架中，开发者可以直接控制这些步骤。
+> MemCube 是记忆的基本容器，负责承载用户的记忆条目。云服务中的 `addMessage` 和 `searchMemory` 接口，本质上就是对 MemCube 内部操作的抽象封装。在开源框架中，开发者可以直接控制这些步骤。
 
 具体操作步骤详见：[开源项目→快速开始](https://memos-docs.openmem.net/cn/getting_started/quick_start)
 
