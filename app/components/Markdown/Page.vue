@@ -35,25 +35,6 @@ const description = computed(() => {
     // Process links [text](url)
     .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="text-primary hover:underline">$1</a>')
 })
-
-// const links = computed(() => {
-//   const links = []
-//   if (toc?.bottom?.edit) {
-//     links.push({
-//       icon: 'i-lucide-external-link',
-//       label: 'community.edit',
-//       to: `${toc.bottom.edit}/${page?.value?.stem}.${page?.value?.extension}`,
-//       target: '_blank'
-//     })
-//   }
-
-//   return [...links, ...(toc?.bottom?.links || [])].filter(Boolean).map((item) => {
-//     return {
-//       ...item,
-//       label: t(`${item.label}`)
-//     }
-//   })
-// })
 </script>
 
 <template>
@@ -102,27 +83,7 @@ const description = computed(() => {
         <UContentToc
           :title="toc?.title"
           :links="page.body?.toc?.links"
-        >
-          <!-- <template
-            v-if="toc?.bottom"
-            #bottom
-          >
-            <div
-              class="hidden lg:block space-y-6"
-              :class="{ '!mt-6': page.body?.toc?.links?.length }"
-            >
-              <USeparator
-                v-if="page.body?.toc?.links?.length"
-                type="dashed"
-              />
-
-              <UPageLinks
-                :title="t(`${toc.bottom.title}`)"
-                :links="links"
-              />
-            </div>
-          </template> -->
-        </UContentToc>
+        />
       </template>
     </UPage>
   </UContainer>
