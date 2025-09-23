@@ -1,6 +1,6 @@
 ---
 title: Quick Start
-desc: Welcome to the MemOS Cloud Platform. Refer to this quick start guide to easily integrate memory capabilities. You’ll need to complete the following steps:
+desc: Welcome to the MemOS Cloud Platform. Refer to this quick start guide to easily integrate memory capabilities. You’ll need to complete the following steps.
 ---
 
 ## 1. Get Your API Key
@@ -219,15 +219,11 @@ curl --request POST \
     },
     "message": "ok"
 }
-
-# Example of fields that may be output in the future:
-# instruction:
-#   "Task: Answer the user's question 'Where to go during National Day?'\nAudience: Family trip (including children and elderly)\nRequirements:\n- Explicitly consider the travel needs of children and elderly when answering\n- Destination suggestions must be consistent with 'family-friendly'\nNote: If key information is missing (departure location/budget/number of days), business logic can append a clarification strategy"
-#
-# full_instruction:
-#   "You are a travel advisor.\nThe user always plans trips with the whole family (including children and elderly).\nPlease directly answer 'Where to go during National Day?' and prioritize recommending destinations suitable for family trips.\nIf information is insufficient, first ask clarification questions, then provide recommendations."
-
 ```
+
+Example of fields that may be output in the future:
+- instruction: "Task: Answer the user's question 'Where to go during National Day?'\nAudience: Family trip (including children and elderly)\nRequirements:\n- Explicitly consider the travel needs of children and elderly when answering\n- Destination suggestions must be consistent with 'family-friendly'\nNote: If key information is missing (departure location/budget/number of days), business logic can append a clarification strategy."
+- full_instruction: "You are a travel advisor.\nThe user always plans trips with the whole family (including children and elderly).\nPlease directly answer 'Where to go during National Day?' and prioritize recommending destinations suitable for family trips.\nIf information is insufficient, first ask clarification questions, then provide recommendations."
 
 ### 2.3 Get Original Messages
 
