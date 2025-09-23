@@ -1,58 +1,63 @@
 ---
-title: 配额和限制
+title: Limits
 ---
 
 
-## 1. 免费额度说明
+## 1. Free Quota
 
-MemOS 云服务目前向所有开发者提供以下接口的免费开发额度，以 **调用次数** 为计算单位，不同接口的消耗方式不同，具体如下表所示：
+The MemOS Cloud Service currently provides all developers with the following free development quotas for the APIs, calculated based on **number of calls**. Different APIs consume quota differently, as shown in the table below:
 
-| 接口名称 | 消耗类型 | 说明 | 免费额度（次数） |
+| API Name | Consumption Type | Description | Free Quota (Calls) |
 | --- | --- | --- | --- |
-| addMessage | 调用次数 | 每次接口请求成功消耗 1 次额度 | 5,000 |
-| searchMemory | 调用次数 | 每次接口请求成功消耗 1 次额度 | 1,000 |
-| getMessage | 调用次数 | 每次接口请求成功消耗 1 次额度 | 5,000 |
+| addMessage | Number of calls | Each successful request consumes 1 call | 5,000 |
+| searchMemory | Number of calls | Each successful request consumes 1 call | 1,000 |
+| getMessage | Number of calls | Each successful request consumes 1 call | 5,000 |
 
-**⚠️ 注意：**
+::note
+**Note**
+- The free quota is provided per **developer account** and is shared across all projects under that account.
+- Failed requests (authentication failure, parameter error, exceeding limits, etc.) **do not consume quota**.
+::
 
-*   免费额度为 **每个开发者账号** 提供，适用于账号下所有项目共享。
-    
-*   请求失败（鉴权失败、参数错误、超额限制等）**不消耗额度**。
+<br>
 
+## 2. Resource Limits
 
-## 2. 资源限制
+To ensure stable and secure service, MemOS Cloud Service enforces the following limits on API calls, calculated at the account level:
 
-为保证服务稳定与安全，MemOS 云服务对接口调用有如下限制，按照账号维度计算：
-
-| 接口名称 | 单次输入上限 | 单次输出上限 | 总调用次数上限 |
+| API Name | Max Input per Request | Max Output per Request | Total Call Limit |
 | --- | --- | --- | --- |
-| addMessage | 4,000 token | \- | 5,000 |
-| searchMemory | 4,000 token | 10 条记忆 | 1,000 |
-| getMessage | \- | 50 条消息 | 5,000 |
+| addMessage | 4,000 tokens | - | 5,000 |
+| searchMemory | 4,000 tokens | 10 memories | 1,000 |
+| getMessage | - | 50 messages | 5,000 |
 
-⚠️ 注意：
+::note
+**Note**
+- Requests exceeding the per-call limit will return the corresponding error code without deducting quota.
+- Additionally, we recommend a maximum QPS ≤ 10 (i.e., up to 10 requests per second). This is not a strict limit, but high concurrency may be affected by platform capacity, so control request frequency according to actual needs.
+::
 
-*   当请求超出单次上限时，系统直接返回对应错误码，不会扣减调用次数。
-    
-*   另外，我们建议最大 QPS ≤ 10（即每秒最多 10 次请求），此非严格限制，但高并发请求可能会受到平台处理能力影响，请根据实际需求合理控制调用频率。
+<br>
+
+## 3. Usage Monitoring
+
+You can view the remaining quota for each API through the **API Console**, with filters for project, API key, and date to facilitate tracking and managing usage.
+
+<img width="3024" height="1890" alt="image" src="https://github.com/user-attachments/assets/49cddd25-6fbf-40d4-a750-58c3b2ac5547" />
 
 
-## 3. 用量监控
+<br>
 
-您可通过**API 控制台**查看各接口的剩余额度，并支持按项目、接口密钥和日期进行筛选，方便跟踪和管理调用情况。
+## 4. Obtaining More Quota
 
-![image.png](https://cdn.memtensor.com.cn/img/1758185375611_551iyw_compressed.png)
+To help developers quickly try and validate features while considering resource costs, each developer is provided a **limited free quota**. When usage exceeds the free quota, the system will block excess requests and provide a prompt, ensuring platform stability.
 
-
-## 4. 领取更多额度
-
-为了帮助开发者快速试用和验证功能，同时考虑到资源成本，我们为每位开发者提供**有限的免费额度**。当调用量超过免费额度时，系统会阻止超额请求并返回提示，确保平台稳定运行。
-
-如果您的业务需要更多调用量，可扫描下方企业微信二维码咨询客服，领取更多免费额度。
+If your business requires more calls, scan the Enterprise WeChat QR code below to contact customer support and obtain additional free quota.
 
 ![image.png](https://cdn.memtensor.com.cn/img/1758251897005_7xgrmm_compressed.png)
 
+<br>
 
-## 5.联系我们
+## 5. Contact Us
 
 ![image.png](https://cdn.memtensor.com.cn/img/1758251354703_v1nwkz_compressed.png)
