@@ -13,7 +13,7 @@ nav:
     - "(ri:question-line) FAQs": overview/faq.md
     - "(ri:cpu-line) Algorithm Overview": overview/algorithm.md
 
-  - "(ri:dashboard-line) Dashboard":
+  - "(ri:dashboard-line) Cloud platform":
     - "(ri:eye-line) Introduction": dashboard/overview.md
     - "(ri:play-line) Quick Start": dashboard/quick_start.md
     - "(ri:shield-line) Limitations and Quotas": dashboard/limit.md
