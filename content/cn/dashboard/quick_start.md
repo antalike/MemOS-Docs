@@ -26,10 +26,12 @@ os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem"
 
 data = {
   "messages": [
-    {"role": "user", "content": "我计划下个月去法国旅行，需要准备什么？"},
-    {"role": "assistant", "content": "法国旅行需要准备护照、签证、欧元现金等。具体需要什么帮助？"},
-    {"role": "user", "content": "主要是巴黎和尼斯，大概7天行程"},
-    {"role": "assistant", "content": "巴黎和尼斯是很好的选择！建议预订酒店和查看当地天气。"}
+    {"role": "user", "content": "我想暑假出去玩，你能帮我推荐下吗？"},
+    {"role": "assistant", "content": "好的！是自己出行还是和家人朋友一起呢？"},
+    {"role": "user", "content": "肯定要带孩子啊，我们家出门都是全家一起。"},
+    {"role": "assistant", "content": "明白了，所以你们是父母带孩子一块儿旅行，对吗？"}
+    {"role": "user", "content": "肯定要带孩子啊，我们家出门都是全家一起。"},
+    {"role": "assistant", "content": "收到，那我会帮你推荐适合家庭出游的目的地。"}
   ],
   "use_id": "memos_user_123",
   "conversation_id": "memos_conversation_123"
@@ -41,7 +43,6 @@ headers = {
 url = f"{os.environ['MEMOS_BASE_URL']}/add/message"
 
 requests.post(url=url, headers=headers, data=json.dumps(data))
-
 ```
 ```python [Python (SDK)]
 from memos.api.client import MemOSClient 
@@ -63,11 +64,11 @@ client.add(messages=messages, user_id=use_id, conversation_id=conversation_id)
 ```
 ```bash [curl]
 curl --request POST \
-  --url https://memos.memtensor.cn/api/openmem/add/message \
+  --url https://memos.memtensor.cn/api/openmem/v1/add/message \
   --header 'Authorization: Token YOUR_API_KEY' \
   --header 'Content-Type: application/json' \
   --data '{
-    "use_id": "memos_user_123",
+    "user_id": "memos_user_123",
     "conversation_id": "memos_conversation_123",
     "messages": [
       {"role": "user", "content": "我想暑假出去玩，你能帮我推荐下吗？"},
