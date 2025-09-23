@@ -11,13 +11,11 @@ desc: 欢迎访问 MemOS 云平台，可参考本新手指南，快速接入�
 
 <br>
 
-## 2. 调用前准备
+## 2.核心记忆操作
 
-在调用 MemOS API 前，你需要先完成一些初始化配置。
+### 2.1 添加原始对话（addMessage）
 
-**1. 如果你使用 Python HTTP 方式调用接口**
-
-- 设置环境变量
+只需要把`原始的对话记录`给到MemOS，MemOS 会<code style="font-weight: bold;">自动抽象加工并保存为记忆</code>**。**
 
 ::code-group
 ```python [Python (HTTP)]
@@ -28,37 +26,7 @@ import json
 # 替换成你的 API Key
 os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
 os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
-```
 
-**2. 如果你使用 Python SDK 方式调用接口**
-
-- 安装SDK
-
-::code-group
-```bash
-pip install MemoryOS -U
-```
-  
-- 初始化客户端
-
-::code-group
-```python [Python (SDK)]
-from memos.api import MemOSClient
-
-# 使用 API Key 初始化客户端
-client = MemOSClient(api_key=YOUR_API_KEY)
-```
-
-<br>
-
-## 3.核心记忆操作
-
-### 3.1 添加原始对话（addMessage）
-
-只需要把`原始的对话记录`给到MemOS，MemOS 会<code style="font-weight: bold;">自动抽象加工并保存为记忆</code>**。**
-
-::code-group
-```python [Python (HTTP)]
 data = {
   "messages": [
     {"role": "user", "content": "我想暑假出去玩，你能帮我推荐下吗？"},
@@ -80,6 +48,13 @@ url = f"{os.environ['MEMOS_BASE_URL']}/add/message"
 requests.post(url=url, headers=headers, data=json.dumps(data))
 ```
 ```python [Python (SDK)]
+# 先执行，pip install MemoryOS -U
+
+from memos.api import MemOSClient
+
+# 使用 API Key 初始化客户端
+client = MemOSClient(api_key=YOUR_API_KEY)
+
 messages = [
   {"role": "user", "content": "我想暑假出去玩，你能帮我推荐下吗？"},
   {"role": "assistant", "content": "好的！是自己出行还是和家人朋友一起呢？"},
@@ -111,6 +86,7 @@ curl --request POST \
     ]
   }'
 ```
+::
 ```json [add_message_res.json]
 {
 	"code": 0,
@@ -123,7 +99,7 @@ curl --request POST \
 
 <br>
 
-### 3.2 查询记忆（searchMemory）
+### 2.2 查询记忆（searchMemory）
 
 使用用户的发言查询记忆，MemOS 会自动召回最相关的记忆供 AI 参考。
 
@@ -137,6 +113,14 @@ curl --request POST \
 
 ::code-group
 ```python [Python (HTTP)]
+import os
+import requests
+import json
+
+# 替换成你的 API Key
+os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
+os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
+
 data = {
   "query": "国庆去哪玩",
   "user_id": "memos_user_123",
@@ -158,6 +142,13 @@ requests.post(url=url, headers=headers, data=json.dumps(data))
 
 ```
 ```python [Python (SDK)]
+# 先执行，pip install MemoryOS -U
+
+from memos.api import MemOSClient
+
+# 使用 API Key 初始化客户端
+client = MemOSClient(api_key=YOUR_API_KEY)
+
 query = "国庆去哪玩"
 user_id = "memos_user_123"
 conversation_id ="memos_conversation_123"
@@ -184,6 +175,7 @@ curl --request POST \
 # "return_instruction": true
 # "return_full_instruction": true
 ```
+::
 ```json [search_memory_res.json]
 {
     "code": 0,
@@ -235,12 +227,20 @@ curl --request POST \
 #   "你是一名旅游顾问。\n用户在规划旅行时总是全家一起出游（包括孩子和老人）。\n请直接回答“国庆去哪玩好？”，并优先推荐适合家庭出游的目的地。\n如果信息不足，请先提出澄清问题，再给出建议。"
 ```
 
-### 3.3 获取原始对话（getMessage）
+### 2.3 获取原始对话（getMessage）
 
 获取指定用户和会话的**原始对话消息**，用于查看或参考完整聊天记录。
 
 ::code-group
 ```python [Python (HTTP)]
+import os
+import requests
+import json
+
+# 替换成你的 API Key
+os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
+os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
+
 data = {
   "user_id": "memos_user_123",
   "conversation_id": "memos_conversation_123"
@@ -255,9 +255,12 @@ requests.post(url=url, headers=headers, data=json.dumps(data))
 
 ```
 ```python [Python (SDK)]
-from memos.api.client import MemOSClient 
+# 先执行，pip install MemoryOS -U
+from memos.api import MemOSClient
 
-client = MemOSClient(api_key="mpg-xx")
+# 使用 API Key 初始化客户端
+client = MemOSClient(api_key=YOUR_API_KEY)
+
 user_id = "memos_user_123"
 conversation_id ="memos_conversation_123"
 
@@ -273,6 +276,7 @@ curl --request POST \
     "conversation_id": "memos_conversation_123"
   }'
 ```
+::
 ```json [get_message_res.json]
 {
   "code": 0,
@@ -281,26 +285,26 @@ curl --request POST \
       {
         "role": "user",
         "content": "我想暑假出去玩，你能帮我推荐下吗？",
-        "createTime": "2025-08-26 09:30:00",
-        "updateTime": "2025-08-26 09:30:00"
+        "create_time": "2025-08-26 09:30:00",
+        "update_time": "2025-08-26 09:30:00"
       },
       {
         "role": "assistant",
         "content": "明白了，所以你们是父母带孩子一块儿旅行，对吗？",
-        "createTime": "2025-08-26 09:30:00",
-        "updateTime": "2025-08-26 09:30:00"
+        "create_time": "2025-08-26 09:30:00",
+        "update_time": "2025-08-26 09:30:00"
       },
       {
         "role": "user",
         "content": "对，带上孩子和老人，一般都是全家行动。",
-        "createTime": "2025-08-26 09:30:00",
-        "updateTime": "2025-08-26 09:30:00"
+        "create_time": "2025-08-26 09:30:00",
+        "update_time": "2025-08-26 09:30:00"
       },
       {
         "role": "assistant",
         "content": "收到，那我会帮你推荐适合家庭出游的目的地。",
-        "createTime": "2025-08-26 09:30:00",
-        "updateTime": "2025-08-26 09:30:00"
+        "create_time": "2025-08-26 09:30:00",
+        "update_time": "2025-08-26 09:30:00"
       }
     ]
   },
