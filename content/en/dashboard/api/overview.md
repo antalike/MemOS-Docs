@@ -1,77 +1,74 @@
 ---
-title: 概览
+title: Overview
 ---
 
-## 接口介绍
+## 1. API Introduction
 
-目前 MemOS 提供两种类型的 API，帮助开发者实现对话记忆的存储与检索：
+MemOS currently provides two types of APIs to help developers store and retrieve conversation memory:
 
-*   **记忆 API：** 检索召回用户的相关记忆片段，模型生成回答时能够结合用户历史、偏好、上下文；
-    
-*   **消息 API：** 添加与获取用户与系统的原始对话消息，支持储存完整的对话记录。
-    
+- **Memory API**: Retrieves relevant memory fragments of the user so that model-generated responses can incorporate user history, preferences, and context;  
+- **Message API**: Adds and retrieves raw conversation messages between the user and system, supporting storage of complete conversation records.
 
-## 鉴权认证
+<br>
 
-所有接口请求都需要认证，请确保每个请求的 Authorization 头中包含您的接口密钥。
+## 2. Authentication
 
-## 项目管理
+All API requests require authentication. Ensure that each request includes your API key in the Authorization header.
 
-MemOS 支持以项目为维度管理资源、权限和调用日志。一个项目可以是一款 App、一个 Agent，或者任何需要独立管理资源的模块。
+<br>
 
-1.  **新建项目**
-    
+## 3. Project Management
 
-*   每位新用户默认拥有一个“默认项目”。
-    
-*   通过控制台新建项目时，输入名称和描述，即可创建属于你的独立项目。
-    
+MemOS supports managing resources, permissions, and call logs at the project level. A project can be an app, an agent, or any module that requires independent resource management.
 
-2.  **删除项目**
-    
+1. **Create Project**
 
-*   在拥有多个项目时，可删除不再需要的项目。
-    
+- Each new user has a default project.  
+- When creating a new project via the console, enter a name and description to create your independent project.
 
-❕删除项目将清空该项目下的所有记忆、消息及相关数据，该操作**不可恢复**。
+<br>
 
-![image.png](https://cdn.memtensor.com.cn/img/1758595933287_286261_compressed.png)
+2. **Delete Project**
 
-3.  **接口密钥**
-    
+- If you have multiple projects, you can delete projects that are no longer needed.
 
-*   每个项目拥有独立的接口密钥列表，用于访问该项目下的所有记忆、消息和数据。
-    
-*   在控制台左上角切换项目，即可查看对应密钥。
-    
+::note
+Deleting a project will erase all memories, messages, and related data under that project. This operation **cannot be undone**.
+::
 
-![image.png](https://cdn.memtensor.com.cn/img/1758596003390_f084vw_compressed.png)
+<img width="3020" height="1008" alt="image" src="https://github.com/user-attachments/assets/54cdd03f-0859-4f30-a45f-08bd172942b7" />
 
-4.  **调用日志**
-    
+<br>
 
-*   在控制台左上角切换项目，监控接口调用情况与历史记录。
-    
+3. **API Keys**
 
-![image.png](https://cdn.memtensor.com.cn/img/1758596026089_503m42_compressed.png)
+- Each project has its own API key list for accessing all memories, messages, and data under that project.  
+- Switch projects in the top-left corner of the console to view the corresponding keys.
 
-## 下一步行动
+<img width="3024" height="1042" alt="image" src="https://github.com/user-attachments/assets/2a58463b-99ca-4c9f-89d8-ec9aec2dbb32" />
 
-*   注册并登录 ++MemOS 云平台++，获取您的接口密钥。
-    
-*   浏览每个接口的详细文档，详细了解请求 & 响应格式、参数和示例用法。
-    
-    *   [《添加消息》](/dashboard/api/add-message-api-add-message-post)
-        
-    *   [《查询记忆》](/dashboard/api/search-memory-api-search-memory-post)
-        
-    *   [《获取消息》](/dashboard/api/get-message-api-get-message-get)
-        
-    *   [《错误码查询》](/dashboard/api/error_code)
-        
-*   进行第一次接口调用，添加或检索记忆。
-    
+<br>
 
-## 联系我们
+4. **Call Logs**
 
-![image.png](https://cdn.memtensor.com.cn/img/1758251354703_v1nwkz_compressed.png)
+- Switch projects in the top-left corner of the console to monitor API usage and history.
+
+<img width="3024" height="1040" alt="image" src="https://github.com/user-attachments/assets/7cb2e857-28e6-431c-993a-d96c5dfe373a" />
+
+<br>
+
+## 4. Next Steps
+
+- Register and log in to the [MemOS Cloud Platform](https://memos-dashboard.openmem.net/quickstart/) to obtain your API key.  
+- Review the detailed documentation for each API to understand request & response formats, parameters, and examples:  
+  - [Add Message](/dashboard/api/add-message-api-add-message-post)  
+  - [Search Memory](/dashboard/api/search-memory-api-search-memory-post)  
+  - [Get Message](/dashboard/api/get-message-api-get-message-get)  
+  - [Error Codes](/dashboard/api/error_code)  
+- Make your first API call to add or retrieve memory.
+
+<br>
+
+## 5. Contact Us
+
+![image.png](https://statics.memtensor.com.cn/memos/contact-ui.png)
