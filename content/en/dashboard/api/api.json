@@ -19,8 +19,8 @@
   "paths": {
     "/add/message": {
       "post": {
-        "summary": "添加消息",
-        "description": "向指定会话添加一条或多条消息。支持用户消息与助手消息，可自定义创建时间。",
+        "summary": "Add Message",
+        "description": "Add one or more messages to a specified conversation. Supports both user and assistant messages, with optional custom creation time.",
         "operationId": "add_message_api_add_message_post",
         "requestBody": {
           "required": true,
@@ -48,8 +48,8 @@
     },
     "/get/message": {
       "post": {
-        "summary": "获取消息",
-        "description": "查询指定用户的记忆，返回与查询内容最相关的记忆片段。",
+        "summary": "Get message",
+        "description": "Retrieve historical conversation records between a user and the assistant from a specified conversation. The number of results returned can be limited.",
         "operationId": "get_message_api_get_message_get",
         "requestBody": {
           "required": true,
@@ -77,8 +77,8 @@
     },
     "/search/memory": {
       "post": {
-        "summary": "查询记忆",
-        "description": "从指定会话中获取用户与助手的历史对话记录，可按数量限制返回结果。",
+        "summary": "Search Memory",
+        "description": "Query the memories of a specified user and return the memory fragments most relevant to the query content.",
         "operationId": "search_memory_api_search_memory_post",
         "requestBody": {
           "required": true,
@@ -111,7 +111,7 @@
         "type": "apiKey",
         "name": "Authorization",
         "in": "header",
-        "description": "Token API_key，可在 API 控制台>接口密钥 中查看"
+        "description": "Token API_key, available in <a href=\"https://memos-dashboard.openmem.net/apikeys/\" class=\"text-primary border-b border-transparent hover:border-primary font-medium focus-visible:outline-primary [&amp;&gt;code]:border-dashed hover:[&amp;&gt;code]:border-primary hover:[&amp;&gt;code]:text-primary transition-colors [&amp;&gt;code]:transition-colors\" target=\"_blank\">API Console > API Keys</a>"
       }
     },
     "schemas": {
@@ -126,17 +126,17 @@
           "user_id": {
             "type": "string",
             "title": "User ID",
-            "description": "与添加消息关联的用户的唯一标识符。"
+            "description": "Unique identifier of the user associated with the message."
           },
           "conversation_id": {
             "type": "string",
             "title": "Conversation ID",
-            "description": "与添加消息关联的会话的唯一标识符。"
+            "description": "Unique identifier of the conversation."
           },
           "messages": {
             "type": "array",
             "title": "Messages",
-            "description": "表示内存内容的消息对象数组。",
+            "description": "Array of message objects representing the memory content. Each object contains:",
             "items": {
               "$ref": "#/components/schemas/MessageInput"
             }
@@ -158,17 +158,17 @@
               "assistant"
             ],
             "title": "Role",
-            "description": "消息发送者的角色。"
+            "description": "Sender role."
           },
           "content": {
             "type": "string",
             "title": "Content",
-            "description": "消息内容文本。"
+            "description": "Content of the message."
           },
           "chat_time": {
             "type": "string",
             "title": "Chat Time",
-            "description": "消息创建的时间，结构化时间或者中文，不传则使用当前时间。"
+            "description": "Optional creation time of the message. Can be structured time or Chinese string. Defaults to current time if omitted."
           }
         },
         "title": "MessageInput"
@@ -184,7 +184,7 @@
             "type": "integer",
             "format": "int32",
             "title": "Code",
-            "description": "接口状态码。 0: 表示成功，1000: 未知错误",
+            "description": "API status code. See <a href=\"https://memos-dashboard.openmem.net/apikeys/\" class=\"text-primary border-b border-transparent hover:border-primary font-medium focus-visible:outline-primary [&amp;&gt;code]:border-dashed hover:[&amp;&gt;code]:border-primary hover:[&amp;&gt;code]:text-primary transition-colors [&amp;&gt;code]:transition-colors\">Error Code</a> for details",
             "example": 0
           },
           "data": {
@@ -193,7 +193,7 @@
           "message": {
             "type": "string",
             "title": "Message",
-            "description": "接口提示信息，如 \"消息添加成功\"。",
+            "description": "API response message, e.g., \"Message added successfully\".",
             "example": "ok"
           }
         },
@@ -205,11 +205,12 @@
           "success": {
             "type": "boolean",
             "title": "Success",
-            "description": "是否添加成功。true 表示成功，false 表示失败。",
+            "description": "Indicates if the message was added successfully. true = success, false = failure.",
             "example": true
           }
         },
-        "title": "OpenMemAddMessageResponse"
+        "title": "OpenMemAddMessageResponse",
+        "description": "Object representing the result of adding the message."
       },
       "GetMessageRequest": {
         "type": "object",
@@ -221,18 +222,18 @@
           "user_id": {
             "type": "string",
             "title": "User ID",
-            "description": "与获取消息关联的用户的唯一标识符。"
+            "description": "Unique identifier of the user associated with the messages being retrieved."
           },
           "conversation_id": {
             "type": "string",
             "title": "Conversation ID",
-            "description": "与获取消息关联的会话的唯一标识符。"
+            "description": "Unique identifier of the conversation associated with the messages."
           },
           "message_limit_number": {
             "type": "integer",
             "format": "int32",
             "title": "Message Limit Number",
-            "description": "限定返回的消息条数，用于控制消息列表的长度，不传时使用系统默认值 6。",
+            "description": "Limits the number of messages returned, controlling the length of the message list. Defaults to 6 if not provided.",
             "default": 6
           }
         },
@@ -249,7 +250,7 @@
             "type": "integer",
             "format": "int32",
             "title": "Code",
-            "description": "接口状态码。 0: 表示成功，1000: 未知错误",
+            "description": "API status code. See <a href=\"https://memos-dashboard.openmem.net/apikeys/\" class=\"text-primary border-b border-transparent hover:border-primary font-medium focus-visible:outline-primary [&amp;&gt;code]:border-dashed hover:[&amp;&gt;code]:border-primary hover:[&amp;&gt;code]:text-primary transition-colors [&amp;&gt;code]:transition-colors\">Error Code</a> for details.",
             "example": 0
           },
           "data": {
@@ -258,7 +259,7 @@
           "message": {
             "type": "string",
             "title": "Message",
-            "description": "接口提示信息。"
+            "description": "API response message."
           }
         },
         "title": "GetMessageResponse"
@@ -269,13 +270,14 @@
           "message_detail_list": {
             "type": "array",
             "title": "Message Detail List",
-            "description": "消息添加结果对象。",
+            "description": "List of retrieved message details. Each item includes:",
             "items": {
               "$ref": "#/components/schemas/MessageDetail"
             }
           }
         },
-        "title": "GetMessageResponseData"
+        "title": "GetMessageResponseData",
+        "description": "Object containing the retrieved messages."
       },
       "MessageDetail": {
         "type": "object",
@@ -287,26 +289,27 @@
               "assistant"
             ],
             "title": "Role",
-            "description": "消息发送者的角色。",
+            "description": "Role of the message sender.",
             "example": "user"
           },
           "content": {
             "type": "string",
             "title": "Content",
-            "description": "消息内容文本。"
+            "description": "Text content of the message."
           },
           "create_time": {
             "type": "string",
             "title": "Create Time",
-            "description": "消息创建时间。"
+            "description": "Creation time of the message."
           },
           "update_time": {
             "type": "string",
             "title": "Update Time",
-            "description": "消息最近一次更新时间。"
+            "description": "Last update time of the message."
           }
         },
-        "title": "MessageDetail"
+        "title": "MessageDetail",
+        "description": "List of retrieved message details. Each item includes:"
       },
       "SearchMemoryRequest": {
         "type": "object",
@@ -318,23 +321,23 @@
           "user_id": {
             "type": "string",
             "title": "User ID",
-            "description": "与查询的记忆关联的用户的唯一标识符。"
+            "description": "Unique identifier of the user associated with the memory being queried."
           },
           "conversation_id": {
             "type": "string",
             "title": "Conversation ID",
-            "description": "查询内容所在会话的唯一标识符，传入可以明确当前会话，本会话的记忆应当比其他历史会话的权重高。"
+            "description": "Unique identifier of the conversation containing the memory. Providing this ensures the current conversation’s memories have higher priority over other historical."
           },
           "query": {
             "type": "string",
             "title": "Query",
-            "description": "要在记忆中查询的文本内容"
+            "description": "Text content to search within the memories."
           },
           "memory_limit_number": {
             "type": "integer",
             "format": "int32",
             "title": "Memory Limit Number",
-            "description": "限定返回的记忆条数，用于控制记忆片段的长度，不传时使用系统默认值 6。",
+            "description": "Limits the number of memory items returned, controlling the length of memory fragments. Defaults to 6 if not provided.",
             "default": 6
           }
         },
@@ -351,7 +354,7 @@
             "type": "integer",
             "format": "int32",
             "title": "Code",
-            "description": "接口状态码。 0: 表示成功，1000: 未知错误",
+            "description": "API status code. See <a href=\"/dashboard/api/error_code\" class=\"text-primary border-b border-transparent hover:border-primary font-medium focus-visible:outline-primary [&amp;&gt;code]:border-dashed hover:[&amp;&gt;code]:border-primary hover:[&amp;&gt;code]:text-primary transition-colors [&amp;&gt;code]:transition-colors\">Error Code</a> for details.",
             "example": 0
           },
           "data": {
@@ -360,7 +363,7 @@
           "message": {
             "type": "string",
             "title": "Message",
-            "description": "接口提示信息。"
+            "description": "API response message."
           }
         },
         "title": "SearchMemoryResponse"
@@ -371,12 +374,13 @@
           "memory_detail_list": {
             "type": "array",
             "title": "Memory Detail List",
-            "description": "返回的记忆片段详情列表。",
+            "description": "List of memory fragment details returned. Each item includes:",
             "items": {
               "$ref": "#/components/schemas/MemoryDetail"
             }
           }
-        }
+        },
+        "description": "Object containing the query result."
       },
       "MemoryDetail": {
         "type": "object",
@@ -384,17 +388,17 @@
           "id": {
             "type": "string",
             "title": "ID",
-            "description": "记忆的唯一标识符，系统内部用于区分不同的记忆条目。"
+            "description": "Unique identifier of the memory, used internally by the system."
           },
           "memory_key": {
             "type": "string",
             "title": "Memory Key",
-            "description": "记忆的标题或关键词，用于概括该记忆的主要内容。"
+            "description": "Title or keyword summarizing the memory."
           },
           "memory_value": {
             "type": "string",
             "title": "Memory Value",
-            "description": "记忆的具体内容。"
+            "description": "Detailed content of the memory."
           },
           "memory_type": {
             "type": "string",
@@ -404,18 +408,18 @@
               "UserMemory"
             ],
             "title": "Memory Type",
-            "description": "WorkingMemory (工作记忆，临时存储的短期信息), LongTermMemory (长期记忆，持久保存的重要信息或事实), UserMemory (用户记忆，与特定用户相关的个性化信息)",
+            "description": "WorkingMemory: short-term working memory, temporarily stored.<br>LongTermMemory: long-term memory, important information or facts stored persistently.<br>UserMemory: user-specific memory, personalized information related to a specific user.",
             "example": "LongTermMemory"
           },
           "memory_time": {
             "type": "string",
             "title": "Memory Time",
-            "description": "记忆内容创建的时间，通常为 ISO 8601 格式。"
+            "description": "Creation time of the memory, usually in ISO 8601 format."
           },
           "conversation_id": {
             "type": "string",
             "title": "Conversation ID",
-            "description": "与该记忆关联的会话的唯一标识符。"
+            "description": "Unique identifier of the conversation associated with the memory."
           },
           "status": {
             "type": "string",
@@ -423,7 +427,7 @@
               "activated"
             ],
             "title": "Status",
-            "description": "记忆的状态，当前所有检索到的记忆都是 activated",
+            "description": "Memory status. All retrieved memories are currently activated.",
             "example": "activated"
           },
           "confidence": {
@@ -431,13 +435,13 @@
             "minimum": 0,
             "maximum": 1,
             "title": "Confidence",
-            "description": "记忆的置信度分数，范围 0~1，数值越接近 1 表示该记忆越准确可靠。置信度分数会随着模型对该记忆的推理次数增加而逐渐衰减，用于反映记忆随着时间或使用频率可能产生的不确定性。",
+            "description": "Confidence score of the memory, ranging from 0 to 1. Values closer to 1 indicate higher reliability. <br>The score may gradually decay over time or with repeated model reasoning to reflect uncertainty.",
             "example": 0.95
           },
           "tags": {
             "type": "array",
             "title": "Tags",
-            "description": "与记忆相关的标签列表，用于分类、检索或主题标记。数组中的每个元素都是string，例如 [\"人物\", \"事件\", \"工作\"]。",
+            "description": "List of tags associated with the memory for categorization or retrieval. Each element is a string, e.g., [\"person\", \"event\", \"work\"].",
             "items": {
               "type": "string"
             }
@@ -445,21 +449,22 @@
           "update_time": {
             "type": "string",
             "title": "Update Time",
-            "description": "记忆最后一次被修改或更新的时间，通常为 ISO 8601 格式。"
+            "description": "Last modification or update time of the memory, usually in ISO 8601 format."
           },
           "relativity": {
             "type": "number",
             "minimum": 0,
             "maximum": 1,
             "title": "Relativity",
-            "description": "查询内容与该记忆的相关性分数，范围 0~1，数值越接近 1 表示越相关。",
+            "description": "Relevance score of the memory to the query, ranging from 0 to 1. Higher values indicate stronger relevance.",
             "example": 0.87
           }
         },
-        "title": "MemoryDetail"
+        "title": "MemoryDetail",
+        "description": "List of memory fragment details returned. Each item includes:"
       },
       "title": "SearchMemoryResponseData",
-      "description": "消息添加结果对象。"
+      "description": "Object containing the query result."
     }
   }
 }

@@ -1,9 +1,9 @@
 ---
-title: 错误码查询
+title: Error Code
 ---
 
-| code码 | 含义 | 解决方法 |
+| Code | Meaning | Resolution |
 | --- | --- | --- |
-| 0 | 成功 |  |
-| 50000 | 系统错误 | 请稍后再试 |
-| 40000 | 参数错误 | 修改请求参数 |
+| 0 | Success |  |
+| 50000 | System error | Please try again later |
+| 40000 | Parameter error | Modify the request parameters |
