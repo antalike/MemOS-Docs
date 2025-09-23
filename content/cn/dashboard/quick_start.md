@@ -13,6 +13,8 @@ desc: 欢迎访问 MemOS 云平台，可参考本新手指南，快速接入�
 
 ## 2.核心记忆操作
 
+如果是使用Python SDK，需先执行```pip install MemoryOS -U```
+
 ### 2.1 添加原始对话（addMessage）
 
 只需要把`原始的对话记录`给到MemOS，MemOS 会<code style="font-weight: bold;">自动抽象加工并保存为记忆</code>**。**
@@ -48,9 +50,8 @@ url = f"{os.environ['MEMOS_BASE_URL']}/add/message"
 requests.post(url=url, headers=headers, data=json.dumps(data))
 ```
 ```python [Python (SDK)]
-# 先执行，pip install MemoryOS -U
-
-from memos.api import MemOSClient
+# # 请确保已安装MemoS (pip install MemoryOS -U)
+from memos.api.client import MemOSClient
 
 # 使用 API Key 初始化客户端
 client = MemOSClient(api_key=YOUR_API_KEY)
@@ -68,7 +69,7 @@ conversation_id = "memos_conversation_123"
 
 client.add(messages=messages, user_id=user_id, conversation_id=conversation_id)
 ```
-```bash [curl]
+```bash [Curl]
 curl --request POST \
   --url https://memos.memtensor.cn/api/openmem/v1/add/message \
   --header 'Authorization: Token YOUR_API_KEY' \
@@ -142,9 +143,8 @@ requests.post(url=url, headers=headers, data=json.dumps(data))
 
 ```
 ```python [Python (SDK)]
-# 先执行，pip install MemoryOS -U
-
-from memos.api import MemOSClient
+# 请确保已安装MemoS (pip install MemoryOS -U)
+from memos.api.client import MemOSClient
 
 # 使用 API Key 初始化客户端
 client = MemOSClient(api_key=YOUR_API_KEY)
@@ -219,13 +219,11 @@ curl --request POST \
     },
     "message": "ok"
 }
-# 未来可能输出的字段示例：
-# instruction:
-#   "任务：回答用户“国庆去哪玩好？”\n受众：全家出游（包含孩子与老人）\n要求：\n- 回答时显式考虑儿童与老人的出行需求\n- 目的地建议需与“家庭友好”一致\n备注：如关键信息不足（出发地/预算/行程天数），可由业务逻辑追加澄清策略"
-#
-# full_instruction:
-#   "你是一名旅游顾问。\n用户在规划旅行时总是全家一起出游（包括孩子和老人）。\n请直接回答“国庆去哪玩好？”，并优先推荐适合家庭出游的目的地。\n如果信息不足，请先提出澄清问题，再给出建议。"
 ```
+未来可能输出的字段示例：
+- instruction: "任务：回答用户“国庆去哪玩好？”\n受众：全家出游（包含孩子与老人）\n要求：\n- 回答时显式考虑儿童与老人的出行需求\n- 目的地建议需与“家庭友好”一致\n备注：如关键信息不足（出发地/预算/行程天数），可由业务逻辑追加澄清策略"
+- full_instruction:
+"你是一名旅游顾问。\n用户在规划旅行时总是全家一起出游（包括孩子和老人）。\n请直接回答“国庆去哪玩好？”，并优先推荐适合家庭出游的目的地。\n如果信息不足，请先提出澄清问题，再给出建议。"
 
 ### 2.3 获取原始对话（getMessage）
 
@@ -255,8 +253,8 @@ requests.post(url=url, headers=headers, data=json.dumps(data))
 
 ```
 ```python [Python (SDK)]
-# 先执行，pip install MemoryOS -U
-from memos.api import MemOSClient
+# 请确保已安装MemoS (pip install MemoryOS -U)
+from memos.api.client import MemOSClient
 
 # 使用 API Key 初始化客户端
 client = MemOSClient(api_key=YOUR_API_KEY)
