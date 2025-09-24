@@ -168,7 +168,7 @@
           "chat_time": {
             "type": "string",
             "title": "Chat Time",
-            "description": "消息创建的时间，结构化时间或者中文，不传则使用当前时间。"
+            "description": "对话发生的时间，可传入结构化时间或中文时间描述。传入该参数能够让记忆携带时间信息。"
           }
         },
         "title": "MessageInput"
