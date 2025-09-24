@@ -115,7 +115,8 @@ class WritingAssistant:
         self.memos_client = MemOSClient(api_key=os.getenv("MEMOS_API_KEY"))
         self.openai_client = OpenAI(api_key=os.getenv("OPEN_API_KEY"))
     
-    def search_memories(self, query, user_id, conversation_id):
+    def search_memory(self, query, user_id, conversation_id):
+        """Search relevant memories based on query"""
         response = self.memos_client.search(query, user_id, conversation_id)
         return [memory_detail.memory_value for memory_detail in response.data.memory_detail_list]
 
@@ -139,17 +140,19 @@ class WritingAssistant:
             return base_prompt
         
 
-    def add_messages(self, messages, user_id, conversation_id):
+    def add_message(self, messages, user_id, conversation_id):
+        """Add messages to MemOS so they can be processed into memories"""
         self.memos_client.add(messages, user_id, conversation_id)
 
-    def get_messages(self, user_id, conversation_id):
-        response = self.memos_client.get_messages(user_id, conversation_id)
+    def get_message(self, user_id, conversation_id):
+        """Retrieve the raw messages stored in MemOS (for debugging/inspection)"""
+        response = self.memos_client.get(user_id, conversation_id)
         return response.data.message_detail_list
 
     def chat(self, query, user_id, conversation_id):
         """Main chat function to handle dialogue with memory integration"""
         # 1. Search relevant memories
-        memories = self.search_memories(query, user_id, conversation_id)
+        memories = self.search_memory(query, user_id, conversation_id)
         
         # Build system prompt with memories
         system_prompt = self.build_system_prompt(memories)

@@ -118,7 +118,7 @@ class FinancialManagementAssistant:
         self.openai_client = OpenAI(api_key=os.getenv("OPEN_API_KEY"))
     
     def search_memory(self, query, user_id, conversation_id):
-        """根据查询搜索相关记忆"""
+        """查询相关记忆"""
         response = self.memos_client.search(query, user_id, conversation_id)
 
         return [memory_detail.memory_value for memory_detail in response.data.memory_detail_list]
@@ -144,9 +144,11 @@ class FinancialManagementAssistant:
         
 
     def add_message(self, messages, user_id, conversation_id):
+        """添加消息"""
         self.memos_client.add(messages, user_id, conversation_id)
 
     def get_message(self, user_id, conversation_id):
+        """获取消息"""
         response = self.memos_client.get(user_id, conversation_id)
         
         return response.data.message_detail_list

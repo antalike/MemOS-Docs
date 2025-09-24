@@ -117,7 +117,7 @@ class FinancialManagementAssistant:
         self.memos_client = MemOSClient(api_key=os.getenv("MEMOS_API_KEY"))
         self.openai_client = OpenAI(api_key=os.getenv("OPEN_API_KEY"))
     
-    def search_memories(self, query, user_id, conversation_id):
+    def search_memory(self, query, user_id, conversation_id):
         """Search relevant memories based on query"""
         response = self.memos_client.search(query, user_id, conversation_id)
 
@@ -143,13 +143,13 @@ class FinancialManagementAssistant:
             return base_prompt
         
 
-    def add_messages(self, messages, user_id, conversation_id):
+    def add_message(self, messages, user_id, conversation_id):
         """Add messages to MemOS so they can be processed into memories"""
         self.memos_client.add(messages, user_id, conversation_id)
 
-    def get_messages(self, user_id, conversation_id):
+    def get_message(self, user_id, conversation_id):
         """Retrieve the raw messages stored in MemOS (for debugging/inspection)"""
-        response = self.memos_client.get_messages(user_id, conversation_id)
+        response = self.memos_client.get(user_id, conversation_id)
         return response.data.message_detail_list
 
     def chat(self, query, user_id, conversation_id):

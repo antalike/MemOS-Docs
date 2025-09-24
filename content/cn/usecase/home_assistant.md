@@ -119,14 +119,17 @@ class HomeAssistant:
         self.openai_client = OpenAI(api_key=os.getenv("OPEN_API_KEY"))
     
     def search_memory(self, query, user_id, conversation_id):
+        """查询相关记忆"""
         response = self.memos_client.search(query, user_id, conversation_id)
 
         return [memory_detail.memory_value for memory_detail in response.data.memory_detail_list]
 
     def add_message(self, messages, user_id, conversation_id):
+        """添加消息"""
         self.memos_client.add(messages, user_id, conversation_id)
 
     def get_message(self, user_id, conversation_id):
+        """获取消息"""
         response = self.memos_client.get(user_id, conversation_id)
         
         return response.data.message_detail_list
@@ -212,7 +215,7 @@ def execute_pre_conversations():
         
         # 执行对话
         answer = ai_assistant.chat(conv['user'], user_id, conversation_id)
-        print(f"🤖 助手: {answer}")
+        print(f"🤖 [助手]: {answer}")
         print("-" * 40)
     
     print("\n✅ 预配置对话执行完毕！")
