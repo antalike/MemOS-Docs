@@ -328,6 +328,6 @@ my_tree_textual_memory.drop()
 - **了解更多[Neo4j](/open_source/modules/memories/neo4j_graph_db):** treeTextMemory由图数据库后端提供支持。了解Neo4j如何处理节点、边和遍历将帮助您设计更有效的记忆层次结构、多跳推理和上下文链接策略。
 - **添加 [Activation Memory](/open_source/modules/memories/kv_cache_memory):** 使用运行时KV-cache来测试会话状态。
 - **探索图推理:** 为多跳检索和答案合成构建工作流。
-- **更进一步:** 为高级应用检查 [API Reference](/api-reference/set-config-configure-post), 或者在 `examples/`运行更多的示例.
+- **更进一步:** 为高级应用检查 [API Reference](/api-reference/configure-memos), 或者在 `examples/`运行更多的示例.
 
 现在你的代理不仅能记住事实，还能记住它们之间的联系！
