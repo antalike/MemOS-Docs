@@ -237,7 +237,8 @@ def main():
             break
         else:
             print("⚠️  请输入 'y' 表示是或 'n' 表示否")
-    
+
+    print("\n⚡️ 接下来您输入的每一个问题，都将会在一个全新的会话中展开（新的 conversation id）。MemOS将会跨会话自动召回您的历史行为记忆，为您提供连续、个性化的服务。")    
     print("\n🎯 以下是一些示例问题，您可以继续跟助手对话:")
     for i, question in enumerate(demo_questions(), 1):
       print(f"  {i}. {question}")
