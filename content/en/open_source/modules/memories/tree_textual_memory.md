@@ -337,6 +337,6 @@ manually or auto-merge similar nodes!
   runtime KV-cache for session
   state.
 - **Explore Graph Reasoning:** Build workflows for multi-hop retrieval and answer synthesis.
-- **Go Deep:** Check the [API Reference](/api-reference/set-config-configure-post) for advanced usage, or run more examples in `examples/`.
+- **Go Deep:** Check the [API Reference](/api-reference/configure-memos) for advanced usage, or run more examples in `examples/`.
 
 Now your agent remembers not just facts — but the connections between them!

@@ -8,7 +8,7 @@ hero:
       trailingIcon: i-lucide-arrow-right
       to: /overview/introduction
     - label: API Reference
-      to: /api-reference/set-config-configure-post
+      to: /api-reference/configure-memos
       variant: outline
       color: neutral
       # trailingIcon: i-lucide-arrow-right

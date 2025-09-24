@@ -97,5 +97,5 @@ mos.load("tmp/my_mem_cube")
 请查看：
 
 * [核心概念](/open_source/home/core_concepts)
-* [API 参考](/api-reference/set-config-configure-post)
+* [API 参考](/api-reference/configure-memos)
 * [贡献指南](/open_source/contribution/overview)

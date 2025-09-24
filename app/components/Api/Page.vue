@@ -2,9 +2,9 @@
 import type { Collections } from '@nuxt/content'
 
 withDefaults(defineProps<{
-  data: Record<string, any>[]
+  data: FlatPathProps | undefined
   apiName?: keyof Collections
-  navigation?: Record<string, any>[]
+  navigation?: NavLink[] | undefined
 }>(), {
   apiName: 'openapi'
 })

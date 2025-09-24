@@ -21,7 +21,7 @@
       "post": {
         "summary": "Add Message",
         "description": "Add one or more messages to a specified conversation. Supports both user and assistant messages, with optional custom creation time.",
-        "operationId": "add_message_api_add_message_post",
+        "operationId": "add_message",
         "requestBody": {
           "required": true,
           "content": {
@@ -50,7 +50,7 @@
       "post": {
         "summary": "Get Message",
         "description": "Retrieve historical conversation records between a user and the assistant from a specified conversation. The number of results returned can be limited.",
-        "operationId": "get_message_api_get_message_get",
+        "operationId": "get_message",
         "requestBody": {
           "required": true,
           "content": {
@@ -79,7 +79,7 @@
       "post": {
         "summary": "Search Memory",
         "description": "Query the memories of a specified user and return the memory fragments most relevant to the query content.",
-        "operationId": "search_memory_api_search_memory_post",
+        "operationId": "search_memory",
         "requestBody": {
           "required": true,
           "content": {
