@@ -46,7 +46,7 @@ Suppose you are building an **online education assistant** with MemOS to help st
     
 
 ```json
-{"fact": "The student often confuses quadratic and linear functions", "confidence": 0.8, "timestamp": "2025-09-11"}
+{"value": "The student often confuses quadratic and linear functions", "confidence": 0.8, "timestamp": "2025-09-11"}
 ```
 
 *   Status: **Generated**
@@ -75,7 +75,7 @@ Suppose you are building an **online education assistant** with MemOS to help st
     
 
 ```json
-{"fact": "This student is confused about function concepts, especially linear, quadratic, and exponential functions", "confidence": 0.95}
+{"value": "This student is confused about function concepts, especially linear, quadratic, and exponential functions", "confidence": 0.95}
 ```
 
 *   Status: **Merged**
@@ -106,7 +106,7 @@ Suppose you are building an **online education assistant** with MemOS to help st
     
 
 ```json
-{"deleted_fact_id": "12345", "deleted_at": "2026-09-11"}
+{"deleted_memory_id": "12345", "deleted_at": "2026-09-11"}
 ```
 ---
 
