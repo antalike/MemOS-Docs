@@ -109,8 +109,12 @@ from memos.api.client import MemOSClient
 os.environ["MEMOS_API_KEY"] = "mpg-xx"
 os.environ["OPEN_API_KEY"] = "sk-xx"
 
+conversation_counter = 0
+
 def generate_conversation_id():
-    return f"{uuid.uuid4()}"
+    global conversation_counter
+    conversation_counter += 1
+    return f"conversation_{conversation_counter:03d}"
 
 class WritingAssistant:
     """AI写作助手，帮助用户写作，具备记忆能力"""
@@ -158,7 +162,7 @@ class WritingAssistant:
     def chat(self, query, user_id, conversation_id):
         """处理包含记忆集成的对话的主要聊天函数"""
         # 1. 搜索相关记忆
-        memories = self.search_memories(query, user_id, conversation_id)
+        memories = self.search_memory(query, user_id, conversation_id)
         
         # 构建包含记忆的系统提示
         system_prompt = self.build_system_prompt(memories)
@@ -184,7 +188,6 @@ class WritingAssistant:
 
 ai_assistant = WritingAssistant()
 user_id = "memos_writing_user_123"
-conversation_id = "memos_writing_conversation_123"
 
 def demo_questions():
     return [
@@ -206,8 +209,9 @@ def pre_configured_conversations():
 def execute_pre_conversations():
     """执行预配置的对话"""
     conversations = pre_configured_conversations()
+    conversation_id = generate_conversation_id()
     
-    print("\n🔄 正在执行预配置对话...")
+    print(f"\n🔄 正在执行预配置对话（conversation_id={conversation_id}...")
     print("=" * 60)
     
     for i, conv in enumerate(conversations, 1):

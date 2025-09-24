@@ -113,8 +113,12 @@ from memos.api.client import MemOSClient
 os.environ["MEMOS_API_KEY"] = "mpg-xx"
 os.environ["OPEN_API_KEY"] = "sk-xx"
 
+conversation_counter = 0
+
 def generate_conversation_id():
-    return f"{uuid.uuid4()}"
+    global conversation_counter
+    conversation_counter += 1
+    return f"conversation_{conversation_counter:03d}"
 
 class HomeAssistant:    
     def __init__(self):
@@ -186,7 +190,6 @@ class HomeAssistant:
 
 ai_assistant = HomeAssistant()
 user_id = "memos_home_management_user_123"
-conversation_id = "memos_home_management_conversation_123"
 
 def demo_questions():
     return [
@@ -207,9 +210,10 @@ def pre_configured_conversations():
 
 def execute_pre_conversations():
     """执行预配置的对话"""
+    conversation_id = generate_conversation_id()
     conversations = pre_configured_conversations()
     
-    print("\n🔄 正在执行预配置对话...")
+    print(f"\n🔄 正在执行预配置对话（conversation_id={conversation_id}）...")
     print("=" * 60)
     
     for i, conv in enumerate(conversations, 1):

@@ -111,8 +111,12 @@ from memos.api.client import MemOSClient
 os.environ["MEMOS_API_KEY"] = "mpg-xx"
 os.environ["OPEN_API_KEY"] = "sk-xx"
 
+conversation_counter = 0
+
 def generate_conversation_id():
-    return f"{uuid.uuid4()}"
+    global conversation_counter
+    conversation_counter += 1
+    return f"conversation_{conversation_counter:03d}"
 
 class FinancialManagementAssistant:
     """AI财务管理助手，具备记忆能力"""
@@ -189,15 +193,17 @@ user_id = "memos_financial_management_user_123"
 
 def demo_questions():
     return [
-      '我的风险偏好是什么'
+      '我的风险偏好是什么',
       "推荐一些适合我的投资"
     ]
 
 def preset_user_behaviors():
     """显示预设的用户行为记忆"""
     conversation_id = generate_conversation_id()
+    
     print(f"\n📊 已预设的用户行为记忆 (conversation_id={conversation_id}):")
     print("=" * 60)
+
     behaviors = [{
       "role": "user",
       "content": "点击「养老理财」广告进入 APP"
