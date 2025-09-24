@@ -111,8 +111,12 @@ from memos.api.client import MemOSClient
 os.environ["MEMOS_API_KEY"] = "mpg-xx"
 os.environ["OPEN_API_KEY"] = "sk-xx"
 
+conversation_counter = 0
+
 def generate_conversation_id():
-    return f"{uuid.uuid4()}"
+    global conversation_counter
+    conversation_counter += 1
+    return f"conversation_{conversation_counter:03d}"
 
 class FinancialManagementAssistant:
     """AI financial management assistant with memory capability"""
@@ -185,7 +189,6 @@ class FinancialManagementAssistant:
 
 ai_assistant = FinancialManagementAssistant()
 user_id = "memos_financial_management_user_123"
-conversation_id = "memos_financial_management_conversation_123"
 
 def demo_questions():
     return [
@@ -195,8 +198,10 @@ def demo_questions():
 
 def preset_user_behaviors():
     """Show preset user behavior memories"""
-    print("\n📊 Preset user behavior memories:")
+    conversation_id = generate_conversation_id()
+    print(f"\n📊 Preset user behavior memories（conversation_id={conversation_id}）:")
     print("=" * 60)
+
     behaviors = [{
       "role": "user",
       "content": "Clicked 'Retirement Finance' ad to enter app"

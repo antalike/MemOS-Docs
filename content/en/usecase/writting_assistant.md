@@ -109,8 +109,12 @@ from memos.api.client import MemOSClient
 os.environ["MEMOS_API_KEY"] = "mpg-xx"
 os.environ["OPEN_API_KEY"] = "sk-xx"
 
+conversation_counter = 0
+
 def generate_conversation_id():
-    return f"{uuid.uuid4()}"
+    global conversation_counter
+    conversation_counter += 1
+    return f"conversation_{conversation_counter:03d}"
 
 class WritingAssistant:
     """AI Writing Assistant, helps users write with memory capability"""
@@ -182,7 +186,6 @@ class WritingAssistant:
 
 ai_assistant = WritingAssistant()
 user_id = "memos_writing_user_123"
-conversation_id = "memos_writing_conversation_123"
 
 def demo_questions():
     return [
@@ -204,8 +207,9 @@ def pre_configured_conversations():
 def execute_pre_conversations():
     """Execute pre-configured dialogues"""
     conversations = pre_configured_conversations()
+    conversation_id = generate_conversation_id()
     
-    print("\n🔄 Executing pre-configured dialogues...")
+    print(f"\n🔄 Executing pre-configured dialogues（conversation_id={conversation_id}）...")
     print("=" * 60)
     
     for i, conv in enumerate(conversations, 1):
