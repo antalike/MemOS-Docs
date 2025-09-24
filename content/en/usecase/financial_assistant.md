@@ -206,7 +206,7 @@ def preset_user_behaviors():
     ai_assistant.add_messages(behaviors, user_id, conversation_id)
     
     print("=" * 60)
-    print("💡 The above behavior memories have been automatically loaded. The assistant will provide personalized recommendations based on them.")
+    print("💡 The above behavioral memories have been recorded by MemOS. The assistant will provide personalized recommendations based on them.")
 
 def main():
     print("💰 Welcome to see how MemOS is used in a financial management assistant!")
@@ -224,7 +224,8 @@ def main():
             break
         else:
             print("⚠️ Please enter 'y' for yes or 'n' for no")
-    
+
+    print("\n⚡️ Each question you enter next will take place in a brand-new conversation (with a new conversation ID). MemOS will automatically recall your historical behavioral memories across conversations to provide you with continuous and personalized service.")    
     print("\n🎯 Here are some example questions you can continue to ask the assistant:")
     for i, question in enumerate(demo_questions(), 1):
       print(f"  {i}. {question}")
