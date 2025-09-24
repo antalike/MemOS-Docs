@@ -1,5 +1,6 @@
 ---
 title: Limits
+desc: MemOS provides each developer with free quota to quickly experience and validate its memory capabilities.
 ---
 
 
@@ -46,7 +47,8 @@ You can view the remaining quota for each API through the **API Console**, with 
 
 To help developers quickly try and validate features while considering resource costs, each developer is provided a **limited free quota**. When usage exceeds the free quota, the system will block excess requests and provide a prompt, ensuring platform stability.
 
-If your business requires more calls, scan the Enterprise WeChat QR code below to contact customer support and obtain additional free quota.
+If you need more API calls, simply scan the QR code below with your personal WeChat app (no need to install WeCom/Enterprise WeChat) to reach our support team and receive extra free quota.
+Not using WeChat? Scan the Discord QR code in the Contact Us section below to join our channel and get additional quota.
 
 ![image.png](https://cdn.memtensor.com.cn/img/1758251897005_7xgrmm_compressed.png)
 
