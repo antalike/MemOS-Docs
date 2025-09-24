@@ -56,7 +56,10 @@ function handleLocaleSwitch() {
       </NuxtLink>
     </template>
 
-    <UNavigationMenu :items="localizedMenus" class="justify-center">
+    <UNavigationMenu
+      :items="localizedMenus"
+      class="justify-center"
+    >
       <template #item="{ item }">
         <div>{{ item.label }}</div>
       </template>
@@ -78,10 +81,15 @@ function handleLocaleSwitch() {
       </UButton>
 
       <UModal>
-        <UButton color="neutral" variant="ghost" icon="ri:wechat-fill" class="cursor-pointer"/>
+        <UButton
+          color="neutral"
+          variant="ghost"
+          icon="ri:wechat-fill"
+          class="cursor-pointer"
+        />
         <template #content>
           <img
-            src="https://statics.memtensor.com.cn/memos/contact-ui.png"
+            src="https://cdn.memtensor.com.cn/img/1758685658684_nbhka4_compressed.png"
             alt="WeChat QR"
             class="object-contain"
           >
@@ -98,13 +106,20 @@ function handleLocaleSwitch() {
     </template>
 
     <template #body>
-      <UNavigationMenu orientation="vertical" :items="localizedMenus" class="justify-center">
+      <UNavigationMenu
+        orientation="vertical"
+        :items="localizedMenus"
+        class="justify-center"
+      >
         <template #item="{ item }">
           <div>{{ item.label }}</div>
         </template>
       </UNavigationMenu>
 
-      <USeparator type="dashed" class="mt-4 mb-6" />
+      <USeparator
+        type="dashed"
+        class="mt-4 mb-6"
+      />
 
       <UContentNavigation
         highlight
