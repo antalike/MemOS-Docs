@@ -64,4 +64,4 @@ MemOS 支持以项目为维度管理资源、权限和调用日志。一个项�
 
 ## 5. 联系我们
 
-![image.png](https://statics.memtensor.com.cn/memos/contact-ui.png)
+![image.png](https://cdn.memtensor.com.cn/img/1758685658684_nbhka4_compressed.png)

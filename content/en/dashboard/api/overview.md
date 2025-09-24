@@ -63,4 +63,4 @@ Deleting a project will erase all memories, messages, and related data under tha
 
 ## 5. Contact Us
 
-![image.png](https://statics.memtensor.com.cn/memos/contact-ui.png)
+![image.png](https://cdn.memtensor.com.cn/img/1758685658684_nbhka4_compressed.png)
