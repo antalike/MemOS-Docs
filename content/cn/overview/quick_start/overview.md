@@ -129,7 +129,7 @@ results = resp.json()
 
 # 模式一：相关记忆（matches）
 print("相关记忆：", results["data"]["memoryDetailList"])
-# 示例输出：
+# 示例输出（为了方便理解此处做了简化，仅供参考）：
 # [
 #   {
 #     "memoryKey": "出行习惯",
