@@ -1,9 +1,14 @@
 <script setup lang="ts">
-const props = defineProps<{
-  apiData: any
-}>()
+import type { Collections } from '@nuxt/content'
 
-const { schemas } = useOpenApi()
+const props = withDefaults(defineProps<{
+  apiData: any
+  apiName?: keyof Collections
+}>(), {
+  apiName: 'openapi'
+})
+
+const { schemas, globalSecurity, server } = useOpenApi(props.apiName)
 
 const flattenResponses = computed(() => {
   const responses = props.apiData?.responses || {}
@@ -43,29 +48,43 @@ const flattenResponses = computed(() => {
     <ApiPath
       :path="apiData?.apiUrl"
       :method="apiData?.method"
+      :server="server"
     />
     <!-- Mobile/tablet: show the code panel inline above the body -->
     <div class="xl:hidden mt-6">
-      <ApiCodePanel :responses="flattenResponses" />
+      <ApiCodePanel
+        :responses="flattenResponses"
+        :api-name="apiName"
+      />
     </div>
 
     <div class="mdx-content relative mt-8 prose prose-gray dark:prose-invert">
+      <ApiAuthorizations
+        v-if="globalSecurity"
+        :api-name="apiName"
+      />
       <ApiParameter
         v-if="apiData?.parameters"
         :data="apiData.parameters"
+        :api-name="apiName"
       />
       <ApiRequestBody
         v-if="apiData?.requestBody"
         :data="apiData.requestBody"
+        :api-name="apiName"
       />
       <ApiResponse
         v-if="apiData?.responses"
         :data="flattenResponses"
+        :api-name="apiName"
       />
-      <ApiSurround />
+      <ApiSurround :api-name="apiName" />
     </div>
   </div>
   <div class="hidden xl:flex self-start sticky xl:flex-col max-w-[28rem] h-[calc(100vh-4rem)] top-[2.5rem]">
-    <ApiCodePanel :responses="flattenResponses" />
+    <ApiCodePanel
+      :responses="flattenResponses"
+      :api-name="apiName"
+    />
   </div>
 </template>

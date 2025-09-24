@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { Collections } from '@nuxt/content'
+
 interface ArrayItemType {
   $ref?: string
   anyOf?: { type?: string }[]
@@ -27,9 +29,12 @@ interface FlatResponse {
   data?: ResponseSchema
 }
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   data: FlatResponse[]
-}>()
+  apiName?: keyof Collections
+}>(), {
+  apiName: 'openapi'
+})
 
 const firstCode = props.data?.[0]?.statusCode ?? ''
 const currentCode = ref<string>(String(firstCode))
@@ -41,7 +46,7 @@ const selectedResponse = computed<FlatResponse | undefined>(() => {
 <template>
   <div class="api-section">
     <div class="flex flex-col gap-y-4 w-full">
-      <ApiSectionHeader title="Response">
+      <ApiSectionHeader :title="$t('api.response')">
         <template #right>
           <div class="flex items-center gap-4 font-mono px-2 py-0.5 text-xs font-medium text-gray-600 dark:text-gray-300">
             <USelect
@@ -84,19 +89,25 @@ const selectedResponse = computed<FlatResponse | undefined>(() => {
                 :required="selectedResponse?.data?.required?.includes(prop)"
                 :default-value="item.default"
                 :schema="item"
+                :api-name="apiName"
               />
               <div class="mt-4">
                 <ApiResponseSubItem
                   v-if="item.items"
                   :items="item.items"
+                  :api-name="apiName"
+                />
+                <ApiResponseSubItem
+                  v-else-if="item.$ref"
+                  :items="item"
+                  :api-name="apiName"
                 />
                 <template v-else>
                   <p
                     v-if="item.description"
                     class="whitespace-pre-line text-gray-400 text-sm"
-                  >
-                    {{ item.description }}
-                  </p>
+                    v-html="item.description"
+                  />
                   <div
                     v-if="item.example !== undefined && item.example !== null"
                     class="flex mt-6 gap-1.5 text-sm text-gray-400"

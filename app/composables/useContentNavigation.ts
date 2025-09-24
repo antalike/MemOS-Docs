@@ -62,7 +62,7 @@ const toContentNav = (node: RawNav, locale: string): ContentNavigationItem | nul
   }
 
   const stem = (childrenOrPath as string).replace(/\.md$/, '')
-  const isApiReference = stem.includes('api-reference')
+  const isApiReference = stem.includes('api-reference') || stem.includes('dashboard/api')
 
   return {
     title,
@@ -150,11 +150,9 @@ export const useSurroundWithDesc = async (
 
   const docs = await Promise.all(
     base.map((item) => {
-      if (env === 'dev' && item.path.startsWith('/cn')) {
-        return queryCollection('docs').path(`${item.path}`).first()
-      }
+      const docsPath = locale === 'cn' ? item.path : `/en${item.path}`
 
-      return queryCollection('docs').path(`/${locale}${item.path}`).first()
+      return queryCollection('docs').path(`${docsPath}`).first()
     })
   )
 

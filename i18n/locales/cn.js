@@ -18,5 +18,18 @@ export default {
     title: '更新日志',
     description: '所有值得注意的更新和改进都将记录在这里',
     releaseNotes: '发版说明'
+  },
+  dashboard: {
+    nav: {
+      apiReference: 'API 文档',
+      overview: '概览',
+      errorcode: '错误码'
+    }
+  },
+  api: {
+    body: '请求体',
+    response: '响应体',
+    showChildAttrs: '展示属性',
+    hideChildAttrs: '隐藏属性'
   }
 }

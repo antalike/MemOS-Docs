@@ -5,7 +5,6 @@ const route = useRoute()
 
 const { locale } = useI18n()
 const contentNavigation = useContentNavigation(locale)
-
 const { data: files } = useLazyAsyncData(`search`, () => queryCollectionSearchSections('docs'), {
   server: false,
   watch: [locale]
@@ -43,6 +42,8 @@ function isApiPage() {
     || route.path.startsWith('/cn/docs/api/')
     || route.path.startsWith('/api-reference')
     || route.path.startsWith('/cn/api-reference')
+    || route.path.startsWith('/dashboard/api')
+    || route.path.startsWith('/cn/dashboard/api')
 }
 
 provide('navigation', contentNavigation)

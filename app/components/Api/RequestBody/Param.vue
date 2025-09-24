@@ -1,14 +1,18 @@
 <script setup lang="ts">
 import { resolveSchemaRef } from '@/utils/openapi'
+import type { Collections } from '@nuxt/content'
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   prop: string
   param: { $ref: string } | PropertyProps | undefined
   required: string[] | undefined
   parentProp: string | undefined
-}>()
+  apiName?: keyof Collections
+}>(), {
+  apiName: 'openapi'
+})
 
-const { schemas } = useOpenApi()
+const { schemas } = useOpenApi(props.apiName)
 
 const computedParam = computed(() => {
   if (props.param?.$ref) {
@@ -37,6 +41,7 @@ function isRequired(list: string[] | undefined | null, prop: string) {
         :default-value="computedParam.default"
         :schema="computedParam"
         :required="isRequired(required, prop)"
+        :api-name="apiName"
       />
       <div class="mt-4">
         <p
@@ -49,6 +54,13 @@ function isRequired(list: string[] | undefined | null, prop: string) {
         <ApiRequestBodyArrayParam
           v-if="computedParam.anyOf?.length"
           :any-of="computedParam.anyOf"
+          :api-name="apiName"
+        />
+        <!-- Handle Items -->
+        <ApiRequestBodyArrayParam
+          v-if="computedParam.items"
+          :items="computedParam.items"
+          :api-name="apiName"
         />
         <ApiParameterExample :value="computedParam.example" />
       </div>
@@ -58,6 +70,7 @@ function isRequired(list: string[] | undefined | null, prop: string) {
             :properties="computedParam.properties"
             :required="computedParam.required"
             :parent-prop="prop"
+            :api-name="apiName"
           />
         </ApiCollapse>
       </template>

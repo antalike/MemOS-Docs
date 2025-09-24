@@ -1,6 +1,14 @@
 <script setup lang="ts">
+import type { Collections } from '@nuxt/content';
+
+const props = withDefaults(defineProps<{
+  apiName?: keyof Collections
+}>(), {
+  apiName: 'openapi'
+})
+
 const route = useRoute()
-const { paths, getCurrentRouteIndex } = useOpenApi()
+const { paths, getCurrentRouteIndex } = useOpenApi(props.apiName)
 
 const surround = computed(() => {
   const currentRouteIndex = getCurrentRouteIndex(route)

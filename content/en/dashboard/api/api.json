@@ -1,0 +1,470 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "MemOS Dashboard APIs",
+    "description": "Dashboard API for managing messages and searching memories in MemOS.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://memos.memtensor.cn/api/openmem/v1",
+      "description": "Production server"
+    }
+  ],
+  "security": [
+    {
+      "TokenAuth": []
+    }
+  ],
+  "paths": {
+    "/add/message": {
+      "post": {
+        "summary": "Add Message",
+        "description": "Add one or more messages to a specified conversation. Supports both user and assistant messages, with optional custom creation time.",
+        "operationId": "add_message",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddMessageRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddMessageResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/get/message": {
+      "post": {
+        "summary": "Get Message",
+        "description": "Retrieve historical conversation records between a user and the assistant from a specified conversation. The number of results returned can be limited.",
+        "operationId": "get_message",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetMessageRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetMessageResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/search/memory": {
+      "post": {
+        "summary": "Search Memory",
+        "description": "Query the memories of a specified user and return the memory fragments most relevant to the query content.",
+        "operationId": "search_memory",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchMemoryRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchMemoryResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "TokenAuth": {
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "header",
+        "description": "Token API_key, available in <a href=\"https://memos-dashboard.openmem.net/apikeys/\" class=\"text-primary border-b border-transparent hover:border-primary font-medium focus-visible:outline-primary [&amp;&gt;code]:border-dashed hover:[&amp;&gt;code]:border-primary hover:[&amp;&gt;code]:text-primary transition-colors [&amp;&gt;code]:transition-colors\" target=\"_blank\">API Console > API Keys</a>"
+      }
+    },
+    "schemas": {
+      "AddMessageRequest": {
+        "type": "object",
+        "required": [
+          "user_id",
+          "conversation_id",
+          "messages"
+        ],
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "title": "User ID",
+            "description": "Unique identifier of the user associated with the message."
+          },
+          "conversation_id": {
+            "type": "string",
+            "title": "Conversation ID",
+            "description": "Unique identifier of the conversation."
+          },
+          "messages": {
+            "type": "array",
+            "title": "Messages",
+            "description": "Array of message objects representing the memory content. Each object contains:",
+            "items": {
+              "$ref": "#/components/schemas/MessageInput"
+            }
+          }
+        },
+        "title": "AddMessageRequest"
+      },
+      "MessageInput": {
+        "type": "object",
+        "required": [
+          "role",
+          "content"
+        ],
+        "properties": {
+          "role": {
+            "type": "string",
+            "enum": [
+              "user",
+              "assistant"
+            ],
+            "title": "Role",
+            "description": "Sender role."
+          },
+          "content": {
+            "type": "string",
+            "title": "Content",
+            "description": "Content of the message."
+          },
+          "chat_time": {
+            "type": "string",
+            "title": "Chat Time",
+            "description": "Time of the conversation, as a structured timestamp or Chinese text. Allows memory to include time information."
+          }
+        },
+        "title": "MessageInput"
+      },
+      "AddMessageResponse": {
+        "type": "object",
+        "required": [
+          "code",
+          "message"
+        ],
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32",
+            "title": "Code",
+            "description": "API status code. See <a href=\"https://memos-dashboard.openmem.net/apikeys/\" class=\"text-primary border-b border-transparent hover:border-primary font-medium focus-visible:outline-primary [&amp;&gt;code]:border-dashed hover:[&amp;&gt;code]:border-primary hover:[&amp;&gt;code]:text-primary transition-colors [&amp;&gt;code]:transition-colors\">Error Code</a> for details",
+            "example": 0
+          },
+          "data": {
+            "$ref": "#/components/schemas/OpenMemAddMessageResponse"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "description": "API response message, e.g., \"Message added successfully\".",
+            "example": "ok"
+          }
+        },
+        "title": "AddMessageResponse"
+      },
+      "OpenMemAddMessageResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "title": "Success",
+            "description": "Indicates if the message was added successfully. true = success, false = failure.",
+            "example": true
+          }
+        },
+        "title": "OpenMemAddMessageResponse",
+        "description": "Object representing the result of adding the message."
+      },
+      "GetMessageRequest": {
+        "type": "object",
+        "required": [
+          "user_id",
+          "conversation_id"
+        ],
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "title": "User ID",
+            "description": "Unique identifier of the user associated with the messages being retrieved."
+          },
+          "conversation_id": {
+            "type": "string",
+            "title": "Conversation ID",
+            "description": "Unique identifier of the conversation associated with the messages."
+          },
+          "message_limit_number": {
+            "type": "integer",
+            "format": "int32",
+            "title": "Message Limit Number",
+            "description": "Limits the number of messages returned, controlling the length of the message list. Defaults to 6 if not provided.",
+            "default": 6
+          }
+        },
+        "title": "GetMessageRequest"
+      },
+      "GetMessageResponse": {
+        "type": "object",
+        "required": [
+          "code",
+          "message"
+        ],
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32",
+            "title": "Code",
+            "description": "API status code. See <a href=\"https://memos-dashboard.openmem.net/apikeys/\" class=\"text-primary border-b border-transparent hover:border-primary font-medium focus-visible:outline-primary [&amp;&gt;code]:border-dashed hover:[&amp;&gt;code]:border-primary hover:[&amp;&gt;code]:text-primary transition-colors [&amp;&gt;code]:transition-colors\">Error Code</a> for details.",
+            "example": 0
+          },
+          "data": {
+            "$ref": "#/components/schemas/GetMessageResponseData"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "description": "API response message."
+          }
+        },
+        "title": "GetMessageResponse"
+      },
+      "GetMessageResponseData": {
+        "type": "object",
+        "properties": {
+          "message_detail_list": {
+            "type": "array",
+            "title": "Message Detail List",
+            "description": "List of retrieved message details. Each item includes:",
+            "items": {
+              "$ref": "#/components/schemas/MessageDetail"
+            }
+          }
+        },
+        "title": "GetMessageResponseData",
+        "description": "Object containing the retrieved messages."
+      },
+      "MessageDetail": {
+        "type": "object",
+        "properties": {
+          "role": {
+            "type": "string",
+            "enum": [
+              "user",
+              "assistant"
+            ],
+            "title": "Role",
+            "description": "Role of the message sender.",
+            "example": "user"
+          },
+          "content": {
+            "type": "string",
+            "title": "Content",
+            "description": "Text content of the message."
+          },
+          "create_time": {
+            "type": "string",
+            "title": "Create Time",
+            "description": "Creation time of the message."
+          },
+          "update_time": {
+            "type": "string",
+            "title": "Update Time",
+            "description": "Last update time of the message."
+          }
+        },
+        "title": "MessageDetail",
+        "description": "List of retrieved message details. Each item includes:"
+      },
+      "SearchMemoryRequest": {
+        "type": "object",
+        "required": [
+          "user_id",
+          "query"
+        ],
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "title": "User ID",
+            "description": "Unique identifier of the user associated with the memory being queried."
+          },
+          "conversation_id": {
+            "type": "string",
+            "title": "Conversation ID",
+            "description": "Unique identifier of the conversation containing the memory. Providing this ensures the current conversation’s memories have higher priority over other historical."
+          },
+          "query": {
+            "type": "string",
+            "title": "Query",
+            "description": "Text content to search within the memories."
+          },
+          "memory_limit_number": {
+            "type": "integer",
+            "format": "int32",
+            "title": "Memory Limit Number",
+            "description": "Limits the number of memory items returned, controlling the length of memory fragments. Defaults to 6 if not provided.",
+            "default": 6
+          }
+        },
+        "title": "SearchMemoryRequest"
+      },
+      "SearchMemoryResponse": {
+        "type": "object",
+        "required": [
+          "code",
+          "message"
+        ],
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32",
+            "title": "Code",
+            "description": "API status code. See <a href=\"/dashboard/api/error_code\" class=\"text-primary border-b border-transparent hover:border-primary font-medium focus-visible:outline-primary [&amp;&gt;code]:border-dashed hover:[&amp;&gt;code]:border-primary hover:[&amp;&gt;code]:text-primary transition-colors [&amp;&gt;code]:transition-colors\">Error Code</a> for details.",
+            "example": 0
+          },
+          "data": {
+            "$ref": "#/components/schemas/SearchMemoryResponseData"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "description": "API response message."
+          }
+        },
+        "title": "SearchMemoryResponse"
+      },
+      "SearchMemoryResponseData": {
+        "type": "object",
+        "properties": {
+          "memory_detail_list": {
+            "type": "array",
+            "title": "Memory Detail List",
+            "description": "List of memory fragment details returned. Each item includes:",
+            "items": {
+              "$ref": "#/components/schemas/MemoryDetail"
+            }
+          }
+        },
+        "description": "Object containing the query result."
+      },
+      "MemoryDetail": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "ID",
+            "description": "Unique identifier of the memory, used internally by the system."
+          },
+          "memory_key": {
+            "type": "string",
+            "title": "Memory Key",
+            "description": "Title or keyword summarizing the memory."
+          },
+          "memory_value": {
+            "type": "string",
+            "title": "Memory Value",
+            "description": "Detailed content of the memory."
+          },
+          "memory_type": {
+            "type": "string",
+            "enum": [
+              "WorkingMemory",
+              "LongTermMemory",
+              "UserMemory"
+            ],
+            "title": "Memory Type",
+            "description": "WorkingMemory: short-term working memory, temporarily stored.<br>LongTermMemory: long-term memory, important information or facts stored persistently.<br>UserMemory: user-specific memory, personalized information related to a specific user.",
+            "example": "LongTermMemory"
+          },
+          "memory_time": {
+            "type": "string",
+            "title": "Memory Time",
+            "description": "Creation time of the memory, usually in ISO 8601 format."
+          },
+          "conversation_id": {
+            "type": "string",
+            "title": "Conversation ID",
+            "description": "Unique identifier of the conversation associated with the memory."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "activated"
+            ],
+            "title": "Status",
+            "description": "Memory status. All retrieved memories are currently activated.",
+            "example": "activated"
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "title": "Confidence",
+            "description": "Confidence score of the memory, ranging from 0 to 1. Values closer to 1 indicate higher reliability. <br>The score may gradually decay over time or with repeated model reasoning to reflect uncertainty.",
+            "example": 0.95
+          },
+          "tags": {
+            "type": "array",
+            "title": "Tags",
+            "description": "List of tags associated with the memory for categorization or retrieval. Each element is a string, e.g., [\"person\", \"event\", \"work\"].",
+            "items": {
+              "type": "string"
+            }
+          },
+          "update_time": {
+            "type": "string",
+            "title": "Update Time",
+            "description": "Last modification or update time of the memory, usually in ISO 8601 format."
+          },
+          "relativity": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "title": "Relativity",
+            "description": "Relevance score of the memory to the query, ranging from 0 to 1. Higher values indicate stronger relevance.",
+            "example": 0.87
+          }
+        },
+        "title": "MemoryDetail",
+        "description": "List of memory fragment details returned. Each item includes:"
+      },
+      "title": "SearchMemoryResponseData",
+      "description": "Object containing the query result."
+    }
+  }
+}

@@ -1,10 +1,20 @@
 <script setup lang="ts">
-const { getOpenApi, getApiByRoute } = useOpenApi()
+useHead({
+  title: 'API Reference'
+})
+
+const { t, locale } = useI18n()
+const { getOpenApi, getApiByRoute, apiNavData } = useOpenApi()
 await getOpenApi()
 
 const route = useRoute()
 const apiData = computed(() => getApiByRoute(route))
-const { t, locale } = useI18n()
+const navigation = computed(() => [
+  {
+    title: t('dashboard.nav.apiReference'),
+    children: apiNavData.value
+  }
+])
 
 const homePath = computed(() => {
   return getHomePath('/', locale.value)
@@ -17,15 +27,11 @@ const localizedMenus = computed(() => {
       label: t('header.home')
     },
     {
-      to: getLangPath('/home/overview', locale.value),
+      to: getLangPath('/open_source/home/overview', locale.value),
       label: t('header.docs'),
       active: !route.path.includes('/changelog')
     }
   ]
-})
-
-useHead({
-  title: 'API Reference'
 })
 </script>
 
@@ -51,7 +57,10 @@ useHead({
         type="dashed"
         class="mt-4 mb-6"
       />
-      <ApiNavigation class="pb-6" />
+      <ApiNavigation
+        class="pb-6"
+        :navigation="navigation"
+      />
     </template>
   </UHeader>
   <div class="flex">
@@ -60,7 +69,10 @@ useHead({
         <NuxtLink>
           <LogoPro class="w-auto h-6 shrink-0" />
         </NuxtLink>
-        <ApiNavigation class="mt-6" />
+        <ApiNavigation
+          class="mt-6"
+          :navigation="navigation"
+        />
       </div>
     </div>
     <div class="relative w-full lg:ml-[19rem] flex gap-x-8 min-h-screen pt-10 px-4 lg:pt-10 lg:pl-16 lg:pr-10">

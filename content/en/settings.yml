@@ -2,64 +2,83 @@ nav:
   # You can include icons using the syntax `(ri:icon-name)`.
   # The frontend will render these as actual icons.
   # You can find available icons at https://icones.js.org/
+  - "(ri:book-line) Overview":
+    - "(ri:home-line) Introduction": overview/introduction.md
+    - "(ri:rocket-line) Quick Start":
+      - "(ri:eye-line) Overview": overview/quick_start/overview.md
+      - "(ri:add-line) Memory Production": overview/quick_start/mem_production.md
+      - "(ri:calendar-line) Memory Schedule": overview/quick_start/mem_schedule.md
+      - "(ri:search-line) Memory Recall and Instruction Completion": overview/quick_start/mem_recall.md
+      - "(ri:refresh-line) Memory Lifecycle": overview/quick_start/mem_lifecycle.md
+    - "(ri:question-line) FAQs": overview/faq.md
+    - "(ri:cpu-line) Algorithm Overview": overview/algorithm.md
 
-  - "(ri:home-line) Home":
-    - "(ri:eye-line) Overview": home/overview.md
-    - "(ri:information-line) What Is MemOS?": home/memos_intro.md
-    - "(ri:lightbulb-line) Core Concepts": home/core_concepts.md
-    - "(ri:building-2-line) Architecture": home/architecture.md
+  - "(ri:dashboard-line) Cloud platform":
+    - "(ri:eye-line) Introduction": dashboard/overview.md
+    - "(ri:play-line) Quick Start": dashboard/quick_start.md
+    - "(ri:shield-line) Limitations and Quotas": dashboard/limit.md
+    - "(ri:file-code-line) API Reference": dashboard/api/overview.md
 
-  - "(ri:rocket-line) Getting Started":
-    - "(ri:install-line) Installation": getting_started/installation.md
-    - "(ri:play-line) Quick Start": getting_started/quick_start.md
-    - "(ri:bookmark-line) Your First Memory": getting_started/your_first_memory.md
-    - "(ri:file-code-line) REST API Server": getting_started/rest_api_server.md
-    - "(ri:code-line) Examples": getting_started/examples.md
+  - "(ri:lightbulb-line) Use Cases":
+    - "(ri:money-dollar-circle-line) Financial Assistant": usecase/financial_assistant.md
+    - "(ri:heart-line) Life Assistant": usecase/home_assistant.md
+    - "(ri:edit-line) Writing Assistant": usecase/writting_assistant.md
 
-  - "(ri:cpu-line) MOS":
-    - "(ri:eye-line) Overview": modules/mos/overview.md
-    - "(ri:book-open-line) MemOS NEO": modules/mos/memos_neo.md
-    - "(ri:tools-line) MemOS MCP": modules/mos/memos_mcp.md
-    - "(ri:team-line) Users": modules/mos/users.md
-    - "(ri:settings-3-line) Users Configurations": modules/mos/users_configurations.md
-    - "(ri:checkbox-multiple-blank-line) MemCube": modules/mem_cube.md
-    - "(ri:book-open-line) MemReader": modules/mem_reader.md
-    - "(ri:calendar-line) MemScheduler": modules/mem_scheduler.md
-    - "(ri:robot-2-line) LLMs and Embeddings": modules/model_backend.md
 
-  - "(ri:brain-line) Memories":
-    - "(ri:database-2-line) KV Cache Memory": modules/memories/kv_cache_memory.md
-    - "(ri:book-2-line) Plaintext Memory":
-      - "(ri:file-text-line) General Textual Memory": modules/memories/general_textual_memory.md
-      - "(ri:tree-line) Tree Textual Memory": modules/memories/tree_textual_memory.md
-      - "(ri:database-line) Neo4j Graph Database": modules/memories/neo4j_graph_db.md
-      - "(ri:database-line) Nebula Graph Database": modules/memories/nebula_graph_db.md
-    - "(ri:cpu-line) Parametric Memory": modules/memories/parametric_memory.md
+  - "(ri:open-source-line) Open Source":
+    - "(ri:rocket-line) Getting Started":
+      - "(ri:install-line) Installation": open_source/getting_started/installation.md
+      - "(ri:play-line) Quick Start": open_source/getting_started/quick_start.md
+      - "(ri:bookmark-line) Your First Memory": open_source/getting_started/your_first_memory.md
+      - "(ri:lightbulb-line) Core Concepts": open_source/home/core_concepts.md
+      - "(ri:building-2-line) Architecture": open_source/home/architecture.md
+      - "(ri:file-code-line) REST API Server": open_source/getting_started/rest_api_server.md
+      - "(ri:code-line) Examples": open_source/getting_started/examples.md
 
-  - "(ri:history-line) Scenario Examples":
-    - "(ri:database-2-line) Overview": cookbook/overview.md
-    - "(ri:seedling-line) Chapter 1: Your First MemCube":
-      - "(ri:cloud-line) API": cookbook/chapter1/api.md
-      - "(ri:node-tree) OLLAMA": cookbook/chapter1/ollama.md
-    - "(ri:database-2-line) Chapter 2: TreeNodeTextualMemoryMetadata": 
-      - "(ri:cloud-line) API": cookbook/chapter2/api.md
-      - "(ri:node-tree) OLLAMA": cookbook/chapter2/ollama.md
-    - "(ri:search-2-line) Chapter 3: Intelligent Novel Analysis System": cookbook/chapter3/overview.md
-    - "(ri:graduation-cap-line) Chapter 4: Using MemOS to Build a Production-Grade Knowledge Q&A System": cookbook/chapter4/overview.md
+    - "(ri:cpu-line) MOS":
+      - "(ri:eye-line) Overview": open_source/modules/mos/overview.md
+      - "(ri:book-open-line) MemOS NEO": open_source/modules/mos/memos_neo.md
+      - "(ri:tools-line) MemOS MCP": open_source/modules/mos/memos_mcp.md
+      - "(ri:team-line) Users": open_source/modules/mos/users.md
+      - "(ri:settings-3-line) Users Configurations": open_source/modules/mos/users_configurations.md
+      - "(ri:checkbox-multiple-blank-line) MemCube": open_source/modules/mem_cube.md
+      - "(ri:book-open-line) MemReader": open_source/modules/mem_reader.md
+      - "(ri:calendar-line) MemScheduler": open_source/modules/mem_scheduler.md
+      - "(ri:robot-2-line) LLMs and Embeddings": open_source/modules/model_backend.md
 
-  - "(ri:star-line) Best Practice":
-    - "(ri:speed-line) Performance Tuning": best_practice/performance_tuning.md
-    - "(ri:building-3-line) Memory Structure Design": best_practice/memory_structure_design.md
-    - "(ri:wifi-line) Network Workarounds": best_practice/network_workarounds.md
-    - "(ri:error-warning-line) Common Errors & Solutions": best_practice/common_errors_solutions.md
-    - "(ri:tools-line) MCP for Coze Space and Tools": best_practice/mcp_for_cozespace_and_tools.md
+    - "(ri:brain-line) Memories":
+      - "(ri:database-2-line) KV Cache Memory": open_source/modules/memories/kv_cache_memory.md
+      - "(ri:book-2-line) Plaintext Memory":
+        - "(ri:file-text-line) General Textual Memory": open_source/modules/memories/general_textual_memory.md
+        - "(ri:tree-line) Tree Textual Memory": open_source/modules/memories/tree_textual_memory.md
+        - "(ri:database-line) Neo4j Graph Database": open_source/modules/memories/neo4j_graph_db.md
+        - "(ri:database-line) Nebula Graph Database": open_source/modules/memories/nebula_graph_db.md
+      - "(ri:cpu-line) Parametric Memory": open_source/modules/memories/parametric_memory.md
 
-  - "(ri:heart-line) Contribution":
-    - "(ri:eye-line) Overview": contribution/overview.md
-    - "(ri:tools-line) Setting Up": contribution/setting_up.md
-    - "(ri:git-branch-line) Development Workflow": contribution/development_workflow.md
-    - "(ri:git-commit-line) Commit Guidelines": contribution/commit_guidelines.md
-    - "(ri:article-line) Writing Docs": contribution/writing_docs.md
-    - "(ri:flask-line) Writing Tests": contribution/writing_tests.md
+    - "(ri:history-line) Scenario Examples":
+      - "(ri:database-2-line) Overview": open_source/cookbook/overview.md
+      - "(ri:seedling-line) Chapter 1: Your First MemCube":
+        - "(ri:cloud-line) API": open_source/cookbook/chapter1/api.md
+        - "(ri:node-tree) OLLAMA": open_source/cookbook/chapter1/ollama.md
+      - "(ri:database-2-line) Chapter 2: TreeNodeTextualMemoryMetadata":
+        - "(ri:cloud-line) API": open_source/cookbook/chapter2/api.md
+        - "(ri:node-tree) OLLAMA": open_source/cookbook/chapter2/ollama.md
+      - "(ri:search-2-line) Chapter 3: Intelligent Novel Analysis System": open_source/cookbook/chapter3/overview.md
+      - "(ri:graduation-cap-line) Chapter 4: Using MemOS to Build a Production-Grade Knowledge Q&A System": open_source/cookbook/chapter4/overview.md
 
-  - "(ri:file-code-line) API Reference": api-reference/configure-memos
+    - "(ri:star-line) Best Practice":
+      - "(ri:speed-line) Performance Tuning": open_source/best_practice/performance_tuning.md
+      - "(ri:building-3-line) Memory Structure Design": open_source/best_practice/memory_structure_design.md
+      - "(ri:wifi-line) Network Workarounds": open_source/best_practice/network_workarounds.md
+      - "(ri:error-warning-line) Common Errors & Solutions": open_source/best_practice/common_errors_solutions.md
+      - "(ri:tools-line) MCP for Coze Space and Tools": open_source/best_practice/mcp_for_cozespace_and_tools.md
+
+    - "(ri:heart-line) Contribution":
+      - "(ri:eye-line) Overview": open_source/contribution/overview.md
+      - "(ri:tools-line) Setting Up": open_source/contribution/setting_up.md
+      - "(ri:git-branch-line) Development Workflow": open_source/contribution/development_workflow.md
+      - "(ri:git-commit-line) Commit Guidelines": open_source/contribution/commit_guidelines.md
+      - "(ri:article-line) Writing Docs": open_source/contribution/writing_docs.md
+      - "(ri:flask-line) Writing Tests": open_source/contribution/writing_tests.md
+
+    - "(ri:file-code-line) API Reference": api-reference/configure-memos

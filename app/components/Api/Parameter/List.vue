@@ -5,6 +5,10 @@ defineProps<{
   title: string
   data: ParametersProp[]
 }>()
+
+defineOptions({
+  inheritAttrs: false
+})
 </script>
 
 <template>
@@ -17,6 +21,7 @@ defineProps<{
       <div class="border-gray-100 dark:border-gray-800 border-b last:border-b-0">
         <div class="py-6">
           <ApiParameterLine
+            v-bind="$attrs"
             :name="param.name"
             :required="param.required"
             :schema="param.schema"

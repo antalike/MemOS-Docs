@@ -1,3 +1,5 @@
+import type { Collections } from '@nuxt/content'
+
 type MethodType = 'post' | 'get' | 'delete' | 'put'
 
 // Parameter information
@@ -67,6 +69,20 @@ export interface FlatPathProps extends PathProps {
   routePath: string
 }
 
+export interface SecurityProps {
+  type: 'apiKey' | 'http' | 'oauth2' | 'openIdConnect'
+  name: string
+  in?: 'query' | 'header' | 'cookie'
+  description?: string
+}
+
+export type NavLink = {
+  title: string
+  path?: string
+  method?: 'get' | 'post' | 'put' | 'delete'
+  children?: NavLink[]
+}
+
 // Resolve schema $ref
 export function resolveSchemaRef(
   ref: string | undefined | null,
@@ -79,17 +95,23 @@ export function resolveSchemaRef(
 }
 
 // Flatten OpenAPI paths
-export function flattenPaths(paths: Record<string, PathsProps>) {
+export function flattenPaths(
+  paths: Record<string, PathsProps>,
+  parentPath?: string,
+  collectionName?: keyof Collections
+) {
   const results: FlatPathProps[] = []
 
   Object.entries(paths).forEach(([apiUrl, methods]) => {
     Object.entries(methods).forEach(([method, operation]) => {
-      const routePath = operation.summary.split(' ').map(s => s.toLowerCase()).join('-')
+      const path = collectionName === 'openapi' ? operation.summary : operation.operationId
+      const separator = collectionName === 'openapi' ? ' ' : '_'
+      const routePath = path.split(separator).map(s => s.toLowerCase()).join('-')
 
       results.push({
         apiUrl,
         method: method as MethodType,
-        routePath: `/api-reference/${routePath}`,
+        routePath: `/${parentPath}/${routePath}`,
         ...operation
       })
     })

@@ -2,64 +2,82 @@ nav:
   # You can include icons using the syntax `(ri:icon-name)`.
   # The frontend will render these as actual icons.
   # You can find available icons at https://icones.js.org/
+  - "(ri:book-line) 概览":
+    - "(ri:home-line) MemOS简介": overview/introduction.md
+    - "(ri:rocket-line) 快速开始":
+      - "(ri:eye-line) 概览": overview/quick_start/overview.md
+      - "(ri:add-line) 记忆生产": overview/quick_start/mem_production.md
+      - "(ri:calendar-line) 记忆调度": overview/quick_start/mem_schedule.md
+      - "(ri:search-line) 记忆召回和指令补全": overview/quick_start/mem_recall.md
+      - "(ri:refresh-line) 记忆生命周期管理": overview/quick_start/mem_lifecycle.md
+    - "(ri:question-line) FAQs": overview/faq.md
+    - "(ri:cpu-line) MemOS算法原理概述": overview/algorithm.md
 
-  - "(ri:home-line) 首页":
-    - "(ri:eye-line) 概览": home/overview.md
-    - "(ri:information-line) 什么是 MemOS？": home/memos_intro.md
-    - "(ri:lightbulb-line) 核心概念": home/core_concepts.md
-    - "(ri:building-2-line) 架构设计": home/architecture.md
+  - "(ri:dashboard-line) 云平台":
+    - "(ri:eye-line) 云平台简介": dashboard/overview.md
+    - "(ri:play-line) 快速开始": dashboard/quick_start.md
+    - "(ri:shield-line) 配额和限制": dashboard/limit.md
+    - "(ri:file-code-line) API 文档": dashboard/api/overview.md
 
-  - "(ri:rocket-line) 快速入门":
-    - "(ri:install-line) 安装指南": getting_started/installation.md
-    - "(ri:play-line) 快速启动": getting_started/quick_start.md
-    - "(ri:bookmark-line) 创建你的第一个记忆": getting_started/your_first_memory.md
-    - "(ri:file-code-line) REST API 服务": getting_started/rest_api_server.md
-    - "(ri:code-line) 示例": getting_started/examples.md
+  - "(ri:lightbulb-line) 最佳实践":
+    - "(ri:money-dollar-circle-line) 让理财助手读懂客户行为背后的偏好": usecase/financial_assistant.md
+    - "(ri:edit-line) 有记忆的写作助手更好用": usecase/writting_assistant.md
+    - "(ri:heart-line) 构建拥有记忆的家庭生活助手": usecase/home_assistant.md
 
-  - "(ri:cpu-line) MOS":
-    - "(ri:eye-line) 概览": modules/mos/overview.md
-    - "(ri:book-open-line) 简化版本": modules/mos/memos_neo.md
-    - "(ri:tools-line) MCP服务": modules/mos/memos_mcp.md
-    - "(ri:team-line) 用户管理": modules/mos/users.md
-    - "(ri:settings-3-line) 用户配置": modules/mos/users_configurations.md
-    - "(ri:checkbox-multiple-blank-line) 记忆立方": modules/mem_cube.md
-    - "(ri:book-open-line) 记忆读取": modules/mem_reader.md
-    - "(ri:calendar-line) 记忆调度": modules/mem_scheduler.md
-    - "(ri:robot-2-line) 大模型与Embedding调用": modules/model_backend.md
+  - "(ri:open-source-line) 开源项目":
+    - "(ri:rocket-line) 快速入门":
+      - "(ri:install-line) 安装指南": open_source/getting_started/installation.md
+      - "(ri:play-line) 快速启动": open_source/getting_started/quick_start.md
+      - "(ri:bookmark-line) 创建你的第一个记忆": open_source/getting_started/your_first_memory.md
+      - "(ri:lightbulb-line) 核心概念": open_source/home/core_concepts.md
+      - "(ri:building-2-line) 架构设计": open_source/home/architecture.md
+      - "(ri:file-code-line) REST API 服务": open_source/getting_started/rest_api_server.md
+      - "(ri:code-line) 示例": open_source/getting_started/examples.md
 
-  - "(ri:brain-line) 记忆系统":
-    - "(ri:database-2-line) KV cache 记忆": modules/memories/kv_cache_memory.md
-    - "(ri:book-2-line) 明文记忆":
-      - "(ri:file-text-line) 通用明文记忆": modules/memories/general_textual_memory.md
-      - "(ri:tree-line) 树形明文记忆": modules/memories/tree_textual_memory.md
-      - "(ri:database-line) Neo4j 图数据库": modules/memories/neo4j_graph_db.md
-      - "(ri:database-line) Nebula 图数据库": modules/memories/nebula_graph_db.md
-    - "(ri:cpu-line) 参数记忆": modules/memories/parametric_memory.md
+    - "(ri:cpu-line) MOS":
+      - "(ri:eye-line) 概览": open_source/modules/mos/overview.md
+      - "(ri:book-open-line) 简化版本": open_source/modules/mos/memos_neo.md
+      - "(ri:tools-line) MCP服务": open_source/modules/mos/memos_mcp.md
+      - "(ri:team-line) 用户管理": open_source/modules/mos/users.md
+      - "(ri:settings-3-line) 用户配置": open_source/modules/mos/users_configurations.md
+      - "(ri:checkbox-multiple-blank-line) 记忆立方": open_source/modules/mem_cube.md
+      - "(ri:book-open-line) 记忆读取": open_source/modules/mem_reader.md
+      - "(ri:calendar-line) 记忆调度": open_source/modules/mem_scheduler.md
+      - "(ri:robot-2-line) 大模型与Embedding调用": open_source/modules/model_backend.md
 
-  - "(ri:history-line) 场景案例":
-    - "(ri:database-2-line) 概览": cookbook/overview.md
-    - "(ri:seedling-line) 第一章 你的第一个 MemCube":
-      - "(ri:cloud-line) API": cookbook/chapter1/api.md
-      - "(ri:node-tree) OLLAMA": cookbook/chapter1/ollama.md
-    - "(ri:database-2-line) 第二章 TreeNodeTextualMemoryMetadata": 
-      - "(ri:cloud-line) API": cookbook/chapter2/api.md
-      - "(ri:node-tree) OLLAMA": cookbook/chapter2/ollama.md
-    - "(ri:search-2-line) 第三章 智能小说分析系统": cookbook/chapter3/overview.md
-    - "(ri:graduation-cap-line) 第四章 使用 MemOS 构建生产级知识问答系统": cookbook/chapter4/overview.md
+    - "(ri:brain-line) 记忆系统":
+      - "(ri:database-2-line) KV cache 记忆": open_source/modules/memories/kv_cache_memory.md
+      - "(ri:book-2-line) 明文记忆":
+        - "(ri:file-text-line) 通用明文记忆": open_source/modules/memories/general_textual_memory.md
+        - "(ri:tree-line) 树形明文记忆": open_source/modules/memories/tree_textual_memory.md
+        - "(ri:database-line) Neo4j 图数据库": open_source/modules/memories/neo4j_graph_db.md
+        - "(ri:database-line) Nebula 图数据库": open_source/modules/memories/nebula_graph_db.md
+      - "(ri:cpu-line) 参数记忆": open_source/modules/memories/parametric_memory.md
 
-  - "(ri:star-line) 最佳实践":
-    - "(ri:speed-line) 性能调优": best_practice/performance_tuning.md
-    - "(ri:building-3-line) 记忆结构设计": best_practice/memory_structure_design.md
-    - "(ri:wifi-line) 网络环境适配": best_practice/network_workarounds.md
-    - "(ri:error-warning-line) 常见错误与解决方案": best_practice/common_errors_solutions.md
-    - "(ri:tools-line) Coze空间配置Memos的MCP": best_practice/mcp_for_cozespace_and_tools.md
+    - "(ri:history-line) 场景案例":
+      - "(ri:database-2-line) 概览": open_source/cookbook/overview.md
+      - "(ri:seedling-line) 第一章 你的第一个 MemCube":
+        - "(ri:cloud-line) API": open_source/cookbook/chapter1/api.md
+        - "(ri:node-tree) OLLAMA": open_source/cookbook/chapter1/ollama.md
+      - "(ri:database-2-line) 第二章 TreeNodeTextualMemoryMetadata":
+        - "(ri:cloud-line) API": open_source/cookbook/chapter2/api.md
+        - "(ri:node-tree) OLLAMA": open_source/cookbook/chapter2/ollama.md
+      - "(ri:search-2-line) 第三章 智能小说分析系统": open_source/cookbook/chapter3/overview.md
+      - "(ri:graduation-cap-line) 第四章 使用 MemOS 构建生产级知识问答系统": open_source/cookbook/chapter4/overview.md
 
-  - "(ri:heart-line) 贡献指南":
-    - "(ri:eye-line) 总览": contribution/overview.md
-    - "(ri:tools-line) 环境配置": contribution/setting_up.md
-    - "(ri:git-branch-line) 开发流程": contribution/development_workflow.md
-    - "(ri:git-commit-line) 提交规范": contribution/commit_guidelines.md
-    - "(ri:article-line) 文档编写": contribution/writing_docs.md
-    - "(ri:flask-line) 测试编写": contribution/writing_tests.md
+    - "(ri:star-line) 最佳实践":
+      - "(ri:speed-line) 性能调优": open_source/best_practice/performance_tuning.md
+      - "(ri:building-3-line) 记忆结构设计": open_source/best_practice/memory_structure_design.md
+      - "(ri:wifi-line) 网络环境适配": open_source/best_practice/network_workarounds.md
+      - "(ri:error-warning-line) 常见错误与解决方案": open_source/best_practice/common_errors_solutions.md
+      - "(ri:tools-line) Coze空间配置Memos的MCP": open_source/best_practice/mcp_for_cozespace_and_tools.md
 
-  - "(ri:file-code-line) API 参考文档": api-reference/configure-memos
+    - "(ri:heart-line) 贡献指南":
+      - "(ri:eye-line) 总览": open_source/contribution/overview.md
+      - "(ri:tools-line) 环境配置": open_source/contribution/setting_up.md
+      - "(ri:git-branch-line) 开发流程": open_source/contribution/development_workflow.md
+      - "(ri:git-commit-line) 提交规范": open_source/contribution/commit_guidelines.md
+      - "(ri:article-line) 文档编写": open_source/contribution/writing_docs.md
+      - "(ri:flask-line) 测试编写": open_source/contribution/writing_tests.md
+
+    - "(ri:file-code-line) API 参考文档": api-reference/configure-memos

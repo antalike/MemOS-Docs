@@ -112,7 +112,7 @@ const config: NuxtConfig = {
     build: {
       markdown: {
         highlight: {
-          langs: ['bash', 'ts', 'typescript', 'diff', 'vue', 'json', 'yml', 'css', 'mdc', 'python', 'py', 'mermaid']
+          langs: ['bash', 'shell', 'ts', 'typescript', 'diff', 'vue', 'json', 'yml', 'css', 'mdc', 'python', 'py', 'mermaid']
         }
       }
     }
@@ -137,10 +137,10 @@ const config: NuxtConfig = {
 
   routeRules: {
     '/': {
-      redirect: '/home/overview'
+      redirect: '/open_source/home/overview'
     },
     '/cn': {
-      redirect: '/cn/home/overview'
+      redirect: '/cn/open_source/home/overview'
     }
   },
 

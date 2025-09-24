@@ -1,4 +1,5 @@
 export default {
   env: 'pre',
-  enDomain: ''
+  enDomain: '',
+  homeDomain: 'https://memos-pre.openmem.net'
 }
