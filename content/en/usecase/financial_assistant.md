@@ -104,11 +104,15 @@ pip install MemoryOS -U
 
 ```python
 import os
+import uuid
 from openai import OpenAI
 from memos.api.client import MemOSClient
 
 os.environ["MEMOS_API_KEY"] = "mpg-xx"
 os.environ["OPEN_API_KEY"] = "sk-xx"
+
+def generate_conversation_id():
+    return f"{uuid.uuid4()}"
 
 class FinancialManagementAssistant:
     """AI financial management assistant with memory capability"""
@@ -145,7 +149,7 @@ class FinancialManagementAssistant:
 
     def add_message(self, messages, user_id, conversation_id):
         """Add messages to MemOS so they can be processed into memories"""
-        self.memos_client.add(messages, user_id, conversation_id)
+        self.memos_client.add_message(messages, user_id, conversation_id)
 
     def get_message(self, user_id, conversation_id):
         """Retrieve the raw messages stored in MemOS (for debugging/inspection)"""
@@ -175,7 +179,7 @@ class FinancialManagementAssistant:
             {"role": "user", "content": query},
             {"role": "assistant", "content": answer}
         ]
-        self.memos_client.add(messages, user_id, conversation_id)
+        self.memos_client.add_message(messages, user_id, conversation_id)
         
         return answer
 
@@ -241,8 +245,9 @@ def main():
             continue
         
         print("🤖 Processing...")
+        conversation_id = generate_conversation_id()
         answer = ai_assistant.chat(user_query, user_id, conversation_id)
-        print(f"\n💡 [Assistant]: {answer}\n")
+        print(f"\n💬 conversation_id: {conversation_id}\n💡 [Assistant]: {answer}\n")
         print("-" * 60)
 
 

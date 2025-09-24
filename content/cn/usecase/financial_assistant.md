@@ -104,11 +104,15 @@ pip install MemoryOS -U
 
 ```python
 import os
+import uuid
 from openai import OpenAI
 from memos.api.client import MemOSClient
 
 os.environ["MEMOS_API_KEY"] = "mpg-xx"
 os.environ["OPEN_API_KEY"] = "sk-xx"
+
+def generate_conversation_id():
+    return f"{uuid.uuid4()}"
 
 class FinancialManagementAssistant:
     """AI财务管理助手，具备记忆能力"""
@@ -182,7 +186,6 @@ class FinancialManagementAssistant:
 
 ai_assistant = FinancialManagementAssistant()
 user_id = "memos_financial_management_user_123"
-conversation_id = "memos_financial_management_conversation_123"
 
 def demo_questions():
     return [
@@ -192,7 +195,8 @@ def demo_questions():
 
 def preset_user_behaviors():
     """显示预设的用户行为记忆"""
-    print("\n📊 已预设的用户行为记忆:")
+    conversation_id = generate_conversation_id()
+    print(f"\n📊 已预设的用户行为记忆 (conversation_id={conversation_id}):")
     print("=" * 60)
     behaviors = [{
       "role": "user",
@@ -242,8 +246,9 @@ def main():
             continue
         
         print("🤖 正在处理...")
+        conversation_id = generate_conversation_id()
         answer = ai_assistant.chat(user_query, user_id, conversation_id)
-        print(f"\n💡 [助手]: {answer}\n")
+        print(f"\n💬 conversation_id: {conversation_id}\n💡 [助手]: {answer}\n")
         print("-" * 60)
 
 
