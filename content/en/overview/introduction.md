@@ -7,7 +7,7 @@ Its goal is: to enable your AI system to **have long-term memory like a human**,
 
 For developers, MemOS is like a database for applications: you don’t need to reinvent the wheel to solve the problem of “how AI remembers.” By simply calling the services provided by MemOS, you can easily equip your Agent or application with “memory capability.”
 
-<img src="https://cdn.memtensor.com.cn/img/1758267737066_157s7j_compressed.png" alt="Memory Comparison" style="width:70%;">
+<img src="https://cdn.memtensor.com.cn/img/1758705757425_0enqrc_compressed.png" alt="Memory Comparison" style="width:70%;">
 
 ## 1. Why MemOS is Needed
 
@@ -30,7 +30,7 @@ The value of MemOS lies in its ability to **abstract the memory layer**, allowin
 
 In short: **MemOS transforms AI from a one-off conversation machine into a continuously growing partner.**
 
-<img src="https://cdn.memtensor.com.cn/img/1758265722040_2oue1m_compressed.png" alt="image" style="width:70%;">
+<img src="https://cdn.memtensor.com.cn/img/1758705793859_0ncfzd_compressed.jpeg" alt="image" style="width:70%;">
 
 ## 2. What MemOS Can Do
 
