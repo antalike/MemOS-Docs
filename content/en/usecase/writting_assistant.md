@@ -232,7 +232,8 @@ def main():
             break
         else:
             print("⚠️ Please enter 'y' for yes or 'n' for no")
-    
+
+    print("\n⚡️ Each question you enter next will take place in a brand-new conversation (with a new conversation ID). MemOS will automatically recall your historical behavioral memories across conversations to provide you with continuous and personalized service.")    
     print("\n🎯 Here are some example questions. You can continue chatting with the writing assistant:")
     for i, question in enumerate(demo_questions(), 1):
         print(f"  {i}. {question}")
