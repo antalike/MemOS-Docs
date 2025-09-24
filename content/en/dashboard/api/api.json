@@ -48,7 +48,7 @@
     },
     "/get/message": {
       "post": {
-        "summary": "Get message",
+        "summary": "Get Message",
         "description": "Retrieve historical conversation records between a user and the assistant from a specified conversation. The number of results returned can be limited.",
         "operationId": "get_message_api_get_message_get",
         "requestBody": {
@@ -168,7 +168,7 @@
           "chat_time": {
             "type": "string",
             "title": "Chat Time",
-            "description": "Optional creation time of the message. Can be structured time or Chinese string. Defaults to current time if omitted."
+            "description": "Time of the conversation, as a structured timestamp or Chinese text. Allows memory to include time information."
           }
         },
         "title": "MessageInput"
