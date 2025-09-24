@@ -52,5 +52,5 @@ MemOS 的价值在于，它**抽象出记忆层**，让你只关注业务逻辑
 
 ## 4. 联系我们
 
-<img src="https://cdn.memtensor.com.cn/img/1758251354703_v1nwkz_compressed.png" alt="image" style="width:70%;">
+<img src="https://cdn.memtensor.com.cn/img/1758685658684_nbhka4_compressed.png" alt="image" style="width:70%;">
 
