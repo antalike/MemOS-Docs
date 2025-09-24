@@ -97,7 +97,7 @@ MemOS 的设计核心，是把「记忆」作为一个独立系统层，和计�
 ![640.gif](https://statics.memtensor.com.cn/memos/ani.gif)
 
 <figure style="width: fit-content">
-  <img src="https://cdn.memtensor.com.cn/img/1758183837895_i87vyb_compressed.png " alt="记忆调度的核心思路" />
+  <img src="https://cdn.memtensor.com.cn/img/1758687680524_waiu4s_compressed.png " alt="记忆调度的核心思路" />
   <figcaption style="text-align: center;">记忆调度的核心思路</figcaption>
 </figure>
 
@@ -113,7 +113,7 @@ MemOS 的设计核心，是把「记忆」作为一个独立系统层，和计�
 *   从官方公开的评测数据来看，**MemOS在准确率和计算效率上均实现了显著提升**，相较于OpenAI的全局记忆方案，在关键指标上展现出更优的性能表现，进一步验证了其在记忆调度、管理与推理融合方面的技术领先性。
     
 
-![image.png](https://cdn.memtensor.com.cn/img/1758184331868_djlvc5_compressed.png)
+![image.png](https://cdn.memtensor.com.cn/img/1758687655761_blkqnr_compressed.png)
 
 
 ### 4.2 KV Cache记忆评测
@@ -125,7 +125,7 @@ MemOS 的设计核心，是把「记忆」作为一个独立系统层，和计�
 *   实验结果（见图10）表明，**MemOS在多种配置下均显著优化了KV Cache的构建与复用效率**，使推理过程更加高效流畅，有效缩短了用户的等待时延，并在大规模模型场景中实现了可观的性能加速。
     
 
-![image.png](https://cdn.memtensor.com.cn/img/1758184346453_5nlqyz_compressed.png)
+![image.png](https://cdn.memtensor.com.cn/img/1758687596553_iptom0_compressed.png)
 
 
 ## 5. 下一步行动
@@ -137,4 +137,4 @@ MemOS 的设计核心，是把「记忆」作为一个独立系统层，和计�
 
 ## 6. 联系我们
 
-<img src="https://cdn.memtensor.com.cn/img/1758251354703_v1nwkz_compressed.png" alt="image" style="width:70%;">
+<img src="https://cdn.memtensor.com.cn/img/1758685658684_nbhka4_compressed.png" alt="image" style="width:70%;">

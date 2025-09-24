@@ -147,19 +147,19 @@ fewshot_examples_u123:
 
 ```yaml
 matches:
-  - content: "初三学生"
+  - value: "初三学生"
     score: 0.95
     source: "对话记录#2025-06-10"
     
-  - content: "偏好分步骤讲解"
+  - value: "偏好分步骤讲解"
     score: 0.94
     source: "对话记录#2025-08-01"
     
-  - content: "喜欢简洁的解释"
+  - value: "喜欢简洁的解释"
     score: 0.92
     source: "对话记录#2025-09-03"
     
-  - content: "分不清一次函数和二次函数概念"
+  - value: "分不清一次函数和二次函数概念"
     score: 0.90
     source: "对话记录#2025-10-09"
 
@@ -284,4 +284,4 @@ final_prompt_to_model:
 
 ## 5. 联系我们
 
-<img src="https://cdn.memtensor.com.cn/img/1758251354703_v1nwkz_compressed.png" alt="image" style="width:70%;">
+<img src="https://cdn.memtensor.com.cn/img/1758685658684_nbhka4_compressed.png" alt="image" style="width:70%;">

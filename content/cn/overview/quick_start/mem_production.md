@@ -84,5 +84,5 @@ AI：收到，那我会帮你推荐适合家庭出游的目的地。
 
 ## 4. 联系我们
 
-<img src="https://cdn.memtensor.com.cn/img/1758251354703_v1nwkz_compressed.png" alt="image" style="width:70%;">
+<img src="https://cdn.memtensor.com.cn/img/1758685658684_nbhka4_compressed.png" alt="image" style="width:70%;">
 

@@ -180,5 +180,5 @@ desc: 记忆调度就像大脑的注意力机制，动态决定在合适的时�
       
 
 ## 5. 联系我们
-<img src="https://cdn.memtensor.com.cn/img/1758251354703_v1nwkz_compressed.png" alt="image" style="width:70%;">
+<img src="https://cdn.memtensor.com.cn/img/1758685658684_nbhka4_compressed.png" alt="image" style="width:70%;">
 

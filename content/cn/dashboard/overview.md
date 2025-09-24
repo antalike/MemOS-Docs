@@ -16,5 +16,5 @@ desc: 我们面向开发者提供托管服务，这也是将 MemOS 添加到�
 
 ## 3. 联系我们
 
-![image.png](https://cdn.memtensor.com.cn/img/1758251354703_v1nwkz_compressed.png)
+![image.png](https://cdn.memtensor.com.cn/img/1758685658684_nbhka4_compressed.png)
 
