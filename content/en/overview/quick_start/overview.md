@@ -48,8 +48,8 @@ You only need to provide the `raw conversation logs` to MemOS, and MemOS will `a
 ```python
 import requests
 
-BASE_URL = "https://your-host.com"   # Replace with your service domain
-API_PATH = "/api/openmem/add/message"
+BASE_URL = "https://memos.memtensor.cn/api/openmem/v1"   
+API_PATH = "/add/message"
 API_KEY = "your_api_key_here"        # API Key from console
 
 conversation = [
@@ -62,8 +62,8 @@ conversation = [
 ]
 
 payload = {
-    "userId": "u123",
-    "type": "MEMORY_AND_CONVERSATION",
+    "user_id": "memos_user_123",
+    "conversation_id": "memos_conversation_123"
     "messages": conversation
 }
 
@@ -72,7 +72,7 @@ resp = requests.post(
     json=payload,
     headers={
         "Content-Type": "application/json",
-        "Authorization": f"Bearer {API_KEY}"
+        "Authorization": f"Token {API_KEY}"
     }
 )
 
@@ -98,16 +98,16 @@ In a new conversation, when the user asks AI to recommend a National Day trip pl
 ```python
 import requests
 
-BASE_URL = "https://your-host.com"
-API_PATH = "/api/openmem/search/memory"
+BASE_URL = "https://memos.memtensor.cn/api/openmem/v1"   
+API_PATH = "/search/memory"
 API_KEY = "your_api_key_here"
 
 user_query = "Where to go for National Day travel?"
 
 payload = {
-    "userId": "u123",
+    "user_id": "u123",
     "query": user_query,
-    "memoryLimitNumber": 6  # Optional, default is 6 if not provided
+    "memory_limit_number": 6  # Optional, default is 6 if not provided
 
     # ==== Coming Soon ====
     # The following parameters will be supported in future versions, please do not pass them now
@@ -121,7 +121,7 @@ resp = requests.post(
     json=payload,
     headers={
         "Content-Type": "application/json",
-        "Authorization": f"Bearer {API_KEY}"
+        "Authorization": f"Token {API_KEY}"
     }
 )
 

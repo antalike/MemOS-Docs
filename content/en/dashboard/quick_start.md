@@ -66,7 +66,7 @@ messages = [
 user_id = "memos_user_123"
 conversation_id = "memos_conversation_123"
 
-client.add(messages=messages, user_id=user_id, conversation_id=conversation_id)
+client.add_message(messages=messages, user_id=user_id, conversation_id=conversation_id)
 ```
 ```bash [curl]
 curl --request POST \
@@ -158,7 +158,7 @@ conversation_id ="memos_conversation_123"
 # return_instruction = True
 # return_full_instruction = True
 
-client.search(query=query, user_id=user_id, conversation_id=conversation_id)
+client.search_memory(query=query, user_id=user_id, conversation_id=conversation_id)
 ```
 ```bash [Curl]
 curl --request POST \
@@ -262,7 +262,7 @@ client = MemOSClient(api_key=YOUR_API_KEY)
 user_id = "memos_user_123"
 conversation_id ="memos_conversation_123"
 
-client.get(user_id=user_id, conversation_id=conversation_id)
+client.get_message(user_id=user_id, conversation_id=conversation_id)
 ```
 ```bash [Curl]
 curl --request POST \

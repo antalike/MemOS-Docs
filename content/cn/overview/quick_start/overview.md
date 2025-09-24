@@ -49,8 +49,8 @@ MemOS 提供了两个核心接口帮助你实现：
 ```python
 import requests
 
-BASE_URL = "https://your-host.com"   # 换成你的服务域名
-API_PATH = "/api/openmem/add/message"
+BASE_URL = "https://memos.memtensor.cn/api/openmem/v1"   
+API_PATH = "/add/message"
 API_KEY = "your_api_key_here"        # 从控制台获取的 API Key
 
 conversation = [
@@ -63,17 +63,16 @@ conversation = [
 ]
 
 payload = {
-    "userId": "u123",
-    "type": "MEMORY_AND_CONVERSATION",
+    "user_id": "memos_user_123",
     "messages": conversation
 }
 
 resp = requests.post(
     BASE_URL + API_PATH,
-    json=payload,
+    data=json.dump(payload),
     headers={
         "Content-Type": "application/json",
-        "Authorization": f"Bearer {API_KEY}"
+        "Authorization": f"Token {API_KEY}"
     }
 )
 
@@ -99,16 +98,16 @@ print(resp.json())
 ```python
 import requests
 
-BASE_URL = "https://your-host.com"
-API_PATH = "/api/openmem/search/memory"
+BASE_URL = "https://memos.memtensor.cn/api/openmem/v1"   
+API_PATH = "/search/memory"
 API_KEY = "your_api_key_here"
 
 user_query = "国庆去哪玩好？"
 
 payload = {
-    "userId": "u123",
+    "user_id": "memos_user_123",
     "query": user_query,
-    "memoryLimitNumber": 6  # 可选，不传默认6
+    "memory_limit_number": 6  # 可选，不传默认6
 
     # ==== 敬请期待 ====
     # 以下参数在未来版本中会支持，目前请勿传递
@@ -119,7 +118,7 @@ payload = {
 
 resp = requests.post(
     BASE_URL + API_PATH,
-    json=payload,
+    data=json.dump(payload),
     headers={
         "Content-Type": "application/json",
         "Authorization": f"Bearer {API_KEY}"

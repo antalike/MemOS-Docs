@@ -119,7 +119,7 @@ class FinancialManagementAssistant:
     
     def search_memory(self, query, user_id, conversation_id):
         """Search relevant memories based on query"""
-        response = self.memos_client.search(query, user_id, conversation_id)
+        response = self.memos_client.search_memory(query, user_id, conversation_id)
 
         return [memory_detail.memory_value for memory_detail in response.data.memory_detail_list]
 
@@ -149,7 +149,7 @@ class FinancialManagementAssistant:
 
     def get_message(self, user_id, conversation_id):
         """Retrieve the raw messages stored in MemOS (for debugging/inspection)"""
-        response = self.memos_client.get(user_id, conversation_id)
+        response = self.memos_client.get_message(user_id, conversation_id)
         return response.data.message_detail_list
 
     def chat(self, query, user_id, conversation_id):
