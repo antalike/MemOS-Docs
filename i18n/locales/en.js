@@ -23,7 +23,7 @@ export default {
     nav: {
       apiReference: 'API Reference',
       overview: 'Overview',
-      errorcode: 'Error Code Query'
+      errorcode: 'Error Code'
     }
   },
   api: {

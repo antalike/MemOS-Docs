@@ -23,7 +23,7 @@ export default {
     nav: {
       apiReference: 'API 文档',
       overview: '概览',
-      errorcode: '错误码查询'
+      errorcode: '错误码'
     }
   },
   api: {

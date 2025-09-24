@@ -21,7 +21,7 @@
       "post": {
         "summary": "添加消息",
         "description": "向指定会话添加一条或多条消息。支持用户消息与助手消息，可自定义创建时间。",
-        "operationId": "add_message_api_add_message_post",
+        "operationId": "add_message",
         "requestBody": {
           "required": true,
           "content": {
@@ -50,7 +50,7 @@
       "post": {
         "summary": "获取消息",
         "description": "从指定会话中获取用户与助手的历史对话记录，可按数量限制返回结果。",
-        "operationId": "get_message_api_get_message_get",
+        "operationId": "get_message",
         "requestBody": {
           "required": true,
           "content": {
@@ -79,7 +79,7 @@
       "post": {
         "summary": "查询记忆",
         "description": "查询指定用户的记忆，返回与查询内容最相关的记忆片段。",
-        "operationId": "search_memory_api_search_memory_post",
+        "operationId": "search_memory",
         "requestBody": {
           "required": true,
           "content": {

@@ -1,4 +1,4 @@
-import type { PathsProps, FlatPathProps, SecurityProps } from '@/utils/openapi'
+import type { PathsProps, FlatPathProps, SecurityProps, NavLink } from '@/utils/openapi'
 import type { Collections } from '@nuxt/content'
 import type { RouteLocation } from 'vue-router'
 
@@ -16,13 +16,6 @@ interface OpenApiProps {
   }
 }
 
-type NavLink = {
-  title: string
-  path?: string
-  method?: 'get' | 'post' | 'put' | 'delete'
-  children?: NavLink[]
-}
-
 function prettifyGroupTitle(key: string) {
   const base = key.replace(/^\//, '')
   if (!base) return '/'
@@ -34,14 +27,14 @@ function prettifyGroupTitle(key: string) {
     .join(' ')
 }
 
-const useOpenApi = (apiName: keyof Collections = 'openapi', parentPath: string = 'api-reference') => {
-  const openapi = useState<OpenApiProps | null>(apiName, () => null)
-  const server = useState<Record<string, any> | null>(`${apiName}Server`, () => null)
-  const schemas = useState<Record<string, SchemaProps>>(`${apiName}Schemas`, () => ({}))
-  const securitySchemes = useState<Record<string, SecurityProps>>(`${apiName}SecuritySchemas`, () => ({}))
-  const globalSecurity = useState<any[]>(`${apiName}Security`, () => ([]))
-  const paths = useState<FlatPathProps[]>(`${apiName}Paths`, () => ([]))
-  const apiNavData = computed(() => {
+const useOpenApi = (collectionName: keyof Collections = 'openapi', parentPath: string = 'api-reference') => {
+  const openapi = useState<OpenApiProps | null>(collectionName, () => null)
+  const server = useState<Record<string, any> | null>(`${collectionName}Server`, () => null)
+  const schemas = useState<Record<string, SchemaProps>>(`${collectionName}Schemas`, () => ({}))
+  const securitySchemes = useState<Record<string, SecurityProps>>(`${collectionName}SecuritySchemas`, () => ({}))
+  const globalSecurity = useState<any[]>(`${collectionName}Security`, () => ([]))
+  const paths = useState<FlatPathProps[]>(`${collectionName}Paths`, () => ([]))
+  const apiNavData = computed<NavLink[]>(() => {
     // Group by first-level segment of apiUrl
     const groupMap = new Map<string, FlatPathProps[]>()
     paths.value.forEach((item: FlatPathProps) => {
@@ -87,13 +80,13 @@ const useOpenApi = (apiName: keyof Collections = 'openapi', parentPath: string =
 
   // Fetch OpenAPI data
   async function getOpenApi() {
-    const { data } = await useAsyncData(apiName, async () => {
-      return queryCollection(apiName).all()
+    const { data } = await useAsyncData(collectionName, async () => {
+      return queryCollection(collectionName).all()
     })
 
     let doc
 
-    if (apiName === 'dashboardApi') {
+    if (collectionName === 'dashboardApi') {
       const targetPath = route.path.startsWith('/cn')
         ? 'cn/dashboard/api/api'
         : 'en/dashboard/api/api'
@@ -107,10 +100,10 @@ const useOpenApi = (apiName: keyof Collections = 'openapi', parentPath: string =
     server.value = openapi.value?.meta.body.servers?.[0] ?? null
     schemas.value = openapi.value?.components?.schemas ?? {}
     securitySchemes.value = openapi.value?.components?.securitySchemes ?? {}
-    paths.value = flattenPaths(openapi.value?.paths ?? {}, parentPath)
+    paths.value = flattenPaths(openapi.value?.paths ?? {}, parentPath, collectionName)
   }
 
-  function getApiByRoute(route: RouteLocation) {
+  function getApiByRoute(route: RouteLocation): FlatPathProps | undefined {
     let normalizedPath = route.path.replace(/^\/cn/, '').replace(/\/$/, '') || '/'
     normalizedPath = normalizedPath.split('-').map(s => s.toLowerCase()).join('-')
     return paths.value.find(path => path.routePath === normalizedPath)
