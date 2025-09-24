@@ -98,7 +98,7 @@ From Next-Token Prediction to Next-Scene Prediction
 ![640.gif](https://statics.memtensor.com.cn/memos/ani.gif)
 
 <figure style="width: fit-content">
-  <img src="https://cdn.memtensor.com.cn/img/1758183837895_i87vyb_compressed.png " alt="Core idea of memory scheduling" />
+  <img src="https://cdn.memtensor.com.cn/img/1758687680524_waiu4s_compressed.png " alt="Core idea of memory scheduling" />
   <figcaption style="text-align: center;">Core idea of memory scheduling</figcaption>
 </figure>
 
@@ -114,7 +114,7 @@ From Next-Token Prediction to Next-Scene Prediction
 *   Public results show that **MemOS achieves significant improvements in both accuracy and computational efficiency**. Compared with OpenAI’s global memory approach, it demonstrates superior performance on key metrics, further verifying its technological leadership in memory scheduling, management, and reasoning integration.
     
 
-![image.png](https://cdn.memtensor.com.cn/img/1758184331868_djlvc5_compressed.png)
+![image.png](https://cdn.memtensor.com.cn/img/1758687655761_blkqnr_compressed.png)
 
 
 ### 4.2 KV Cache Memory Evaluation
@@ -126,7 +126,7 @@ From Next-Token Prediction to Next-Scene Prediction
 *   Results (see Figure 10) show that **MemOS significantly optimizes KV Cache build and reuse efficiency across configurations**, making inference more efficient and smooth. This reduces user waiting latency and achieves substantial performance acceleration in large-scale model scenarios.
     
 
-![image.png](https://cdn.memtensor.com.cn/img/1758184346453_5nlqyz_compressed.png)
+![image.png](https://cdn.memtensor.com.cn/img/1758687596553_iptom0_compressed.png)
 
 
 ## 5. Next Steps
@@ -138,4 +138,4 @@ From Next-Token Prediction to Next-Scene Prediction
 
 ## 6. Contact Us
 
-<img src="https://cdn.memtensor.com.cn/img/1758251354703_v1nwkz_compressed.png" alt="image" style="width:70%;">
+<img src="https://cdn.memtensor.com.cn/img/1758685658684_nbhka4_compressed.png" alt="image" style="width:70%;">

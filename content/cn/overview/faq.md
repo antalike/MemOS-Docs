@@ -100,4 +100,4 @@ desc: 我们集中整理了使用 MemOS 过程中最常见的困惑，不用到�
 
 ## 3. 联系我们
 
-<img src="https://cdn.memtensor.com.cn/img/1758251354703_v1nwkz_compressed.png" alt="image" style="width:70%;">
+<img src="https://cdn.memtensor.com.cn/img/1758685658684_nbhka4_compressed.png" alt="image" style="width:70%;">

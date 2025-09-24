@@ -31,7 +31,7 @@ MemOS provides two core APIs to help you achieve this:
 - `addMessage` — Submit raw conversations to us, we automatically process and store them as memory  
 - `searchMemory` — Recall relevant memories and optional suggested instructions in subsequent conversations, making AI responses more aligned with user needs  
 
-![image.svg](https://cdn.memtensor.com.cn/img/1758180109237_8ubv8n.svg)
+![image.svg](https://cdn.memtensor.com.cn/img/1758686454660_pixumf_compressed.png)
 
 ### Step 1. Get API Key
 
@@ -204,4 +204,4 @@ We provide three concrete business reference cases for you to review:
 
 ## 4. Contact Us
 
-<img src="https://cdn.memtensor.com.cn/img/1758251354703_v1nwkz_compressed.png" alt="image" style="width:70%;">
+<img src="https://cdn.memtensor.com.cn/img/1758685658684_nbhka4_compressed.png" alt="image" style="width:70%;">

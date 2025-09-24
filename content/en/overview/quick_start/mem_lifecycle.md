@@ -135,4 +135,4 @@ Still have questions? Check out [FAQs](/overview/faq) to see if they can help.
 
 ## 5. Contact Us
 
-<img src="https://cdn.memtensor.com.cn/img/1758251354703_v1nwkz_compressed.png" alt="image" style="width:70%;">
+<img src="https://cdn.memtensor.com.cn/img/1758685658684_nbhka4_compressed.png" alt="image" style="width:70%;">
