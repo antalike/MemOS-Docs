@@ -147,19 +147,19 @@ User query: [Teacher, can you teach me how to solve this problem? 2x² - 3x - 5 
 
 ```yaml
 matches:
-  - content: "9th grade student"
+  - value: "9th grade student"
     score: 0.95
     source: "Dialogue record#2025-06-10"
     
-  - content: "Prefers step-by-step explanations"
+  - value: "Prefers step-by-step explanations"
     score: 0.94
     source: "Dialogue record#2025-08-01"
     
-  - content: "Likes concise explanations"
+  - value: "Likes concise explanations"
     score: 0.92
     source: "Dialogue record#2025-09-03"
     
-  - content: "Confuses linear and quadratic functions"
+  - value: "Confuses linear and quadratic functions"
     score: 0.90
     source: "Dialogue record#2025-10-09"
 
