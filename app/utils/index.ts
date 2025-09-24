@@ -11,7 +11,10 @@ export function getLangPath(path: string, locale: string) {
 }
 
 export function getHomePath(path: string, locale: string) {
-  return locale === 'cn' ? `https://memos.openmem.net/cn${path}` : `https://memos.openmem.net${path}`
+  const config = useRuntimeConfig()
+  const homeDomain = config.public.homeDomain
+  console.log('getHomePath homeDomain', homeDomain)
+  return locale === 'cn' ? `${homeDomain}/cn${path}` : `${homeDomain}${path}`
 }
 
 export function copyText(text: string) {
