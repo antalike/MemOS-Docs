@@ -129,7 +129,7 @@ results = resp.json()
 
 # Mode 1: Related Memories (matches)
 print("Related Memories:", results["data"]["memoryDetailList"])
-# Example output:
+# Example output(simplified here for easier understanding, for reference only):
 # [
 #   {
 #     "memoryKey": "Travel Habit",
