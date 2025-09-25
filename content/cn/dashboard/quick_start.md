@@ -54,7 +54,7 @@ requests.post(url=url, headers=headers, data=json.dumps(data))
 from memos.api.client import MemOSClient
 
 # 使用 API Key 初始化客户端
-client = MemOSClient(api_key=YOUR_API_KEY)
+client = MemOSClient(api_key="YOUR_API_KEY")
 
 messages = [
   {"role": "user", "content": "我想暑假出去玩，你能帮我推荐下吗？"},
@@ -147,7 +147,7 @@ for memory in res.json()["data"]["memory_detail_list"]:
 from memos.api.client import MemOSClient
 
 # 使用 API Key 初始化客户端
-client = MemOSClient(api_key=YOUR_API_KEY)
+client = MemOSClient(api_key="YOUR_API_KEY")
 
 query = "国庆去哪玩"
 user_id = "memos_user_123"
@@ -256,7 +256,7 @@ requests.post(url=url, headers=headers, data=json.dumps(data))
 from memos.api.client import MemOSClient
 
 # 使用 API Key 初始化客户端
-client = MemOSClient(api_key=YOUR_API_KEY)
+client = MemOSClient(api_key="YOUR_API_KEY")
 
 user_id = "memos_user_123"
 conversation_id = "0610"

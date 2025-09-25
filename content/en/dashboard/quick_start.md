@@ -53,7 +53,7 @@ requests.post(url=url, headers=headers, data=json.dumps(data))
 from memos.api.client import MemOSClient
 
 # Initialize MemOS client with API Key to start sending requests
-client = MemOSClient(api_key=YOUR_API_KEY)
+client = MemOSClient(api_key="YOUR_API_KEY")
 
 messages = [
   {"role": "user", "content": "I want to travel during summer vacation, can you recommend something?"},
@@ -257,7 +257,7 @@ requests.post(url=url, headers=headers, data=json.dumps(data))
 from memos.api.client import MemOSClient
 
 # Initialize MemOS client with API Key to start sending requests
-client = MemOSClient(api_key=YOUR_API_KEY)
+client = MemOSClient(api_key="YOUR_API_KEY")
 
 user_id = "memos_user_123"
 conversation_id = "0610"
