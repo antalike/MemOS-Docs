@@ -162,7 +162,7 @@ For local deployment or deep customization, you can directly use MemOS’s open-
 
 > MemCube is the basic container of memory, responsible for storing user memory items. The `addMessage` and `searchMemory` APIs in the cloud service are essentially abstracted wrappers around internal operations of MemCube. In the open-source framework, developers can directly control these steps.
 
-For detailed operation steps, see: [Open-source Project → Quick Start](https://memos-docs.openmem.net/cn/getting_started/quick_start)
+For detailed operation steps, see: [Open-source Project → Quick Start](https://memos-docs.openmem.net/open_source/getting_started/quick_start)
 
 ## 3. Next Steps
 
