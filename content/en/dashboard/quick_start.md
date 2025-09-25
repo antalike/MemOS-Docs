@@ -174,10 +174,6 @@ curl --request POST \
     "user_id": "memos_user_123",
     "conversation_id": "0928"
   }'
-# MemOS will support returning matches, instruction, and full_instruction in the future:
-# "return_matches": true
-# "return_instruction": true
-# "return_full_instruction": true
 ```
 ::
 ```json [search_memory_res.json]
