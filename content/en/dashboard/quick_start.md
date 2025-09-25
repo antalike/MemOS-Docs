@@ -15,6 +15,7 @@ Register and log in to the [MemOS Cloud Platform](https://memos-dashboard.openme
 
 ### 2.1 Add Original Messages
 
+**Conversation A: Occurred on 2025-06-10**<br>
 Simply provide the **raw conversation records** to MemOS.  MemOS will <code style="font-weight: bold;">automatically abstract, process, and save them as memory</code>.
 
 ::code-group
@@ -37,7 +38,7 @@ data = {
     {"role": "assistant", "content": "Understood, I’ll recommend destinations suitable for family trips."}
   ],
   "user_id": "memos_user_123",
-  "conversation_id": "memos_conversation_123"
+  "conversation_id": "0610"
 }
 headers = {
   "Content-Type": "application/json",
@@ -64,7 +65,7 @@ messages = [
   {"role": "assistant", "content": "Understood, I’ll recommend destinations suitable for family trips."}
 ]
 user_id = "memos_user_123"
-conversation_id = "memos_conversation_123"
+conversation_id = "0610"
 
 client.add_message(messages=messages, user_id=user_id, conversation_id=conversation_id)
 ```
@@ -75,7 +76,7 @@ curl --request POST \
   --header 'Content-Type: application/json' \
   --data '{
     "user_id": "memos_user_123",
-    "conversation_id": "memos_conversation_123",
+    "conversation_id": "0610",
     "messages": [
       {"role":"user","content":"I want to travel during summer vacation, can you recommend something?"},
       {"role":"assistant","content":"Sure! Are you traveling alone, with family or with friends?"},
@@ -101,6 +102,7 @@ curl --request POST \
 
 ### 2.2 Search Memory
 
+**Conversation A: Occurred on 2025-09-28**<br>
 Use the user's utterance to search memory, and MemOS will automatically retrieve the most relevant memories for the AI to reference.
 
 > MemOS supports returning **`matches`**, **`instruction`** (coming soon), and **`full_instruction`** (coming soon). In practice, you only need to choose one according to your business needs.
@@ -124,7 +126,7 @@ os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 data = {
   "query": "Any suggestions for where to go during National Day?",
   "user_id": "memos_user_123",
-  "conversation_id": "memos_conversation_123"
+  "conversation_id": "0928"
 }
 
 # MemOS will support returning matches, instruction, and full_instruction in the future:
@@ -151,7 +153,7 @@ client = MemOSClient(api_key=YOUR_API_KEY)
 
 query = "Any suggestions for where to go during National Day?"
 user_id = "memos_user_123"
-conversation_id ="memos_conversation_123"
+conversation_id ="0928"
 
 # MemOS will support returning matches, instruction, and full_instruction in the future:
 # return_matches = True
@@ -168,7 +170,7 @@ curl --request POST \
   --data '{
     "query": "Any suggestions for where to go during National Day?",
     "user_id": "memos_user_123",
-    "conversation_id": "memos_conversation_123"
+    "conversation_id": "0928"
   }'
 # MemOS will support returning matches, instruction, and full_instruction in the future:
 # "return_matches": true
@@ -187,7 +189,7 @@ curl --request POST \
                 "memory_value": "[user perspective] The user plans a family trip during the summer vacation, bringing along children and elderly family members, traveling together as a whole family.",
                 "memory_type": "WorkingMemory",
                 "memory_time": null,
-                "conversation_id": "memos_conversation_123",
+                "conversation_id": "0610",
                 "status": "activated",
                 "confidence": 0.0,
                 "tags": [
@@ -204,7 +206,7 @@ curl --request POST \
                 "memory_value": "[assistant perspective] The assistant understands that the user will travel with family, including children and elderly, and plans to recommend destinations suitable for family trips.",
                 "memory_type": "WorkingMemory",
                 "memory_time": null,
-                "conversation_id": "memos_conversation_123",
+                "conversation_id": "0610",
                 "status": "activated",
                 "confidence": 0.0,
                 "tags": [
@@ -241,7 +243,7 @@ os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
 data = {
   "user_id": "memos_user_123",
-  "conversation_id": "memos_conversation_123"
+  "conversation_id": "0610"
 }
 headers = {
   "Content-Type": "application/json",
@@ -260,7 +262,7 @@ from memos.api.client import MemOSClient
 client = MemOSClient(api_key=YOUR_API_KEY)
 
 user_id = "memos_user_123"
-conversation_id ="memos_conversation_123"
+conversation_id ="0610"
 
 client.get_message(user_id=user_id, conversation_id=conversation_id)
 ```
@@ -271,7 +273,7 @@ curl --request POST \
   --header 'Content-Type: application/json' \
   --data '{
     "user_id": "memos_user_123",
-    "conversation_id": "memos_conversation_123"
+    "conversation_id": "0610"
   }'
 ```
 ::
@@ -283,26 +285,26 @@ curl --request POST \
       {
         "role": "user",
         "content": "I want to travel during summer vacation, can you recommend something?",
-        "create_time": "2025-08-26 09:30:00",
-        "update_time": "2025-08-26 09:30:00"
+        "create_time": "2025-06-10 09:30:00",
+        "update_time": "2025-06-10 09:30:00"
       },
       {
         "role": "assistant",
         "content": "Sure! Are you traveling alone, with family or with friends?",
-        "create_time": "2025-08-26 09:30:00",
-        "update_time": "2025-08-26 09:30:00"
+        "create_time": "2025-06-10 09:30:00",
+        "update_time": "2025-06-10 09:30:00"
       },
       {
         "role": "user",
         "content": "I’m bringing my kid. My family always travels together.",
-        "create_time": "2025-08-26 09:30:00",
-        "update_time": "2025-08-26 09:30:00"
+        "create_time": "2025-06-10 09:30:00",
+        "update_time": "2025-06-10 09:30:00"
       },
       {
         "role": "assistant",
         "content": "Understood, I’ll recommend destinations suitable for family trips.",
-        "create_time": "2025-08-26 09:30:00",
-        "update_time": "2025-08-26 09:30:00"
+        "create_time": "2025-06-10 09:30:00",
+        "update_time": "2025-06-10 09:30:00"
       }
     ]
   },
