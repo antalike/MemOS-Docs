@@ -141,7 +141,7 @@ url = f"{os.environ['MEMOS_BASE_URL']}/search/memory"
 
 res = requests.post(url=url, headers=headers, data=json.dumps(data))
 for memory in res.json()['data']['memory_detail_list']:
-  print(f"Related memory: {memory.memory_value}")
+  print(f"Related memory: {memory['memory_value']}")
 
 ```
 ```python [Python (SDK)]
@@ -149,7 +149,7 @@ for memory in res.json()['data']['memory_detail_list']:
 from memos.api.client import MemOSClient
 
 # Initialize MemOS client with API Key to start sending requests
-client = MemOSClient(api_key=YOUR_API_KEY)
+client = MemOSClient(api_key="YOUR_API_KEY")
 
 query = "Any suggestions for where to go during National Day?"
 user_id = "memos_user_123"
