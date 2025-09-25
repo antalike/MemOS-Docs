@@ -16,7 +16,8 @@ desc: 欢迎访问 MemOS 云平台，可参考本新手指南，快速接入�
 
 ### 2.1 添加原始对话（addMessage）
 
-只需要把`原始的对话记录`给到MemOS，MemOS 会<code style="font-weight: bold;">自动抽象加工并保存为记忆</code>**。**
+**会话 A：2025-06-10 发生**<br>
+你只需要把`原始的对话记录`给到MemOS，MemOS 会<code style="font-weight: bold;">自动抽象加工并保存为记忆</code>**。**
 
 ::code-group
 ```python [Python (HTTP)]
@@ -33,12 +34,12 @@ data = {
     {"role": "user", "content": "我想暑假出去玩，你能帮我推荐下吗？"},
     {"role": "assistant", "content": "好的！是自己出行还是和家人朋友一起呢？"},
     {"role": "user", "content": "肯定要带孩子啊，我们家出门都是全家一起。"},
-    {"role": "assistant", "content": "明白了，所以你们是父母带孩子一块儿旅行，对吗？"}
+    {"role": "assistant", "content": "明白了，所以你们是父母带孩子一块儿旅行，对吗？"},
     {"role": "user", "content": "对，带上孩子和老人，一般都是全家行动。"},
     {"role": "assistant", "content": "收到，那我会帮你推荐适合家庭出游的目的地。"}
   ],
   "user_id": "memos_user_123",
-  "conversation_id": "memos_conversation_123"
+  "conversation_id": "0610"
 }
 headers = {
   "Content-Type": "application/json",
@@ -50,10 +51,10 @@ requests.post(url=url, headers=headers, data=json.dumps(data))
 ```
 ```python [Python (SDK)]
 # # 请确保已安装MemoS (pip install MemoryOS -U)
-from memos.api.client import MemOSClient
+from memos.api.client import MemOSClient
 
 # 使用 API Key 初始化客户端
-client = MemOSClient(api_key=YOUR_API_KEY)
+client = MemOSClient(api_key=YOUR_API_KEY)
 
 messages = [
   {"role": "user", "content": "我想暑假出去玩，你能帮我推荐下吗？"},
@@ -64,7 +65,7 @@ messages = [
   {"role": "assistant", "content": "收到，那我会帮你推荐适合家庭出游的目的地。"}
 ]
 user_id = "memos_user_123"
-conversation_id = "memos_conversation_123"
+conversation_id = "0610"
 
 client.add_message(messages=messages, user_id=user_id, conversation_id=conversation_id)
 ```
@@ -75,7 +76,7 @@ curl --request POST \
   --header 'Content-Type: application/json' \
   --data '{
     "user_id": "memos_user_123",
-    "conversation_id": "memos_conversation_123",
+    "conversation_id": "0610",
     "messages": [
       {"role": "user", "content": "我想暑假出去玩，你能帮我推荐下吗？"},
       {"role": "assistant", "content": "好的！是自己出行还是和家人朋友一起呢？"},
@@ -99,7 +100,8 @@ curl --request POST \
 
 ### 2.2 查询记忆（searchMemory）
 
-使用用户的发言查询记忆，MemOS 会自动召回最相关的记忆供 AI 参考。
+**会话 B：2025-9-28 发生**<br>
+用户在一个新的会话中，提出让AI推荐国庆旅游计划，MemOS 会自动召回相关记忆供AI参考，从而推荐更加个性化的旅游计划
 
 > MemOS 支持同时返回 **` 相关记忆（matches）`**、**`拼接指令（instruction）`（敬请期待） **与** `完整指令（full_instruction）`（敬请期待）** 。实际使用中，你只需根据业务需求选择其一即可
 
@@ -117,12 +119,12 @@ import json
 
 # 替换成你的 API Key
 os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
-os.environ["MEMOS_BASE_URL"] = "https://apigw-pre.memtensor.cn/api/openmem/v1"
+os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
 data = {
   "query": "国庆去哪玩",
   "user_id": "memos_user_123",
-  "conversation_id": "memos_conversation_123"
+  "conversation_id": "0928"
 }
 
 # MemOS 未来将支持返回 相关记忆（matches）、拼接指令（instruction）与完整指令（full_instruction）：
@@ -136,26 +138,32 @@ headers = {
 }
 url = f"{os.environ['MEMOS_BASE_URL']}/search/memory"
 
-requests.post(url=url, headers=headers, data=json.dumps(data))
+res = requests.post(url=url, headers=headers, data=json.dumps(data))
+
+for memory in res.json()["data"]["memory_detail_list"]:
+    print(f"相关记忆：{memory['memory_value']}")
 
 ```
 ```python [Python (SDK)]
-# 请确保已安装MemoS (pip install MemoryOS -U)
-from memos.api.client import MemOSAPIClient
+# 请确保已安装MemOS (pip install MemoryOS -U)
+from memos.api.client import MemOSClient
 
 # 使用 API Key 初始化客户端
-client = MemOSClient(api_key=YOUR_API_KEY)
+client = MemOSClient(api_key=YOUR_API_KEY)
 
 query = "国庆去哪玩"
 user_id = "memos_user_123"
-conversation_id ="memos_conversation_123"
+conversation_id = "0928"
 
 # MemOS 未来将支持返回 相关记忆（matches）、拼接指令（instruction）与完整指令（full_instruction）：
 # return_matches = True
 # return_instruction = True
 # return_full_instruction = True
 
-client.search_memory(query=query, user_id=user_id, conversation_id=conversation_id)
+res = client.search_memory(query=query, user_id=user_id, conversation_id=conversation_id)
+
+for memory in res.data.memory_detail_list:
+    print(f"相关记忆：{memory.memory_value}")
 ```
 ```bash [Curl]
 curl --request POST \
@@ -165,7 +173,7 @@ curl --request POST \
   --data '{
     "query": "国庆去哪玩好？",
     "user_id": "memos_user_123",
-    "conversation_id": "memos_conversation_123"
+    "conversation_id": "0928"
   }'
 # MemOS 未来将支持返回 相关记忆（matches）、拼接指令（instruction）与完整指令（full_instruction）：
 # "return_matches": true
@@ -184,7 +192,7 @@ curl --request POST \
                 "memory_value": "[user观点]用户计划在暑假进行一次家庭旅行，携带孩子和老人，全家一起行动。",
                 "memory_type": "WorkingMemory",
                 "memory_time": null,
-                "conversation_id": "memos_conversation_123",
+                "conversation_id": "0610",
                 "status": "activated",
                 "confidence": 0.0,
                 "tags": [
@@ -201,7 +209,7 @@ curl --request POST \
                 "memory_value": "[assistant观点]助手了解到用户将和家人，包括孩子和老人一起旅行，并计划为其推荐适合家庭出游的目的地。",
                 "memory_type": "WorkingMemory",
                 "memory_time": null,
-                "conversation_id": "memos_conversation_123",
+                "conversation_id": "0610",
                 "status": "activated",
                 "confidence": 0.0,
                 "tags": [
@@ -217,10 +225,7 @@ curl --request POST \
     "message": "ok"
 }
 ```
-未来可能输出的字段示例：
-- instruction: "任务：回答用户“国庆去哪玩好？”\n受众：全家出游（包含孩子与老人）\n要求：\n- 回答时显式考虑儿童与老人的出行需求\n- 目的地建议需与“家庭友好”一致\n备注：如关键信息不足（出发地/预算/行程天数），可由业务逻辑追加澄清策略"
-- full_instruction:
-"你是一名旅游顾问。\n用户在规划旅行时总是全家一起出游（包括孩子和老人）。\n请直接回答“国庆去哪玩好？”，并优先推荐适合家庭出游的目的地。\n如果信息不足，请先提出澄清问题，再给出建议。"
+
 
 ### 2.3 获取原始对话（getMessage）
 
@@ -238,7 +243,7 @@ os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
 data = {
   "user_id": "memos_user_123",
-  "conversation_id": "memos_conversation_123"
+  "conversation_id": "0610"
 }
 headers = {
   "Content-Type": "application/json",
@@ -251,13 +256,13 @@ requests.post(url=url, headers=headers, data=json.dumps(data))
 ```
 ```python [Python (SDK)]
 # 请确保已安装MemoS (pip install MemoryOS -U)
-from memos.api.client import MemOSAPIClient
+from memos.api.client import MemOSClient
 
 # 使用 API Key 初始化客户端
-client = MemOSAPIClient(api_key=YOUR_API_KEY)
+client = MemOSClient(api_key=YOUR_API_KEY)
 
 user_id = "memos_user_123"
-conversation_id ="memos_conversation_123"
+conversation_id = "0610"
 
 client.get_message(user_id=user_id, conversation_id=conversation_id)
 ```
@@ -268,7 +273,7 @@ curl --request POST \
   --header 'Content-Type: application/json' \
   --data '{
     "user_id": "memos_user_123",
-    "conversation_id": "memos_conversation_123"
+    "conversation_id": "0610"
   }'
 ```
 ::
@@ -280,26 +285,26 @@ curl --request POST \
       {
         "role": "user",
         "content": "我想暑假出去玩，你能帮我推荐下吗？",
-        "create_time": "2025-08-26 09:30:00",
-        "update_time": "2025-08-26 09:30:00"
+        "create_time": "2025-06-10 09:30:00",
+        "update_time": "2025-06-10 09:30:00"
       },
       {
         "role": "assistant",
         "content": "明白了，所以你们是父母带孩子一块儿旅行，对吗？",
-        "create_time": "2025-08-26 09:30:00",
-        "update_time": "2025-08-26 09:30:00"
+        "create_time": "2025-06-10 09:30:00",
+        "update_time": "2025-06-10 09:30:00"
       },
       {
         "role": "user",
         "content": "对，带上孩子和老人，一般都是全家行动。",
-        "create_time": "2025-08-26 09:30:00",
-        "update_time": "2025-08-26 09:30:00"
+        "create_time": "2025-06-10 09:30:00",
+        "update_time": "2025-06-10 09:30:00"
       },
       {
         "role": "assistant",
         "content": "收到，那我会帮你推荐适合家庭出游的目的地。",
-        "create_time": "2025-08-26 09:30:00",
-        "update_time": "2025-08-26 09:30:00"
+        "create_time": "2025-06-10 09:30:00",
+        "update_time": "2025-06-10 09:30:00"
       }
     ]
   },

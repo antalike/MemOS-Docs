@@ -15,6 +15,7 @@ Register and log in to the [MemOS Cloud Platform](https://memos-dashboard.openme
 
 ### 2.1 Add Original Messages
 
+**Conversation A: Occurred on 2025-06-10**<br>
 Simply provide the **raw conversation records** to MemOS.  MemOS will <code style="font-weight: bold;">automatically abstract, process, and save them as memory</code>.
 
 ::code-group
@@ -32,12 +33,12 @@ data = {
     {"role": "user", "content": "I want to travel during summer vacation, can you recommend something?"},
     {"role": "assistant", "content": "Sure! Are you traveling alone, with family or with friends?"},
     {"role": "user", "content": "I’m bringing my kid. My family always travels together."},
-    {"role": "assistant", "content": "Got it, so you’re traveling with your children as a family, right?"}
+    {"role": "assistant", "content": "Got it, so you’re traveling with your children as a family, right?"},
     {"role": "user", "content": "Yes, with both kids and elderly, we usually travel as a whole family."},
     {"role": "assistant", "content": "Understood, I’ll recommend destinations suitable for family trips."}
   ],
   "user_id": "memos_user_123",
-  "conversation_id": "memos_conversation_123"
+  "conversation_id": "0610"
 }
 headers = {
   "Content-Type": "application/json",
@@ -48,41 +49,40 @@ url = f"{os.environ['MEMOS_BASE_URL']}/add/message"
 requests.post(url=url, headers=headers, data=json.dumps(data))
 ```
 ```python [Python (SDK)]
-# pip install MemoryOS -U
-
-from memos.api import MemOSClient
+# Please ensure that MemOS has been installed (pip install MemoryOS -U)
+from memos.api.client import MemOSClient
 
 # Initialize MemOS client with API Key to start sending requests
-client = MemOSClient(api_key=YOUR_API_KEY)
+client = MemOSClient(api_key=YOUR_API_KEY)
 
 messages = [
   {"role": "user", "content": "I want to travel during summer vacation, can you recommend something?"},
   {"role": "assistant", "content": "Sure! Are you traveling alone, with family or with friends?"},
   {"role": "user", "content": "I’m bringing my kid. My family always travels together."},
-  {"role": "assistant", "content": "Got it, so you’re traveling with your children as a family, right?"}
+  {"role": "assistant", "content": "Got it, so you’re traveling with your children as a family, right?"},
   {"role": "user", "content": "Yes, with both kids and elderly, we usually travel as a whole family."},
   {"role": "assistant", "content": "Understood, I’ll recommend destinations suitable for family trips."}
 ]
 user_id = "memos_user_123"
-conversation_id = "memos_conversation_123"
+conversation_id = "0610"
 
 client.add_message(messages=messages, user_id=user_id, conversation_id=conversation_id)
 ```
-```bash [curl]
+```bash [Curl]
 curl --request POST \
   --url https://memos.memtensor.cn/api/openmem/v1/add/message \
   --header 'Authorization: Token YOUR_API_KEY' \
   --header 'Content-Type: application/json' \
   --data '{
     "user_id": "memos_user_123",
-    "conversation_id": "memos_conversation_123",
+    "conversation_id": "0610",
     "messages": [
       {"role":"user","content":"I want to travel during summer vacation, can you recommend something?"},
       {"role":"assistant","content":"Sure! Are you traveling alone, with family or with friends?"},
-      {"role":"user","content":"I'm bringing my kid. My family always travels together."},
-      {"role":"assistant","content":"Got it, so you're traveling with your children as a family, right?"},
+      {"role":"user","content":"I'\''m bringing my kid. My family always travels together."},
+      {"role":"assistant","content":"Got it, so you'\''re traveling with your children as a family, right?"},
       {"role":"user","content":"Yes, with both kids and elderly, we usually travel as a whole family."},
-      {"role":"assistant","content":"Understood, I'll recommend destinations suitable for family trips."}
+      {"role":"assistant","content":"Understood, I'\''ll recommend destinations suitable for family trips."}
     ]
   }'
 ```
@@ -101,6 +101,7 @@ curl --request POST \
 
 ### 2.2 Search Memory
 
+**Conversation A: Occurred on 2025-09-28**<br>
 Use the user's utterance to search memory, and MemOS will automatically retrieve the most relevant memories for the AI to reference.
 
 > MemOS supports returning **`matches`**, **`instruction`** (coming soon), and **`full_instruction`** (coming soon). In practice, you only need to choose one according to your business needs.
@@ -124,7 +125,7 @@ os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 data = {
   "query": "Any suggestions for where to go during National Day?",
   "user_id": "memos_user_123",
-  "conversation_id": "memos_conversation_123"
+  "conversation_id": "0928"
 }
 
 # MemOS will support returning matches, instruction, and full_instruction in the future:
@@ -138,27 +139,32 @@ headers = {
 }
 url = f"{os.environ['MEMOS_BASE_URL']}/search/memory"
 
-requests.post(url=url, headers=headers, data=json.dumps(data))
+res = requests.post(url=url, headers=headers, data=json.dumps(data))
+
+for memory in res.json()["data"]["memory_detail_list"]:
+    print(f"Related memory：{memory['memory_value']}")
 
 ```
 ```python [Python (SDK)]
-# pip install MemoryOS -U
-
-from memos.api import MemOSClient
+# Please ensure that MemOS has been installed (pip install MemoryOS -U)
+from memos.api.client import MemOSClient
 
 # Initialize MemOS client with API Key to start sending requests
-client = MemOSClient(api_key=YOUR_API_KEY)
+client = MemOSClient(api_key=YOUR_API_KEY)
 
 query = "Any suggestions for where to go during National Day?"
 user_id = "memos_user_123"
-conversation_id ="memos_conversation_123"
+conversation_id ="0928"
 
 # MemOS will support returning matches, instruction, and full_instruction in the future:
 # return_matches = True
 # return_instruction = True
 # return_full_instruction = True
 
-client.search_memory(query=query, user_id=user_id, conversation_id=conversation_id)
+res = client.search_memory(query=query, user_id=user_id, conversation_id=conversation_id)
+
+for memory in res.data.memory_detail_list:
+    print(f"Related memory：{memory.memory_value}")
 ```
 ```bash [Curl]
 curl --request POST \
@@ -168,7 +174,7 @@ curl --request POST \
   --data '{
     "query": "Any suggestions for where to go during National Day?",
     "user_id": "memos_user_123",
-    "conversation_id": "memos_conversation_123"
+    "conversation_id": "0928"
   }'
 # MemOS will support returning matches, instruction, and full_instruction in the future:
 # "return_matches": true
@@ -187,7 +193,7 @@ curl --request POST \
                 "memory_value": "[user perspective] The user plans a family trip during the summer vacation, bringing along children and elderly family members, traveling together as a whole family.",
                 "memory_type": "WorkingMemory",
                 "memory_time": null,
-                "conversation_id": "memos_conversation_123",
+                "conversation_id": "0610",
                 "status": "activated",
                 "confidence": 0.0,
                 "tags": [
@@ -204,7 +210,7 @@ curl --request POST \
                 "memory_value": "[assistant perspective] The assistant understands that the user will travel with family, including children and elderly, and plans to recommend destinations suitable for family trips.",
                 "memory_type": "WorkingMemory",
                 "memory_time": null,
-                "conversation_id": "memos_conversation_123",
+                "conversation_id": "0610",
                 "status": "activated",
                 "confidence": 0.0,
                 "tags": [
@@ -220,10 +226,6 @@ curl --request POST \
     "message": "ok"
 }
 ```
-
-Example of fields that may be output in the future:
-- instruction: "Task: Answer the user's question 'Where to go during National Day?'\nAudience: Family trip (including children and elderly)\nRequirements:\n- Explicitly consider the travel needs of children and elderly when answering\n- Destination suggestions must be consistent with 'family-friendly'\nNote: If key information is missing (departure location/budget/number of days), business logic can append a clarification strategy."
-- full_instruction: "You are a travel advisor.\nThe user always plans trips with the whole family (including children and elderly).\nPlease directly answer 'Where to go during National Day?' and prioritize recommending destinations suitable for family trips.\nIf information is insufficient, first ask clarification questions, then provide recommendations."
 
 ### 2.3 Get Original Messages
 
@@ -241,7 +243,7 @@ os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
 data = {
   "user_id": "memos_user_123",
-  "conversation_id": "memos_conversation_123"
+  "conversation_id": "0610"
 }
 headers = {
   "Content-Type": "application/json",
@@ -253,14 +255,14 @@ requests.post(url=url, headers=headers, data=json.dumps(data))
 
 ```
 ```python [Python (SDK)]
-# pip install MemoryOS -U
-from memos.api import MemOSClient
+# Please ensure that MemoS has been installed (pip install MemoryOS -U).
+from memos.api.client import MemOSClient
 
 # Initialize MemOS client with API Key to start sending requests
-client = MemOSClient(api_key=YOUR_API_KEY)
+client = MemOSClient(api_key=YOUR_API_KEY)
 
 user_id = "memos_user_123"
-conversation_id ="memos_conversation_123"
+conversation_id = "0610"
 
 client.get_message(user_id=user_id, conversation_id=conversation_id)
 ```
@@ -271,7 +273,7 @@ curl --request POST \
   --header 'Content-Type: application/json' \
   --data '{
     "user_id": "memos_user_123",
-    "conversation_id": "memos_conversation_123"
+    "conversation_id": "0610"
   }'
 ```
 ::
@@ -283,26 +285,26 @@ curl --request POST \
       {
         "role": "user",
         "content": "I want to travel during summer vacation, can you recommend something?",
-        "create_time": "2025-08-26 09:30:00",
-        "update_time": "2025-08-26 09:30:00"
+        "create_time": "2025-06-10 09:30:00",
+        "update_time": "2025-06-10 09:30:00"
       },
       {
         "role": "assistant",
         "content": "Sure! Are you traveling alone, with family or with friends?",
-        "create_time": "2025-08-26 09:30:00",
-        "update_time": "2025-08-26 09:30:00"
+        "create_time": "2025-06-10 09:30:00",
+        "update_time": "2025-06-10 09:30:00"
       },
       {
         "role": "user",
         "content": "I’m bringing my kid. My family always travels together.",
-        "create_time": "2025-08-26 09:30:00",
-        "update_time": "2025-08-26 09:30:00"
+        "create_time": "2025-06-10 09:30:00",
+        "update_time": "2025-06-10 09:30:00"
       },
       {
         "role": "assistant",
         "content": "Understood, I’ll recommend destinations suitable for family trips.",
-        "create_time": "2025-08-26 09:30:00",
-        "update_time": "2025-08-26 09:30:00"
+        "create_time": "2025-06-10 09:30:00",
+        "update_time": "2025-06-10 09:30:00"
       }
     ]
   },
