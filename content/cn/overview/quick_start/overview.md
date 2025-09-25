@@ -162,7 +162,7 @@ print(f"相关记忆：{results['data']['memory_detail_list']}")
 
 > MemCube 是记忆的基本容器，负责承载用户的记忆条目。云服务中的 `addMessage` 和 `searchMemory` 接口，本质上就是对 MemCube 内部操作的抽象封装。在开源框架中，开发者可以直接控制这些步骤。
 
-具体操作步骤详见：[开源项目→快速开始](https://memos-docs.openmem.net/cn/getting_started/quick_start)
+具体操作步骤详见：[开源项目→快速开始](https://memos-docs.openmem.net/cn/open_source/getting_started/quick_start)
 
 
 ## 3. 下一步行动
