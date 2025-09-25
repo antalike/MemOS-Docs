@@ -64,6 +64,7 @@ conversation = [
 
 payload = {
     "user_id": "memos_user_123",
+    "conversation_id": "0610",
     "messages": conversation
 }
 
@@ -106,6 +107,7 @@ user_query = "国庆去哪玩好？"
 
 payload = {
     "user_id": "memos_user_123",
+    "conversation_id": "0928",
     "query": user_query,
     "memory_limit_number": 6  # 可选，不传默认6
 
