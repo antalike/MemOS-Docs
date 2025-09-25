@@ -59,16 +59,35 @@ EMBEDDING_DIMENSION=1024
 # MOS_EMBEDDER_PROVIDER: openai or azure
 ```
 
+#### Start Docker Client
+
+
 #### Enter Docker Folder
 ```bash 
 # Enter Docker in the current folder
 cd docker
 ```
 
+
+#### Install Dependencies
+```bash
+
+pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
+
+# Use aliyun source to install dependencies
+pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple/
+
+```
+
 #### Start the container using Docker Compose Up in the Docker directory (ensuring proper VPN connection):
 
 ```bash
+
+# On the first run, you need to build the image
+docker compose up --build
+# On subsequent runs, you do not need to build the image
 docker compose up
+
 ```
 #### Access the API at [http://localhost:8000/docs](http://localhost:8000/docs).
 
