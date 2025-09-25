@@ -211,7 +211,7 @@ def execute_pre_conversations():
     conversations = pre_configured_conversations()
     conversation_id = generate_conversation_id()
     
-    print(f"\n🔄 正在执行预配置对话（conversation_id={conversation_id}...")
+    print(f"\n🔄 正在执行预配置对话（conversation_id={conversation_id})...")
     print("=" * 60)
     
     for i, conv in enumerate(conversations, 1):

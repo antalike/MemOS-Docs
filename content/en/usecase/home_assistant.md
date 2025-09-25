@@ -148,7 +148,7 @@ class HomeAssistant:
     def chat(self, query, user_id, conversation_id):
         """Main chat function handling memory-integrated conversation"""
         # 1. Search relevant memories
-        memories = self.search_memories(query, user_id, conversation_id)
+        memories = self.search_memory(query, user_id, conversation_id)
         
         # Build system prompt including memories
         system_prompt = self.build_system_prompt(memories)

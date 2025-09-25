@@ -13,7 +13,6 @@ export function getLangPath(path: string, locale: string) {
 export function getHomePath(path: string, locale: string) {
   const config = useRuntimeConfig()
   const homeDomain = config.public.homeDomain
-  console.log('getHomePath homeDomain', homeDomain)
   return locale === 'cn' ? `${homeDomain}/cn${path}` : `${homeDomain}${path}`
 }
 
