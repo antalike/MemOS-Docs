@@ -68,7 +68,7 @@ conversation_id = "memos_conversation_123"
 
 client.add_message(messages=messages, user_id=user_id, conversation_id=conversation_id)
 ```
-```bash [curl]
+```bash [Curl]
 curl --request POST \
   --url https://memos.memtensor.cn/api/openmem/v1/add/message \
   --header 'Authorization: Token YOUR_API_KEY' \
