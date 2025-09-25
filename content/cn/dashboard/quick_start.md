@@ -140,7 +140,7 @@ requests.post(url=url, headers=headers, data=json.dumps(data))
 
 ```
 ```python [Python (SDK)]
-# 请确保已安装MemoS (pip install MemoryOS -U)
+# 请确保已安装MemOS (pip install MemoryOS -U)
 from memos.api.client import MemOSAPIClient
 
 # 使用 API Key 初始化客户端

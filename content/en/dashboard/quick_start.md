@@ -253,8 +253,8 @@ requests.post(url=url, headers=headers, data=json.dumps(data))
 
 ```
 ```python [Python (SDK)]
-# pip install MemoryOS -U
-from memos.api import MemOSClient
+# Please ensure that MemoS has been installed (pip install MemoryOS -U).
+from memos.api.client import MemOSClient
 
 # Initialize MemOS client with API Key to start sending requests
 client = MemOSClient(api_key=YOUR_API_KEY)
