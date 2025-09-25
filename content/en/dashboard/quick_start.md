@@ -33,7 +33,7 @@ data = {
     {"role": "user", "content": "I want to travel during summer vacation, can you recommend something?"},
     {"role": "assistant", "content": "Sure! Are you traveling alone, with family or with friends?"},
     {"role": "user", "content": "I’m bringing my kid. My family always travels together."},
-    {"role": "assistant", "content": "Got it, so you’re traveling with your children as a family, right?"}
+    {"role": "assistant", "content": "Got it, so you’re traveling with your children as a family, right?"},
     {"role": "user", "content": "Yes, with both kids and elderly, we usually travel as a whole family."},
     {"role": "assistant", "content": "Understood, I’ll recommend destinations suitable for family trips."}
   ],
@@ -49,18 +49,17 @@ url = f"{os.environ['MEMOS_BASE_URL']}/add/message"
 requests.post(url=url, headers=headers, data=json.dumps(data))
 ```
 ```python [Python (SDK)]
-# pip install MemoryOS -U
-
-from memos.api import MemOSClient
+# Please ensure that MemOS has been installed (pip install MemoryOS -U)
+from memos.api.client import MemOSClient
 
 # Initialize MemOS client with API Key to start sending requests
-client = MemOSClient(api_key=YOUR_API_KEY)
+client = MemOSClient(api_key=YOUR_API_KEY)
 
 messages = [
   {"role": "user", "content": "I want to travel during summer vacation, can you recommend something?"},
   {"role": "assistant", "content": "Sure! Are you traveling alone, with family or with friends?"},
   {"role": "user", "content": "I’m bringing my kid. My family always travels together."},
-  {"role": "assistant", "content": "Got it, so you’re traveling with your children as a family, right?"}
+  {"role": "assistant", "content": "Got it, so you’re traveling with your children as a family, right?"},
   {"role": "user", "content": "Yes, with both kids and elderly, we usually travel as a whole family."},
   {"role": "assistant", "content": "Understood, I’ll recommend destinations suitable for family trips."}
 ]
@@ -80,10 +79,10 @@ curl --request POST \
     "messages": [
       {"role":"user","content":"I want to travel during summer vacation, can you recommend something?"},
       {"role":"assistant","content":"Sure! Are you traveling alone, with family or with friends?"},
-      {"role":"user","content":"I'm bringing my kid. My family always travels together."},
-      {"role":"assistant","content":"Got it, so you're traveling with your children as a family, right?"},
+      {"role":"user","content":"I'\''m bringing my kid. My family always travels together."},
+      {"role":"assistant","content":"Got it, so you'\''re traveling with your children as a family, right?"},
       {"role":"user","content":"Yes, with both kids and elderly, we usually travel as a whole family."},
-      {"role":"assistant","content":"Understood, I'll recommend destinations suitable for family trips."}
+      {"role":"assistant","content":"Understood, I'\''ll recommend destinations suitable for family trips."}
     ]
   }'
 ```
@@ -144,12 +143,11 @@ requests.post(url=url, headers=headers, data=json.dumps(data))
 
 ```
 ```python [Python (SDK)]
-# pip install MemoryOS -U
-
-from memos.api import MemOSClient
+# Please ensure that MemOS has been installed (pip install MemoryOS -U)
+from memos.api.client import MemOSClient
 
 # Initialize MemOS client with API Key to start sending requests
-client = MemOSClient(api_key=YOUR_API_KEY)
+client = MemOSClient(api_key=YOUR_API_KEY)
 
 query = "Any suggestions for where to go during National Day?"
 user_id = "memos_user_123"
@@ -252,13 +250,13 @@ requests.post(url=url, headers=headers, data=json.dumps(data))
 ```
 ```python [Python (SDK)]
 # Please ensure that MemoS has been installed (pip install MemoryOS -U).
-from memos.api.client import MemOSClient
+from memos.api.client import MemOSClient
 
 # Initialize MemOS client with API Key to start sending requests
-client = MemOSClient(api_key=YOUR_API_KEY)
+client = MemOSClient(api_key=YOUR_API_KEY)
 
 user_id = "memos_user_123"
-conversation_id ="0610"
+conversation_id = "0610"
 
 client.get_message(user_id=user_id, conversation_id=conversation_id)
 ```
