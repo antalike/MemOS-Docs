@@ -54,7 +54,7 @@ requests.post(url=url, headers=headers, data=json.dumps(data))
 from memos.api.client import MemOSClient
 
 # 使用 API Key 初始化客户端
-client = MemOSClient(api_key=YOUR_API_KEY)
+client = MemOSClient(api_key="YOUR_API_KEY")
 
 messages = [
   {"role": "user", "content": "我想暑假出去玩，你能帮我推荐下吗？"},
@@ -138,15 +138,16 @@ headers = {
 }
 url = f"{os.environ['MEMOS_BASE_URL']}/search/memory"
 
-requests.post(url=url, headers=headers, data=json.dumps(data))
-
+res = requests.post(url=url, headers=headers, data=json.dumps(data))
+for memory in res.json()["data"]["memory_detail_list"]:
+    print(f"相关记忆: {memory['memory_value']}")
 ```
 ```python [Python (SDK)]
 # 请确保已安装MemOS (pip install MemoryOS -U)
 from memos.api.client import MemOSClient
 
 # 使用 API Key 初始化客户端
-client = MemOSClient(api_key=YOUR_API_KEY)
+client = MemOSClient(api_key="YOUR_API_KEY")
 
 query = "国庆去哪玩"
 user_id = "memos_user_123"
@@ -157,7 +158,9 @@ conversation_id = "0928"
 # return_instruction = True
 # return_full_instruction = True
 
-client.search_memory(query=query, user_id=user_id, conversation_id=conversation_id)
+res = client.search_memory(query=query, user_id=user_id, conversation_id=conversation_id)
+for memory in res.data.memory_detail_list:
+    print(f"相关记忆: {memory.memory_value}")
 ```
 ```bash [Curl]
 curl --request POST \
@@ -169,10 +172,6 @@ curl --request POST \
     "user_id": "memos_user_123",
     "conversation_id": "0928"
   }'
-# MemOS 未来将支持返回 相关记忆（matches）、拼接指令（instruction）与完整指令（full_instruction）：
-# "return_matches": true
-# "return_instruction": true
-# "return_full_instruction": true
 ```
 ::
 ```json [search_memory_res.json]
@@ -253,7 +252,7 @@ requests.post(url=url, headers=headers, data=json.dumps(data))
 from memos.api.client import MemOSClient
 
 # 使用 API Key 初始化客户端
-client = MemOSClient(api_key=YOUR_API_KEY)
+client = MemOSClient(api_key="YOUR_API_KEY")
 
 user_id = "memos_user_123"
 conversation_id = "0610"
