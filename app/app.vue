@@ -24,7 +24,6 @@ const isSupportCssOklch = (): boolean => {
   return CSS.supports('color', 'oklch(0% 0 0)')
 }
 
-// 根据浏览器设置HTML类名
 const htmlClass = computed(() => {
   if (import.meta.client) {
     if (!isSupportCssOklch()) {
