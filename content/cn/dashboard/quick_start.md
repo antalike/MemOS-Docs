@@ -172,10 +172,6 @@ curl --request POST \
     "user_id": "memos_user_123",
     "conversation_id": "0928"
   }'
-# MemOS 未来将支持返回 相关记忆（matches）、拼接指令（instruction）与完整指令（full_instruction）：
-# "return_matches": true
-# "return_instruction": true
-# "return_full_instruction": true
 ```
 ::
 ```json [search_memory_res.json]
