@@ -43,3 +43,259 @@ img[alt="MemOS Banner"] {
 .scrollbar-hide::-webkit-scrollbar {
   display: none; 
 }
+
+/* Color-mix() functions - Chrome 107 incompatible (Chrome 111+ support) */
+/* Fallback colors with RGB values for better browser compatibility */
+.compact {
+  /* Red colors with RGB fallbacks */
+  --color-red-100: rgb(249, 230, 230);
+  --color-red-300: rgb(252, 165, 165);
+  --color-red-400: rgb(248, 113, 113);
+  --color-red-600: rgb(220, 38, 38);
+  --color-red-700: rgb(185, 28, 28);
+  
+  /* Orange colors with RGB fallbacks */
+  --color-orange-100: rgb(254, 237, 218);
+  --color-orange-600: rgb(234, 88, 12);
+  --color-orange-800: rgb(154, 52, 18);
+  
+  /* Yellow colors with RGB fallbacks */
+  --color-yellow-400: rgb(251, 191, 36);
+  --color-yellow-700: rgb(161, 98, 7);
+  
+  /* Green colors with RGB fallbacks */
+  --color-green-400: rgb(74, 222, 128);
+  --color-green-600: rgb(22, 163, 74);
+  --color-green-700: rgb(21, 128, 61);
+  
+  /* Blue colors with RGB fallbacks */
+  --color-blue-100: rgb(219, 234, 254);
+  --color-blue-400: rgb(96, 165, 250);
+  --color-blue-700: rgb(29, 78, 216);
+  --color-blue-800: rgb(30, 64, 175);
+  
+  /* Gray colors with RGB fallbacks */
+  --color-gray-50: rgb(249, 250, 251);
+  --color-gray-100: rgb(243, 244, 246);
+  --color-gray-200: rgb(229, 231, 235);
+  --color-gray-300: rgb(209, 213, 219);
+  --color-gray-400: rgb(156, 163, 175);
+  --color-gray-500: rgb(107, 114, 128);
+  --color-gray-600: rgb(75, 85, 99);
+  --color-gray-700: rgb(55, 65, 81);
+  --color-gray-800: rgb(31, 41, 55);
+  --color-gray-900: rgb(17, 24, 39);
+  --color-gray-950: rgb(3, 7, 18);
+  
+  /* Neutral colors with RGB fallbacks */
+  --color-old-neutral-50: rgb(250, 250, 250);
+  --color-old-neutral-100: rgb(245, 245, 245);
+  --color-old-neutral-200: rgb(229, 229, 229);
+  --color-old-neutral-300: rgb(212, 212, 212);
+  --color-old-neutral-400: rgb(163, 163, 163);
+  --color-old-neutral-500: rgb(115, 115, 115);
+  --color-old-neutral-600: rgb(82, 82, 82);
+  --color-old-neutral-700: rgb(64, 64, 64);
+  --color-old-neutral-800: rgb(38, 38, 38);
+  --color-old-neutral-900: rgb(23, 23, 23);
+  --color-old-neutral-950: rgb(10, 10, 10);
+}
+.compact .bg-default\/75 {
+    background-color: var(--ui-bg);
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--ui-bg) 75%, transparent);
+    }
+  }
+.compact .border-gray-200\/70 {
+  border-color: color-mix(in srgb, oklch(92.8% 0.006 264.531) 70%, transparent);
+  @supports (color: color-mix(in lab, red, red)) {
+    border-color: color-mix(in oklab, var(--color-gray-200) 70%, transparent);
+  }
+}
+.compact .border-gray-950\/10 {
+  border-color: color-mix(in srgb, oklch(13% 0.028 261.692) 10%, transparent);
+  @supports (color: color-mix(in lab, red, red)) {
+    border-color: color-mix(in oklab, var(--color-gray-950) 10%, transparent);
+  }
+}
+.compact .bg-blue-400\/20 {
+  background-color: color-mix(in srgb, oklch(70.7% 0.165 254.624) 20%, transparent);
+  @supports (color: color-mix(in lab, red, red)) {
+    background-color: color-mix(in oklab, var(--color-blue-400) 20%, transparent);
+  }
+}
+.compact .bg-gray-100\/50 {
+  background-color: color-mix(in srgb, oklch(96.7% 0.003 264.542) 50%, transparent);
+  @supports (color: color-mix(in lab, red, red)) {
+    background-color: color-mix(in oklab, var(--color-gray-100) 50%, transparent);
+  }
+}
+.compact .bg-green-400\/20 {
+  background-color: color-mix(in srgb, oklch(79.2% 0.209 151.711) 20%, transparent);
+  @supports (color: color-mix(in lab, red, red)) {
+    background-color: color-mix(in oklab, var(--color-green-400) 20%, transparent);
+  }
+}
+.compact .bg-red-100\/50 {
+  background-color: color-mix(in srgb, oklch(93.6% 0.032 17.717) 50%, transparent);
+  @supports (color: color-mix(in lab, red, red)) {
+    background-color: color-mix(in oklab, var(--color-red-100) 50%, transparent);
+  }
+}
+.compact .bg-red-400\/20 {
+  background-color: color-mix(in srgb, oklch(70.4% 0.191 22.216) 20%, transparent);
+  @supports (color: color-mix(in lab, red, red)) {
+    background-color: color-mix(in oklab, var(--color-red-400) 20%, transparent);
+  }
+}
+.compact .bg-yellow-400\/20 {
+  background-color: color-mix(in srgb, oklch(85.2% 0.199 91.936) 20%, transparent);
+  @supports (color: color-mix(in lab, red, red)) {
+    background-color: color-mix(in oklab, var(--color-yellow-400) 20%, transparent);
+  }
+}
+.compact .group-hover\:bg-gray-200\/50 {
+  &:is(:where(.group):hover *) {
+    @media (hover: hover) {
+      background-color: color-mix(in srgb, oklch(92.8% 0.006 264.531) 50%, transparent);
+      @supports (color: color-mix(in lab, red, red)) {
+        background-color: color-mix(in oklab, var(--color-gray-200) 50%, transparent);
+      }
+    }
+  }
+}
+.compact .hover\:bg-gray-50\/50 {
+  &:hover {
+    @media (hover: hover) {
+      background-color: color-mix(in srgb, oklch(98.5% 0.002 247.839) 50%, transparent);
+      @supports (color: color-mix(in lab, red, red)) {
+        background-color: color-mix(in oklab, var(--color-gray-50) 50%, transparent);
+      }
+    }
+  }
+}
+.compact .dark\:bg-blue-400\/20 {
+  &:where(.dark, .dark *) {
+    background-color: color-mix(in srgb, oklch(70.7% 0.165 254.624) 20%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--color-blue-400) 20%, transparent);
+    }
+  }
+}
+.compact .dark\:bg-green-400\/20 {
+  &:where(.dark, .dark *) {
+    background-color: color-mix(in srgb, oklch(79.2% 0.209 151.711) 20%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--color-green-400) 20%, transparent);
+    }
+  }
+}
+.compact .dark\:bg-red-400\/10 {
+  &:where(.dark, .dark *) {
+    background-color: color-mix(in srgb, oklch(70.4% 0.191 22.216) 10%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--color-red-400) 10%, transparent);
+    }
+  }
+}
+.compact .dark\:bg-red-400\/20 {
+  &:where(.dark, .dark *) {
+    background-color: color-mix(in srgb, oklch(70.4% 0.191 22.216) 20%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--color-red-400) 20%, transparent);
+    }
+  }
+}
+.compact .dark\:bg-yellow-400\/20 {
+  &:where(.dark, .dark *) {
+    background-color: color-mix(in srgb, oklch(85.2% 0.199 91.936) 20%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--color-yellow-400) 20%, transparent);
+    }
+  }
+}
+.compact .dark\:group-hover\:bg-gray-700\/70 {
+  &:where(.dark, .dark *) {
+    &:is(:where(.group):hover *) {
+      @media (hover: hover) {
+        background-color: color-mix(in srgb, oklch(37.3% 0.034 259.733) 70%, transparent);
+        @supports (color: color-mix(in lab, red, red)) {
+          background-color: color-mix(in oklab, var(--color-gray-700) 70%, transparent);
+        }
+      }
+    }
+  }
+}
+
+.compact .ring {
+  --tw-ring-shadow: var(--tw-ring-inset, ) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
+}
+.compact .ring-0 {
+   --tw-ring-shadow: var(--tw-ring-inset, ) 0 0 0 calc(0px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
+}
+.compact .ring-2 {
+  --tw-ring-shadow: var(--tw-ring-inset, ) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
+}
+.compact .ring-3 {
+  --tw-ring-shadow: var(--tw-ring-inset, ) 0 0 0 calc(3px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
+}
+.compact .focus\:ring-2 {
+  &:focus {
+    --tw-ring-shadow: var(--tw-ring-inset, ) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
+  }
+}
+.compact .focus-visible\:ring-2 {
+  &:focus-visible {
+    --tw-ring-shadow: var(--tw-ring-inset, ) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
+  }
+}
+.compact .focus-visible\:before\:ring-2 {
+  &:focus-visible {
+    &::before {
+      --tw-ring-shadow: var(--tw-ring-inset, ) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
+    }
+  }
+}
+.compact .has-focus-visible\:ring-2 {
+  &:has(*:focus-visible) {
+    --tw-ring-shadow: var(--tw-ring-inset, ) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
+  }
+}
+.compact .sm\:ring {
+  @media (width >= 40rem) {
+    --tw-ring-shadow: var(--tw-ring-inset, ) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
+  }
+}
+.compact .\[\&_\*\]\:ring-0 {
+  & * {
+    --tw-ring-shadow: var(--tw-ring-inset, ) 0 0 0 calc(0px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
+  }
+}
+.compact .\[\&_\*\]\:focus\:ring-0 {
+  & * {
+    &:focus {
+      --tw-ring-shadow: var(--tw-ring-inset, ) 0 0 0 calc(0px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
+    }
+  }
+}
+.compact .\[\&\>h2\]\:before\:ring-4 {
+  &>h2 {
+    &::before {
+      --tw-ring-shadow: var(--tw-ring-inset, ) 0 0 0 calc(4px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
+    }
+  }
+}
+.compact .\[\&\>h3\]\:before\:ring-4 {
+  &>h3 {
+    &::before {
+      --tw-ring-shadow: var(--tw-ring-inset, ) 0 0 0 calc(4px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
+    }
+  }
+}
+.compact .\[\&\>h4\]\:before\:ring-4 {
+  &>h4 {
+    &::before {
+      --tw-ring-shadow: var(--tw-ring-inset, ) 0 0 0 calc(4px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
+    }
+  }
+}
