@@ -55,9 +55,9 @@ Deleting a project will erase all memories, messages, and related data under tha
 
 - Register and log in to the [MemOS Cloud Platform](https://memos-dashboard.openmem.net/quickstart/) to obtain your API key.  
 - Review the detailed documentation for each API to understand request & response formats, parameters, and examples:  
-  - [Add Message](/dashboard/api/add-message-api-add-message-post)  
-  - [Search Memory](/dashboard/api/search-memory-api-search-memory-post)  
-  - [Get Message](/dashboard/api/get-message-api-get-message-get)  
+  - [Add Message](/dashboard/api/add-message)  
+  - [Search Memory](/dashboard/api/search-memory)  
+  - [Get Message](/dashboard/api/get-message)  
   - [Error Codes](/dashboard/api/error_code)  
 - Make your first API call to add or retrieve memory.
 
