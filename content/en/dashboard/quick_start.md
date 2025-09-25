@@ -53,7 +53,7 @@ requests.post(url=url, headers=headers, data=json.dumps(data))
 from memos.api.client import MemOSClient
 
 # Initialize MemOS client with API Key to start sending requests
-client = MemOSClient(api_key=YOUR_API_KEY)
+client = MemOSClient(api_key="YOUR_API_KEY")
 
 messages = [
   {"role": "user", "content": "I want to travel during summer vacation, can you recommend something?"},
@@ -139,7 +139,9 @@ headers = {
 }
 url = f"{os.environ['MEMOS_BASE_URL']}/search/memory"
 
-requests.post(url=url, headers=headers, data=json.dumps(data))
+res = requests.post(url=url, headers=headers, data=json.dumps(data))
+for memory in res.json()['data']['memory_detail_list']:
+  print(f"Related memory: {memory['memory_value']}")
 
 ```
 ```python [Python (SDK)]
@@ -147,7 +149,7 @@ requests.post(url=url, headers=headers, data=json.dumps(data))
 from memos.api.client import MemOSClient
 
 # Initialize MemOS client with API Key to start sending requests
-client = MemOSClient(api_key=YOUR_API_KEY)
+client = MemOSClient(api_key="YOUR_API_KEY")
 
 query = "Any suggestions for where to go during National Day?"
 user_id = "memos_user_123"
@@ -158,7 +160,9 @@ conversation_id ="0928"
 # return_instruction = True
 # return_full_instruction = True
 
-client.search_memory(query=query, user_id=user_id, conversation_id=conversation_id)
+res = client.search_memory(query=query, user_id=user_id, conversation_id=conversation_id)
+for memory in res.data.memory_detail_list:
+  print(f"Related memory: {memory.memory_value}")
 ```
 ```bash [Curl]
 curl --request POST \
@@ -170,10 +174,6 @@ curl --request POST \
     "user_id": "memos_user_123",
     "conversation_id": "0928"
   }'
-# MemOS will support returning matches, instruction, and full_instruction in the future:
-# "return_matches": true
-# "return_instruction": true
-# "return_full_instruction": true
 ```
 ::
 ```json [search_memory_res.json]
@@ -253,7 +253,7 @@ requests.post(url=url, headers=headers, data=json.dumps(data))
 from memos.api.client import MemOSClient
 
 # Initialize MemOS client with API Key to start sending requests
-client = MemOSClient(api_key=YOUR_API_KEY)
+client = MemOSClient(api_key="YOUR_API_KEY")
 
 user_id = "memos_user_123"
 conversation_id = "0610"
