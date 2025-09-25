@@ -61,6 +61,7 @@ EMBEDDING_DIMENSION=1024
 # MOS_MAX_TURNS_WINDOW: 对话窗口保留轮数
 # MOS_EMBEDDER_PROVIDER: openai 或 azure
 ```
+#### 启动docker客户端
 
 #### 进入docker文件夹
 ```bash 
@@ -68,10 +69,25 @@ EMBEDDING_DIMENSION=1024
 cd docker
 ```
 
+#### 安装对应依赖模块
+```bash
+
+pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
+# 使用阿里云源安装依赖
+pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple/
+
+```
+
+
 #### 在docker目录下使用 Docker Compose Up启动容器(保证vpn正常连接)：
 
 ```bash
+
+# 首次运行需要build
+docker compose up --build
+# 再次运行则不需要
 docker compose up
+
 ```
 
 #### 通过 [http://localhost:8000/docs](http://localhost:8000/docs) 访问 API。
