@@ -46,37 +46,36 @@ You only need to provide the `raw conversation logs` to MemOS, and MemOS will `a
 ::
 
 ```python
+import os
 import requests
+import json
 
-BASE_URL = "https://memos.memtensor.cn/api/openmem/v1"   
-API_PATH = "/add/message"
-API_KEY = "your_api_key_here"        # API Key from console
+os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
+os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
-conversation = [
+data = {
+  "messages": [
     {"role": "user", "content": "I want to travel during summer vacation, can you recommend something?"},
     {"role": "assistant", "content": "Sure! Are you traveling alone or with family/friends?"},
     {"role": "user", "content": "Of course I’m bringing my kid, our family always travels together."},
     {"role": "assistant", "content": "Got it, so you’re traveling with your children as a family, right?"},
     {"role": "user", "content": "Yes, with both kids and elderly, we usually travel as a whole family."},
     {"role": "assistant", "content": "Understood, I’ll recommend destinations suitable for family trips."}
-]
-
-payload = {
-    "user_id": "memos_user_123",
-    "conversation_id": "memos_conversation_123"
-    "messages": conversation
+  ],
+  "user_id": "memos_user_123",
+  "conversation_id": "0610"
 }
 
-resp = requests.post(
-    BASE_URL + API_PATH,
-    json=payload,
-    headers={
-        "Content-Type": "application/json",
-        "Authorization": f"Token {API_KEY}"
-    }
-)
+headers = {
+  "Content-Type": "application/json",
+  "Authorization": f"Token {os.environ['MEMOS_API_KEY']}"
+}
 
-print(resp.json())
+url = f"{os.environ['MEMOS_BASE_URL']}/add/message"
+
+res = requests.post(url=url, headers=headers, data=json.dumps(data))
+
+print(res.json())
 ```
 
 ### Step 3. Query MemOS for relevant memories within conversations (searchMemory)
@@ -96,17 +95,17 @@ In a new conversation, when the user asks AI to recommend a National Day trip pl
 > **Why this design**: Most memory systems stop at “recalling facts”, but facts ≠ executable Prompts. MemOS’s unique instruction completion chain saves you from complex stitching and fine-tuning, directly converting memories into model-readable and executable prompts.
 
 ```python
+import os
 import requests
+import json
 
-BASE_URL = "https://memos.memtensor.cn/api/openmem/v1"   
-API_PATH = "/search/memory"
-API_KEY = "your_api_key_here"
+os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
+os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
-user_query = "Where to go for National Day travel?"
-
-payload = {
-    "user_id": "u123",
-    "query": user_query,
+data = {
+    "user_id": "memos_user_123",  
+    "conversation_id": "0928"
+    "query": "Where to go for National Day travel?",
     "memory_limit_number": 6  # Optional, default is 6 if not provided
 
     # ==== Coming Soon ====
@@ -116,26 +115,25 @@ payload = {
     # "return_full_instruction": True
 }
 
-resp = requests.post(
-    BASE_URL + API_PATH,
-    json=payload,
-    headers={
-        "Content-Type": "application/json",
-        "Authorization": f"Token {API_KEY}"
-    }
-)
+headers = {
+  "Content-Type": "application/json",
+  "Authorization": f"Token {os.environ['MEMOS_API_KEY']}"
+}
+url = f"{os.environ['MEMOS_BASE_URL']}/search/memory"
 
-results = resp.json()
+res = requests.post(url=url, headers=headers, data=json.dumps(data))
+
+results = res.json()  
 
 # Mode 1: Related Memories (matches)
-print("Related Memories:", results["data"]["memoryDetailList"])
+print("Related Memories:", results["data"]["memory_detail_list"])
 # Example output(simplified here for easier understanding, for reference only):
 # [
 #   {
-#     "memoryKey": "Travel Habit",
-#     "memoryValue": "Travel with whole family (including kids and elderly)",
+#     "memory_key": "Travel Habit",
+#     "memory_value": "Travel with whole family (including kids and elderly)",
 #     "confidence": 0.97,
-#     "updateTime": "2025-06-10T10:00:00Z"
+#     "update_time": "2025-06-10T10:00:00Z"
 #   }
 # ]
 

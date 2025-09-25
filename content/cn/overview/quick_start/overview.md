@@ -47,37 +47,37 @@ MemOS 提供了两个核心接口帮助你实现：
 ::
 
 ```python
+import os
 import requests
+import json
 
-BASE_URL = "https://memos.memtensor.cn/api/openmem/v1"   
-API_PATH = "/add/message"
-API_KEY = "your_api_key_here"        # 从控制台获取的 API Key
+# 替换成你的 API Key
+os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
+os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
-conversation = [
+data = {
+  "messages": [
     {"role": "user", "content": "我想暑假出去玩，你能帮我推荐下吗？"},
     {"role": "assistant", "content": "好的！是自己出行还是和家人朋友一起呢？"},
     {"role": "user", "content": "肯定要带孩子啊，我们家出门都是全家一起。"},
     {"role": "assistant", "content": "明白了，所以你们是父母带孩子一块儿旅行，对吗？"},
     {"role": "user", "content": "对，带上孩子和老人，一般都是全家行动。"},
     {"role": "assistant", "content": "收到，那我会帮你推荐适合家庭出游的目的地。"}
-]
-
-payload = {
-    "user_id": "memos_user_123",
-    "conversation_id": "0610",
-    "messages": conversation
+  ],
+  "user_id": "memos_user_123",
+  "conversation_id": "0610"
 }
 
-resp = requests.post(
-    BASE_URL + API_PATH,
-    data=json.dump(payload),
-    headers={
-        "Content-Type": "application/json",
-        "Authorization": f"Token {API_KEY}"
-    }
-)
+headers = {
+  "Content-Type": "application/json",
+  "Authorization": f"Token {os.environ['MEMOS_API_KEY']}"
+}
 
-print(resp.json())
+url = f"{os.environ['MEMOS_BASE_URL']}/add/message"
+
+res = requests.post(url=url, headers=headers, data=json.dumps(data))
+
+print(res.json())
 ```
 
 ### 步骤 3. 在会话中调用MemOS查询相关记忆（searchMemory）
@@ -97,47 +97,43 @@ print(resp.json())
 > **为什么要这样设计**：大多数记忆系统只停留在“召回事实”，但事实并不等于可执行的 Prompt。 MemOS 独有的指令补全链路，帮你省去复杂的拼接与调优，把记忆转译成模型可直接理解和执行的提示。
 
 ```python
+import os
 import requests
+import json
 
-BASE_URL = "https://memos.memtensor.cn/api/openmem/v1"   
-API_PATH = "/search/memory"
-API_KEY = "your_api_key_here"
+os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
+os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
-user_query = "国庆去哪玩好？"
+data = {
+  "user_id": "memos_user_123",  
+  "conversation_id": "0928",
+  "query": "国庆去哪玩好？",
+  "memory_limit_number": 6  # 可选，不传默认6
 
-payload = {
-    "user_id": "memos_user_123",
-    "conversation_id": "0928",
-    "query": user_query,
-    "memory_limit_number": 6  # 可选，不传默认6
-
-    # ==== 敬请期待 ====
-    # 以下参数在未来版本中会支持，目前请勿传递
-    # "return_matches": True,
-    # "return_instruction": True,
-    # "return_full_instruction": True
+  # ==== 敬请期待 ====
+  # 以下参数在未来版本中会支持，目前请勿传递
+  # "return_matches": True,
+  # "return_instruction": True,
+  # "return_full_instruction": True
 }
 
-resp = requests.post(
-    BASE_URL + API_PATH,
-    data=json.dump(payload),
-    headers={
-        "Content-Type": "application/json",
-        "Authorization": f"Bearer {API_KEY}"
-    }
-)
+headers = {
+  "Content-Type": "application/json",
+  "Authorization": f"Token {os.environ['MEMOS_API_KEY']}"
+}
+url = f"{os.environ['MEMOS_BASE_URL']}/search/memory"
 
-results = resp.json()
+res = requests.post(url=url, headers=headers, data=json.dumps(data))
 
-# 模式一：相关记忆（matches）
-print("相关记忆：", results["data"]["memoryDetailList"])
+results = res.json()  
+print(f"相关记忆：{results['data']['memory_detail_list']}")
 # 示例输出（为了方便理解此处做了简化，仅供参考）：
 # [
 #   {
-#     "memoryKey": "出行习惯",
-#     "memoryValue": "全家一起出游（包含孩子与老人）",
+#     "memory_key": "出行习惯",
+#     "memory_value": "全家一起出游（包含孩子与老人）",
 #     "confidence": 0.97,
-#     "updateTime": "2025-06-10T10:00:00Z"
+#     "update_time": "2025-06-10T10:00:00Z"
 #   }
 # ]
 
