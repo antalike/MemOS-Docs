@@ -139,7 +139,9 @@ headers = {
 }
 url = f"{os.environ['MEMOS_BASE_URL']}/search/memory"
 
-requests.post(url=url, headers=headers, data=json.dumps(data))
+res = requests.post(url=url, headers=headers, data=json.dumps(data))
+for memory in res.json()['data']['memory_detail_list']:
+  print(f"Related memory: {memory.memory_value}")
 
 ```
 ```python [Python (SDK)]
@@ -158,7 +160,9 @@ conversation_id ="0928"
 # return_instruction = True
 # return_full_instruction = True
 
-client.search_memory(query=query, user_id=user_id, conversation_id=conversation_id)
+res = client.search_memory(query=query, user_id=user_id, conversation_id=conversation_id)
+for memory in res.data.memory_detail_list:
+  print(f"Related memory: {memory.memory_value}")
 ```
 ```bash [Curl]
 curl --request POST \
