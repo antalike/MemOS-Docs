@@ -56,9 +56,9 @@ MemOS 支持以项目为维度管理资源、权限和调用日志。一个项�
 
 - 注册并登录 [MemOS 云平台](https://memos-dashboard.openmem.net/quickstart/)，获取您的接口密钥。
 - 浏览每个接口的详细文档，详细了解请求 & 响应格式、参数和示例用法。
-  - [添加消息](/dashboard/api/add-message-api-add-message-post)
-  - [查询记忆](/dashboard/api/search-memory-api-search-memory-post)
-  - [获取消息](/dashboard/api/get-message-api-get-message-get)
+  - [添加消息](/dashboard/api/add-message)
+  - [查询记忆](/dashboard/api/search-memory)
+  - [获取消息](/dashboard/api/get-message)
   - [错误码查询](/dashboard/api/error_code)
 - 进行第一次接口调用，添加或检索记忆。
 
