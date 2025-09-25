@@ -104,7 +104,7 @@ os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
 data = {
     "user_id": "memos_user_123",  
-    "conversation_id": "0928"
+    "conversation_id": "0928",
     "query": "Where to go for National Day travel?",
     "memory_limit_number": 6  # Optional, default is 6 if not provided
 
