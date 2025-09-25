@@ -163,7 +163,7 @@ class FinancialManagementAssistant:
     def chat(self, query, user_id, conversation_id):
         """Main chat function for handling conversations with memory integration"""
         # 1) Search relevant memories
-        memories = self.search_memories(query, user_id, conversation_id)
+        memories = self.search_memory(query, user_id, conversation_id)
         
         # Build system prompt with memories
         system_prompt = self.build_system_prompt(memories)
@@ -212,7 +212,7 @@ def preset_user_behaviors():
     
     for i, behavior in enumerate(behaviors, 1):
         print(f"{i}. {behavior['content']}")
-    ai_assistant.add_messages(behaviors, user_id, conversation_id)
+    ai_assistant.add_message(behaviors, user_id, conversation_id)
     
     print("=" * 60)
     print("💡 The above behavioral memories have been recorded by MemOS. The assistant will provide personalized recommendations based on them.")
