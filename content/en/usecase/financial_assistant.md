@@ -108,8 +108,8 @@ import uuid
 from openai import OpenAI
 from memos.api.client import MemOSClient
 
-os.environ["MEMOS_API_KEY"] = "mpg-xx"
-os.environ["OPEN_API_KEY"] = "sk-xx"
+os.environ["MEMOS_API_KEY"] = "mpg-xx" # Get MemOS_API_KEY from cloud service console
+os.environ["OPENAI_API_KEY"] = "sk-xx" # Replace with your own API_KEY
 
 conversation_counter = 0
 
@@ -123,7 +123,7 @@ class FinancialManagementAssistant:
     
     def __init__(self):
         self.memos_client = MemOSClient(api_key=os.getenv("MEMOS_API_KEY"))
-        self.openai_client = OpenAI(api_key=os.getenv("OPEN_API_KEY"))
+        self.openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
     
     def search_memory(self, query, user_id, conversation_id):
         """Search relevant memories based on query"""
