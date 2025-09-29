@@ -54,7 +54,7 @@ const flattenResponses = computed(() => {
       />
     </div>
 
-    <div class="mdx-content relative mt-8 prose prose-gray dark:prose-invert">
+    <div class="mdx-content relative mt-8 mb-8 prose prose-gray dark:prose-invert">
       <ApiAuthorizations v-if="globalSecurity" />
       <ApiParameter
         v-if="apiData?.parameters"
@@ -68,8 +68,9 @@ const flattenResponses = computed(() => {
         v-if="apiData?.responses"
         :data="flattenResponses"
       />
-      <ApiSurround />
     </div>
+    <slot name="markdown" />
+    <ApiSurround />
   </div>
   <div class="hidden xl:flex self-start sticky xl:flex-col max-w-[28rem] h-[calc(100vh-4rem)] top-[2.5rem]">
     <ApiCodeRequest
