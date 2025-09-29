@@ -84,7 +84,11 @@ const isMarkdown = computed(() => {
           v-if="data"
           :api-data="data"
           :api-name="apiName"
-        />
+        >
+          <template #markdown>
+            <slot name="markdown" />
+          </template>
+        </ApiContent>
         <MarkdownPage v-else-if="isMarkdown" />
         <ApiNotFound v-else />
       </div>

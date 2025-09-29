@@ -4,7 +4,7 @@ import type { ContentNavigationItem } from '@nuxt/content'
 const route = useRoute()
 const { toc } = useAppConfig()
 const navigation = inject<ContentNavigationItem[]>('navigation', [])
-const { t, locale } = useI18n()
+const { locale } = useI18n()
 const config = useRuntimeConfig()
 
 // Remove trailing slash to match content path

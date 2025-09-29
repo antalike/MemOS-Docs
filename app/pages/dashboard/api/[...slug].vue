@@ -3,7 +3,7 @@ useHead({
   title: 'Dashboard API Reference'
 })
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const { getOpenApi, getApiByRoute, apiNavData } = useOpenApi('dashboardApi', 'dashboard/api')
 await getOpenApi()
 
@@ -40,6 +40,13 @@ const navigation = computed(() => {
     }
   ]
 })
+
+const normalizedPath = route.path.replace(/\/$/, '') || '/'
+const { data: page } = await useAsyncData(normalizedPath, () => {
+  const path = normalizedPath.replace(/-/g, '_')
+  const docsPath = locale.value === 'cn' ? path : `/en${path}`
+  return queryCollection('docs').path(docsPath).first()
+})
 </script>
 
 <template>
@@ -47,5 +54,12 @@ const navigation = computed(() => {
     api-name="dashboardApi"
     :data="apiData"
     :navigation="navigation"
-  />
+  >
+    <template
+      v-if="page"
+      #markdown
+    >
+      <ContentRenderer :value="page" />
+    </template>
+  </ApiPage>
 </template>
