@@ -1,13 +1,9 @@
 <script setup lang="ts">
 defineProps<{
-  properties: Record<string, { $ref: string } | PropertyProps>
+  properties: Record<string, PropertyProps>
   required?: string[] | undefined
   parentProp?: string | undefined
 }>()
-
-defineOptions({
-  inheritAttrs: false
-})
 </script>
 
 <template>
@@ -16,7 +12,6 @@ defineOptions({
     :key="prop"
   >
     <ApiRequestBodyParam
-      v-bind="$attrs"
       :param="param"
       :prop="prop"
       :required="required"

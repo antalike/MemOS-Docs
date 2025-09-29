@@ -24,7 +24,7 @@ defineOptions({
             v-bind="$attrs"
             :name="param.name"
             :required="param.required"
-            :schema="param.schema"
+            :param="param.schema"
           />
         </div>
       </div>

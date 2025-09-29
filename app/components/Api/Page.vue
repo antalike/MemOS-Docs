@@ -1,13 +1,18 @@
 <script setup lang="ts">
 import type { Collections } from '@nuxt/content'
 
-withDefaults(defineProps<{
+const props = withDefaults(defineProps<{
   data: FlatPathProps | undefined
   apiName?: keyof Collections
   navigation?: NavLink[] | undefined
+  showRequestCode?: boolean
 }>(), {
-  apiName: 'openapi'
+  apiName: 'openapi',
+  showRequestCode: false
 })
+
+// 提供 collectionName 给子组件
+provide('collectionName', props.apiName)
 
 const route = useRoute()
 const { t, locale } = useI18n()
@@ -61,7 +66,6 @@ const isMarkdown = computed(() => {
         />
         <ApiNavigation
           class="pb-6"
-          :api-name="apiName"
           :navigation="navigation"
         />
       </template>
@@ -74,7 +78,6 @@ const isMarkdown = computed(() => {
           </NuxtLink>
           <ApiNavigation
             class="mt-6"
-            :api-name="apiName"
             :navigation="navigation"
           />
         </div>
@@ -83,7 +86,7 @@ const isMarkdown = computed(() => {
         <ApiContent
           v-if="data"
           :api-data="data"
-          :api-name="apiName"
+          :show-request-code="showRequestCode"
         />
         <MarkdownPage v-else-if="isMarkdown" />
         <ApiNotFound v-else />

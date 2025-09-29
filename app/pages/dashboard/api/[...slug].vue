@@ -47,5 +47,6 @@ const navigation = computed(() => {
     api-name="dashboardApi"
     :data="apiData"
     :navigation="navigation"
+    :show-request-code="true"
   />
 </template>

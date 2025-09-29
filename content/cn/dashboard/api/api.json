@@ -367,6 +367,7 @@
       },
       "SearchMemoryResponseData": {
         "type": "object",
+        "title": "SearchMemoryResponseData",
         "properties": {
           "memory_detail_list": {
             "type": "array",

@@ -1,15 +1,10 @@
 <script setup lang="ts">
-import type { Collections } from '@nuxt/content';
-import type { RequestProps } from '~/utils/openapi'
-
-const props = withDefaults(defineProps<{
+const props = defineProps<{
   data: RequestProps
-  apiName?: keyof Collections
-}>(), {
-  apiName: 'openapi'
-})
+}>()
 
-const { getContentSchema } = useOpenApi(props.apiName)
+const collectionName = inject<CollectionName>('collectionName')
+const { getContentSchema } = useOpenApi(collectionName)
 const { schema, contentType } = getContentSchema(props.data.content)
 </script>
 
@@ -29,7 +24,6 @@ const { schema, contentType } = getContentSchema(props.data.content)
       <ApiRequestBodyList
         :properties="schema.properties"
         :required="schema.required"
-        :api-name="apiName"
       />
     </div>
   </div>

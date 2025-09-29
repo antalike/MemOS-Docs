@@ -1,13 +1,8 @@
 <script setup lang="ts">
 import type { Collections } from '@nuxt/content'
 
-const props = withDefaults(defineProps<{
-  apiName?: keyof Collections
-}>(), {
-  apiName: 'openapi'
-})
-
-const { globalSecurity, securitySchemes } = useOpenApi(props.apiName)
+const collectionName = inject<keyof Collections>('collectionName')
+const { globalSecurity, securitySchemes } = useOpenApi(collectionName)
 const fields = computed(() => {
   const securityKey = Object.keys(globalSecurity.value)
   return securityKey.map(key => securitySchemes.value[key])

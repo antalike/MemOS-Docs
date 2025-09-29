@@ -8,14 +8,9 @@ export interface ParametersProp {
 </script>
 
 <script setup lang="ts">
-import type { Collections } from '@nuxt/content'
-
-const props = withDefaults(defineProps<{
+const props = defineProps<{
   data: ParametersProp[]
-  apiName?: keyof Collections
-}>(), {
-  apiName: 'openapi'
-})
+}>()
 
 const pathParameters = computed(() => {
   return props.data.filter(item => item.in === 'path')
@@ -31,13 +26,11 @@ const queryParameters = computed(() => {
       v-if="pathParameters.length"
       title="Path Parameters"
       :data="pathParameters"
-      :api-name="apiName"
     />
     <ApiParameterList
       v-if="queryParameters.length"
       title="Query Parameters"
       :data="queryParameters"
-      :api-name="apiName"
     />
   </div>
 </template>

@@ -1,40 +1,9 @@
 <script setup lang="ts">
-import type { Collections } from '@nuxt/content'
+import type { FlatResponse } from '~/utils/openapi'
 
-interface ArrayItemType {
-  $ref?: string
-  anyOf?: { type?: string }[]
-  type?: string
-}
-
-interface SchemaItem {
-  type?: string
-  title?: string
-  description?: string
-  default?: unknown
-  example?: unknown
-  items?: ArrayItemType
-}
-
-interface ResponseSchema {
-  description?: string
-  required?: string[]
-  properties?: Record<string, SchemaItem>
-}
-
-interface FlatResponse {
-  statusCode: string
-  description?: string
-  contentType?: string
-  data?: ResponseSchema
-}
-
-const props = withDefaults(defineProps<{
+const props = defineProps<{
   data: FlatResponse[]
-  apiName?: keyof Collections
-}>(), {
-  apiName: 'openapi'
-})
+}>()
 
 const firstCode = props.data?.[0]?.statusCode ?? ''
 const currentCode = ref<string>(String(firstCode))
@@ -88,19 +57,12 @@ const selectedResponse = computed<FlatResponse | undefined>(() => {
                 :name="prop"
                 :required="selectedResponse?.data?.required?.includes(prop)"
                 :default-value="item.default"
-                :schema="item"
-                :api-name="apiName"
+                :param="item"
               />
               <div class="mt-4">
                 <ApiResponseSubItem
-                  v-if="item.items"
-                  :items="item.items"
-                  :api-name="apiName"
-                />
-                <ApiResponseSubItem
-                  v-else-if="item.$ref"
-                  :items="item"
-                  :api-name="apiName"
+                  v-if="item.properties"
+                  :item="item"
                 />
                 <template v-else>
                   <p

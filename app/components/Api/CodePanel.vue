@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import type { JSONValue } from '@/utils/jsonHighlight'
 import { renderHighlightedJson } from '@/utils/jsonHighlight'
-import { resolveSchemaRef } from '@/utils/openapi'
-import type { Collections } from '@nuxt/content'
 
 type JSONValueLocal = JSONValue
 
@@ -17,7 +15,6 @@ interface SchemaLike {
   anyOf?: SchemaLike[]
   oneOf?: SchemaLike[]
   allOf?: SchemaLike[]
-  $ref?: string
 }
 
 interface ResponseItem {
@@ -26,25 +23,14 @@ interface ResponseItem {
   contentType?: string
   data?: SchemaLike
 }
-const props = withDefaults(defineProps<{
+const props = defineProps<{
   responses: ResponseItem[]
-  apiName?: keyof Collections
-}>(), {
-  apiName: 'openapi'
-})
-
-const { schemas } = useOpenApi(props.apiName)
+}>()
 
 const active = ref<number>(0)
 
-// Build a plain example object from a schema
-function resolveRef(ref: string): SchemaLike | null {
-  return resolveSchemaRef(ref, schemas.value) as unknown as SchemaLike | null
-}
-
 function pickSchema(s: SchemaLike | undefined): SchemaLike | undefined {
   if (!s) return s
-  if (s.$ref) return resolveRef(s.$ref) ?? undefined
   if (s.anyOf && s.anyOf.length) return pickSchema(s.anyOf[0])
   if (s.oneOf && s.oneOf.length) return pickSchema(s.oneOf[0])
   if (s.allOf && s.allOf.length) {
