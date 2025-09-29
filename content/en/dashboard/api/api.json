@@ -20,7 +20,7 @@
     "/add/message": {
       "post": {
         "summary": "Add Message",
-        "description": "Add one or more messages to a specified conversation. Supports both user and assistant messages, with optional custom creation time.",
+        "description": "This API allows you to add one or more messages to a specific conversation. As illustrated in the examples bellow, you can add messages in real time during a user-assistant interaction, import historical messages in bulk, or enrich the conversation with user preferences and behavior data. All added messages are transformed into memories by MemOS, enabling their retrieval in future conversations to support chat history management, user behavior tracking, and personalized interactions.",
         "operationId": "add_message",
         "requestBody": {
           "required": true,
@@ -49,7 +49,7 @@
     "/get/message": {
       "post": {
         "summary": "Get Message",
-        "description": "Retrieve historical conversation records between a user and the assistant from a specified conversation. The number of results returned can be limited.",
+        "description": "This API retrieves the historical conversation records between a user and the assistant for a specified session, with the option to limit the number of results. As shown in the examples bellow, you can use the returned recent messages as references for the model when generating responses, maintaining dialogue coherence and contextual understanding. It can also be used to restore chat context when a user refreshes or reopens the app, ensuring a seamless user experience and supporting personalized interactions.",
         "operationId": "get_message",
         "requestBody": {
           "required": true,
@@ -78,7 +78,7 @@
     "/search/memory": {
       "post": {
         "summary": "Search Memory",
-        "description": "Query the memories of a specified user and return the memory fragments most relevant to the query content.",
+        "description": "This API allows you to query a user’s memory and returns the fragments most relevant to the input. These can serve as references for the model when generating responses. As shown in the examples bellow, You can retrieve memory in real time during a user’s conversation with the AI, or perform a global search across their entire memory to create user profiles or support personalized recommendations, improving both dialogue coherence and personalization.",
         "operationId": "search_memory",
         "requestBody": {
           "required": true,
