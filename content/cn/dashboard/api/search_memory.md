@@ -42,7 +42,7 @@ for memory in res.json().get("data", {}).get("memory_detail_list", []):
 #         "memory_key": "饮食偏好",
 #         "memory_value": "[user观点]用户喜欢辣味食物，但不太喜欢重油的菜肴，如麻辣火锅和毛血旺。",
 #         "memory_type": "WorkingMemory",
-#         "conversation_id": "memos_conversation_id_345",
+#         "conversation_id": "memos_conversation_345",
 #         "tags": ["饮食", "偏好", "辣味"],
 #         "relativity": 0.0043  # 表示与 query 的相关度，值越高表示越相关
 #     },

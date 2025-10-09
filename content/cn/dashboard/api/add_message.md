@@ -91,7 +91,7 @@ def add_message(user_id, conversation_id, messages):
 # === 使用示例 ===
 
 # 导入历史对话
-add_message("memos_user_345", "memos_conversation_id_345", history_messages)
+add_message("memos_user_345", "memos_conversation_345", history_messages)
 ```
 
 ### 记录用户偏好或行为
