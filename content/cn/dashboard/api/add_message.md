@@ -11,25 +11,29 @@ import requests
 
 
 os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
-os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api"
+os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
 # headers 和 base URL
-headers = {"Authorization": f"Token {os.environ['MEMOS_API_KEY']}","Content-Type": "application/json"}
+headers = {
+  "Authorization": f"Token {os.environ['MEMOS_API_KEY']}",
+  "Content-Type": "application/json"
+}
 BASE_URL = os.environ['MEMOS_BASE_URL']
 
 def add_message(user_id, conversation_id, role, content):
     data = {
-        "userId": user_id,
+        "user_id": user_id,
         "conversation_id": conversation_id,
         "messages": [{"role": role, "content": content}]
     }
     
-    res = requests.post(f"{BASE_URL}/add/message", headers=headers, json=data)
+    res = requests.post(f"{BASE_URL}/add/message", headers=headers, data=json.dumps(data))
+    result = res.json()
   
-    if res.json().get('code') == 0: 
+    if result.get('code') == 0: 
       print(f"✅ 添加成功")
     else:
-      print(f"❌ 添加失败")
+      print(f"❌ 添加失败, {result.get('message')}")
 
 # 用户发送消息
 add_message("memos_user_123", "memos_conversation_123", "user","""我今天早上跑了5公里，膝盖有点酸""")
@@ -51,35 +55,38 @@ import requests
 
 
 os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
-os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api"
+os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
 # headers 和 base URL
-headers = {"Authorization": f"Token {os.environ['MEMOS_API_KEY']}","Content-Type": "application/json"}
+headers = {
+  "Authorization": f"Token {os.environ['MEMOS_API_KEY']}",
+  "Content-Type": "application/json"
+}
 BASE_URL = os.environ['MEMOS_BASE_URL']
 
 # 示例历史对话数据
 history_messages = [
   # 用户第一天和AI的对话
-    {"role": "user", "content": "我喜欢吃辣的食物", "chatTime": "2025-09-12 08:00:00"},
-    {"role": "assistant", "content": "明白啦，我记住了，你喜欢辣味的食物。", "chatTime": "2025-09-12 08:01:00"},
+    {"role": "user", "content": "我喜欢吃辣的食物", "chat_time": "2025-09-12 08:00:00"},
+    {"role": "assistant", "content": "明白啦，我记住了，你喜欢辣味的食物。", "chat_time": "2025-09-12 08:01:00"},
   # 用户几天后和AI的对话
-    {"role": "user", "content": "但我又不太喜欢重油的，比如麻辣火锅、毛血旺之类的", "chatTime": "2025-09-25 12:00:00"},
-    {"role": "assistant", "content": "你更偏好清爽又带辣味的菜。我可以帮你推荐一些适合你的辣味美食哦~", "chatTime": "2025-09-25 12:01:00"}
+    {"role": "user", "content": "但我又不太喜欢重油的，比如麻辣火锅、毛血旺之类的", "chat_time": "2025-09-25 12:00:00"},
+    {"role": "assistant", "content": "你更偏好清爽又带辣味的菜。我可以帮你推荐一些适合你的辣味美食哦~", "chat_time": "2025-09-25 12:01:00"}
 ]
 
 def add_message(user_id, conversation_id, messages):
-
     data = {
-        "userId": user_id,
+        "user_id": user_id,
         "conversation_id": conversation_id,
         "messages": messages
     }
     res = requests.post(f"{BASE_URL}/add/message", headers=headers, json=data)
-    
-    if res.json().get('code') == 0: 
+    result = res.json()
+  
+    if result.get('code') == 0: 
       print(f"✅ 添加成功")
     else:
-      print(f"❌ 添加失败")
+      print(f"❌ 添加失败, {result.get('message')}")
 
 # === 使用示例 ===
 
@@ -100,10 +107,13 @@ import requests
 
 
 os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
-os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api"
+os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
 # headers 和 base URL
-headers = {"Authorization": f"Token {os.environ['MEMOS_API_KEY']}","Content-Type": "application/json"}
+headers = {
+  "Authorization": f"Token {os.environ['MEMOS_API_KEY']}",
+  "Content-Type": "application/json"
+}
 BASE_URL = os.environ['MEMOS_BASE_URL']
 
 # 用户兴趣信息
@@ -128,18 +138,19 @@ user_profile_info = [
 
 def add_message(user_id, conversation_id, messages):
     data = {
-        "userId": user_id,
+        "user_id": user_id,
         "conversation_id": conversation_id,
         "messages": messages
     }
   
     res = requests.post(f"{BASE_URL}/add/message", headers=headers, json=data)
-    
-    if res.json().get('code') == 0: 
+    result = res.json()
+  
+    if result.get('code') == 0: 
       print(f"✅ 添加成功")
     else:
-      print(f"❌ 添加失败")
-      
+      print(f"❌ 添加失败, {result.get('message')}")
+
 # === 使用示例 ===
 
 # 导入用户兴趣问卷信息
