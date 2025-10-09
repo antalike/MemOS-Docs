@@ -80,7 +80,7 @@ def add_message(user_id, conversation_id, messages):
         "conversation_id": conversation_id,
         "messages": messages
     }
-    res = requests.post(f"{BASE_URL}/add/message", headers=headers, json=data)
+    res = requests.post(f"{BASE_URL}/add/message", headers=headers, data=json.dumps(data))
     result = res.json()
   
     if result.get('code') == 0: 
@@ -143,7 +143,7 @@ def add_message(user_id, conversation_id, messages):
         "messages": messages
     }
   
-    res = requests.post(f"{BASE_URL}/add/message", headers=headers, json=data)
+    res = requests.post(f"{BASE_URL}/add/message", headers=headers, data=json.dumps(data))
     result = res.json()
   
     if result.get('code') == 0: 
