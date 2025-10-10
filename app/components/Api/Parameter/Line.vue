@@ -1,19 +1,11 @@
 <script setup lang="ts">
-import { resolveSchemaRef } from '@/utils/openapi'
-import type { Collections } from '@nuxt/content'
-
-const props = withDefaults(defineProps<{
+const props = defineProps<{
   name: string
   parentName?: string | undefined
   required?: boolean
   defaultValue?: unknown
-  schema?: Record<string, unknown>
-  apiName?: keyof Collections
-}>(), {
-  apiName: 'openapi'
-})
-
-const { schemas } = useOpenApi(props.apiName)
+  schema?: SchemaObject
+}>()
 
 function mapSimpleType(t?: string): string {
   if (!t) return 'any'
@@ -25,14 +17,7 @@ function mapSimpleType(t?: string): string {
 
 function normalizeTypeFromSchema(s: any): string {
   if (!s) return 'any'
-  // $ref
-  if (s.$ref) {
-    const ref = resolveSchemaRef(s.$ref as string, schemas.value) as any
-    if (!ref) return 'object'
-    if (ref.type) return mapSimpleType(ref.type)
-    if (ref.properties) return 'object'
-    return 'object'
-  }
+
   // anyOf
   if (Array.isArray(s.anyOf)) {
     return s.anyOf.map((t: any) => normalizeTypeFromSchema(t)).join(' | ')
@@ -41,35 +26,25 @@ function normalizeTypeFromSchema(s: any): string {
   if (s.type === 'array') {
     // best-effort derive item type
     const item = s.items || {}
-    if (item.$ref) {
-      const ref = resolveSchemaRef(item.$ref as string, schemas.value) as any
-      const base = ref?.type ? mapSimpleType(ref.type) : 'object'
-      return `${base}[]`
-    }
     const base = mapSimpleType(item.type as string)
-    return `${base.replace('[]','')}[]`
+    return `${base.replace('[]', '')}[]`
   }
   // primitives / object
-  if (s.type) return mapSimpleType(s.type as string)
   if (s.properties) return 'object'
+  if (s.type) return mapSimpleType(s.type as string)
   return 'any'
 }
 
 const computedType = computed(() => {
-  if (props.schema)
-    return normalizeTypeFromSchema(props.schema)
-  return 'any'
+  return normalizeTypeFromSchema(props.schema)
 })
 
 function extractRefName(s: any): string | undefined {
   if (!s) return undefined
   const pickRef = (node: any): string | undefined => {
-    if (!node) return undefined
-    if (node.$ref) return String(node.$ref).split('/').pop()
-    if (node.items && node.items.$ref) return String(node.items.$ref).split('/').pop()
+    if (node.items && node.items.type === 'object') return node.items.title
     return undefined
   }
-  if (s.$ref) return pickRef(s)
   if (Array.isArray(s.anyOf)) {
     for (const opt of s.anyOf) {
       const r = pickRef(opt)

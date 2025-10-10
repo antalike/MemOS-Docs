@@ -1,61 +1,53 @@
 <script setup lang="ts">
-import type { Collections } from '@nuxt/content'
+const props = defineProps<{
+  path: string
+  method: HttpMethods
+}>()
 
-interface ArrayItemType {
-  $ref?: string
-  anyOf?: { type?: string }[]
-  type?: string
-}
+const collectionName = inject<CollectionName>('collectionName')
+const {
+  getResponseStatusCodes,
+  getResponseByStatusCode,
+  getResponseContentType,
+  getResponseAsJSONSchema
+} = useOpenApi(collectionName)
 
-interface SchemaItem {
-  type?: string
-  title?: string
-  description?: string
-  default?: unknown
-  example?: unknown
-  items?: ArrayItemType
-}
-
-interface ResponseSchema {
-  description?: string
-  required?: string[]
-  properties?: Record<string, SchemaItem>
-}
-
-interface FlatResponse {
-  statusCode: string
-  description?: string
-  contentType?: string
-  data?: ResponseSchema
-}
-
-const props = withDefaults(defineProps<{
-  data: FlatResponse[]
-  apiName?: keyof Collections
-}>(), {
-  apiName: 'openapi'
+const statusCodes = computed(() => {
+  return getResponseStatusCodes(props.path, props.method)
 })
 
-const firstCode = props.data?.[0]?.statusCode ?? ''
-const currentCode = ref<string>(String(firstCode))
-const selectedResponse = computed<FlatResponse | undefined>(() => {
-  return props.data?.find(item => String(item.statusCode) === currentCode.value)
+const currentCode = ref<string>('200')
+
+const selectedContentType = computed(() => {
+  if (!currentCode.value) return
+  return getResponseContentType(props.path, props.method, currentCode.value)
+})
+
+const selectedResponse = computed(() => {
+  if (!currentCode.value) return null
+  return getResponseByStatusCode(props.path, props.method, currentCode.value)
+})
+
+const selectedSchema = computed(() => {
+  if (!currentCode.value) return null
+  return getResponseAsJSONSchema(props.path, props.method, currentCode.value)
 })
 </script>
 
 <template>
-  <div class="api-section">
+  <div
+    v-if="statusCodes.length > 0"
+    class="api-section"
+  >
     <div class="flex flex-col gap-y-4 w-full">
       <ApiSectionHeader :title="$t('api.response')">
         <template #right>
           <div class="flex items-center gap-4 font-mono px-2 py-0.5 text-xs font-medium text-gray-600 dark:text-gray-300">
             <USelect
               v-model="currentCode"
-              label-key="statusCode"
-              value-key="statusCode"
-              :items="data"
+              :items="statusCodes"
             />
-            <span>{{ selectedResponse?.contentType }}</span>
+            <span>{{ selectedContentType }}</span>
           </div>
         </template>
       </ApiSectionHeader>
@@ -63,51 +55,51 @@ const selectedResponse = computed<FlatResponse | undefined>(() => {
         v-if="selectedResponse"
         class="text-sm prose prose-gray dark:prose-invert mb-2"
       >
-        <p class="whitespace-pre-line text-gray-400">
-          {{ selectedResponse?.description }}
+        <p
+          v-if="selectedResponse.description"
+          class="whitespace-pre-line text-gray-400"
+        >
+          {{ selectedResponse.description }}
         </p>
       </div>
     </div>
-    <div v-if="selectedResponse && selectedResponse.data">
+    <div v-if="selectedSchema">
       <div
-        v-if="selectedResponse?.data?.description"
+        v-if="selectedSchema?.description"
         class="pt-6 pb-4"
       >
         <p class="whitespace-pre-line text-gray-400 text-sm">
-          {{ selectedResponse?.data?.description }}
+          {{ selectedSchema?.description }}
         </p>
       </div>
-      <template v-if="selectedResponse?.data?.properties">
+      <template v-if="selectedSchema.properties">
         <template
-          v-for="(item, prop) in selectedResponse.data.properties"
+          v-for="(item, prop) in selectedSchema.properties"
           :key="prop"
         >
           <div class="border-gray-100 dark:border-gray-800 border-b last:border-b-0">
             <div class="py-6">
               <ApiParameterLine
                 :name="prop"
-                :required="selectedResponse?.data?.required?.includes(prop)"
+                :required="selectedSchema?.required?.includes(prop)"
                 :default-value="item.default"
                 :schema="item"
-                :api-name="apiName"
               />
               <div class="mt-4">
-                <ApiResponseSubItem
-                  v-if="item.items"
-                  :items="item.items"
-                  :api-name="apiName"
+                <p
+                  v-if="item.description"
+                  class="whitespace-pre-line text-gray-400 text-sm"
+                  v-html="item.description"
                 />
                 <ApiResponseSubItem
-                  v-else-if="item.$ref"
-                  :items="item"
-                  :api-name="apiName"
+                  v-if="item.properties"
+                  :item="item"
+                />
+                <ApiResponseSubItem
+                  v-else-if="item.items"
+                  :item="item.items"
                 />
                 <template v-else>
-                  <p
-                    v-if="item.description"
-                    class="whitespace-pre-line text-gray-400 text-sm"
-                    v-html="item.description"
-                  />
                   <div
                     v-if="item.example !== undefined && item.example !== null"
                     class="flex mt-6 gap-1.5 text-sm text-gray-400"

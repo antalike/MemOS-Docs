@@ -54,6 +54,7 @@ const { data: page } = await useAsyncData(normalizedPath, () => {
     api-name="dashboardApi"
     :data="apiData"
     :navigation="navigation"
+    :show-request-code="true"
   >
     <template
       v-if="page"

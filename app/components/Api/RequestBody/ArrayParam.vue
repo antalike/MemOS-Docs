@@ -1,26 +1,16 @@
 <script setup lang="ts">
-import type { Collections } from '@nuxt/content'
-
-const props = withDefaults(defineProps<{
+const props = defineProps<{
   anyOf?: any[]
   items?: Record<string, any>
-  apiName?: keyof Collections
-}>(), {
-  apiName: 'openapi'
-})
-
-const { resolveSchemaRef } = useOpenApi(props.apiName)
+}>()
 
 const arrParams = computed(() => {
-  if (props.anyOf) {
-    return props.anyOf.filter((item) => {
-      return item.type === 'array' && item.items?.$ref
-    }).map((item) => {
-      return resolveSchemaRef(item.items?.$ref)
-    })
-  } else {
-    return [resolveSchemaRef(props.items?.$ref)]
+  if (props.anyOf && Array.isArray(props.anyOf)) {
+    return props.anyOf
+      .filter(item => item && item.type === 'array' && item.items)
+      .map(item => item.items)
   }
+  return props.items ? [props.items] : []
 })
 </script>
 
@@ -30,13 +20,12 @@ const arrParams = computed(() => {
     :key="index"
   >
     <ApiCollapse
-      v-if="param"
+      v-if="param && param.properties"
       class="mt-4"
     >
       <ApiRequestBodyList
         :properties="param.properties"
         :required="param.required"
-        :api-name="apiName"
       />
     </ApiCollapse>
   </template>

@@ -1,9 +1,9 @@
 import type { Collections } from '@nuxt/content'
 
-type MethodType = 'post' | 'get' | 'delete' | 'put'
+export type MethodType = 'post' | 'get' | 'delete' | 'put'
 
 // Parameter information
-interface ParametersProp {
+export interface ParametersProp {
   name: string
   in: 'path' | 'query'
   required: boolean
@@ -17,6 +17,7 @@ export interface PropertyProps {
   description: string
   example?: string
   default?: string
+  properties? : Record<string, unknown>
 }
 
 export interface SchemaProps {
@@ -41,7 +42,7 @@ export interface RequestProps {
 }
 
 // Response information
-interface ResponseProps {
+export interface ResponseProps {
   [key: string]: {
     description: string
     content: ContentProps
@@ -49,7 +50,7 @@ interface ResponseProps {
 }
 
 // OpenAPI path information
-interface PathProps {
+export interface PathProps {
   description: string
   operationId: string
   parameters?: ParametersProp[]
@@ -69,13 +70,6 @@ export interface FlatPathProps extends PathProps {
   routePath: string
 }
 
-export interface SecurityProps {
-  type: 'apiKey' | 'http' | 'oauth2' | 'openIdConnect'
-  name: string
-  in?: 'query' | 'header' | 'cookie'
-  description?: string
-}
-
 export type NavLink = {
   title: string
   path?: string
@@ -83,34 +77,104 @@ export type NavLink = {
   children?: NavLink[]
 }
 
-// Resolve schema $ref
-export function resolveSchemaRef(
-  ref: string | undefined | null,
-  schemas: Record<string, unknown> | undefined | null
-): Record<string, unknown> | null {
-  if (!ref || !schemas) return null
-  const key = ref.split('/').pop() as string | undefined
-  if (!key) return null
-  return (schemas[key] as Record<string, unknown>) || null
+// Response component types
+export interface ArrayItemType {
+  $ref?: string
+  anyOf?: VariantDescriptor[]
+  oneOf?: VariantDescriptor[]
+  type?: string
+  title?: string
+  description?: string
+  properties?: Record<string, SchemaItem>
+  required?: string[]
+  enum?: unknown[]
+  items?: ArrayItemType
+  default?: unknown
+  [key: string]: unknown
+}
+
+export type VariantDescriptor = {
+  type?: string
+  title?: string
+  $ref?: string
+  [key: string]: unknown
+}
+
+export interface SchemaItem {
+  type?: string
+  title?: string
+  description?: string
+  default?: unknown
+  example?: unknown
+  items?: ArrayItemType
+  $ref?: string
+  [key: string]: unknown
+}
+
+export interface ResponseSchema {
+  description?: string
+  required?: string[]
+  properties?: Record<string, SchemaItem>
+}
+
+export interface FlatResponse {
+  statusCode: string
+  description?: string
+  contentType?: string
+  data?: ResponseSchema
+}
+
+export type CollectionName = keyof Collections
+
+export interface OpenApiProps {
+  components?: {
+    schemas?: Record<string, SchemaProps>
+    securitySchemes?: Record<string, SecurityProps>
+  }
+  paths?: Record<string, PathsProps>
+  meta: {
+    body: {
+      security: any[]
+      servers: any[]
+    }
+  }
+}
+
+export type ResponseEnvelope = {
+  description?: string
+  content?: ContentProps
 }
 
 // Flatten OpenAPI paths
-export function flattenPaths(
-  paths: Record<string, PathsProps>,
+export interface OasRoutePath {
+  path: string
+  method: HttpMethods
+  routePath: string
+  [key: string]: unknown
+}
+
+export interface OasRequestBody {
+  contentType?: string
+  body: MediaTypeObject | null
+}
+
+export function flattenOasPaths(
+  oas: SimpleOAS,
   parentPath?: string,
   collectionName?: keyof Collections
-) {
-  const results: FlatPathProps[] = []
+): OasRoutePath[] {
+  const paths = oas.getPaths()
+  const results: OasRoutePath[] = []
 
-  Object.entries(paths).forEach(([apiUrl, methods]) => {
+  Object.entries(paths).forEach(([path, methods]) => {
     Object.entries(methods).forEach(([method, operation]) => {
-      const path = collectionName === 'openapi' ? operation.summary : operation.operationId
       const separator = collectionName === 'openapi' ? ' ' : '_'
-      const routePath = path.split(separator).map(s => s.toLowerCase()).join('-')
+      let routePath = collectionName === 'openapi' ? operation.summary : operation.operationId
 
+      routePath = routePath.split(separator).map(s => s.toLowerCase()).join('-')
       results.push({
-        apiUrl,
-        method: method as MethodType,
+        path,
+        method,
         routePath: `/${parentPath}/${routePath}`,
         ...operation
       })

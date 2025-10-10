@@ -1,26 +1,18 @@
 <script setup lang="ts">
-import { resolveSchemaRef } from '@/utils/openapi'
-import type { Collections } from '@nuxt/content'
-
-const props = withDefaults(defineProps<{
+const props = defineProps<{
   prop: string
-  param: { $ref: string } | PropertyProps | undefined
+  schema: SchemaObject
   required: string[] | undefined
   parentProp: string | undefined
-  apiName?: keyof Collections
-}>(), {
-  apiName: 'openapi'
-})
+}>()
 
-const { schemas } = useOpenApi(props.apiName)
-
-const computedParam = computed(() => {
-  if (props.param?.$ref) {
-    const ref = resolveSchemaRef(props.param.$ref, schemas.value)
-    return ref as any
+const properties = computed(() => {
+  if (!props.schema) return null
+  if (props.schema?.properties) return props.schema.properties
+  if (props.schema.anyOf) {
+    return props.schema.anyOf.filter(item => Object.prototype.hasOwnProperty.call(item, 'properties'))?.[0]?.properties
   }
-
-  return props.param
+  return null
 })
 
 function isRequired(list: string[] | undefined | null, prop: string) {
@@ -31,46 +23,42 @@ function isRequired(list: string[] | undefined | null, prop: string) {
 
 <template>
   <div
-    v-if="computedParam"
+    v-if="schema"
     class="border-gray-100 dark:border-gray-800 border-b last:border-b-0"
   >
     <div class="py-6">
       <ApiParameterLine
         :name="prop"
         :parent-name="parentProp"
-        :default-value="computedParam.default"
-        :schema="computedParam"
+        :default-value="schema.default"
+        :schema="schema"
         :required="isRequired(required, prop)"
-        :api-name="apiName"
       />
       <div class="mt-4">
         <p
-          v-if="computedParam.description"
+          v-if="schema.description"
           class="whitespace-pre-line text-gray-400 text-sm"
         >
-          {{ computedParam.description }}
+          {{ schema.description }}
         </p>
         <!-- Handle anyOf -->
         <ApiRequestBodyArrayParam
-          v-if="computedParam.anyOf?.length"
-          :any-of="computedParam.anyOf"
-          :api-name="apiName"
+          v-if="schema.anyOf?.length"
+          :any-of="schema.anyOf"
         />
         <!-- Handle Items -->
         <ApiRequestBodyArrayParam
-          v-if="computedParam.items"
-          :items="computedParam.items"
-          :api-name="apiName"
+          v-if="schema.items"
+          :items="schema.items"
         />
-        <ApiParameterExample :value="computedParam.example" />
+        <ApiParameterExample :value="schema.example" />
       </div>
-      <template v-if="computedParam.properties">
+      <template v-if="properties">
         <ApiCollapse class="mt-4">
           <ApiRequestBodyList
-            :properties="computedParam.properties"
-            :required="computedParam.required"
+            :properties="properties"
+            :required="schema.required"
             :parent-prop="prop"
-            :api-name="apiName"
           />
         </ApiCollapse>
       </template>
