@@ -225,14 +225,45 @@ const useOpenApi = (collectionName: keyof Collections = 'openapi', parentPath: s
     return 'null'
   }
 
-  function generateRequestBodyData(schema: Record<string, unknown>): string {
-    if (!schema || !schema.properties) return '{}'
+  function generateRequestBodyData(oas: SimpleOAS, path: string, method: HttpMethods, contentType: string): string {
+    const example = oas.getRequestBodyExample(path, method, contentType)
 
-    const properties = Object.entries(schema.properties as Record<string, unknown>).map(([key, prop]) => {
-      return `    "${key}": ${getValue(prop as Record<string, unknown>)}`
+    if (!example) {
+      return '{}'
+    }
+
+    const jsonLines: string[] = []
+    jsonLines.push('{')
+
+    const entries = Object.entries(example as Record<string, unknown>)
+    entries.forEach(([key, value], index) => {
+      const isLast = index === entries.length - 1
+      const comma = isLast ? '' : ','
+
+      if (Array.isArray(value)) {
+        jsonLines.push(`    "${key}": [`)
+        value.forEach((item, itemIndex) => {
+          const itemComma = itemIndex < value.length - 1 ? ',' : ''
+          if (typeof item === 'object' && item !== null) {
+            jsonLines.push(`     ${JSON.stringify(item)}${itemComma}`)
+          } else if (typeof item === 'string') {
+            jsonLines.push(`      "${item}"${itemComma}`)
+          } else {
+            jsonLines.push(`      ${JSON.stringify(item)}${itemComma}`)
+          }
+        })
+        jsonLines.push(`    ]${comma}`)
+      } else if (typeof value === 'object' && value !== null) {
+        jsonLines.push(`    "${key}": ${JSON.stringify(value)}${comma}`)
+      } else if (typeof value === 'string') {
+        jsonLines.push(`    "${key}": "${value}"${comma}`)
+      } else {
+        jsonLines.push(`    "${key}": ${JSON.stringify(value)}${comma}`)
+      }
     })
 
-    return `{\n${properties.join(',\n')}\n  }`
+    jsonLines.push('  }')
+    return jsonLines.join('\n')
   }
 
   function generateCurlSnippet(oas: SimpleOAS, path: string, method: HttpMethods) {
@@ -259,7 +290,7 @@ const useOpenApi = (collectionName: keyof Collections = 'openapi', parentPath: s
 
     if (contentType && schema) {
       curlLines.push(`  --header 'Content-Type: ${contentType}'`)
-      const dataStr = generateRequestBodyData(schema as Record<string, unknown>)
+      const dataStr = generateRequestBodyData(oas, path, method, contentType)
       curlLines.push(`  --data '${dataStr}'`)
     }
 
@@ -283,7 +314,36 @@ const useOpenApi = (collectionName: keyof Collections = 'openapi', parentPath: s
     pyLines.push(`os.environ["BASE_URL"] = "${baseUrl}"`)
     pyLines.push('')
 
-    if (schema && (schema as Record<string, unknown>).properties) {
+    const example = oas.getRequestBodyExample(path, method, contentType)
+    if (example) {
+      pyLines.push('data = {')
+      Object.entries(example as Record<string, unknown>).forEach(([key, value], index, entries) => {
+        const isLast = index === entries.length - 1
+        const comma = isLast ? '' : ','
+
+        if (Array.isArray(value)) {
+          pyLines.push(`  "${key}": [`)
+          value.forEach((item, itemIndex) => {
+            const itemComma = itemIndex < value.length - 1 ? ',' : ''
+            if (typeof item === 'object' && item !== null) {
+              pyLines.push(`    ${JSON.stringify(item)}${itemComma}`)
+            } else if (typeof item === 'string') {
+              pyLines.push(`    "${item}"${itemComma}`)
+            } else {
+              pyLines.push(`    ${JSON.stringify(item)}${itemComma}`)
+            }
+          })
+          pyLines.push(`  ]${comma}`)
+        } else if (typeof value === 'object' && value !== null) {
+          pyLines.push(`  "${key}": ${JSON.stringify(value)}${comma}`)
+        } else if (typeof value === 'string') {
+          pyLines.push(`  "${key}": "${value}"${comma}`)
+        } else {
+          pyLines.push(`  "${key}": ${JSON.stringify(value)}${comma}`)
+        }
+      })
+      pyLines.push('}')
+    } else if (schema && (schema as Record<string, unknown>).properties) {
       pyLines.push('data = {')
       Object.entries((schema as Record<string, unknown>).properties as Record<string, unknown>).forEach(([key, prop]) => {
         pyLines.push(`    "${key}": ${getValue(prop as Record<string, unknown>)}`)
@@ -293,14 +353,14 @@ const useOpenApi = (collectionName: keyof Collections = 'openapi', parentPath: s
 
     pyLines.push('headers = {')
     if (contentType) {
-      pyLines.push(`    "Content-Type": "${contentType}"`)
+      pyLines.push(`  "Content-Type": "${contentType}"`)
     }
     if (auth && auth.length > 0) {
       auth.forEach((s) => {
         if (s.scheme?.type === 'apiKey' && s.scheme.in === 'header') {
-          pyLines.push(`    "${s.scheme.name}": f"Token {os.environ['MEMOS_API_KEY']}"`)
+          pyLines.push(`  "${s.scheme.name}": f"Token {os.environ['MEMOS_API_KEY']}"`)
         } else if (s.scheme?.type === 'http' && s.scheme.scheme === 'bearer') {
-          pyLines.push(`    "Authorization": f"Bearer {os.environ['MEMOS_API_KEY']}"`)
+          pyLines.push(`  "Authorization": f"Bearer {os.environ['MEMOS_API_KEY']}"`)
         }
       })
     }
@@ -325,7 +385,7 @@ const useOpenApi = (collectionName: keyof Collections = 'openapi', parentPath: s
   }
 
   function generatePythonSdkSnippet(oas: SimpleOAS, path: string, method: HttpMethods) {
-    const { schema } = getContentInfo(oas, path, method)
+    const { schema, contentType } = getContentInfo(oas, path, method)
 
     const pyLines: string[] = []
     pyLines.push('from memos.api.client import MemOSClient')
@@ -333,20 +393,46 @@ const useOpenApi = (collectionName: keyof Collections = 'openapi', parentPath: s
     pyLines.push('client = MemOSClient(api_key="YOUR_API_KEY")')
     pyLines.push('')
 
-    if (schema && (schema as Record<string, unknown>).properties) {
+    const example = oas.getRequestBodyExample(path, method, contentType)
+    if (example) {
+      Object.entries(example as Record<string, unknown>).forEach(([key, value]) => {
+        if (Array.isArray(value)) {
+          pyLines.push(`${key} = [`)
+          value.forEach((item, index) => {
+            const comma = index < value.length - 1 ? ',' : ''
+            if (typeof item === 'object' && item !== null) {
+              pyLines.push(`  ${JSON.stringify(item)}${comma}`)
+            } else if (typeof item === 'string') {
+              pyLines.push(`  "${item}"${comma}`)
+            } else {
+              pyLines.push(`  ${JSON.stringify(item)}${comma}`)
+            }
+          })
+          pyLines.push(']')
+        } else if (typeof value === 'object' && value !== null) {
+          pyLines.push(`${key} = ${JSON.stringify(value)}`)
+        } else if (typeof value === 'string') {
+          pyLines.push(`${key} = "${value}"`)
+        } else {
+          pyLines.push(`${key} = ${JSON.stringify(value)}`)
+        }
+      })
+      pyLines.push('')
+    } else if (schema && (schema as Record<string, unknown>).properties) {
       Object.entries((schema as Record<string, unknown>).properties as Record<string, unknown>).forEach(([key, prop]) => {
         pyLines.push(`${key} = ${getValue(prop as Record<string, unknown>)}`)
       })
       pyLines.push('')
     }
 
+    const keys = Object.keys(example ?? schema?.properties ?? {})
     if (path === '/search/memory') {
-      pyLines.push('res = client.add_message(messages=messages, user_id=user_id, conversation_id=conversation_id)')
+      pyLines.push(`res = client.add_message(${keys.map(key => `${key}=${key}`).join(', ')})`)
       pyLines.push('')
       pyLines.push('for memory in res.data.memory_detail_list:')
       pyLines.push('  print(f"Related memory：{memory.memory_value}")')
     } else {
-      pyLines.push('client.add_message(messages=messages, user_id=user_id, conversation_id=conversation_id)')
+      pyLines.push(`client.add_message(${keys.map(key => `${key}=${key}`).join(', ')})`)
     }
 
     return pyLines.join('\n')
