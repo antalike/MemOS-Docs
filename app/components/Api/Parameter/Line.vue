@@ -4,7 +4,7 @@ const props = defineProps<{
   parentName?: string | undefined
   required?: boolean
   defaultValue?: unknown
-  param?: Record<string, unknown>
+  schema?: SchemaObject
 }>()
 
 function mapSimpleType(t?: string): string {
@@ -36,7 +36,7 @@ function normalizeTypeFromSchema(s: any): string {
 }
 
 const computedType = computed(() => {
-  return normalizeTypeFromSchema(props.param)
+  return normalizeTypeFromSchema(props.schema)
 })
 
 function extractRefName(s: any): string | undefined {
@@ -55,7 +55,7 @@ function extractRefName(s: any): string | undefined {
   return undefined
 }
 
-const refLabel = computed(() => extractRefName(props.param))
+const refLabel = computed(() => extractRefName(props.schema))
 </script>
 
 <template>

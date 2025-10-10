@@ -3,13 +3,13 @@ import { codeToHtml } from 'shiki'
 
 const props = defineProps<{
   code: string
-  language: 'python' | 'bash'
+  language: 'python' | 'bash' | 'json' | undefined
 }>()
 
 const highlightCode = ref<string>('')
 
 watch(() => props.code, async (value) => {
-  if (value) {
+  if (value && props.language) {
     const highlightHtml = await codeToHtml(value, {
       lang: props.language,
       theme: 'github-dark'

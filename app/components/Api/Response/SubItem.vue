@@ -59,7 +59,7 @@ const displaySchema = computed((): ArrayItemType | null => {
               :name="prop"
               :required="displaySchema?.required?.includes(prop)"
               :default-value="subitem.default"
-              :param="subitem"
+              :schema="subitem"
             />
             <div class="mt-3">
               <p

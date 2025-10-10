@@ -11,8 +11,9 @@ interface colorsProps {
 const props = defineProps<{
   path: string
   method: string
-  server: Record<string, any>
 }>()
+
+const { server } = useOpenApi(inject('collectionName'))
 
 const colorsMap: colorsProps = {
   get: {
@@ -51,11 +52,7 @@ function isParameter(path: string) {
 
 // Copy full path
 function handleCopy() {
-  let baseUrl = ''
-
-  if (props.server) {
-    baseUrl = props.server?.url
-  }
+  const baseUrl = server.value ?? ''
 
   copyText(baseUrl + props.path)
   isCopy.value = true

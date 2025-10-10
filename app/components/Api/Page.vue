@@ -11,7 +11,6 @@ const props = withDefaults(defineProps<{
   showRequestCode: false
 })
 
-// 提供 collectionName 给子组件
 provide('collectionName', props.apiName)
 
 const route = useRoute()

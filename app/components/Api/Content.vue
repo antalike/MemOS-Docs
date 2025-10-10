@@ -1,28 +1,9 @@
 <script setup lang="ts">
-const props = withDefaults(defineProps<{
+withDefaults(defineProps<{
   apiData: any
   showRequestCode?: boolean
 }>(), {
   showRequestCode: false
-})
-const { globalSecurity, server } = useOpenApi(inject('collectionName'))
-
-const flattenResponses = computed(() => {
-  const responses = props.apiData?.responses || {}
-  return Object.entries(responses).map(([statusCode, response]) => {
-    const newRes = {
-      statusCode,
-      description: response.description
-    }
-    const contentType = Object.keys(response.content || {})[0]
-
-    if (contentType) {
-      newRes.contentType = contentType
-      newRes.data = response.content?.[contentType]
-    }
-
-    return newRes
-  })
 })
 </script>
 
@@ -39,34 +20,39 @@ const flattenResponses = computed(() => {
       </div>
     </header>
     <ApiPath
-      :path="apiData?.apiUrl"
+      :path="apiData?.path"
       :method="apiData?.method"
-      :server="server"
     />
     <div class="xl:hidden mt-6">
       <ApiCodeRequest
         v-if="showRequestCode && apiData?.requestBody"
-        :api-data="apiData"
+        :path="apiData?.path"
+        :method="apiData?.method"
       />
       <ApiCodeResponse
         v-if="apiData?.responses"
-        :responses="flattenResponses"
+        :path="apiData?.path"
+        :method="apiData?.method"
       />
     </div>
 
     <div class="mdx-content relative mt-8 mb-8 prose prose-gray dark:prose-invert">
-      <ApiAuthorizations v-if="globalSecurity" />
+      <ApiAuthorizations
+        :path="apiData?.path"
+        :method="apiData?.method"
+      />
       <ApiParameter
-        v-if="apiData?.parameters"
-        :data="apiData.parameters"
+        :path="apiData?.path"
+        :method="apiData?.method"
       />
       <ApiRequestBody
-        v-if="apiData?.requestBody"
-        :data="apiData.requestBody"
+        :path="apiData?.path"
+        :method="apiData?.method"
       />
       <ApiResponse
         v-if="apiData?.responses"
-        :data="flattenResponses"
+        :path="apiData?.path"
+        :method="apiData?.method"
       />
     </div>
     <slot name="markdown" />
@@ -75,11 +61,13 @@ const flattenResponses = computed(() => {
   <div class="hidden xl:flex self-start sticky xl:flex-col max-w-[28rem] h-[calc(100vh-4rem)] top-[2.5rem]">
     <ApiCodeRequest
       v-if="showRequestCode && apiData?.requestBody"
-      :api-data="apiData"
+      :path="apiData?.path"
+      :method="apiData?.method"
     />
     <ApiCodeResponse
       v-if="apiData?.responses"
-      :responses="flattenResponses"
+      :path="apiData?.path"
+      :method="apiData?.method"
     />
   </div>
 </template>

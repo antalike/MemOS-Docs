@@ -7,12 +7,14 @@ interface CodeItem {
 }
 
 const props = defineProps<{
-  apiData?: FlatPathProps
+  path: string
+  method: HttpMethods
 }>()
 
 const collectionName = inject<CollectionName>('collectionName')
-
-const { openapi } = useOpenApi(collectionName)
+const {
+  generateSnippet
+} = useOpenApi(collectionName)
 
 const codeLang = ref('python-http')
 const codeItems = ref<CodeItem[]>([
@@ -41,9 +43,9 @@ const activeItem = computed(() => {
 
 const snippets = computed<Record<string, string>>(() => {
   return {
-    'curl': generateSnippet(openapi.value, props.apiData, 'curl'),
-    'python-http': generateSnippet(openapi.value, props.apiData, 'python-http'),
-    'python-sdk': generateSnippet(openapi.value, props.apiData, 'python-sdk')
+    'curl': generateSnippet(props.path, props.method, 'curl'),
+    'python-http': generateSnippet(props.path, props.method, 'python-http'),
+    'python-sdk': generateSnippet(props.path, props.method, 'python-sdk')
   }
 })
 

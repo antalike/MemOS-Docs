@@ -1,6 +1,8 @@
 <script setup lang="ts">
 defineProps<{
-  properties: Record<string, PropertyProps>
+  properties: {
+    [name: string]: SchemaObject
+  }
   required?: string[] | undefined
   parentProp?: string | undefined
 }>()
@@ -12,7 +14,7 @@ defineProps<{
     :key="prop"
   >
     <ApiRequestBodyParam
-      :param="param"
+      :schema="param"
       :prop="prop"
       :required="required"
       :parent-prop="parentProp"

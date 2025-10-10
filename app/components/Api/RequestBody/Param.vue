@@ -1,16 +1,16 @@
 <script setup lang="ts">
 const props = defineProps<{
   prop: string
-  param: PropertyProps | undefined
+  schema: SchemaObject
   required: string[] | undefined
   parentProp: string | undefined
 }>()
 
 const properties = computed(() => {
-  if (!props.param) return null
-  if (props.param?.properties) return props.param.properties
-  if (props.param.anyOf) {
-    return props.param.anyOf.filter(item => Object.prototype.hasOwnProperty.call(item, 'properties'))?.[0]?.properties
+  if (!props.schema) return null
+  if (props.schema?.properties) return props.schema.properties
+  if (props.schema.anyOf) {
+    return props.schema.anyOf.filter(item => Object.prototype.hasOwnProperty.call(item, 'properties'))?.[0]?.properties
   }
   return null
 })
@@ -23,41 +23,41 @@ function isRequired(list: string[] | undefined | null, prop: string) {
 
 <template>
   <div
-    v-if="param"
+    v-if="schema"
     class="border-gray-100 dark:border-gray-800 border-b last:border-b-0"
   >
     <div class="py-6">
       <ApiParameterLine
         :name="prop"
         :parent-name="parentProp"
-        :default-value="param.default"
-        :param="param"
+        :default-value="schema.default"
+        :schema="schema"
         :required="isRequired(required, prop)"
       />
       <div class="mt-4">
         <p
-          v-if="param.description"
+          v-if="schema.description"
           class="whitespace-pre-line text-gray-400 text-sm"
         >
-          {{ param.description }}
+          {{ schema.description }}
         </p>
         <!-- Handle anyOf -->
         <ApiRequestBodyArrayParam
-          v-if="param.anyOf?.length"
-          :any-of="param.anyOf"
+          v-if="schema.anyOf?.length"
+          :any-of="schema.anyOf"
         />
         <!-- Handle Items -->
         <ApiRequestBodyArrayParam
-          v-if="param.items"
-          :items="param.items"
+          v-if="schema.items"
+          :items="schema.items"
         />
-        <ApiParameterExample :value="param.example" />
+        <ApiParameterExample :value="schema.example" />
       </div>
       <template v-if="properties">
         <ApiCollapse class="mt-4">
           <ApiRequestBodyList
             :properties="properties"
-            :required="param.required"
+            :required="schema.required"
             :parent-prop="prop"
           />
         </ApiCollapse>

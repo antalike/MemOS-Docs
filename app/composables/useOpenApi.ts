@@ -1,5 +1,7 @@
 import type { Collections } from '@nuxt/content'
 import type { RouteLocation } from 'vue-router'
+import SimpleOAS, { type HttpMethods } from '~/utils/oas'
+import { flattenOasPaths } from '~/utils/openapi'
 
 function prettifyGroupTitle(key: string) {
   const base = key.replace(/^\//, '')
@@ -12,18 +14,21 @@ function prettifyGroupTitle(key: string) {
     .join(' ')
 }
 
+const oasInstanceStore = new Map<string, SimpleOAS>()
+
 const useOpenApi = (collectionName: keyof Collections = 'openapi', parentPath: string = 'api-reference') => {
   const openapi = useState<OpenApiProps | null>(collectionName, () => null)
-  const server = useState<Record<string, unknown> | null>(`${collectionName}Server`, () => null)
   const schemas = useState<Record<string, SchemaProps>>(`${collectionName}Schemas`, () => ({}))
-  const securitySchemes = useState<Record<string, SecurityProps>>(`${collectionName}SecuritySchemas`, () => ({}))
-  const globalSecurity = useState<unknown[]>(`${collectionName}Security`, () => ([]))
-  const paths = useState<FlatPathProps[]>(`${collectionName}OriginalPaths`, () => ([]))
+
+  const server = useState<string>(`${collectionName}Server`, () => '')
+  const paths = useState<OasRoutePath[]>(`${collectionName}Paths`, () => ([]))
+
+  const oasInstanceLoaded = useState<boolean>(`${collectionName}Loaded`, () => false)
+
   const apiNavData = computed<NavLink[]>(() => {
-    // Group by first-level segment of apiUrl
-    const groupMap = new Map<string, FlatPathProps[]>()
-    paths.value.forEach((item: FlatPathProps) => {
-      const firstSegment = item.apiUrl.split('/').filter(Boolean)[0] ?? ''
+    const groupMap = new Map<string, OasRoutePath[]>()
+    paths.value.forEach((item: OasRoutePath) => {
+      const firstSegment = item.path.split('/').filter(Boolean)[0] ?? ''
       const groupKey = firstSegment ? `/${firstSegment}` : '/'
 
       if (!groupMap.has(groupKey)) {
@@ -40,9 +45,9 @@ const useOpenApi = (collectionName: keyof Collections = 'openapi', parentPath: s
         const item = groupItems[0]
         if (item) {
           singleItems.push({
-            title: item.summary,
+            title: (item.summary as string) || '',
             path: item.routePath,
-            method: item.method
+            method: item.method as 'get' | 'post' | 'put' | 'delete'
           })
         }
       } else {
@@ -51,9 +56,9 @@ const useOpenApi = (collectionName: keyof Collections = 'openapi', parentPath: s
           title: groupTitle,
           children: groupItems
             .map(p => ({
-              title: p.summary,
+              title: (p.summary as string) || '',
               path: p.routePath,
-              method: p.method
+              method: p.method as 'get' | 'post' | 'put' | 'delete'
             }))
         })
       }
@@ -61,11 +66,26 @@ const useOpenApi = (collectionName: keyof Collections = 'openapi', parentPath: s
 
     return singleItems.concat(items)
   })
+
   const route = useRoute()
+
+  function _getOasInstance() {
+    if (oasInstanceStore.has(collectionName)) {
+      return oasInstanceStore.get(collectionName)
+    }
+    return null
+  }
+
+  function _setOasInstance(oasInstance: SimpleOAS) {
+    if (!oasInstanceStore.has(collectionName)) {
+      oasInstanceStore.set(collectionName, oasInstance)
+      oasInstanceLoaded.value = true
+    }
+  }
 
   // Fetch OpenAPI data
   async function getOpenApi() {
-    const { data } = await useAsyncData(collectionName, async () => {
+    const { data } = await useAsyncData(`openapi-data-${collectionName}-${parentPath}`, async () => {
       return queryCollection(collectionName).all()
     })
 
@@ -75,33 +95,27 @@ const useOpenApi = (collectionName: keyof Collections = 'openapi', parentPath: s
       const targetPath = route.path.startsWith('/cn')
         ? 'cn/dashboard/api/api'
         : 'en/dashboard/api/api'
+
       doc = data.value?.find(item => item.stem === targetPath)
     } else {
       doc = data.value?.[0]
     }
 
+    const oas = new SimpleOAS(doc)
+    await oas.dereference()
+    _setOasInstance(oas)
+
     openapi.value = (doc as unknown as OpenApiProps) ?? null
-    globalSecurity.value = (openapi.value?.meta.body.security?.[0] as unknown[]) ?? null
-    server.value = (openapi.value?.meta.body.servers?.[0] as Record<string, unknown>) ?? null
     schemas.value = openapi.value?.components?.schemas ?? {}
-    securitySchemes.value = openapi.value?.components?.securitySchemes ?? {}
-    paths.value = flattenPaths(openapi.value?.paths ?? {}, parentPath, collectionName as unknown as CollectionName)
+
+    server.value = oas.url()
+    paths.value = flattenOasPaths(oas, parentPath, collectionName as unknown as CollectionName)
   }
 
-  function getApiByRoute(route: RouteLocation): FlatPathProps | undefined | null {
+  function getApiByRoute(route: RouteLocation): OasRoutePath | undefined {
     let normalizedPath = route.path.replace(/^\/cn/, '').replace(/\/$/, '') || '/'
     normalizedPath = normalizedPath.split('-').map(s => s.toLowerCase()).join('-')
-    // Handle Schema
-    const apiData = paths.value.find(path => path.routePath === normalizedPath)
-    if (!apiData) return null
-
-    const { requestBody, responses, ...rest } = apiData
-
-    return {
-      requestBody: resolveRequestSchema(requestBody),
-      responses: resolveResponseSchema(responses),
-      ...rest
-    }
+    return paths.value.find(path => path.routePath === normalizedPath)
   }
 
   function getCurrentRouteIndex(route: RouteLocation): number {
@@ -110,141 +124,273 @@ const useOpenApi = (collectionName: keyof Collections = 'openapi', parentPath: s
     return paths.value.findIndex(path => path.routePath === normalizedPath)
   }
 
-  function resolveSchemaRef(ref: string | undefined | null): unknown | null {
-    if (!ref || !schemas.value) return null
-    const key = ref.split('/').pop() as string | undefined
-    if (!key) return null
-    return (schemas.value[key] as unknown) || null
+  function getSecurityWithTypes(path: string, method: HttpMethods): SecurityProps[] {
+    if (oasInstanceLoaded.value) {
+      const oas = _getOasInstance()
+      if (oas)
+        return oas.getSecurityWithTypes(path, method)
+    }
+    return []
   }
 
-  // 深度解析 schema 中任意位置的 $ref（包括 properties/items/anyOf/allOf/oneOf 等），并避免循环引用
-  function deepResolveSchema(input: unknown, visited: Set<string> = new Set()): unknown {
-    if (input == null) return input
-
-    // 处理数组
-    if (Array.isArray(input)) {
-      return input.map(item => deepResolveSchema(item, visited))
+  function getParameters(path: string, method: HttpMethods): ParameterObject[] {
+    if (oasInstanceLoaded.value) {
+      const oas = _getOasInstance()
+      if (oas)
+        return oas.getParameters(path, method)
     }
+    return []
+  }
 
-    // 处理对象
-    if (typeof input === 'object') {
-      const obj = input as Record<string, unknown>
-      const maybeRef = (obj as { $ref?: unknown }).$ref
-      if (typeof maybeRef === 'string') {
-        const key = maybeRef.split('/').pop() || ''
-        if (!key) return input
-        const { $ref: _refIgnored, ...rest } = obj as Record<string, unknown>
-        const resolvedRest = deepResolveSchema(rest, visited)
+  function getRequestBody(path: string, method: HttpMethods): OasRequestBody | null {
+    if (oasInstanceLoaded.value) {
+      const oas = _getOasInstance()
+      if (oas) {
+        const body = oas.getRequestBody(path, method)
+        const contentType = oas.getContentType(path, method)
+        return { contentType, body }
+      }
+    }
+    return null
+  }
 
-        if (visited.has(key)) {
-          // 已解析过该 ref，避免死循环
-          const already = resolveSchemaRef(maybeRef)
-          if (already && typeof already === 'object' && resolvedRest && typeof resolvedRest === 'object') {
-            return { ...(already as unknown as Record<string, unknown>), ...(resolvedRest as unknown as Record<string, unknown>) }
+  function getResponseStatusCodes(path: string, method: HttpMethods): string[] {
+    if (oasInstanceLoaded.value) {
+      const oas = _getOasInstance()
+      if (oas)
+        return oas.getResponseStatusCodes(path, method)
+    }
+    return []
+  }
+
+  function getResponseByStatusCode(path: string, method: HttpMethods, statusCode: string | number): ResponseObject | null {
+    if (oasInstanceLoaded.value) {
+      const oas = _getOasInstance()
+      if (oas)
+        return oas.getResponseByStatusCode(path, method, statusCode)
+    }
+    return null
+  }
+
+  function getResponseContentType(path: string, method: HttpMethods, statusCode: string | number): string {
+    if (oasInstanceLoaded.value) {
+      const oas = _getOasInstance()
+      if (oas)
+        return oas.getResponseContentType(path, method, statusCode)
+    }
+    return 'null'
+  }
+
+  function getResponseAsJSONSchema(path: string, method: HttpMethods, statusCode: string | number): SchemaObject | null {
+    if (oasInstanceLoaded.value) {
+      const oas = _getOasInstance()
+      if (oas)
+        return oas.getResponseAsJSONSchema(path, method, statusCode)
+    }
+    return null
+  }
+
+  function generateResponseExample(path: string, method: HttpMethods, statusCode: string | number): Record<string, any> {
+    if (oasInstanceLoaded.value) {
+      const oas = _getOasInstance()
+      if (oas) {
+        const example = oas.generateResponseExample(path, method, statusCode)
+        const contentType = oas.getResponseContentType(path, method, statusCode)
+        return example?.[contentType] ?? {}
+      }
+    }
+    return {}
+  }
+
+  function getContentInfo(oas: SimpleOAS, path: string, method: HttpMethods) {
+    const contentType = oas.getContentType(path, method)
+    const requestBodySchema = oas.getRequestBodyAsJSONSchema(path, method)
+    return { contentType, schema: requestBodySchema }
+  }
+
+  function getValue(prop: Record<string, unknown>): string | number | boolean {
+    if (!prop) return 'null'
+    if (prop.type === 'string') {
+      if (prop.enum) return `"${(prop.enum as string[])[0]}"`
+      if (prop.format === 'date') return '"2023-01-01"'
+      if (prop.format === 'date-time') return '"2023-01-01T00:00:00Z"'
+      if (prop.format === 'email') return '"example@example.com"'
+      return '"<string>"'
+    }
+    if (prop.type === 'array') return '[]'
+    if (prop.type === 'integer') return (prop.default as number) ?? 0
+    if (prop.type === 'number') return (prop.default as number) ?? 0
+    if (prop.type === 'boolean') return true
+    if (prop.type === 'object') return '{}'
+    return 'null'
+  }
+
+  function generateRequestBodyData(schema: Record<string, unknown>): string {
+    if (!schema || !schema.properties) return '{}'
+
+    const properties = Object.entries(schema.properties as Record<string, unknown>).map(([key, prop]) => {
+      return `    "${key}": ${getValue(prop as Record<string, unknown>)}`
+    })
+
+    return `{\n${properties.join(',\n')}\n  }`
+  }
+
+  function generateCurlSnippet(oas: SimpleOAS, path: string, method: HttpMethods) {
+    const httpMethod = method.toUpperCase()
+    const baseUrl = oas.url()
+    const { contentType, schema } = getContentInfo(oas, path, method)
+    const auth = oas.getSecurityWithTypes(path, method)
+
+    const curlLines: string[] = []
+    curlLines.push(`curl -request ${httpMethod}`)
+    curlLines.push(`  --url ${baseUrl}${path}`)
+
+    if (auth && auth.length > 0) {
+      auth.forEach((s) => {
+        if (s.scheme?.type === 'apiKey') {
+          if (s.scheme.in === 'header') {
+            curlLines.push(`  --header '${s.scheme.name}: Token YOUR_API_KEY'`)
           }
-          return already ?? input
+        } else if (s.scheme?.type === 'http' && s.scheme.scheme === 'bearer') {
+          curlLines.push(`  --header 'Authorization: Bearer YOUR_TOKEN'`)
         }
-
-        visited.add(key)
-        const target = resolveSchemaRef(maybeRef)
-        const resolvedTarget = deepResolveSchema(target ?? input, visited)
-        if (resolvedTarget && typeof resolvedTarget === 'object' && resolvedRest && typeof resolvedRest === 'object') {
-          return { ...(resolvedTarget as unknown as Record<string, unknown>), ...(resolvedRest as unknown as Record<string, unknown>) }
-        }
-        return resolvedTarget
-      }
-
-      // 普通对象：递归解析所有字段
-      const out: Record<string, unknown> = {}
-      for (const [k, v] of Object.entries(obj)) {
-        out[k] = deepResolveSchema(v, visited)
-      }
-      return out
+      })
     }
 
-    // 基础类型直接返回
-    return input
-  }
-
-  // 通用方法：解析并替换 content 中的 schema.$ref
-  function resolveContentSchemas(content?: ContentProps): ContentProps {
-    if (!content) return {} as unknown as ContentProps
-    const result: Record<string, unknown> = {}
-
-    Object.entries(content).forEach(([contentType, value]) => {
-      const rawSchema = value?.schema as { $ref?: string } | undefined
-      if (rawSchema) {
-        // 解析后直接返回找到的数据，不再包裹在 schema 属性下
-        const resolvedDeep = deepResolveSchema(rawSchema)
-        result[contentType] = resolvedDeep
-      } else {
-        // 若原本没有 schema，则保持为 undefined
-        result[contentType] = undefined
-      }
-    })
-
-    // 使用 unknown 再断言为 ContentProps，避免使用 any
-    return result as unknown as ContentProps
-  }
-
-  function resolveRequestSchema(requestBody: RequestProps | undefined): RequestProps | undefined {
-    if (!requestBody)
-      return undefined
-
-    const resolved: RequestProps = {
-      ...requestBody,
-      content: resolveContentSchemas(requestBody.content)
-    } as unknown as RequestProps
-    return resolved
-  }
-
-  function resolveResponseSchema(responses: Record<string, ResponseProps>): Record<string, ResponseProps> {
-    const newResponses: Record<string, ResponseProps> = {}
-
-    Object.entries(responses || {}).forEach(([statusCode, response]) => {
-      const r = response as unknown as ResponseEnvelope
-      const updated: ResponseEnvelope = {
-        ...r,
-        content: resolveContentSchemas(r?.content as ContentProps | undefined)
-      }
-      newResponses[statusCode] = updated as unknown as ResponseProps
-    })
-
-    return newResponses
-  }
-
-  // Extract schema from content
-  function getContentSchema(content?: ContentProps) {
-    const contentType = content ? Object.keys(content)[0] : undefined
-    const value = contentType ? (content as unknown as Record<string, unknown>)[contentType] : undefined
-    let schema: unknown | null = null
-    if (value) {
-      // 兼容两种形态：
-      // 1) 旧结构：{ schema: {...} }
-      // 2) 新结构：直接是 schema 对象
-      const maybeSchema = (value as Record<string, unknown>)?.schema as unknown
-      if (maybeSchema) {
-        schema = deepResolveSchema(maybeSchema)
-      } else {
-        schema = deepResolveSchema(value)
-      }
+    if (contentType && schema) {
+      curlLines.push(`  --header 'Content-Type: ${contentType}'`)
+      const dataStr = generateRequestBodyData(schema as Record<string, unknown>)
+      curlLines.push(`  --data '${dataStr}'`)
     }
-    return { contentType, schema }
+
+    return curlLines.join(' \\\n')
+  }
+
+  function generatePythonHttpSnippet(oas: SimpleOAS, path: string, method: HttpMethods) {
+    const baseUrl = oas.url()
+    const auth = oas.getSecurityWithTypes(path, method)
+    const { contentType, schema } = getContentInfo(oas, path, method)
+
+    const pyLines: string[] = []
+    pyLines.push('import os')
+    pyLines.push('import requests')
+    pyLines.push('import json')
+    pyLines.push('')
+
+    if (auth && auth.length > 0) {
+      pyLines.push('os.environ["API_KEY"] = "YOUR_API_KEY"')
+    }
+    pyLines.push(`os.environ["BASE_URL"] = "${baseUrl}"`)
+    pyLines.push('')
+
+    if (schema && (schema as Record<string, unknown>).properties) {
+      pyLines.push('data = {')
+      Object.entries((schema as Record<string, unknown>).properties as Record<string, unknown>).forEach(([key, prop]) => {
+        pyLines.push(`    "${key}": ${getValue(prop as Record<string, unknown>)}`)
+      })
+      pyLines.push('}')
+    }
+
+    pyLines.push('headers = {')
+    if (contentType) {
+      pyLines.push(`    "Content-Type": "${contentType}"`)
+    }
+    if (auth && auth.length > 0) {
+      auth.forEach((s) => {
+        if (s.scheme?.type === 'apiKey' && s.scheme.in === 'header') {
+          pyLines.push(`    "${s.scheme.name}": f"Token {os.environ['MEMOS_API_KEY']}"`)
+        } else if (s.scheme?.type === 'http' && s.scheme.scheme === 'bearer') {
+          pyLines.push(`    "Authorization": f"Bearer {os.environ['MEMOS_API_KEY']}"`)
+        }
+      })
+    }
+    pyLines.push('}')
+    pyLines.push(`url = f"{os.environ['BASE_URL']}${path}"`)
+    pyLines.push('')
+
+    if (schema) {
+      if (path === '/search/memory') {
+        pyLines.push(`res = requests.${method.toLowerCase()}(url=url, headers=headers, data=json.dumps(data))`)
+        pyLines.push('')
+        pyLines.push('for memory in res.json()["data"]["memory_detail_list"]:')
+        pyLines.push('  print(f"Related memory：{memory[\'memory_value\']}")')
+      } else {
+        pyLines.push(`requests.${method.toLowerCase()}(url=url, headers=headers, data=json.dumps(data))`)
+      }
+    } else {
+      pyLines.push(`requests.${method.toLowerCase()}(url=url, headers=headers)`)
+    }
+
+    return pyLines.join('\n')
+  }
+
+  function generatePythonSdkSnippet(oas: SimpleOAS, path: string, method: HttpMethods) {
+    const { schema } = getContentInfo(oas, path, method)
+
+    const pyLines: string[] = []
+    pyLines.push('from memos.api.client import MemOSClient')
+    pyLines.push('')
+    pyLines.push('client = MemOSClient(api_key="YOUR_API_KEY")')
+    pyLines.push('')
+
+    if (schema && (schema as Record<string, unknown>).properties) {
+      Object.entries((schema as Record<string, unknown>).properties as Record<string, unknown>).forEach(([key, prop]) => {
+        pyLines.push(`${key} = ${getValue(prop as Record<string, unknown>)}`)
+      })
+      pyLines.push('')
+    }
+
+    if (path === '/search/memory') {
+      pyLines.push('res = client.add_message(messages=messages, user_id=user_id, conversation_id=conversation_id)')
+      pyLines.push('')
+      pyLines.push('for memory in res.data.memory_detail_list:')
+      pyLines.push('  print(f"Related memory：{memory.memory_value}")')
+    } else {
+      pyLines.push('client.add_message(messages=messages, user_id=user_id, conversation_id=conversation_id)')
+    }
+
+    return pyLines.join('\n')
+  }
+
+  function generateSnippet(path: string, method: HttpMethods, lang: LangType): string {
+    if (!oasInstanceLoaded.value) {
+      return `# OAS instance not loaded yet`
+    }
+
+    const oas = _getOasInstance()
+    if (!oas) {
+      return `# OAS instance not available`
+    }
+
+    try {
+      if (lang === 'curl') return generateCurlSnippet(oas, path, method)
+      if (lang === 'python-http') return generatePythonHttpSnippet(oas, path, method)
+      if (lang === 'python-sdk') return generatePythonSdkSnippet(oas, path, method)
+      return `# Unsupported language: ${lang}`
+    } catch (error) {
+      console.error('Error generating snippet:', error)
+      return `# Error generating snippet for ${lang}`
+    }
   }
 
   return {
     openapi,
     schemas,
     server,
-    securitySchemes,
-    globalSecurity,
     paths,
     apiNavData,
     getOpenApi,
     getApiByRoute,
     getCurrentRouteIndex,
-    resolveSchemaRef,
-    getContentSchema
+    getSecurityWithTypes,
+    getParameters,
+    getRequestBody,
+    getResponseStatusCodes,
+    getResponseByStatusCode,
+    getResponseContentType,
+    getResponseAsJSONSchema,
+    generateResponseExample,
+    generateSnippet
   }
 }
 

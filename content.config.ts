@@ -39,6 +39,16 @@ export default defineContentConfig({
       schema: z.object({
         openapi: z.string(),
         info: z.record(z.string(), z.any()).optional(),
+        servers: z.array(z.object({
+          url: z.string(),
+          description: z.string().optional(),
+          variables: z.record(z.string(), z.object({
+            default: z.string(),
+            description: z.string().optional(),
+            enum: z.array(z.string()).optional()
+          })).optional()
+        })).optional(),
+        security: z.array(z.record(z.string(), z.array(z.string()))).optional(),
         paths: z.record(
           z.string(),
           z.record(z.string(), z.any())
@@ -52,6 +62,16 @@ export default defineContentConfig({
       schema: z.object({
         openapi: z.string(),
         info: z.record(z.string(), z.any()).optional(),
+        servers: z.array(z.object({
+          url: z.string(),
+          description: z.string().optional(),
+          variables: z.record(z.string(), z.object({
+            default: z.string(),
+            description: z.string().optional(),
+            enum: z.array(z.string()).optional()
+          })).optional()
+        })).optional(),
+        security: z.array(z.record(z.string(), z.array(z.string()))).optional(),
         paths: z.record(
           z.string(),
           z.record(z.string(), z.any())
