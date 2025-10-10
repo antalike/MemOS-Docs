@@ -1,55 +1,27 @@
 <script setup lang="ts">
-import { resolveSchemaRef } from '@/utils/openapi'
-import type { Collections } from '@nuxt/content'
+import type { ArrayItemType } from '~/utils/openapi'
 
-type VariantDescriptor = { type?: string, title?: string, $ref?: string }
+const props = defineProps<{
+  item: ArrayItemType
+}>()
 
-interface ArrayItemType {
-  $ref?: string
-  anyOf?: VariantDescriptor[]
-  oneOf?: VariantDescriptor[]
-  type?: string
-  title?: string
-  description?: string
-  properties?: Record<string, unknown>
-  required?: string[]
-  enum?: unknown[]
-}
-
-const props = withDefaults(defineProps<{
-  items: ArrayItemType
-  apiName?: keyof Collections
-}>(), {
-  apiName: 'openapi'
-})
-
-const { schemas } = useOpenApi(props.apiName)
-
-function resolveRef(ref?: string) {
-  return resolveSchemaRef(ref, schemas.value)
-}
-
-const refSchema = computed(() => resolveRef(props.items?.$ref))
-
-const variantList = computed(() => props.items?.anyOf || props.items?.oneOf || null)
+const variantList = computed(() => props.item?.anyOf || props.item?.oneOf || null)
 const selectedVariantIndex = ref<number>(0)
-const selectedVariant = computed(() => {
+const selectedVariant = computed((): ArrayItemType | null => {
   const list = variantList.value
   if (!list || !list.length) return null
-  const raw = list[selectedVariantIndex.value] || list[0]
-  return raw?.$ref ? resolveRef(raw.$ref) : raw
+  return (list[selectedVariantIndex.value] || list[0]) as ArrayItemType
 })
 
-const displaySchema = computed(() => {
+const displaySchema = computed((): ArrayItemType | null => {
   if (variantList.value) return selectedVariant.value
-  if (props.items?.$ref) return refSchema.value
-  return null
+  return props.item || null
 })
 </script>
 
 <template>
   <ApiCollapse
-    v-if="displaySchema"
+    v-if="(variantList && variantList.length) || (displaySchema && displaySchema.properties)"
     class="mt-4"
   >
     <!-- anyOf / oneOf selector -->
@@ -88,7 +60,6 @@ const displaySchema = computed(() => {
               :required="displaySchema?.required?.includes(prop)"
               :default-value="subitem.default"
               :schema="subitem"
-              :api-name="apiName"
             />
             <div class="mt-3">
               <p
@@ -111,10 +82,7 @@ const displaySchema = computed(() => {
               </div>
             </div>
             <template v-if="subitem.items">
-              <ApiResponseSubItem
-                :items="subitem.items"
-                :api-name="apiName"
-              />
+              <ApiResponseSubItem :item="subitem.items" />
             </template>
           </div>
         </div>

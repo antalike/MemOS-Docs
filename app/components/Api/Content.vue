@@ -1,35 +1,9 @@
 <script setup lang="ts">
-import type { Collections } from '@nuxt/content'
-
-const props = withDefaults(defineProps<{
+withDefaults(defineProps<{
   apiData: any
-  apiName?: keyof Collections
+  showRequestCode?: boolean
 }>(), {
-  apiName: 'openapi'
-})
-
-const { schemas, globalSecurity, server } = useOpenApi(props.apiName)
-
-const flattenResponses = computed(() => {
-  const responses = props.apiData?.responses || {}
-  return Object.entries(responses).map(([statusCode, response]) => {
-    const newRes = {
-      statusCode,
-      description: response.description
-    }
-    const contentType = Object.keys(response.content || {})[0]
-
-    if (contentType) {
-      newRes.contentType = contentType
-      const schemaRef = response.content?.[contentType].schema?.$ref
-      if (schemaRef) {
-        const schemaKey = schemaRef.split('/').pop()
-        newRes.data = schemas.value[schemaKey]
-      }
-    }
-
-    return newRes
-  })
+  showRequestCode: false
 })
 </script>
 
@@ -46,46 +20,54 @@ const flattenResponses = computed(() => {
       </div>
     </header>
     <ApiPath
-      :path="apiData?.apiUrl"
+      :path="apiData?.path"
       :method="apiData?.method"
-      :server="server"
     />
-    <!-- Mobile/tablet: show the code panel inline above the body -->
     <div class="xl:hidden mt-6">
-      <ApiCodePanel
-        :responses="flattenResponses"
-        :api-name="apiName"
+      <ApiCodeRequest
+        v-if="showRequestCode && apiData?.requestBody"
+        :path="apiData?.path"
+        :method="apiData?.method"
+      />
+      <ApiCodeResponse
+        v-if="apiData?.responses"
+        :path="apiData?.path"
+        :method="apiData?.method"
       />
     </div>
 
     <div class="mdx-content relative mt-8 mb-8 prose prose-gray dark:prose-invert">
       <ApiAuthorizations
-        v-if="globalSecurity"
-        :api-name="apiName"
+        :path="apiData?.path"
+        :method="apiData?.method"
       />
       <ApiParameter
-        v-if="apiData?.parameters"
-        :data="apiData.parameters"
-        :api-name="apiName"
+        :path="apiData?.path"
+        :method="apiData?.method"
       />
       <ApiRequestBody
-        v-if="apiData?.requestBody"
-        :data="apiData.requestBody"
-        :api-name="apiName"
+        :path="apiData?.path"
+        :method="apiData?.method"
       />
       <ApiResponse
         v-if="apiData?.responses"
-        :data="flattenResponses"
-        :api-name="apiName"
+        :path="apiData?.path"
+        :method="apiData?.method"
       />
     </div>
     <slot name="markdown" />
-    <ApiSurround :api-name="apiName" />
+    <ApiSurround />
   </div>
   <div class="hidden xl:flex self-start sticky xl:flex-col max-w-[28rem] h-[calc(100vh-4rem)] top-[2.5rem]">
-    <ApiCodePanel
-      :responses="flattenResponses"
-      :api-name="apiName"
+    <ApiCodeRequest
+      v-if="showRequestCode && apiData?.requestBody"
+      :path="apiData?.path"
+      :method="apiData?.method"
+    />
+    <ApiCodeResponse
+      v-if="apiData?.responses"
+      :path="apiData?.path"
+      :method="apiData?.method"
     />
   </div>
 </template>

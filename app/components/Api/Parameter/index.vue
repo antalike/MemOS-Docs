@@ -1,43 +1,54 @@
-<script lang="ts">
-export interface ParametersProp {
-  name: string
-  in: 'path' | 'query'
-  required: boolean
-  schema: Record<string, string>
-}
-</script>
-
 <script setup lang="ts">
-import type { Collections } from '@nuxt/content'
+const props = defineProps<{
+  path: string
+  method: HttpMethods
+}>()
 
-const props = withDefaults(defineProps<{
-  data: ParametersProp[]
-  apiName?: keyof Collections
-}>(), {
-  apiName: 'openapi'
+const collectionName = inject<CollectionName>('collectionName')
+const { getParameters } = useOpenApi(collectionName)
+
+const parameters = computed<ParameterObject[]>(() => {
+  return getParameters(props.path, props.method)
 })
 
 const pathParameters = computed(() => {
-  return props.data.filter(item => item.in === 'path')
+  return parameters.value.filter(item => item.in === 'path')
 })
 const queryParameters = computed(() => {
-  return props.data.filter(item => item.in === 'query')
+  return parameters.value.filter(item => item.in === 'query')
+})
+const headerParameters = computed(() => {
+  return parameters.value.filter(item => item.in === 'header')
+})
+const cookieParameters = computed(() => {
+  return parameters.value.filter(item => item.in === 'cookie')
 })
 </script>
 
 <template>
-  <div class="api-section">
+  <div
+    v-if="parameters && parameters.length"
+    class="api-section"
+  >
     <ApiParameterList
       v-if="pathParameters.length"
       title="Path Parameters"
-      :data="pathParameters"
-      :api-name="apiName"
+      :params="pathParameters"
     />
     <ApiParameterList
       v-if="queryParameters.length"
       title="Query Parameters"
-      :data="queryParameters"
-      :api-name="apiName"
+      :params="queryParameters"
+    />
+    <ApiParameterList
+      v-if="headerParameters.length"
+      title="Header Parameters"
+      :params="headerParameters"
+    />
+    <ApiParameterList
+      v-if="cookieParameters.length"
+      title="Cookie Parameters"
+      :params="cookieParameters"
     />
   </div>
 </template>
