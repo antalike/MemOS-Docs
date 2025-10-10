@@ -353,7 +353,7 @@ const useOpenApi = (collectionName: keyof Collections = 'openapi', parentPath: s
 
     pyLines.push('headers = {')
     if (contentType) {
-      pyLines.push(`  "Content-Type": "${contentType}"`)
+      pyLines.push(`  "Content-Type": "${contentType}",`)
     }
     if (auth && auth.length > 0) {
       auth.forEach((s) => {
