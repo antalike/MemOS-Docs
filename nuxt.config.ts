@@ -29,7 +29,8 @@ const config: NuxtConfig = {
   app: {
     head: {
       script: [
-        ...armsScript
+        ...armsScript,
+        { src: 'https://cdn.memtensor.com.cn/file/locale.1.0.2.min.js', type: 'text/javascript' },
       ]
     }
   },
