@@ -12,7 +12,7 @@ watch(() => props.code, async (value) => {
   if (value && props.language) {
     const highlightHtml = await codeToHtml(value, {
       lang: props.language,
-      theme: 'github-dark'
+      theme: 'material-theme-palenight'
     })
     highlightCode.value = highlightHtml
   }
@@ -26,8 +26,8 @@ watch(() => props.code, async (value) => {
 </template>
 
 <style lang="css" scoped>
-:deep(.shiki.github-dark) {
-  background-color: transparent !important;
+:deep(.shiki.material-theme-palenight) {
+  background-color: #1e2939 !important;
 }
 :deep(.shiki span.line) {
   display: inline-block !important;

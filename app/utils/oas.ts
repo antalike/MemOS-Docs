@@ -443,6 +443,55 @@ export class SimpleOAS {
   }
 
   /**
+   * Get request body example
+   */
+  getRequestBodyExample(path: string, method: HttpMethods, mediaType?: string): Record<string, unknown> {
+    const operation = this.getOperation(path, method)
+    if (!operation?.requestBody) return null
+
+    // Resolve reference
+    let requestBody: RequestBodyObject
+    if (isRef(operation.requestBody)) {
+      requestBody = resolveRef(operation.requestBody.$ref, this.api) as RequestBodyObject
+    } else {
+      requestBody = operation.requestBody as RequestBodyObject
+    }
+
+    if (!requestBody?.content) return null
+
+    // If mediaType is specified, use it directly
+    if (mediaType && requestBody.content[mediaType]) {
+      const mediaObj = requestBody.content[mediaType]
+
+      // Return example if it exists
+      if (mediaObj.example !== undefined) {
+        return mediaObj.example
+      }
+
+      // Return first example from examples if it exists
+      if (mediaObj.examples) {
+        const firstExampleKey = Object.keys(mediaObj.examples)[0]
+        if (firstExampleKey) {
+          const exampleObj = mediaObj.examples[firstExampleKey]
+          if (exampleObj && typeof exampleObj === 'object' && 'value' in exampleObj) {
+            return exampleObj.value
+          }
+          return exampleObj
+        }
+      }
+
+      // Generate example from schema if available
+      if (mediaObj.schema) {
+        return generateSampleFromSchema(mediaObj.schema as SchemaObject, this.api)
+      }
+
+      return null
+    }
+
+    return null
+  }
+
+  /**
    * Get response status codes list
    */
   getResponseStatusCodes(path: string, method: HttpMethods): string[] {
