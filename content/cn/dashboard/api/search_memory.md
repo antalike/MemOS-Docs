@@ -8,28 +8,32 @@
 
 ```python
 import os
+import json
 import requests
 
-API_KEY = os.environ["MEMOS_API_KEY"]
-BASE_URL = os.environ["MEMOS_BASE_URL"]
+os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
+os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
+# headers 和 base URL
 headers = {
-    "Authorization": f"Token {API_KEY}",
-    "Content-Type": "application/json"
+  "Authorization": f"Token {os.environ['MEMOS_API_KEY']}",
+  "Content-Type": "application/json"
 }
+BASE_URL = os.environ['MEMOS_BASE_URL']
 
 # 用户当前发言，直接作为 query
 query_text = "国庆节我要去云南玩了，有什么美食推荐吗？"
 
 data = {
-    "userId": "memos_user_345",
+    "user_id": "memos_user_345",
     "conversation_id": "memos_conversation_789",  # 新建了一个会话ID
     "query": query_text,
 }
 
 # 调用 /search/memory 查询相关记忆
-res = requests.post(f"{BASE_URL}/search/memory", headers=headers, json=data)
-memories = res.json().get("data", {}).get("memoryDetailList", [])
+res = requests.post(f"{BASE_URL}/search/memory", headers=headers, data=json.dumps(data))
+for memory in res.json().get("data", {}).get("memory_detail_list", []):
+    print(f"相关记忆：{memory['memory_value']}")
 
 # 示例返回（展示已召回的记忆片段）
 # [
@@ -38,7 +42,7 @@ memories = res.json().get("data", {}).get("memoryDetailList", [])
 #         "memory_key": "饮食偏好",
 #         "memory_value": "[user观点]用户喜欢辣味食物，但不太喜欢重油的菜肴，如麻辣火锅和毛血旺。",
 #         "memory_type": "WorkingMemory",
-#         "conversation_id": "memos_conversation_id_345",
+#         "conversation_id": "memos_conversation_345",
 #         "tags": ["饮食", "偏好", "辣味"],
 #         "relativity": 0.0043  # 表示与 query 的相关度，值越高表示越相关
 #     },
@@ -63,27 +67,31 @@ memories = res.json().get("data", {}).get("memoryDetailList", [])
 
 ```python
 import os
+import json
 import requests
 
-API_KEY = os.environ["MEMOS_API_KEY"]
-BASE_URL = os.environ["MEMOS_BASE_URL"]
+os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
+os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
+# headers 和 base URL
 headers = {
-    "Authorization": f"Token {API_KEY}",
-    "Content-Type": "application/json"
+  "Authorization": f"Token {os.environ['MEMOS_API_KEY']}",
+  "Content-Type": "application/json"
 }
+BASE_URL = os.environ['MEMOS_BASE_URL']
 
 # 直接询问人物画像，作为 query
 query_text = "我的人物关键词是什么？"
 
 data = {
-    "userId": "memos_user_345",
+    "user_id": "memos_user_345",
     "query": query_text,
 }
 
 # 调用 /search/memory 查询相关记忆
-res = requests.post(f"{BASE_URL}/search/memory", headers=headers, json=data)
-memories = res.json().get("data", {}).get("memoryDetailList", [])
+res = requests.post(f"{BASE_URL}/search/memory", headers=headers, data=json.dumps(data))
+for memory in res.json().get("data", {}).get("memory_detail_list", []):
+    print(f"相关记忆：{memory['memory_value']}")
 
 # 示例返回（展示已召回的记忆片段）
 # [

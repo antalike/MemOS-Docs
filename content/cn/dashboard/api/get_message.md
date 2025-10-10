@@ -6,30 +6,33 @@
 
 ```python
 import os
-import requests
 import json
+import requests
 
-API_KEY = os.environ["MEMOS_API_KEY"]
-BASE_URL = os.environ["MEMOS_BASE_URL"]
+os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
+os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
+# headers 和 base URL
 headers = {
-    "Authorization": f"Token {API_KEY}",
-    "Content-Type": "application/json"
+  "Authorization": f"Token {os.environ['MEMOS_API_KEY']}",
+  "Content-Type": "application/json"
 }
+BASE_URL = os.environ["MEMOS_BASE_URL"]
 
 def get_message(user_id: str, conversation_id: str, limit: int):
     data = {
-        "userId": user_id,
+        "user_id": user_id,
         "conversation_id": conversation_id,
-        "messageLimitNumber": limit
+        "message_limit_number": limit
     }
 
-    res = requests.post(f"{BASE_URL}/get/message", headers=headers, json=data)
+    res = requests.post(f"{BASE_URL}/get/message", headers=headers, data=json.dumps(data))
+    result = res.json()
 
-    if res.status_code == 200 and res.json().get("code") == 0:
-        return res.json().get("data", {}).get("messages", [])
+    if result.get("code") == 0:
+        return result.get("data", {}).get("messages", [])
     else:
-        print(f"❌ 获取消息失败: {res.text}")
+        print(f"❌ 获取消息失败: {result.get('message')}")
         return []
 
 # ---------------------------
@@ -56,15 +59,18 @@ print(json.dumps(model_context_simple, ensure_ascii=False, indent=2))
 
 ```python
 import os
+import json
 import requests
 
-API_KEY = os.environ["MEMOS_API_KEY"]
-BASE_URL = os.environ["MEMOS_BASE_URL"]
+os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
+os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
+# headers 和 base URL
 headers = {
-    "Authorization": f"Token {API_KEY}",
-    "Content-Type": "application/json"
+  "Authorization": f"Token {os.environ['MEMOS_API_KEY']}",
+  "Content-Type": "application/json"
 }
+BASE_URL = os.environ["MEMOS_BASE_URL"]
 
 def get_messages(user_id: str, conversation_id: str):
     data = {
@@ -72,13 +78,13 @@ def get_messages(user_id: str, conversation_id: str):
         "conversation_id": conversation_id,
     }
 
-    res = requests.post(f"{BASE_URL}/get/message", headers=headers, json=data)
+    res = requests.post(f"{BASE_URL}/get/message", headers=headers, data=json.dumps(data))
+    result = res.json()
 
-    if res.status_code == 200 and res.json().get("code") == 0:
-        messages = res.json().get("data", {}).get("messages", [])
-        return messages
+    if result.get("code") == 0:
+        return result.get("data", {}).get("messages", [])
     else:
-        print(f"❌ 获取消息失败: {res.text}")
+        print(f"❌ 获取消息失败: {result.get('message')}")
         return []
 
 # 假设：用户打开 app 时
@@ -89,7 +95,7 @@ messages = get_messages(user_id, conversation_id)
 
 # 打印角色、内容和时间
 for m in messages:
-    print(f"[{m['role']}] {m['content']} (time={m.get('chatTime', '未知')})")
+    print(f"[{m['role']}] {m['content']} (time={m.get('chat_time', '未知')})")
 
 
 # 📌 示例输出：
