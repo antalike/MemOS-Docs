@@ -42,9 +42,9 @@ const navigation = computed(() => {
 })
 
 const normalizedPath = route.path.replace(/\/$/, '') || '/'
-const { data: page } = await useAsyncData(normalizedPath, () => {
-  const path = normalizedPath.replace(/-/g, '_')
-  const docsPath = locale.value === 'cn' ? path : `/en${path}`
+const path = normalizedPath.replace(/-/g, '_')
+const docsPath = locale.value === 'cn' ? `/cn${path}` : `/en${path}`
+const { data: page } = await useAsyncData(docsPath, () => {
   return queryCollection('docs').path(docsPath).first()
 })
 </script>
