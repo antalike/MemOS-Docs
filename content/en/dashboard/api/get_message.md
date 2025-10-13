@@ -27,7 +27,7 @@ def get_message(user_id: str, conversation_id: str, limit: int):
     res = requests.post(f"{BASE_URL}/get/message", headers=headers, json=data)
 
     if res.status_code == 200 and res.json().get("code") == 0:
-        return res.json().get("data", {}).get("messages", [])
+        return res.json().get("data", {}).get("message_detail_list", [])
     else:
         print(f"❌ 获取消息失败: {res.text}")
         return []
@@ -75,7 +75,7 @@ def get_messages(user_id: str, conversation_id: str):
     res = requests.post(f"{BASE_URL}/get/message", headers=headers, json=data)
 
     if res.status_code == 200 and res.json().get("code") == 0:
-        messages = res.json().get("data", {}).get("messages", [])
+        messages = res.json().get("data", {}).get("message_detail_list", [])
         return messages
     else:
         print(f"❌ 获取消息失败: {res.text}")
