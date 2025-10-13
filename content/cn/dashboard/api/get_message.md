@@ -30,7 +30,7 @@ def get_message(user_id: str, conversation_id: str, limit: int):
     result = res.json()
 
     if result.get("code") == 0:
-        return result.get("data", {}).get("messages", [])
+        return result.get("data", {}).get("message_detail_list", [])
     else:
         print(f"❌ 获取消息失败: {result.get('message')}")
         return []
@@ -82,7 +82,7 @@ def get_messages(user_id: str, conversation_id: str):
     result = res.json()
 
     if result.get("code") == 0:
-        return result.get("data", {}).get("messages", [])
+        return result.get("data", {}).get("message_detail_list", [])
     else:
         print(f"❌ 获取消息失败: {result.get('message')}")
         return []
