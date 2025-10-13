@@ -18,74 +18,7 @@ Register and log in to the [MemOS Cloud Platform](https://memos-dashboard.openme
 **Conversation A: Occurred on 2025-06-10**<br>
 Simply provide the **raw conversation records** to MemOS.  MemOS will <code style="font-weight: bold;">automatically abstract, process, and save them as memory</code>.
 
-::code-group
-```python [Python (HTTP)]
-import os
-import requests
-import json
-
-# Replace with your API Key
-os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
-os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
-
-data = {
-  "messages": [
-    {"role": "user", "content": "I want to travel during summer vacation, can you recommend something?"},
-    {"role": "assistant", "content": "Sure! Are you traveling alone, with family or with friends?"},
-    {"role": "user", "content": "I’m bringing my kid. My family always travels together."},
-    {"role": "assistant", "content": "Got it, so you’re traveling with your children as a family, right?"},
-    {"role": "user", "content": "Yes, with both kids and elderly, we usually travel as a whole family."},
-    {"role": "assistant", "content": "Understood, I’ll recommend destinations suitable for family trips."}
-  ],
-  "user_id": "memos_user_123",
-  "conversation_id": "0610"
-}
-headers = {
-  "Content-Type": "application/json",
-  "Authorization": f"Token {os.environ['MEMOS_API_KEY']}"
-}
-url = f"{os.environ['MEMOS_BASE_URL']}/add/message"
-
-requests.post(url=url, headers=headers, data=json.dumps(data))
-```
-```python [Python (SDK)]
-# Please ensure that MemOS has been installed (pip install MemoryOS -U)
-from memos.api.client import MemOSClient
-
-# Initialize MemOS client with API Key to start sending requests
-client = MemOSClient(api_key="YOUR_API_KEY")
-
-messages = [
-  {"role": "user", "content": "I want to travel during summer vacation, can you recommend something?"},
-  {"role": "assistant", "content": "Sure! Are you traveling alone, with family or with friends?"},
-  {"role": "user", "content": "I’m bringing my kid. My family always travels together."},
-  {"role": "assistant", "content": "Got it, so you’re traveling with your children as a family, right?"},
-  {"role": "user", "content": "Yes, with both kids and elderly, we usually travel as a whole family."},
-  {"role": "assistant", "content": "Understood, I’ll recommend destinations suitable for family trips."}
-]
-user_id = "memos_user_123"
-conversation_id = "0610"
-
-client.add_message(messages=messages, user_id=user_id, conversation_id=conversation_id)
-```
-```bash [Curl]
-curl --request POST \
-  --url https://memos.memtensor.cn/api/openmem/v1/add/message \
-  --header 'Authorization: Token YOUR_API_KEY' \
-  --header 'Content-Type: application/json' \
-  --data '{
-    "user_id": "memos_user_123",
-    "conversation_id": "0610",
-    "messages": [
-      {"role":"user","content":"I want to travel during summer vacation, can you recommend something?"},
-      {"role":"assistant","content":"Sure! Are you traveling alone, with family or with friends?"},
-      {"role":"user","content":"I'\''m bringing my kid. My family always travels together."},
-      {"role":"assistant","content":"Got it, so you'\''re traveling with your children as a family, right?"},
-      {"role":"user","content":"Yes, with both kids and elderly, we usually travel as a whole family."},
-      {"role":"assistant","content":"Understood, I'\''ll recommend destinations suitable for family trips."}
-    ]
-  }'
-```
+::code-snippet{name=add_message}
 ::
 ```json [add_message_res.json]
 {
@@ -112,69 +45,7 @@ Use the user's utterance to search memory, and MemOS will automatically retrieve
 
 > **Why this design**: Most memory systems stop at “recalling facts,” but facts do not equal an executable Prompt. MemOS’s unique instruction completion workflow saves you from complex stitching and fine-tuning, turning memories into prompts that the model can directly understand and execute.  
 
-::code-group
-```python [Python (HTTP)]
-import os
-import requests
-import json
-
-# Replace with your API Key
-os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
-os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
-
-data = {
-  "query": "Any suggestions for where to go during National Day?",
-  "user_id": "memos_user_123",
-  "conversation_id": "0928"
-}
-
-# MemOS will support returning matches, instruction, and full_instruction in the future:
-# "return_matches": true
-# "return_instruction": true
-# "return_full_instruction": true
-
-headers = {
-  "Content-Type": "application/json",
-  "Authorization": f"Token {os.environ['MEMOS_API_KEY']}"
-}
-url = f"{os.environ['MEMOS_BASE_URL']}/search/memory"
-
-res = requests.post(url=url, headers=headers, data=json.dumps(data))
-for memory in res.json()['data']['memory_detail_list']:
-  print(f"Related memory: {memory['memory_value']}")
-
-```
-```python [Python (SDK)]
-# Please ensure that MemOS has been installed (pip install MemoryOS -U)
-from memos.api.client import MemOSClient
-
-# Initialize MemOS client with API Key to start sending requests
-client = MemOSClient(api_key="YOUR_API_KEY")
-
-query = "Any suggestions for where to go during National Day?"
-user_id = "memos_user_123"
-conversation_id ="0928"
-
-# MemOS will support returning matches, instruction, and full_instruction in the future:
-# return_matches = True
-# return_instruction = True
-# return_full_instruction = True
-
-res = client.search_memory(query=query, user_id=user_id, conversation_id=conversation_id)
-for memory in res.data.memory_detail_list:
-  print(f"Related memory: {memory.memory_value}")
-```
-```bash [Curl]
-curl --request POST \
-  --url https://memos.memtensor.cn/api/openmem/v1/search/memory \
-  --header 'Authorization: Token YOUR_API_KEY' \
-  --header 'Content-Type: application/json' \
-  --data '{
-    "query": "Any suggestions for where to go during National Day?",
-    "user_id": "memos_user_123",
-    "conversation_id": "0928"
-  }'
-```
+::code-snippet{name=search_memory}
 ::
 ```json [search_memory_res.json]
 {
@@ -225,51 +96,7 @@ curl --request POST \
 
 Retrieve the **original conversation messages** for a specified user and conversati
 
-::code-group
-```python [Python (HTTP)]
-import os
-import requests
-import json
-
-# Replace with your API Key
-os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
-os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
-
-data = {
-  "user_id": "memos_user_123",
-  "conversation_id": "0610"
-}
-headers = {
-  "Content-Type": "application/json",
-  "Authorization": f"Token {os.environ['MEMOS_API_KEY']}"
-}
-url = f"{os.environ['MEMOS_BASE_URL']}/get/message"
-
-requests.post(url=url, headers=headers, data=json.dumps(data))
-
-```
-```python [Python (SDK)]
-# Please ensure that MemoS has been installed (pip install MemoryOS -U).
-from memos.api.client import MemOSClient
-
-# Initialize MemOS client with API Key to start sending requests
-client = MemOSClient(api_key="YOUR_API_KEY")
-
-user_id = "memos_user_123"
-conversation_id = "0610"
-
-client.get_message(user_id=user_id, conversation_id=conversation_id)
-```
-```bash [Curl]
-curl --request POST \
-  --url https://memos.memtensor.cn/api/openmem/v1/get/message \
-  --header 'Authorization: Token YOUR_API_KEY' \
-  --header 'Content-Type: application/json' \
-  --data '{
-    "user_id": "memos_user_123",
-    "conversation_id": "0610"
-  }'
-```
+::code-snippet{name=get_message}
 ::
 ```json [get_message_res.json]
 {
