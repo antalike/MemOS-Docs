@@ -1,8 +1,4 @@
 <script setup lang="ts">
-useHead({
-  title: 'Dashboard API Reference'
-})
-
 const { t, locale } = useI18n()
 const { getOpenApi, getApiByRoute, apiNavData } = useOpenApi('dashboardApi', 'dashboard/api')
 await getOpenApi()
@@ -43,9 +39,13 @@ const navigation = computed(() => {
 
 const normalizedPath = route.path.replace(/\/$/, '') || '/'
 const path = normalizedPath.replace(/-/g, '_')
-const docsPath = locale.value === 'cn' ? `/cn${path}` : `/en${path}`
+const docsPath = locale.value === 'cn' ? path : `/en${path}`
 const { data: page } = await useAsyncData(docsPath, () => {
   return queryCollection('docs').path(docsPath).first()
+})
+
+useHead({
+  title: locale.value === 'cn' ? '云平台 API 文档' : 'Dashboard API Reference'
 })
 </script>
 
@@ -60,7 +60,10 @@ const { data: page } = await useAsyncData(docsPath, () => {
       v-if="page"
       #markdown
     >
-      <ContentRenderer :value="page" />
+      <ContentRenderer
+        class="wrap-break-word"
+        :value="page"
+      />
     </template>
   </ApiPage>
 </template>

@@ -1,147 +1,158 @@
-## 使用示例
+## Examples
 
-### 实时导入对话
+### Real-Time Conversation Sync
 
-你可以在用户每次收到模型回复时，实时调用接口添加消息，随时与 MemOS 同步用户与助手的对话。MemOS将在后端不断根据新的对话，更新用户记忆。
+Use the API to append messages in real time whenever the user receives a model response. This ensures conversations between the user and the assistant are always in sync with MemOS. MemOS continuously updates the user’s memory in the backend as new messages are added.
 
 ```python
 import os
 import json
 import requests
 
-
+# Set your API key and base URL
 os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
-os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api"
+os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
-# headers 和 base URL
-headers = {"Authorization": f"Token {os.environ['MEMOS_API_KEY']}","Content-Type": "application/json"}
+headers = {
+  "Authorization": f"Token {os.environ['MEMOS_API_KEY']}",
+  "Content-Type": "application/json"
+}
 BASE_URL = os.environ['MEMOS_BASE_URL']
 
 def add_message(user_id, conversation_id, role, content):
     data = {
-        "userId": user_id,
+        "user_id": user_id,
         "conversation_id": conversation_id,
         "messages": [{"role": role, "content": content}]
     }
     
-    res = requests.post(f"{BASE_URL}/add/message", headers=headers, json=data)
+    res = requests.post(f"{BASE_URL}/add/message", headers=headers, data=json.dumps(data))
+    result = res.json()
   
-    if res.json().get('code') == 0: 
-      print(f"✅ 添加成功")
+    if result.get('code') == 0: 
+      print(f"✅ Message added successfully")
     else:
-      print(f"❌ 添加失败")
+      print(f"❌ Failed to add message: {result.get('message')}")
 
-# 用户发送消息
-add_message("memos_user_123", "memos_conversation_123", "user","""我今天早上跑了5公里，膝盖有点酸""")
+# === Example ===
 
-# AI 回复消息
-add_message("memos_assistant_123", "memos_conversation_123", "assistant","""你今天跑了5公里，膝盖有点酸，说明关节和肌肉还在适应强度。明天建议把距离控制在3公里左右，重点放在充分热身和放松。这样既能维持训练节奏，又能给膝盖恢复的时间。""")
+# User sends a message
+add_message("memos_user_123", "memos_conversation_123", "user","""I ran 5 kilometers this morning and my knees feel a bit sore.""")
+
+# Assistant replies
+add_message("memos_assistant_123", "memos_conversation_123", "assistant","""You ran 5 kilometers this morning and your knees feel sore. That means your joints and muscles are still adjusting to the intensity. Tomorrow, try keeping the distance to around 3 kilometers and focus on proper warm-up and cool-down. This will help you stay consistent while giving your knees time to recover.""")
 ```
 
-### 导入历史对话
+### Importing Historical Conversations
 
-如果你已经构建了 AI 对话应用，MemOS 也支持批量导入已有聊天记录，帮助对话助手记住用户，更个性化地回复。
+If your application already has existing chat logs, you can bulk import them into MemOS. This allows the assistant to access past context immediately and deliver more personalized, consistent responses.
 
-🍬 小Tips：`chatTime` 可使用结构化时间或中文文本，主要用于 MemOS 在召回记忆时参考，以提升记忆的准确性。
+🍬 Tip: The `chat_time` field accepts both structured timestamps and plain Chinese text. MemOS uses this field to improve memory retrieval accuracy.
 
 ```python
 import os
 import json
 import requests
 
-
+# Set your API key and base URL
 os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
-os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api"
+os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
-# headers 和 base URL
-headers = {"Authorization": f"Token {os.environ['MEMOS_API_KEY']}","Content-Type": "application/json"}
+headers = {
+  "Authorization": f"Token {os.environ['MEMOS_API_KEY']}",
+  "Content-Type": "application/json"
+}
 BASE_URL = os.environ['MEMOS_BASE_URL']
 
-# 示例历史对话数据
+# Example: historical conversation data
 history_messages = [
-  # 用户第一天和AI的对话
-    {"role": "user", "content": "我喜欢吃辣的食物", "chatTime": "2025-09-12 08:00:00"},
-    {"role": "assistant", "content": "明白啦，我记住了，你喜欢辣味的食物。", "chatTime": "2025-09-12 08:01:00"},
-  # 用户几天后和AI的对话
-    {"role": "user", "content": "但我又不太喜欢重油的，比如麻辣火锅、毛血旺之类的", "chatTime": "2025-09-25 12:00:00"},
-    {"role": "assistant", "content": "你更偏好清爽又带辣味的菜。我可以帮你推荐一些适合你的辣味美食哦~", "chatTime": "2025-09-25 12:01:00"}
+    # Day 1 - User and assistant conversation
+    {"role": "user", "content": "I like spicy food.", "chat_time": "2025-09-12 08:00:00"},
+    {"role": "assistant", "content": "Got it — I’ll remember that you like spicy food.", "chat_time": "2025-09-12 08:01:00"},
+
+    # A few days later - New conversation
+    {"role": "user", "content": "But I don’t really like heavy or oily dishes, like hotpot or spicy beef soup.", "chat_time": "2025-09-25 12:00:00"},
+    {"role": "assistant", "content": "So you prefer light but spicy dishes. I can recommend some that might suit your taste!", "chat_time": "2025-09-25 12:01:00"}
 ]
 
 def add_message(user_id, conversation_id, messages):
-
     data = {
-        "userId": user_id,
+        "user_id": user_id,
         "conversation_id": conversation_id,
         "messages": messages
     }
-    res = requests.post(f"{BASE_URL}/add/message", headers=headers, json=data)
-    
-    if res.json().get('code') == 0: 
-      print(f"✅ 添加成功")
+    res = requests.post(f"{BASE_URL}/add/message", headers=headers, data=json.dumps(data))
+    result = res.json()
+  
+    if result.get('code') == 0:
+        print("✅ Message added successfully")
     else:
-      print(f"❌ 添加失败")
+        print(f"❌ Failed to add message: {result.get('message')}")
 
-# === 使用示例 ===
+# === Example ===
 
-# 导入历史对话
-add_message("memos_user_345", "memos_conversation_id_345", history_messages)
+# Import historical conversation
+add_message("memos_user_345", "memos_conversation_345", history_messages)
 ```
 
-### 记录用户偏好或行为
+### Storing User Preferences and Behaviors
 
-除了导入对话内容，用户的个人偏好、行为等数据，例如首次启动应用时填写的兴趣问卷信息，同样可以导入 MemOS，作为记忆的一部分。
+In addition to conversation data, you can import user preferences and behavioral information—such as interest surveys collected during onboarding—into MemOS as part of the user’s memory.
 
-🍬 小Tips：`content` 字段必须是字符串，可以写成单行或多行文本，都可以被系统正常识别。
+🍬 Tip: The `content` field must be a string. Both single-line and multi-line text are supported and will be correctly parsed by the system.
 
 ```python
 import os
 import json
 import requests
 
-
+# Set your API key and base URL
 os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
-os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api"
+os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
-# headers 和 base URL
-headers = {"Authorization": f"Token {os.environ['MEMOS_API_KEY']}","Content-Type": "application/json"}
+headers = {
+  "Authorization": f"Token {os.environ['MEMOS_API_KEY']}",
+  "Content-Type": "application/json"
+}
 BASE_URL = os.environ['MEMOS_BASE_URL']
 
-# 用户兴趣信息
+# Example: user profile and interest data
 user_profile_info = [
     {
         "role": "user",
         "content": """
-喜欢的电影类型: 科幻, 动作, 喜剧
-喜欢的电视剧类型: 悬疑, 历史剧
-喜欢的书籍类型: 科普, 技术, 自我成长
-喜欢的学习方式: 文章, 视频, Podcast
-运动习惯: 跑步, 健身
-饮食偏好: 偏爱辣, 健康饮食
-旅游偏好: 自然景观, 城市文化, 冒险
-喜欢的聊天风格: 幽默, 温暖, 轻松闲聊
-想让AI提供的帮助类型: 建议, 信息查询, 灵感
-我最感兴趣的话题: 人工智能, 未来科技, 电影评论
-我希望AI帮助的事情: 规划日常学习计划, 推荐电影和书籍, 提供心情陪伴
+Favorite movie genres: Sci-fi, Action, Comedy
+Favorite TV genres: Mystery, Historical dramas
+Favorite book genres: Popular science, Technology, Personal growth
+Preferred learning formats: Articles, Videos, Podcasts
+Exercise habits: Running, Fitness
+Dietary preferences: Spicy food, Healthy eating
+Travel interests: Nature, Urban culture, Adventure
+Preferred conversation style: Humorous, Warm, Casual
+Types of support I want from AI: Suggestions, Information lookup, Inspiration
+Topics I’m most interested in: Artificial intelligence, Future tech, Film reviews
+I’d like AI to help me with: Daily study planning, Movie and book recommendations, Emotional companionship
         """
     }
 ]
 
 def add_message(user_id, conversation_id, messages):
     data = {
-        "userId": user_id,
+        "user_id": user_id,
         "conversation_id": conversation_id,
         "messages": messages
     }
   
-    res = requests.post(f"{BASE_URL}/add/message", headers=headers, json=data)
-    
-    if res.json().get('code') == 0: 
-      print(f"✅ 添加成功")
+    res = requests.post(f"{BASE_URL}/add/message", headers=headers, data=json.dumps(data))
+    result = res.json()
+  
+    if result.get('code') == 0:
+        print("✅ Message added successfully")
     else:
-      print(f"❌ 添加失败")
-      
-# === 使用示例 ===
+        print(f"❌ Failed to add message: {result.get('message')}")
 
-# 导入用户兴趣问卷信息
+# === Usage Example ===
+
+# Import user interest and preference data
 add_message("memos_user_567", "memos_conversation_id_567", user_profile_info)
 ```
