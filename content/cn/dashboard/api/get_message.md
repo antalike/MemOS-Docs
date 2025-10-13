@@ -74,7 +74,7 @@ BASE_URL = os.environ["MEMOS_BASE_URL"]
 
 def get_messages(user_id: str, conversation_id: str):
     data = {
-        "userId": user_id,
+        "user_id": user_id,
         "conversation_id": conversation_id,
     }
 
