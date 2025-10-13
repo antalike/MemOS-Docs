@@ -29,7 +29,8 @@ data = {
 
 # 调用 /search/memory 查询相关记忆
 res = requests.post(f"{BASE_URL}/search/memory", headers=headers, json=data)
-memories = res.json().get("data", {}).get("memoryDetailList", [])
+
+print(f"result: {res.json()}")
 
 # 示例返回（展示已召回的记忆片段）
 # [
@@ -83,7 +84,8 @@ data = {
 
 # 调用 /search/memory 查询相关记忆
 res = requests.post(f"{BASE_URL}/search/memory", headers=headers, json=data)
-memories = res.json().get("data", {}).get("memoryDetailList", [])
+
+print(f"result: {res.json()}")
 
 # 示例返回（展示已召回的记忆片段）
 # [

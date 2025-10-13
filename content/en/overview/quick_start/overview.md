@@ -123,10 +123,8 @@ url = f"{os.environ['MEMOS_BASE_URL']}/search/memory"
 
 res = requests.post(url=url, headers=headers, data=json.dumps(data))
 
-results = res.json()  
-
 # Mode 1: Related Memories (matches)
-print("Related Memories:", results["data"]["memory_detail_list"])
+print(f"result: {res.json()}")
 # Example output(simplified here for easier understanding, for reference only):
 # [
 #   {

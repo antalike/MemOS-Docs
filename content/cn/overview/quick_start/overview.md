@@ -125,8 +125,7 @@ url = f"{os.environ['MEMOS_BASE_URL']}/search/memory"
 
 res = requests.post(url=url, headers=headers, data=json.dumps(data))
 
-results = res.json()  
-print(f"相关记忆：{results['data']['memory_detail_list']}")
+print(f"result: {res.json()}")
 # 示例输出（为了方便理解此处做了简化，仅供参考）：
 # [
 #   {
