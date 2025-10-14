@@ -18,8 +18,9 @@ headers = {
 }
 url = f"{os.environ['MEMOS_BASE_URL']}/get/message"
 
-requests.post(url=url, headers=headers, data=json.dumps(data))
+res = requests.post(url=url, headers=headers, data=json.dumps(data))
 
+print(f"result: {res.json()}")
 ```
 ```python [Python (SDK)]
 # 请确保已安装MemoS (pip install MemoryOS -U)
@@ -31,7 +32,9 @@ client = MemOSClient(api_key="YOUR_API_KEY")
 user_id = "memos_user_123"
 conversation_id = "0610"
 
-client.get_message(user_id=user_id, conversation_id=conversation_id)
+res = client.get_message(user_id=user_id, conversation_id=conversation_id)
+
+print(f"result: {res}")
 ```
 ```bash [Curl]
 curl --request POST \
