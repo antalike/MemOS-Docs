@@ -4,6 +4,8 @@
 
 如果你认为在大模型回复时需要参考用户最近的对话内容，可以调用 MemOS 获取会话的历史消息，将返回的最近若干条消息拼接进提示词。这样可以在模型无状态的情况下，保持对话的连续性和上下文理解。
 
+如下示例所示，如果你已经参考 [添加消息 > 导入历史对话](/cn/dashboard/api/add-message#导入历史对话)，添加过用户`memos_user_345` 的历史对话消息，你可以一键复制该示例获取该会话的历史消息。
+
 ```python
 import os
 import json
@@ -39,7 +41,7 @@ def get_message(user_id: str, conversation_id: str, limit: int):
 # 获取历史消息
 model_context = get_message("memos_user_345", "memos_conversation_345", 4)
 
-# 去掉 chatTime，直接生成大模型可用格式，并打印
+# 去掉 chat_time，直接生成大模型可用格式，并打印
 model_context_simple = [{"role": m["role"], "content": m["content"]} for m in model_context]
 print(json.dumps(model_context_simple, ensure_ascii=False, indent=2))
 
@@ -56,6 +58,8 @@ print(json.dumps(model_context_simple, ensure_ascii=False, indent=2))
 ### 恢复聊天上下文
 
 如果你正在初步搭建 AI 应用，暂时还没有设计本地或数据库存储用户聊天记录，可以在用户刷新页面或重新打开应用时，调用 MemOS 接口获取该用户最近一次活跃会话的历史消息，并恢复到对话窗口中。
+
+如下示例所示，如果你已经参考 [添加消息 > 导入历史对话](/cn/dashboard/api/add-message#导入历史对话)，添加过用户`memos_user_345` 的历史对话消息，你可以一键复制该示例获取该会话的历史消息，并输出为你需要的聊天对话页面结构。
 
 ```python
 import os

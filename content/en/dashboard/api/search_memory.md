@@ -1,178 +1,198 @@
-## 使用示例
+## Examples
 
-### 对话中使用记忆
+### Retrieve User Memories During a Conversation
 
-在用户与 AI 对话的过程中，你可以调用 MemOS 检索与当前用户发言最相关的记忆，并将其填充到大模型的回复提示词中。
+During a conversation between the user and the AI, you can use MemOS to retrieve the memories most relevant to the user’s current message and import them into llm’s prompt.
 
-🍬 **小**Tips：填写 `conversation_id` 可以帮助 MemOS 理解当前会话的上下文，提升本会话相关记忆的权重，使对话模型的回复内容更加连贯。
+🍬 **Tip:** Filling `conversation_id` helps MemOS better understand the current session context and increase the weight of session-relevant memories, resulting in more coherent and context-aware responses from the model.
+
+As shown in the example below, if you’ve already followed [**Add Message > Importing Historical Conversations**](/dashboard/api/add-message#importing-historical-conversations) to add historical messages for `memos_user_345`, you can copy the following example to retrieve this user’s memory.
 
 ```python
 import os
+import json
 import requests
 
-API_KEY = os.environ["MEMOS_API_KEY"]
-BASE_URL = os.environ["MEMOS_BASE_URL"]
+# Set your API key and base URL
+os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
+os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
 headers = {
-    "Authorization": f"Token {API_KEY}",
-    "Content-Type": "application/json"
+  "Authorization": f"Token {os.environ['MEMOS_API_KEY']}",
+  "Content-Type": "application/json"
 }
+BASE_URL = os.environ['MEMOS_BASE_URL']
 
-# 用户当前发言，直接作为 query
-query_text = "国庆节我要去云南玩了，有什么美食推荐吗？"
+# Use the user's current message as the query
+query_text = "I'm going to Yunnan for National Day. Any food recommendations?"
 
 data = {
-    "userId": "memos_user_345",
-    "conversation_id": "memos_conversation_789",  # 新建了一个会话ID
+    "user_id": "memos_user_345",
+    "conversation_id": "memos_conversation_789", # Create a new conversation ID
     "query": query_text,
 }
 
-# 调用 /search/memory 查询相关记忆
-res = requests.post(f"{BASE_URL}/search/memory", headers=headers, json=data)
+# Call /search/memory to retreive related memories
+res = requests.post(f"{BASE_URL}/search/memory", headers=headers, data=json.dumps(data))
 
 print(f"result: {res.json()}")
-
-# 示例返回（展示已召回的记忆片段）
-# [
-#     {
-#         "id": "3fa96c6c-a844-4249-a762-dbd26d4279c7",
-#         "memory_key": "饮食偏好",
-#         "memory_value": "[user观点]用户喜欢辣味食物，但不太喜欢重油的菜肴，如麻辣火锅和毛血旺。",
-#         "memory_type": "WorkingMemory",
-#         "conversation_id": "memos_conversation_id_345",
-#         "tags": ["饮食", "偏好", "辣味"],
-#         "relativity": 0.0043  # 表示与 query 的相关度，值越高表示越相关
-#     },
-#     {
-#         "id": "51b537b6-9116-475c-b26f-2e4b445c863d",
-#         "memory_key": "清爽辣味菜肴建议",
-#         "memory_value": "[assistant观点]助手了解到用户的饮食偏好后，建议推荐一些清爽又带辣味的菜肴。",
-#         "memory_type": "WorkingMemory",
-#         "conversation_id": "memos_conversation_345",
-#         "tags": ["饮食建议", "辣味"],
-#         "relativity": 0.0355
-#     }
-# ]
-
+# Example response (showing retrieved memory snippets)
+# result: {
+#   'code': 0, 
+#   'data': {
+#     'memory_detail_list': [
+#       {
+#         'id': '30017d87-c340-4ae0-ac13-9a2992333c2b', 
+#         'memory_key': "Assistant's acknowledgment of user's taste", 
+#         'memory_value': "[assistant viewpoint] The assistant acknowledged the user's preference for spicy food and noted the user's preference for light but spicy dishes, offering to recommend suitable options.", 
+#         'memory_type': 'WorkingMemory', 
+#         'memory_time': None, 
+#         'conversation_id': 'memos_conversation_345',
+#         'status': 'activated',
+#         'confidence': 0.0, 
+#         'tags': ['food preferences', 'recommendations'], 
+#         'update_time': 1760341879781,
+#         'relativity': 0.00031495094
+#       }, 
+#       {
+#         'id': '22a6092e-9b4f-479f-9cd7-37f56d1a6777',
+#         'memory_key': "User's food preferences", 
+#         'memory_value': '[user viewpoint] The user likes spicy food but does not prefer heavy or oily dishes, such as hotpot or spicy beef soup.',
+#         'memory_type': 'WorkingMemory',
+#         'memory_time': None,
+#         'conversation_id': 'memos_conversation_345', 
+#         'status': 'activated', 
+#         'confidence': 0.0, 
+#         'tags': ['food preferences', 'spicy', 'light dishes'],
+#         'update_time': 1760341879780, 
+#         'relativity': 0.0002937317
+#       }
+#     ]
+#   },
+#   'message': 'ok'
+# }
 ```
 
-### 获取用户整体画像
+### Get a User’s Profile
 
-如果你需要对自己开发的应用进行用户分析，或者希望在 AI 应用中向用户实时展示他们的“个人关键印象”，可以调用 MemOS 全局检索用户的记忆，帮助大模型生成用户的个性化画像。
+If you want to analyze users of your application or display a “personal key insights” summary to them in real time, you can use MemOS to retreive a user’s overall memories. This helps the model generate a personalized user profile.
 
-🍬 **小**Tips：此时可以不填写`conversation_id`哦～得到响应详情后，你可以挑选`memory_type` 为 `UserMemory` 的记忆，这类记忆提炼了与用户相关的个性化信息，适合用于生成用户画像或推荐内容。
+🍬 **Tip:** In this case, you don’t need to specify `conversation_id`. After receiving the response, you can select memories with `memory_type` set to `UserMemory`. These memories summarize personalized information about the user and are ideal for generating user profiles or content recommendations.
+
+As shown in the example below, if you’ve already followed [**Add Message > Storing User Preferences and Behaviors**](/dashboard/api/add-message#storing-user-preferences-and-behaviors)  to add historical messages for `memos_user_567`, you can copy the following example to retrieve that user’s memory.
 
 ```python
 import os
+import json
 import requests
 
-API_KEY = os.environ["MEMOS_API_KEY"]
-BASE_URL = os.environ["MEMOS_BASE_URL"]
+# Set your API key and base URL
+os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
+os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
 headers = {
-    "Authorization": f"Token {API_KEY}",
-    "Content-Type": "application/json"
+  "Authorization": f"Token {os.environ['MEMOS_API_KEY']}",
+  "Content-Type": "application/json"
 }
+BASE_URL = os.environ['MEMOS_BASE_URL']
 
-# 直接询问人物画像，作为 query
-query_text = "我的人物关键词是什么？"
+# Query text for retrieving the user's profile
+query_text = "What are my key personal traits?"
 
 data = {
-    "userId": "memos_user_345",
+    "user_id": "memos_user_567",
     "query": query_text,
 }
 
-# 调用 /search/memory 查询相关记忆
-res = requests.post(f"{BASE_URL}/search/memory", headers=headers, json=data)
+# Call /search/memory to retrieve related memories
+res = requests.post(f"{BASE_URL}/search/memory", headers=headers, data=json.dumps(data))
 
 print(f"result: {res.json()}")
-
-# 示例返回（展示已召回的记忆片段）
-# [
-#   {
-#     "id": "2b742eb2-ba0d-418b-8485-0333e51f4d63",
-#     "memory_key": "用户的聊天风格与AI帮助期望",
-#     "memory_value": "[user观点]用户喜欢幽默、温暖、轻松闲聊的聊天风格；希望AI提供建议、信息查询和灵感，并帮助规划日常学习计划、推荐电影和书籍以及提供心情陪伴。",
-#     "memory_type": "UserMemory",  # 内存类型，用户记忆
-#     "memoryTime": null,          # 记忆时间，未设置
-#     "conversation_id": "memos_conversation_567",  # 对话 ID
-#     "status": "activated",       # 状态：已激活
-#     "confidence": 0.0,           # 置信度
-#     "tags": [                    # 标签列表
-#         "聊天风格",
-#         "AI帮助",
-#         "期望"
-#     ],
-#     "updateTime": 1758267685922, # 更新时间戳
-#     "relativity": 1.6605854E-4   # 与上下文的相关性
-#   },
-#   {
-#     "id": "aacdb351-b2d3-47b7-abdd-6945ec1f6778",
-#     "memory_key": "用户感兴趣的话题",
-#     "memory_value": "[user观点]用户对人工智能、未来科技和电影评论等话题最感兴趣。",
-#     "memory_type": "UserMemory",  # 内存类型
-#     "memoryTime": null,          # 记忆时间
-#     "conversation_id": "memos_conversation_567",
-#     "status": "activated",
-#     "confidence": 0.0,
-#     "tags": [
-#         "兴趣",
-#         "话题"
-#     ],
-#     "updateTime": 1758267685924,
-#     "relativity": 9.536743E-5
-#   },
-#   {
-#     "id": "381119b8-1063-4434-ae62-6806bc5a046a",
-#     "memory_key": "用户的饮食和旅游偏好",
-#     "memory_value": "[user观点]用户偏爱辣味及健康饮食；旅游时喜欢自然景观、城市文化和冒险活动。",
-#     "memory_type": "WorkingMemory",  # 工作记忆
-#     "memoryTime": null,
-#     "conversation_id": "memos_conversation_567",
-#     "status": "activated",
-#     "confidence": 0.0,
-#     "tags": [
-#         "饮食",
-#         "旅游",
-#         "偏好"
-#     ],
-#     "updateTime": 1758267685921,
-#     "relativity": 1.9669533E-5
-#   },
-#   {
-#     "id": "895c2c35-6646-4241-909b-88e067e166b6",
-#     "memory_key": "用户的学习方式和运动习惯",
-#     "memory_value": "[user观点]用户偏好的学习方式包括阅读文章、观看视频和收听Podcast；运动习惯包括跑步和健身。",
-#     "memory_type": "WorkingMemory",
-#     "memoryTime": null,
-#     "conversation_id": "memos_conversation_567",
-#     "status": "activated",
-#     "confidence": 0.0,
-#     "tags": [
-#         "学习",
-#         "运动",
-#         "方式"
-#     ],
-#     "updateTime": 1758267685918,
-#     "relativity": 1.9073486E-5
-#   },
-#   {
-#     "id": "df36e0e7-81a3-4694-810e-3b230d85dc13",
-#     "memory_key": "用户的娱乐偏好",
-#     "memory_value": "[user观点]用户喜欢的电影类型包括科幻、动作和喜剧；电视剧类型则偏好悬疑和历史剧；书籍类型偏好科普、技术和自我成长。",
-#     "memory_type": "WorkingMemory",
-#     "memoryTime": null,
-#     "conversation_id": "memos_conversation_567",
-#     "status": "activated",
-#     "confidence": 0.0,
-#     "tags": [
-#         "娱乐",
-#         "电影",
-#         "电视剧",
-#         "书籍"
-#     ],
-#     "updateTime": 1758267685917,
-#     "relativity": 1.847744E-5
-#   }
-# ]
+# Example response (showing retrieved memory snippets)
+# result: {
+#   'code': 0, 
+#   'data': {
+#     'memory_detail_list': [
+#       {'id': 'e2d8dc71-dc05-41c0-a4ec-74cf1b29447b', 
+#        'memory_key': "User's preferred conversation style", 
+#        'memory_value': 'The user prefers a conversation style that is humorous, warm, and casual.', 
+#        'memory_type': 'WorkingMemory', 
+#        'memory_time': None, 
+#        'conversation_id': 'memos_conversation_id_567', 
+#        'status': 'activated', 
+#        'confidence': 0.0, 
+#        'tags': ['conversation', 'style', 'preferences'], 
+#        'update_time': 1760342037762, 
+#        'relativity': 0.00082969666
+#       }, 
+#       {
+#         'id': '9f0a99b3-87c1-47b8-92c6-fa6edaacaf2b', 
+#        'memory_key': "User's preferred conversation style", 
+#        'memory_value': '[user viewpoint] The user prefers conversations that are Humorous, Warm, and Casual.', 
+#        'memory_type': 'WorkingMemory', 
+#        memory_time': None, 
+#        'conversation_id': 'memos_conversation_id_567', 
+#        'status': 'activated', 
+#        'confidence': 0.0, 
+#        'tags': ['conversation', 'style'], 
+#        'update_time': 1760343893000, 
+#        'relativity': 0.00036263466
+#       }, 
+#       {
+#         'id': 'ac0f19ac-7a0e-47d8-a1b6-f9d9faa6cfcd', 
+#         'memory_key': "User's favorite book genres", 
+#         'memory_value': '[user viewpoint] The user likes reading books on Popular science, Technology, and Personal growth.', 
+#         'memory_type': 'WorkingMemory', 
+#         'memory_time': None, 
+#         'conversation_id': 'memos_conversation_id_567', 
+#         'status': 'activated', 
+#         'confidence': 0.0, 
+#         'tags': ['books', 'preferences'], 
+#         'update_time': 1760343892997, 
+#         'relativity': 7.033348e-05
+#       }, 
+#       {
+#         'id': 'f7f0d39a-8177-42c6-9194-d445332a0dad', 
+#         'memory_key': "User's entertainment preferences", 
+#         'memory_value': 'The user enjoys sci-fi, action, and comedy movies; mystery and historical drama TV shows; and popular science, technology, and personal growth books.', 
+#         'memory_type': 'WorkingMemory', 
+#         'memory_time': None, 
+#         'conversation_id': 
+#         'memos_conversation_id_567', 
+#         'status': 'activated', 
+#         'confidence': 0.0, 
+#         'tags': ['entertainment', 'movies', 'TV shows', 'books'], 
+#         'update_time': 1760342037756, 
+#         'relativity': 4.130602e-05
+#       }, 
+#       {
+#         'id': '46ce3e1b-431e-4361-90dc-df85c001d1e1', 
+#         'memory_key': '用户的运动和饮食习惯', 
+#         'memory_value': '[user观点]用户的运动习惯包括跑步和健身；饮食偏好为偏爱辣和健康饮食。', 
+#         'memory_type': 'UserMemory', 
+#         'memory_time': None, 
+#         'conversation_id': 'memos_conversation_id_567',
+#         'status': 'activated', 
+#         'confidence': 0.0, 
+#         'tags': ['运动', '饮食', '习惯'], 
+#         'update_time': 1760322048850,
+#         'relativity': 2.6285648e-05
+#       }, 
+#       {
+#         'id': 'a15f1804-c3fa-476a-886e-658cb9930780', 
+#         'memory_key': "User's desired AI assistance", 
+#         'memory_value': 'The user would like AI to help with daily study planning, movie and book recommendations, and emotional companionship.', 
+#         'memory_type': 'WorkingMemory',
+#         'memory_time': None, 
+#         'conversation_id': 'memos_conversation_id_567', 
+#         'status': 'activated', 
+#         'confidence': 0.0, 
+#         'tags': ['AI assistance', 'study', 'recommendations', 'companionship'], 
+#         'update_time': 1760342037764, 
+#         'relativity': 2.4139881e-05
+#       }
+#     ]
+#   }, 
+#   'message': 'ok'
+# }
 ```

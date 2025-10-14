@@ -46,7 +46,7 @@ add_message("memos_assistant_123", "memos_conversation_123", "assistant","""你�
 
 如果你已经构建了 AI 对话应用，MemOS 也支持批量导入已有聊天记录，帮助对话助手记住用户，更个性化地回复。
 
-🍬 小Tips：`chatTime` 可使用结构化时间或中文文本，主要用于 MemOS 在召回记忆时参考，以提升记忆的准确性。
+🍬 小Tips：`chat_time` 可使用结构化时间或中文文本，主要用于 MemOS 在召回记忆时参考，以提升记忆的准确性。
 
 ```python
 import os

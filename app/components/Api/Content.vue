@@ -17,12 +17,9 @@ const isSticky = ref(true)
 const sidebarTop = ref(0)
 
 const sidebarStyle = computed(() => {
-  if (!isSticky.value) {
-    return {
-      top: `${sidebarTop.value - 20}px`
-    }
+  return {
+    top: `${sidebarTop.value}px`
   }
-  return {}
 })
 
 const handleScroll = () => {
@@ -35,10 +32,23 @@ const handleScroll = () => {
 
   const contentBottom = contentRect.bottom + 32
   const sidebarBottomWhenSticky = stickyTop + sidebarRect.height
-  const shouldStick = contentBottom >= sidebarBottomWhenSticky && sidebarBottomWhenSticky <= viewportHeight
 
-  isSticky.value = shouldStick
-  sidebarTop.value = shouldStick ? 0 : contentRect.height - sidebarRect.height
+  if (sidebarBottomWhenSticky <= viewportHeight) {
+    const shouldStick = contentBottom >= sidebarBottomWhenSticky
+    isSticky.value = shouldStick
+    sidebarTop.value = shouldStick ? 40 : contentRect.height - sidebarRect.height
+  } else {
+    if (sidebarRect.bottom > viewportHeight) {
+      isSticky.value = false
+      sidebarTop.value = 0
+    } else if (contentBottom > viewportHeight) {
+      isSticky.value = true
+      sidebarTop.value = viewportHeight - sidebarBottomWhenSticky
+    } else {
+      isSticky.value = false
+      sidebarTop.value = contentRect.height - sidebarRect.height
+    }
+  }
 }
 
 onMounted(() => {
@@ -113,7 +123,7 @@ onUnmounted(() => {
     ref="sidebarRef"
     :class="[
       'hidden xl:flex self-start xl:flex-col max-w-[28rem] h-fit',
-      isSticky ? 'sticky h-[calc(100vh-4rem)] top-[2.5rem]' : 'relative'
+      isSticky ? 'sticky h-[calc(100vh-4rem)]' : 'relative'
     ]"
     :style="sidebarStyle"
   >
