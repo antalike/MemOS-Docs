@@ -5,7 +5,7 @@ const props = defineProps<{
 
 const { locale } = useI18n()
 
-const { data: snippet } = await useAsyncData(`snippet-${props.name}`, () => {
+const { data: snippet } = await useAsyncData(`snippet-${locale.value}-${props.name}`, () => {
   const snippetPath = locale.value === 'cn'
     ? `/cn/dashboard/snippets/${props.name}`
     : `/en/dashboard/snippets/${props.name}`

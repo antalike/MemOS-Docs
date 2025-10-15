@@ -1,9 +1,11 @@
 import yaml from '@rollup/plugin-yaml'
 import type { NuxtConfig } from '@nuxt/schema'
 import pkg from './package.json'
-import { getCnRoutes } from './scripts/extract-routes.mjs'
+import { getCnRoutes, getCnDashboardApiRoutes, getCnApiReferenceRoutes } from './scripts/extract-routes.mjs'
 
 const cnRoutes = getCnRoutes()
+const cnDashboardApiRoutes = getCnDashboardApiRoutes()
+const cnApiRoutes = getCnApiReferenceRoutes()
 // Get locale from command line arguments or environment variable
 const env = process.env.NUXT_ENV_CONFIG || 'prod'
 
@@ -129,7 +131,11 @@ const config: NuxtConfig = {
       routes: [
         '/',
         '/cn',
-        ...cnRoutes
+        ...cnRoutes,
+        ...cnDashboardApiRoutes,
+        ...cnApiRoutes,
+        '/cn/dashboard/api/overview',
+        '/cn/dashboard/api/error_code'
       ],
       crawlLinks: true
     }
