@@ -16,9 +16,9 @@ const statusCodes = computed(() => {
 })
 
 const exampleObjects = computed(() => {
-  return generateResponseExample(props.path, props.method, currentCode.value)
+  const example = generateResponseExample(props.path, props.method, currentCode.value)
+  return JSON.stringify(example, null, 2) ?? ''
 })
-const highlightedExample = computed(() => renderHighlightedJson(exampleObjects.value, 0))
 
 function handleClick(code: number | string) {
   currentCode.value = code
@@ -32,7 +32,7 @@ onUnmounted(() => {
 })
 
 async function handleCopy() {
-  navigator.clipboard.writeText(JSON.stringify(exampleObjects.value, null, 2) || '')
+  navigator.clipboard.writeText(exampleObjects.value)
   isCopy.value = true
   timer = setTimeout(() => {
     isCopy.value = false
@@ -72,7 +72,8 @@ async function handleCopy() {
     </template>
     <template #panel>
       <ApiCodeBlock
-        :code="JSON.stringify(exampleObjects, null, 2)"
+        v-if="exampleObjects"
+        :code="exampleObjects"
         language="json"
       />
     </template>
