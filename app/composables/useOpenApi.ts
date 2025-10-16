@@ -17,13 +17,14 @@ function prettifyGroupTitle(key: string) {
 const oasInstanceStore = new Map<string, SimpleOAS>()
 
 const useOpenApi = (collectionName: keyof Collections = 'openapi', parentPath: string = 'api-reference') => {
-  const openapi = useState<OpenApiProps | null>(collectionName, () => null)
-  const schemas = useState<Record<string, SchemaProps>>(`${collectionName}Schemas`, () => ({}))
+  const { locale } = useI18n()
+  const openapi = useState<OpenApiProps | null>(`${collectionName}-${locale.value}`, () => null)
+  const schemas = useState<Record<string, SchemaProps>>(`${collectionName}Schemas-${locale.value}`, () => ({}))
 
-  const server = useState<string>(`${collectionName}Server`, () => '')
-  const paths = useState<OasRoutePath[]>(`${collectionName}Paths`, () => ([]))
+  const server = useState<string>(`${collectionName}Server-${locale.value}`, () => '')
+  const paths = useState<OasRoutePath[]>(`${collectionName}Paths-${locale.value}`, () => ([]))
 
-  const oasInstanceLoaded = useState<boolean>(`${collectionName}Loaded`, () => false)
+  const oasInstanceLoaded = useState<boolean>(`${collectionName}Loaded-${locale.value}`, () => false)
 
   const apiNavData = computed<NavLink[]>(() => {
     const groupMap = new Map<string, OasRoutePath[]>()
@@ -70,22 +71,24 @@ const useOpenApi = (collectionName: keyof Collections = 'openapi', parentPath: s
   const route = useRoute()
 
   function _getOasInstance() {
-    if (oasInstanceStore.has(collectionName)) {
-      return oasInstanceStore.get(collectionName)
+    const storeKey = `${collectionName}-${locale.value}`
+    if (oasInstanceStore.has(storeKey)) {
+      return oasInstanceStore.get(storeKey)
     }
     return null
   }
 
   function _setOasInstance(oasInstance: SimpleOAS) {
-    if (!oasInstanceStore.has(collectionName)) {
-      oasInstanceStore.set(collectionName, oasInstance)
+    const storeKey = `${collectionName}-${locale.value}`
+    if (!oasInstanceStore.has(storeKey)) {
+      oasInstanceStore.set(storeKey, oasInstance)
       oasInstanceLoaded.value = true
     }
   }
 
   // Fetch OpenAPI data
   async function getOpenApi() {
-    const { data } = await useAsyncData(`openapi-data-${collectionName}-${parentPath}`, async () => {
+    const { data } = await useAsyncData(`openapi-data-${collectionName}-${parentPath}-${locale.value}`, async () => {
       return queryCollection(collectionName).all()
     })
 
@@ -125,7 +128,7 @@ const useOpenApi = (collectionName: keyof Collections = 'openapi', parentPath: s
   }
 
   function getSecurityWithTypes(path: string, method: HttpMethods): SecurityProps[] {
-    if (oasInstanceLoaded.value) {
+    if (import.meta.server || oasInstanceLoaded.value) {
       const oas = _getOasInstance()
       if (oas)
         return oas.getSecurityWithTypes(path, method)
@@ -134,7 +137,7 @@ const useOpenApi = (collectionName: keyof Collections = 'openapi', parentPath: s
   }
 
   function getParameters(path: string, method: HttpMethods): ParameterObject[] {
-    if (oasInstanceLoaded.value) {
+    if (import.meta.server || oasInstanceLoaded.value) {
       const oas = _getOasInstance()
       if (oas)
         return oas.getParameters(path, method)
@@ -143,7 +146,7 @@ const useOpenApi = (collectionName: keyof Collections = 'openapi', parentPath: s
   }
 
   function getRequestBody(path: string, method: HttpMethods): OasRequestBody | null {
-    if (oasInstanceLoaded.value) {
+    if (import.meta.server || oasInstanceLoaded.value) {
       const oas = _getOasInstance()
       if (oas) {
         const body = oas.getRequestBody(path, method)
@@ -155,7 +158,7 @@ const useOpenApi = (collectionName: keyof Collections = 'openapi', parentPath: s
   }
 
   function getResponseStatusCodes(path: string, method: HttpMethods): string[] {
-    if (oasInstanceLoaded.value) {
+    if (import.meta.server || oasInstanceLoaded.value) {
       const oas = _getOasInstance()
       if (oas)
         return oas.getResponseStatusCodes(path, method)
@@ -164,7 +167,7 @@ const useOpenApi = (collectionName: keyof Collections = 'openapi', parentPath: s
   }
 
   function getResponseByStatusCode(path: string, method: HttpMethods, statusCode: string | number): ResponseObject | null {
-    if (oasInstanceLoaded.value) {
+    if (import.meta.server || oasInstanceLoaded.value) {
       const oas = _getOasInstance()
       if (oas)
         return oas.getResponseByStatusCode(path, method, statusCode)
@@ -173,7 +176,7 @@ const useOpenApi = (collectionName: keyof Collections = 'openapi', parentPath: s
   }
 
   function getResponseContentType(path: string, method: HttpMethods, statusCode: string | number): string {
-    if (oasInstanceLoaded.value) {
+    if (import.meta.server || oasInstanceLoaded.value) {
       const oas = _getOasInstance()
       if (oas)
         return oas.getResponseContentType(path, method, statusCode)
@@ -182,7 +185,7 @@ const useOpenApi = (collectionName: keyof Collections = 'openapi', parentPath: s
   }
 
   function getResponseAsJSONSchema(path: string, method: HttpMethods, statusCode: string | number): SchemaObject | null {
-    if (oasInstanceLoaded.value) {
+    if (import.meta.server || oasInstanceLoaded.value) {
       const oas = _getOasInstance()
       if (oas)
         return oas.getResponseAsJSONSchema(path, method, statusCode)
@@ -191,7 +194,7 @@ const useOpenApi = (collectionName: keyof Collections = 'openapi', parentPath: s
   }
 
   function generateResponseExample(path: string, method: HttpMethods, statusCode: string | number): Record<string, any> {
-    if (oasInstanceLoaded.value) {
+    if (import.meta.server || oasInstanceLoaded.value) {
       const oas = _getOasInstance()
       if (oas) {
         const example = oas.generateResponseExample(path, method, statusCode)

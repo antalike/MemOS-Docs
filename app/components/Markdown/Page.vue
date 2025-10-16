@@ -9,8 +9,8 @@ const config = useRuntimeConfig()
 
 // Remove trailing slash to match content path
 const normalizedPath = route.path.replace(/\/$/, '') || '/'
-const { data: page } = await useAsyncData(normalizedPath, () => {
-  const docsPath = locale.value === 'cn' ? normalizedPath : `/en${normalizedPath}`
+const docsPath = locale.value === 'cn' ? normalizedPath : `/en${normalizedPath}`
+const { data: page } = await useAsyncData(docsPath, () => {
   return queryCollection('docs').path(docsPath).first()
 })
 

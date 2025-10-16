@@ -9,15 +9,17 @@ defineProps<{
 </script>
 
 <template>
-  <template
-    v-for="(param, prop) in properties"
-    :key="prop"
-  >
-    <ApiRequestBodyParam
-      :schema="param"
-      :prop="prop"
-      :required="required"
-      :parent-prop="parentProp"
-    />
-  </template>
+  <div>
+    <template
+      v-for="(param, prop) in properties"
+      :key="prop"
+    >
+      <ApiRequestBodyParam
+        :schema="param"
+        :prop="prop"
+        :required="required"
+        :parent-prop="parentProp"
+      />
+    </template>
+  </div>
 </template>

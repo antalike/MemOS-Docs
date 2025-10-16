@@ -7,18 +7,22 @@ const props = defineProps<{
 }>()
 
 const highlightCode = ref<string>('')
+await generateHighlight()
 
-watch(() => props.code, async (value) => {
-  if (value && props.language) {
-    const highlightHtml = await codeToHtml(value, {
+watchEffect(() => {
+  generateHighlight()
+})
+
+async function generateHighlight() {
+  if (props.code && props.language) {
+    const highlightHtml = await codeToHtml(props.code, {
       lang: props.language,
       theme: 'material-theme-palenight'
     })
+
     highlightCode.value = highlightHtml
   }
-}, {
-  immediate: true
-})
+}
 </script>
 
 <template>
