@@ -1,6 +1,370 @@
 {
   "versions": [
     {
+      "releaseUrl": "https://github.com/MemTensor/MemOS/releases/tag/v1.1.1",
+      "name": "v1.1.1",
+      "date": "2025-09-24",
+      "changedInfo": [
+        {
+          "type": "feat",
+          "description": "delete custom_logger_handler",
+          "author": "CarltonXiang",
+          "pr": 289,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/289"
+        },
+        {
+          "type": "fix",
+          "description": "change env model name",
+          "author": "fridayL",
+          "pr": 292,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/292"
+        },
+        {
+          "type": "feat",
+          "description": "add orginal context for reranking",
+          "author": "fridayL",
+          "pr": 284,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/284"
+        },
+        {
+          "type": "revert",
+          "description": "nebular require_python",
+          "author": "CarltonXiang",
+          "pr": 300,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/300"
+        },
+        {
+          "type": "feat",
+          "description": "chat bot api",
+          "author": "CaralHsi",
+          "pr": 294,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/294"
+        },
+        {
+          "type": "feat",
+          "description": "chat bot api",
+          "author": "CaralHsi",
+          "pr": 302,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/302"
+        },
+        {
+          "type": "feat",
+          "description": "chat bot api, add reranker filter; fix pydantic bug",
+          "author": "CaralHsi",
+          "pr": 303,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/303"
+        },
+        {
+          "type": "fix",
+          "description": "bug in internet pydantic error",
+          "author": "CaralHsi",
+          "pr": 304,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/304"
+        },
+        {
+          "type": "feat",
+          "description": "update nebula to nebula 5.1.1",
+          "author": "CaralHsi",
+          "pr": 311,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/311"
+        },
+        {
+          "type": "fix",
+          "description": "nebula multi db bug",
+          "author": "CaralHsi",
+          "pr": 313,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/313"
+        },
+        {
+          "type": "feat",
+          "description": "add time log for threaddict and change openai packacge singleton",
+          "author": "fridayL",
+          "pr": 314,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/314"
+        },
+        {
+          "type": "feat",
+          "description": "add api client",
+          "author": "CarltonXiang",
+          "pr": 316,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/316"
+        },
+        {
+          "type": "feat",
+          "description": "add segment lock dict",
+          "author": "fridayL",
+          "pr": 319,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/319"
+        },
+        {
+          "type": "feat",
+          "description": "add sinlgleton",
+          "author": "fridayL",
+          "pr": 321,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/321"
+        },
+        {
+          "type": "feat",
+          "description": "nebula&reorganize update",
+          "author": "CaralHsi",
+          "pr": 322,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/322"
+        },
+        {
+          "type": "fix",
+          "description": "nebula reset bug",
+          "author": "CaralHsi",
+          "pr": 323,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/323"
+        },
+        {
+          "type": "feat",
+          "description": "add default processing in mem-reader",
+          "author": "CaralHsi",
+          "pr": 325,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/325"
+        },
+        {
+          "type": "docker",
+          "description": "start",
+          "author": "pursues",
+          "pr": 324,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/324"
+        },
+        {
+          "type": "feat",
+          "description": "remove json",
+          "author": "fridayL",
+          "pr": 328,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/328"
+        },
+        {
+          "type": "feat",
+          "description": "remove",
+          "author": "fridayL",
+          "pr": 329,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/329"
+        },
+        {
+          "type": "fix",
+          "description": "not include embedding",
+          "author": "CaralHsi",
+          "pr": 330,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/330"
+        },
+        {
+          "type": "feat",
+          "description": "recall and searcher use parallel",
+          "author": "lijicode",
+          "pr": 337,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/337"
+        },
+        {
+          "type": "feat",
+          "description": "API 1.0",
+          "author": "CarltonXiang",
+          "pr": 339,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/339"
+        },
+        {
+          "type": "fix",
+          "description": "format",
+          "author": "CaralHsi",
+          "pr": 341,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/341"
+        },
+        {
+          "type": "chore",
+          "description": "bump version to v1.1.0",
+          "author": "CaralHsi",
+          "pr": 340,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/340"
+        }
+      ]
+    },
+    {
+      "releaseUrl": "https://github.com/MemTensor/MemOS/releases/tag/v1.1.0",
+      "name": "v1.1.0",
+      "date": "2025-09-24",
+      "changedInfo": [
+        {
+          "type": "feat",
+          "description": "delete custom_logger_handler",
+          "author": "CarltonXiang",
+          "pr": 289,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/289"
+        },
+        {
+          "type": "fix",
+          "description": "change env model name",
+          "author": "fridayL",
+          "pr": 292,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/292"
+        },
+        {
+          "type": "feat",
+          "description": "add orginal context for reranking",
+          "author": "fridayL",
+          "pr": 284,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/284"
+        },
+        {
+          "type": "revert",
+          "description": "nebular require_python",
+          "author": "CarltonXiang",
+          "pr": 300,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/300"
+        },
+        {
+          "type": "feat",
+          "description": "chat bot api",
+          "author": "CaralHsi",
+          "pr": 294,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/294"
+        },
+        {
+          "type": "feat",
+          "description": "chat bot api",
+          "author": "CaralHsi",
+          "pr": 302,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/302"
+        },
+        {
+          "type": "feat",
+          "description": "chat bot api, add reranker filter; fix pydantic bug",
+          "author": "CaralHsi",
+          "pr": 303,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/303"
+        },
+        {
+          "type": "fix",
+          "description": "bug in internet pydantic error",
+          "author": "CaralHsi",
+          "pr": 304,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/304"
+        },
+        {
+          "type": "feat",
+          "description": "update nebula to nebula 5.1.1",
+          "author": "CaralHsi",
+          "pr": 311,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/311"
+        },
+        {
+          "type": "fix",
+          "description": "nebula multi db bug",
+          "author": "CaralHsi",
+          "pr": 313,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/313"
+        },
+        {
+          "type": "feat",
+          "description": "add time log for threaddict and change openai packacge singleton",
+          "author": "fridayL",
+          "pr": 314,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/314"
+        },
+        {
+          "type": "feat",
+          "description": "add api client",
+          "author": "CarltonXiang",
+          "pr": 316,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/316"
+        },
+        {
+          "type": "feat",
+          "description": "add segment lock dict",
+          "author": "fridayL",
+          "pr": 319,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/319"
+        },
+        {
+          "type": "feat",
+          "description": "add sinlgleton",
+          "author": "fridayL",
+          "pr": 321,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/321"
+        },
+        {
+          "type": "feat",
+          "description": "nebula&reorganize update",
+          "author": "CaralHsi",
+          "pr": 322,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/322"
+        },
+        {
+          "type": "fix",
+          "description": "nebula reset bug",
+          "author": "CaralHsi",
+          "pr": 323,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/323"
+        },
+        {
+          "type": "feat",
+          "description": "add default processing in mem-reader",
+          "author": "CaralHsi",
+          "pr": 325,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/325"
+        },
+        {
+          "type": "docker",
+          "description": "start",
+          "author": "pursues",
+          "pr": 324,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/324"
+        },
+        {
+          "type": "feat",
+          "description": "remove json",
+          "author": "fridayL",
+          "pr": 328,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/328"
+        },
+        {
+          "type": "feat",
+          "description": "remove",
+          "author": "fridayL",
+          "pr": 329,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/329"
+        },
+        {
+          "type": "fix",
+          "description": "not include embedding",
+          "author": "CaralHsi",
+          "pr": 330,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/330"
+        },
+        {
+          "type": "feat",
+          "description": "recall and searcher use parallel",
+          "author": "lijicode",
+          "pr": 337,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/337"
+        },
+        {
+          "type": "feat",
+          "description": "API 1.0",
+          "author": "CarltonXiang",
+          "pr": 339,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/339"
+        },
+        {
+          "type": "fix",
+          "description": "format",
+          "author": "CaralHsi",
+          "pr": 341,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/341"
+        },
+        {
+          "type": "chore",
+          "description": "bump version to v1.1.0",
+          "author": "CaralHsi",
+          "pr": 340,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/340"
+        }
+      ]
+    },
+    {
       "releaseUrl": "https://github.com/MemTensor/MemOS/releases/tag/v1.0.1",
       "name": "v1.0.1",
       "date": "2025-09-10",

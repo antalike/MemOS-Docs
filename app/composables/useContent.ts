@@ -1,7 +1,11 @@
 // add br to the content
 export function useContent(pageValue: { body: { value: Array<[string, object]> }, path: string }) {
   try {
-    const { body, path } = pageValue
+    const { body, path } = pageValue || {}
+
+    if (!body || !path) {
+      return pageValue
+    }
 
     if (path.includes('open_source')) {
       return pageValue

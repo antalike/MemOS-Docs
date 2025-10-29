@@ -1,9 +1,22 @@
 versions:
+  - name: v1.1.1
+    date: 2025-09-25
+    changedInfo:
+      New Features:
+        - type: 云服务 1.0 内测版发布
+          changedInfo:
+            - 🛠️ 开箱即用：无需复杂部署，直接通过云端 API 接入
+            - 🔄 跨会话记忆：自动召回用户画像、偏好、行为，实现连续个性化
+            - 📖 Developer-Friendly：文档、示例代码 全面支持
+            - 🎁 Free Quota：每位开发者均可领取基础额度，方便探索
+        - type: 企业群聊问答机器人
+          changedInfo:
+            - 支持云服务知识库问答
   - name: v1.0.1
     date: 2025-09-10
     changedInfo:
       New Features:
-        - type: 群答疑机器人
+        - type: 企业群聊问答机器人
           changedInfo:
             - 基于MemOS Cube构建群答疑机器人上线
         - type: KV-Cache性能优化

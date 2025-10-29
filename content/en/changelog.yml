@@ -1,4 +1,17 @@
 versions:
+  - name: v1.1.1
+    date: 2025-09-25
+    changedInfo:
+      New Features:
+        - type: Cloud Service 1.0 Beta Release
+          changedInfo:
+            - 🛠️ Ready-to-Use：Deploy directly via cloud API without complex setup
+            - 🔄 Cross-Session Memory：Automatically retrieve user profiles, preferences, and behaviors for continuous personalization
+            - 📖 Developer-Friendly：Comprehensive documentation and example code support
+            - 🎁 Free Quota：Every developer can receive basic quota to explore
+        - type: Enterprise Group Q&A bot
+          changedInfo:
+            - Supports Q&A based on cloud service knowledge base    
   - name: v1.0.1
     date: 2025-09-10
     changedInfo:
