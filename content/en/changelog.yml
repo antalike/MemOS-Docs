@@ -1,4 +1,48 @@
 versions:
+  - name: v1.1.2
+    date: 2025-11-05
+    changedInfo:
+      New Features:
+        - type: Memory Add & Search
+          changedInfo:
+            - Added async mode (plaintext & preference)
+            - Preference Memory now supported
+            - Reranker strategy suite
+            - BM25 for TreeTextMemory
+        - type: Scheduler
+          changedInfo:
+            - Modularized API scheduler
+            - Redis ORM optimized for history sync & hybrid search
+        - type: Data & Infra
+          changedInfo:
+            - PolarDB graph backend connection pool/timeout & fixes
+            - Unified graph factory (Neo4j/PolarDB/Nebula)
+            - Milvus interface & item optimizations
+            - Enhanced logging pipeline
+            - Nacos-based dynamic configuration
+        - type: Evaluation
+          changedInfo:
+            - PrefEval field standardization
+            - LoCoMo/LongMemEval/PrefEval/PersonaMem evaluation upgrades
+      Improvements:
+        - type: Plaintext Memory
+          changedInfo:
+            - Standardized preference fields
+        - type: Framework
+          changedInfo:
+            - Updated API routes
+            - More robust error handling & context tracing
+      Bug Fixes:
+        - type: Scheduler
+          changedInfo:
+            - Fixed query scheduling edge case
+            - Corrected message schema inconsistencies
+        - type: Plaintext Memory
+          changedInfo:
+            - Graph/DB：corrected PolarDB issues
+        - type: Framework
+          changedInfo:
+            - Fixed SQLite user listing bug
   - name: v1.1.1
     date: 2025-09-25
     changedInfo:
@@ -11,7 +55,7 @@ versions:
             - 🎁 Free Quota：Every developer can receive basic quota to explore
         - type: Enterprise Group Q&A bot
           changedInfo:
-            - Supports Q&A based on cloud service knowledge base    
+            - Supports Q&A based on cloud service knowledge base
   - name: v1.0.1
     date: 2025-09-10
     changedInfo:
