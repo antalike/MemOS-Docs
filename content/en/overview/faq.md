@@ -16,8 +16,23 @@ desc: We have compiled the most common questions about using MemOS. No need to s
 
 
 ### Q: Can MemOS be combined with existing RAG or knowledge graphs?
+Yes.  
+RAG focuses on **factual retrieval and knowledge augmentation** — helping the model “know what exists in the world.”  
+MemOS focuses on **state management and continuous memory** — helping the model “know who you are and what you want.”
 
-Yes. MemOS memory units can interface with the vector recall layer of RAG or call external knowledge graphs. The difference is that MemOS manages dynamic, evolving “memories,” not a static knowledge base.
+Together, they form a complementary intelligence architecture:
+
+> 🧠 **RAG provides external knowledge, while MemOS provides internal memory.**  
+> The former makes the model smarter; the latter makes the model understand you better.
+
+In practice, **MemOS memory units** can directly connect to **RAG’s vector retrieval layer**, and can also work with external knowledge graphs.  
+The key difference: RAG manages **static facts**, whereas MemOS manages **dynamic memory that evolves over time**.
+
+In other words:  
+- **RAG** makes the model more like an encyclopedia  
+- **MemOS** makes the model more like a long-term personal assistant  
+
+When combined, the AI can both “know the world” and “understand you.”
 
 
 ### Q: How does MemOS work?
@@ -82,6 +97,11 @@ No. The scheduler runs asynchronously and adopts cache stability strategies to b
 
 ### Q: If the requested information is very recent, like “what I did yesterday,” is scheduling still needed?
 Yes. Scheduling is not only about “retrievability” but also about being “fast, accurate, and concise.” Even with recent events, the scheduler still evaluates whether to fuse them into a complete context.
+
+
+### Q: Which products and industries does MemOS serve?
+MemOS has been applied across multiple domains, including major internet companies (covering verticals such as e-commerce and travel), telecom operators, financial securities, manufacturing, and education & scientific research. We have partnered with leading state-owned enterprises and top industry teams, validating memory-driven capabilities in scenarios such as embodied intelligence, AI customer service, knowledge management, intelligent investment advisory, industrial operations & maintenance, and AI-powered learning.
+Some projects are still in joint development, and details cannot yet be disclosed — but we will continue to share more concrete case stories in the future!
 
 
 ## 2. Next Steps
