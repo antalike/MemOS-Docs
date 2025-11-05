@@ -1,4 +1,48 @@
 versions:
+  - name: v1.1.2
+    date: 2025-11-05
+    changedInfo:
+      New Features:
+        - type: 记忆添加与检索
+          changedInfo:
+            - 新增异步添加模式（支持明文与偏好）
+            - 支持偏好记忆全链路
+            - 引入 Reranker 策略集
+            - TreeTextMemory 支持 BM25 检索算法
+        - type: 调度模块
+          changedInfo:
+            - API 调度模块化重构
+            - 优化 Redis ORM 用于历史同步与混合搜索
+        - type: 数据与基础设施
+          changedInfo:
+            - PolarDB 图后端增加连接池与超时控制并修复相关问题
+            - 统一图工厂（支持 Neo4j / PolarDB / Nebula）
+            - 优化 Milvus 接口与数据项结构
+            - 增强日志链路与监控信息
+            - 基于 Nacos 的动态配置管理
+        - type: 评估体系
+          changedInfo:
+            - PrefEval 字段标准化
+            - 升级 LoCoMo / LongMemEval / PrefEval / PersonaMem 评估流程
+      Improvements:
+        - type: 明文记忆
+          changedInfo:
+            - 偏好字段标准化
+        - type: 项目框架
+          changedInfo:
+            - 更新 API 路由模块
+            - 增强错误处理与上下文追踪稳定性
+      Bug Fixes:
+        - type: 调度模块
+          changedInfo:
+            - 修复查询调度边界条件问题
+            - 修正消息队列 schema 问题
+        - type: 明文记忆
+          changedInfo:
+            - 修复 PolarDB 图数据库相关错误
+        - type: 项目框架
+          changedInfo:
+            - 修复 SQLite 用户列表异常
   - name: v1.1.1
     date: 2025-09-25
     changedInfo:
