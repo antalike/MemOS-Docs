@@ -25,9 +25,13 @@ versions:
             - PrefEval field standardization
             - LoCoMo/LongMemEval/PrefEval/PersonaMem evaluation upgrades
       Improvements:
-        - type: Standardized preference fields
-        - type: Updated API routes
-        - type: More robust error handling & context tracing
+        - type: Plaintext Memory
+          changedInfo:
+            - Standardized preference fields
+        - type: Framework
+          changedInfo:
+            - Updated API routes
+            - More robust error handling & context tracing
       Bug Fixes:
         - type: Scheduler
           changedInfo:
