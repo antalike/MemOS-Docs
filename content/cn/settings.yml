@@ -8,7 +8,7 @@ nav:
       - "(ri:eye-line) 概览": overview/quick_start/overview.md
       - "(ri:add-line) 记忆生产": overview/quick_start/mem_production.md
       - "(ri:calendar-line) 记忆调度": overview/quick_start/mem_schedule.md
-      - "(ri:search-line) 记忆召回和指令补全": overview/quick_start/mem_recall.md
+      - "(ri:search-line) 记忆召回": overview/quick_start/mem_recall.md
       - "(ri:refresh-line) 记忆生命周期管理": overview/quick_start/mem_lifecycle.md
     - "(ri:question-line) FAQs": overview/faq.md
     - "(ri:cpu-line) MemOS算法原理概述": overview/algorithm.md

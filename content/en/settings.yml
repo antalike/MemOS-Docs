@@ -8,7 +8,7 @@ nav:
       - "(ri:eye-line) Overview": overview/quick_start/overview.md
       - "(ri:add-line) Memory Production": overview/quick_start/mem_production.md
       - "(ri:calendar-line) Memory Schedule": overview/quick_start/mem_schedule.md
-      - "(ri:search-line) Memory Recall and Instruction Completion": overview/quick_start/mem_recall.md
+      - "(ri:search-line) Memory Recall": overview/quick_start/mem_recall.md
       - "(ri:refresh-line) Memory Lifecycle": overview/quick_start/mem_lifecycle.md
     - "(ri:question-line) FAQs": overview/faq.md
     - "(ri:cpu-line) Algorithm Overview": overview/algorithm.md
