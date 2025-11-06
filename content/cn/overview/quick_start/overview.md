@@ -29,7 +29,7 @@ MemOS 提供两种使用方式：
 MemOS 提供了两个核心接口帮助你实现：
 
 - `addMessage` —— 把原始对话交给我们，我们自动加工并存储记忆
-- `searchMemory` —— 在后续对话中召回相关记忆和建议指令（可选），让 AI 回答更贴近用户需求
+- `searchMemory` —— 在后续对话中召回事实记忆和偏好记忆，让 AI 回答更贴近用户需求
 
 ![image.svg](https://cdn.memtensor.com.cn/img/1762434889291_h9co0h_compressed.png)
 
@@ -51,18 +51,16 @@ import os
 import requests
 import json
 
-# 替换成你的 API Key
+# 替换成你的 MemOS API Key
 os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
 os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
 data = {
   "messages": [
-    {"role": "user", "content": "我想暑假出去玩，你能帮我推荐下吗？"},
-    {"role": "assistant", "content": "好的！是自己出行还是和家人朋友一起呢？"},
-    {"role": "user", "content": "肯定要带孩子啊，我们家出门都是全家一起。"},
-    {"role": "assistant", "content": "明白了，所以你们是父母带孩子一块儿旅行，对吗？"},
-    {"role": "user", "content": "对，带上孩子和老人，一般都是全家行动。"},
-    {"role": "assistant", "content": "收到，那我会帮你推荐适合家庭出游的目的地。"}
+    {"role": "user", "content": "我暑假定好去广州旅游，住宿的话有哪些连锁酒店可选？"},
+    {"role": "assistant", "content": "您可以考虑【七天、全季、希尔顿】等等"},
+    {"role": "user", "content": "我选七天"},
+    {"role": "assistant", "content": "好的，有其他问题再问我。"}
   ],
   "user_id": "memos_user_123",
   "conversation_id": "0610"
@@ -85,16 +83,8 @@ print(res.json())
 ::note
 **会话 B：2025-9-28 发生**<br>
 
-用户在一个新的会话中，提出让AI推荐国庆旅游计划，MemOS 会自动召回相关记忆供AI参考，从而推荐更加个性化的旅游计划
+用户在一个新的会话中，提出让AI推荐国庆旅游地点和酒店，MemOS 会自动召回【事实记忆：曾去过哪里】【偏好记忆：订酒店的偏好】供AI参考，从而推荐更加个性化的旅游计划
 ::
-
-> MemOS 支持同时返回 **` 相关记忆（matches）`**、**`拼接指令（instruction）`（敬请期待） **与** `完整指令（full_instruction）`（敬请期待）** 。实际使用中，你只需根据业务需求选择其一即可
-
-> - **需要完全掌控** → 用 **matches**，只返回记忆条目，由开发者自行拼接成指令；
-> - **想省去拼接工作，但还需叠加业务规则** → 用 **instruction**，系统已将记忆与用户问题拼接为半成品指令，开发者可在此基础上再加工；
-> - **追求一键直连** → 用 **full_instruction**，系统已生成完整可直接下发给大模型的终端指令。
-
-> **为什么要这样设计**：大多数记忆系统只停留在“召回事实”，但事实并不等于可执行的 Prompt。 MemOS 独有的指令补全链路，帮你省去复杂的拼接与调优，把记忆转译成模型可直接理解和执行的提示。
 
 ```python
 import os
@@ -107,14 +97,11 @@ os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 data = {
   "user_id": "memos_user_123",  
   "conversation_id": "0928",
-  "query": "国庆去哪玩好？",
-  "memory_limit_number": 6  # 可选，不传默认6
+  "query": "我国庆想出去玩，帮我推荐个没去过的城市，以及没住过的酒店品牌",
+  "memory_limit_number": 6,    # 事实记忆条数限制，不传默认6
+  "include_preference":True,   # 是否返回偏好记忆，不传默认打开
+  "preference_limit_number":6  # 偏好记忆条数限制，不传默认6
 
-  # ==== 敬请期待 ====
-  # 以下参数在未来版本中会支持，目前请勿传递
-  # "return_matches": True,
-  # "return_instruction": True,
-  # "return_full_instruction": True
 }
 
 headers = {
@@ -126,33 +113,33 @@ url = f"{os.environ['MEMOS_BASE_URL']}/search/memory"
 res = requests.post(url=url, headers=headers, data=json.dumps(data))
 
 print(f"result: {res.json()}")
-# 示例输出（为了方便理解此处做了简化，仅供参考）：
-# [
-#   {
-#     "memory_key": "出行习惯",
-#     "memory_value": "全家一起出游（包含孩子与老人）",
-#     "confidence": 0.97,
-#     "update_time": "2025-06-10T10:00:00Z"
-#   }
-# ]
 
-# 模式二（敬请期待）：拼接指令（半成品，结构化，便于二次加工）
-# print("拼接指令：", results["data"]["instruction"])
-# 示例输出：
-# 任务：回答用户“国庆去哪玩好？”
-# 受众：全家出游（包含孩子与老人）
-# 要求：
-# - 回答时显式考虑儿童与老人的出行需求
-# - 目的地建议需与“家庭友好”一致
-# 备注：如关键信息不足（出发地/预算/行程天数），可由业务逻辑追加澄清策略
+# 示例输出（为了方便理解此处做了简化，仅供参考）
 
-# 模式三（敬请期待）：完整指令（终端态，可直接给模型）
-# print("完整指令：", results["data"]["full_instruction"])
-# 示例输出：
-# 你是一名旅游顾问。
-# 用户在规划旅行时总是全家一起出游（包括孩子和老人）。
-# 请直接回答“国庆去哪玩好？”，并优先推荐适合家庭出游的目的地。
-# 如果信息不足，请先提出澄清问题，再给出建议。
+# 偏好类型的记忆
+# preference_detail_list [
+#     {
+#       "preference_type": "implicit_preference",  #隐性偏好
+#       "preference": "用户可能偏好性价比较高的酒店选择。",
+#       "reasoning": "七天酒店通常以经济实惠著称，而用户选择七天酒店可能表明其在住宿方面倾向于选择性价比较高的选项。虽然用户没有明确提到预算限制或具体酒店偏好，但在提供的选项中选择七天可能反映了对价格和实用性的重视。",
+#       "conversation_id": "0610"
+#     }
+#   ]
+
+# 事实类型的记忆
+# memory_detail_list [
+#     {
+#       "memory_key": "暑假广州旅游计划",
+#       "memory_value": "用户计划在暑假期间前往广州旅游，并选择了七天连锁酒店作为住宿选项。",
+#       "conversation_id": "0610",
+#       "tags": [
+#         "旅游",
+#         "广州",
+#         "住宿",
+#         "酒店"
+#       ]
+#     }
+#   ]
 ```
 
 ## 2. 方式二：开源框架
@@ -172,13 +159,13 @@ print(f"result: {res.json()}")
 
 ::note
 **深入理解**<br>
-MemOS 的记忆机制可以理解为一条完整的「工作流」：
-你提交原始消息 → 对记忆进行加工生产 → 调度机制根据任务和上下文安排调用与存储，并可动态调整记忆形态 → 在需要时被召回相关记忆注入为上下文或指令 → 同时由生命周期管理维持演化与更新。
+MemOS 的记忆机制可以理解为一条完整的「工作流」： 
+你提交原始消息 → 对记忆进行加工生产 → 调度机制根据任务和上下文安排调用与存储，并可动态调整记忆形态 → 在需要时被召回相关记忆→ 同时由生命周期管理维持演化与更新。
 ::
 
 - [记忆生产](/overview/quick_start/mem_production)
 - [记忆调度](/overview/quick_start/mem_schedule)
-- [记忆召回与指令补全](/overview/quick_start/mem_recall)
+- [记忆召回](/overview/quick_start/mem_recall)
 - [记忆生命周期管理](/overview/quick_start/mem_lifecycle)
 
 ### 3.2 使用MemOS进行实战

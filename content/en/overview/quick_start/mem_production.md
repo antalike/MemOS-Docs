@@ -44,17 +44,17 @@ As a result:
 **Example**:
 
 ```json
-User: I want to go on a trip during the summer vacation. Can you recommend something?
-AI: Sure! Will you be traveling alone or with family and friends?
-User: Of course with kids. Our family always travels together.
-AI: Got it. So, you travel with both kids and parents, right?
-User: Yes, we usually bring the kids and elders—traveling as a whole family.
-AI: Understood. I’ll recommend destinations suitable for family trips.
+User: I’ve planned to travel to Guangzhou this summer. What chain hotels are available for accommodation?
+Assistant: You can consider options like 7 Days Inn, All Seasons, Hilton, etc.
+User: I’ll choose 7 Days Inn.
+Assistant: Alright, feel free to ask me if you have any other questions.
 ```
 
 ```json
-Memory: The user usually travels with the whole family (children and parents)
-Metadata: timestamp=2025-06-10, source=Conversation A…
+Fact Memory: The user has planned to travel to Guangzhou during the summer of 2024 and has chosen to stay at 7 Days Inn for accommodation.
+
+Preference Memory: Preference for budget-friendly accommodations.
+Reasoning: The user's choice of 7 Days Inn over other options like Hilton suggests a potential preference for more budget-friendly accommodations. 7 Days Inn is known for being an economical option compared to Hilton, which is a higher-end hotel chain. This choice indicates that the user might prioritize cost-effectiveness in their accommodation decisions.
 ```
 
 > For you, this means: as long as you store raw conversations, you don’t need to write your own “keyword extraction” or “intent recognition” logic—you can directly obtain reusable long-term user preferences.
@@ -75,7 +75,7 @@ In MemOS, **memory production** is the full process of converting raw input into
 Learn more about MemOS core capabilities:
 
 - [Memory Scheduling](/overview/quick_start/mem_schedule)
-- [Memory Recall & Instruction Completion](/overview/quick_start/mem_recall)
+- [Memory Recall](/overview/quick_start/mem_recall)
 - [Memory Lifecycle Management](/overview/quick_start/mem_lifecycle)
 
 ## 4. Contact Us
