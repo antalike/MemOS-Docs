@@ -34,16 +34,8 @@ Simply provide the **raw conversation records** to MemOS.  MemOS will <code styl
 
 ### 2.2 Search Memory
 
-**Conversation A: Occurred on 2025-09-28**<br>
-Use the user's utterance to search memory, and MemOS will automatically retrieve the most relevant memories for the AI to reference.
-
-> MemOS supports returning **`matches`**, **`instruction`** (coming soon), and **`full_instruction`** (coming soon). In practice, you only need to choose one according to your business needs.
-
-> - **Need full control** → use **matches**, which only returns memory entries, and developers manually stitch them into instructions.  
-> - **Want to save stitching work but still need to apply business rules** → use **instruction**, where the system has already combined memories with the user’s query into a semi-finished instruction, which developers can further refine.  
-> - **Pursue one-click direct connection** → use **full_instruction**, where the system generates a complete terminal instruction that can be directly sent to the LLM.
-
-> **Why this design**: Most memory systems stop at “recalling facts,” but facts do not equal an executable Prompt. MemOS’s unique instruction completion workflow saves you from complex stitching and fine-tuning, turning memories into prompts that the model can directly understand and execute.  
+**Conversation B: Occurred on 2025-09-28**<br>
+When the user asks in a new session for National Day travel and hotel recommendations, MemOS automatically recalls factual (where they’ve been) and preference memories (hotel choices) to help the AI give more personalized suggestions.
 
 ::code-snippet{name=search_memory}
 ::
