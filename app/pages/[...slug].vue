@@ -13,10 +13,6 @@ const normalizedPath = route.path.replace(/\/$/, '') || '/'
 const { data: page } = await useAsyncData(normalizedPath, () => {
   const docsPath = locale.value === 'cn' ? normalizedPath : `/en${normalizedPath}`
 
-  queryCollection("docs").all().then(res => {
-    console.log('====res:', res)
-  }) 
-
   return queryCollection('docs').path(docsPath).first()
 })
 
@@ -26,7 +22,6 @@ watch(locale, async (_newLocale: string) => {
 })
 
 const pageValue = page.value as unknown as { body: { value: [string, object][] }, path: string }
-console.log('pageValue:', pageValue)
 if (import.meta.server) {
   useContent(pageValue)
 }
