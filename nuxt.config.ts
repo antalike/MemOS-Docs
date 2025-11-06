@@ -86,7 +86,8 @@ const config: NuxtConfig = {
       useCookie: true,
       cookieKey: 'MEMOS_LANG',
       cookieDomain: 'openmem.net',
-      fallbackLocale: 'en'
+      fallbackLocale: 'en',
+      redirectOn: 'all'
     },
     pages: undefined
   },
