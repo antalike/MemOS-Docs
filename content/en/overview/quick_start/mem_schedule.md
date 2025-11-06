@@ -174,7 +174,7 @@ Developers can **extend scheduling strategies** to customize system behavior, ma
 
 Learn more about MemOS core capabilities:
 
-*   [Memory Recall and Instruction Completion](/overview/quick_start/mem_recall)
+*   [Memory Recall](/overview/quick_start/mem_recall)
     
 *   [Memory Lifecycle Management](/overview/quick_start/mem_lifecycle)
       
