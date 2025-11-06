@@ -174,7 +174,7 @@ desc: 记忆调度就像大脑的注意力机制，动态决定在合适的时�
 
 了解MemOS更多核心能力
 
-*   [记忆召回与指令补全](/overview/quick_start/mem_recall)
+*   [记忆召回](/overview/quick_start/mem_recall)
     
 *   [记忆生命周期管理](/overview/quick_start/mem_lifecycle)
       
