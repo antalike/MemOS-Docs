@@ -19,6 +19,34 @@ const armsScript = process.env.NODE_ENV === 'production'
         })();`,
     type: 'text/javascript' }]
   : []
+// 语言判断script
+const langScript = {
+  innerHTML: `
+    (function () {
+      const key = "MEMOS_LANG";
+      if (!document.cookie.match(/(?:^|;\\s*)MEMOS_LANG=([^;]+)/)) {
+        const browserLang = (navigator.language || "").toLowerCase();
+        const lang = browserLang.startsWith("zh") ? "cn" : "en";
+        const domain = location.hostname.endsWith("openmem.net") ? ";domain=.openmem.net" : "";
+        document.cookie = key + "=" + lang + ";path=/" + domain;
+        const pathname = location.pathname
+        const hasCnPrefix = pathname === "/cn" || pathname.startsWith("/cn/");
+        
+        let targetPath = pathname
+        if (lang === 'cn' && !hasCnPrefix) {
+          targetPath = '/cn' + targetPath
+        } else if (lang === 'en' && hasCnPrefix) {
+          targetPath = targetPath.slice(3) || '/'
+        }
+        if (location.pathname !== targetPath) {
+          location.replace(targetPath + location.search + location.hash)
+        }
+      }
+    })();
+  `,
+  type: 'text/javascript',
+  tagPosition: 'head'
+}
 
 const envConfig = await import(`./envConfig/config.${env}.ts`).then(m => m.default).catch(() => {
   return {
@@ -31,7 +59,8 @@ const config: NuxtConfig = {
   app: {
     head: {
       script: [
-        ...armsScript
+        ...armsScript,
+        langScript
       ]
     }
   },
