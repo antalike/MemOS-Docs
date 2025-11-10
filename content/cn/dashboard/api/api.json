@@ -472,7 +472,7 @@
               "activated"
             ],
             "title": "Status",
-            "description": "事实记忆的状态，当前所有检索到的事实记忆都是activated：<br>activated：激活状态，当前可检索和使用的事实记忆。",
+            "description": "事实记忆的状态，当前所有检索到的事实记忆都是activated。<br>activated：激活状态，当前可检索和使用的事实记忆。",
             "example": "activated"
           },
           "confidence": {
@@ -551,7 +551,7 @@
               "activated"
             ],
             "title": "Status",
-            "description": "偏好记忆的状态，当前所有检索到的偏好记忆都是activated：<br>activated：激活状态，当前可检索和使用的事实记忆。",
+            "description": "偏好记忆的状态，当前所有检索到的偏好记忆都是activated。<br>activated：激活状态，当前可检索和使用的事实记忆。",
             "example": "activated"
           },
           "update_time": {
