@@ -69,9 +69,10 @@ onUnmounted(() => {
           {{ apiData?.summary }}
         </h1>
         <div class="mt-2 text-lg">
-          <p class="text-gray-400 text-base">
-            {{ apiData?.description }}
-          </p>
+          <p
+            class="text-gray-400 text-base"
+            v-html="apiData?.description"
+          />
         </div>
       </header>
       <ApiPath
