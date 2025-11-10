@@ -9,15 +9,15 @@ os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
 os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
 data = {
-  "messages": [
-    {"role": "user", "content": "我暑假定好去广州旅游，住宿的话有哪些连锁酒店可选？"},
-    {"role": "assistant", "content": "您可以考虑【七天、全季、希尔顿】等等"},
-    {"role": "user", "content": "我选七天"},
-    {"role": "assistant", "content": "好的，有其他问题再问我。"}
-  ],
-  "user_id": "memos_user_123",
-  "conversation_id": "0610"
-}
+    "user_id": "memos_user_123",
+    "conversation_id": "0610",
+    "messages": [
+      {"role": "user", "content": "我暑假定好去广州旅游，住宿的话有哪些连锁酒店可选？"},
+      {"role": "assistant", "content": "您可以考虑【七天、全季、希尔顿】等等"},
+      {"role": "user", "content": "我选七天"},
+      {"role": "assistant", "content": "好的，有其他问题再问我。"}
+    ]
+  }
 headers = {
   "Content-Type": "application/json",
   "Authorization": f"Token {os.environ['MEMOS_API_KEY']}"

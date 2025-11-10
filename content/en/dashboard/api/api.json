@@ -95,7 +95,7 @@
     "/search/memory": {
       "post": {
         "summary": "Search Memory",
-        "description": "This API allows you to query a user’s memory and returns the fragments most relevant to the input. These can serve as references for the model when generating responses. As shown in the examples bellow, You can retrieve memory in real time during a user’s conversation with the AI, or perform a global search across their entire memory to create user profiles or support personalized recommendations, improving both dialogue coherence and personalization.",
+        "description": "This API allows you to query a user’s memory and returns the fragments most relevant to the input. These can serve as references for the model when generating responses. As shown in the examples bellow, You can retrieve memory in real time during a user’s conversation with the AI, or perform a global search across their entire memory to create user profiles or support personalized recommendations, improving both dialogue coherence and personalization.<br><br>In the latest update, in addition to “Fact Memory”, the system now supports “Preference Memory”, enabling LLM to respond in a way that better understands the user.",
         "operationId": "search_memory",
         "requestBody": {
           "required": true,
@@ -359,7 +359,20 @@
             "type": "integer",
             "format": "int32",
             "title": "Memory Limit Number",
-            "description": "Limits the number of memory items returned, controlling the length of memory fragments. Defaults to 6 if not provided.",
+            "description": "Limits the number of fact memory items returned, controlling the length of fact memory. Defaults to 6 if not provided.",
+            "default": 6
+          },
+          "include_preference": {
+            "type": "boolean",
+            "title": "Include Preference",
+            "description": "Whether to enable preference memory recall. When enabled, the system will intelligently retrieve the user’s preference memories based on the query. Defaults to true if not provided.",
+            "default": true
+          },
+          "preference_limit_number": {
+            "type": "integer",
+            "format": "int32",
+            "title": "Preference Limit Number",
+            "description": "Limits the number of preference memory items returned, controlling the length of fact memory. Defaults to 6 if not provided.",
             "default": 6
           }
         },
@@ -401,6 +414,19 @@
             "items": {
               "$ref": "#/components/schemas/MemoryDetail"
             }
+          },
+          "preference_detail_list": {
+            "type": "array",
+            "title": "Preference Detail List",
+            "description": "List of preference memory details returned. Each item includes:",
+            "items": {
+              "$ref": "#/components/schemas/PreferenceDetail"
+            }
+          },
+          "preference_note": {
+            "type": "string",
+            "title": "Preference Note",
+            "description": "Preference memory usage note when it is retrieved."
           }
         },
         "description": "Object containing the query result."
@@ -411,17 +437,17 @@
           "id": {
             "type": "string",
             "title": "ID",
-            "description": "Unique identifier of the memory, used internally by the system."
+            "description": "Unique identifier of fact memory, used internally by the system."
           },
           "memory_key": {
             "type": "string",
             "title": "Memory Key",
-            "description": "Title or keyword summarizing the memory."
+            "description": "Title or keyword summarizing fact memory."
           },
           "memory_value": {
             "type": "string",
             "title": "Memory Value",
-            "description": "Detailed content of the memory."
+            "description": "Detailed content of fact memory."
           },
           "memory_type": {
             "type": "string",
@@ -434,15 +460,15 @@
             "description": "WorkingMemory: short-term working memory, temporarily stored.<br>LongTermMemory: long-term memory, important information or facts stored persistently.<br>UserMemory: user-specific memory, personalized information related to a specific user.",
             "example": "LongTermMemory"
           },
-          "memory_time": {
+          "create_time": {
             "type": "string",
-            "title": "Memory Time",
-            "description": "Creation time of the memory, usually in ISO 8601 format."
+            "title": "Create Time",
+            "description": "Creation time of fact memory, usually in ISO 8601 format."
           },
           "conversation_id": {
             "type": "string",
             "title": "Conversation ID",
-            "description": "Unique identifier of the conversation associated with the memory."
+            "description": "Unique identifier of the conversation associated with fact memory."
           },
           "status": {
             "type": "string",
@@ -450,7 +476,7 @@
               "activated"
             ],
             "title": "Status",
-            "description": "Memory status. All retrieved memories are currently activated.",
+            "description": "Fact memory status. All retrieved fact memories are currently activated.<br>activated: active fact memory, available for retrieval and use.",
             "example": "activated"
           },
           "confidence": {
@@ -458,13 +484,13 @@
             "minimum": 0,
             "maximum": 1,
             "title": "Confidence",
-            "description": "Confidence score of the memory, ranging from 0 to 1. Values closer to 1 indicate higher reliability. <br>The score may gradually decay over time or with repeated model reasoning to reflect uncertainty.",
+            "description": "Confidence score of fact memory, ranging from 0 to 1. Values closer to 1 indicate higher reliability. <br>The score may gradually decay over time or with repeated model reasoning to reflect uncertainty.",
             "example": 0.95
           },
           "tags": {
             "type": "array",
             "title": "Tags",
-            "description": "List of tags associated with the memory for categorization or retrieval. Each element is a string, e.g., [\"person\", \"event\", \"work\"].",
+            "description": "List of tags associated with fact memory for categorization or retrieval. Each element is a string, e.g., [\"person\", \"event\", \"work\"].",
             "items": {
               "type": "string"
             }
@@ -472,19 +498,74 @@
           "update_time": {
             "type": "string",
             "title": "Update Time",
-            "description": "Last modification or update time of the memory, usually in ISO 8601 format."
+            "description": "Last modification or update time of fact memory, usually in ISO 8601 format."
           },
           "relativity": {
             "type": "number",
             "minimum": 0,
             "maximum": 1,
             "title": "Relativity",
-            "description": "Relevance score of the memory to the query, ranging from 0 to 1. Higher values indicate stronger relevance.",
+            "description": "Relevance score of fact memory to the query, ranging from 0 to 1. Higher values indicate stronger relevance.",
             "example": 0.87
           }
         },
         "title": "MemoryDetail",
         "description": "List of memory fragment details returned. Each item includes:"
+      },
+      "PreferenceDetail": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "ID",
+            "description": "Unique identifier of preference memory, used internally by the system."
+          },
+          "preference": {
+            "type": "string",
+            "title": "Preference",
+            "description": "Detailed content of preference memory."
+          },
+          "preference_type": {
+            "type": "string",
+            "enum": [
+              "explicit_preference",
+              "implicit_preference"
+            ],
+            "title": "Preference Type",
+            "description": "explicit_preference: Explicit preference memory.<br>implicit_preference: Implicit preference memory.",
+            "example": "explicit_preference"
+          },
+          "reasoning": {
+            "type": "string",
+            "title": "Reasoning",
+            "description": "The reason why preference memory was extracted."
+          },
+          "create_time": {
+            "type": "string",
+            "title": "Create Time",
+            "description": "Creation time of preference memory, usually in ISO 8601 format."
+          },
+          "conversation_id": {
+            "type": "string",
+            "title": "Conversation ID",
+            "description": "Unique identifier of the conversation associated with preference memory."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "activated"
+            ],
+            "title": "Status",
+            "description": "Preference memory status. All retrieved preference memories are currently activated.<br>activated: active preference memory, available for retrieval and use.",
+            "example": "activated"
+          },
+          "update_time": {
+            "type": "string",
+            "title": "Update Time",
+            "description": "Last modification or update time of preference memory, usually in ISO 8601 format."
+          }
+        },
+        "title": "MemoryDetail"
       },
       "title": "SearchMemoryResponseData",
       "description": "Object containing the query result."

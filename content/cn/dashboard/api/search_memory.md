@@ -37,27 +37,50 @@ res = requests.post(f"{BASE_URL}/search/memory", headers=headers, data=json.dump
 
 print(f"result: {res.json()}")
 # 示例返回（展示已召回的记忆片段）
-# [
+# # {
+#   "memory_detail_list": [
 #     {
-#         "id": "3fa96c6c-a844-4249-a762-dbd26d4279c7",
-#         "memory_key": "饮食偏好",
-#         "memory_value": "[user观点]用户喜欢辣味食物，但不太喜欢重油的菜肴，如麻辣火锅和毛血旺。",
-#         "memory_type": "WorkingMemory",
-#         "conversation_id": "memos_conversation_345",
-#         "tags": ["饮食", "偏好", "辣味"],
-#         "relativity": 0.0043  # 表示与 query 的相关度，值越高表示越相关
+#       "id": "c6c63472-25d3-49ee-b360-9b0702d96781",
+#       "memory_key": "辣味食物偏好",
+#       "memory_value": "用户喜欢吃辣的食物，但不太喜欢重油的菜肴，如麻辣火锅和毛血旺。用户更偏好清爽又带辣味的菜。",
+#       "memory_type": "UserMemory",
+#       "create_time": 1762674694466,
+#       "conversation_id": "memos_conversation_345",
+#       "status": "activated",
+#       "confidence": 0.99,
+#       "tags": [
+#         "饮食偏好",
+#         "辣味",
+#         "重油"
+#       ],
+#       "update_time": 1762674694423,
+#       "relativity": 0.00242424
+#     }
+#   ],
+#   "preference_detail_list": [
+#     {
+#       "id": "46d8372d-241a-4ffc-890b-ae13c90d5565",
+#       "preference_type": "explicit_preference",
+#       "preference": "用户喜欢辣味的食物，但不喜欢重油的辣味食物。",
+#       "reasoning": "用户在第一次查询中明确表示喜欢辣的食物，在第二次查询中进一步说明自己不喜欢重油的辣味食物，这表明用户的偏好是喜欢辣但清爽的食物。",
+#       "create_time": 1762675342352,
+#       "conversation_id": "memos_conversation_345",
+#       "status": "activated",
+#       "update_time": 1762674923302
 #     },
 #     {
-#         "id": "51b537b6-9116-475c-b26f-2e4b445c863d",
-#         "memory_key": "清爽辣味菜肴建议",
-#         "memory_value": "[assistant观点]助手了解到用户的饮食偏好后，建议推荐一些清爽又带辣味的菜肴。",
-#         "memory_type": "WorkingMemory",
-#         "conversation_id": "memos_conversation_345",
-#         "tags": ["饮食建议", "辣味"],
-#         "relativity": 0.0355
+#       "id": "9d62c1ae-a069-478d-a2fd-cb4aadfb6868",
+#       "preference_type": "implicit_preference",
+#       "preference": "用户可能偏好较健康的饮食选择",
+#       "reasoning": "用户表达了对辣味的明确喜好，但对重油食物表示不喜欢。这表明用户可能更关注饮食的健康性，倾向于选择不那么油腻的食物。用户对辣味的喜好与对重油食物的排斥结合在一起，可能暗示着对健康饮食的隐性偏好。",
+#       "create_time": 1762674923448,
+#       "conversation_id": "memos_conversation_345",
+#       "status": "activated",
+#       "update_time": 1762674851542
 #     }
-# ]
-
+#   ],
+#   "preference_note": "\n# 注意：\n事实记忆是事实的摘要，而偏好记忆是用户偏好的摘要。\n你的回复不得违反用户的任何偏好，无论是显式偏好还是隐式偏好，并简要解释你为什么这样回答以避免冲突。\n"
+# }
 ```
 
 ### 获取用户整体画像
@@ -97,91 +120,112 @@ res = requests.post(f"{BASE_URL}/search/memory", headers=headers, data=json.dump
 print(f"result: {res.json()}")
 
 # 示例返回（展示已召回的记忆片段）
-# [
-#   {
-#     "id": "2b742eb2-ba0d-418b-8485-0333e51f4d63",
-#     "memory_key": "用户的聊天风格与AI帮助期望",
-#     "memory_value": "[user观点]用户喜欢幽默、温暖、轻松闲聊的聊天风格；希望AI提供建议、信息查询和灵感，并帮助规划日常学习计划、推荐电影和书籍以及提供心情陪伴。",
-#     "memory_type": "UserMemory",  # 内存类型，用户记忆
-#     "memoryTime": null,          # 记忆时间，未设置
-#     "conversation_id": "memos_conversation_567",  # 对话 ID
-#     "status": "activated",       # 状态：已激活
-#     "confidence": 0.0,           # 置信度
-#     "tags": [                    # 标签列表
-#         "聊天风格",
-#         "AI帮助",
-#         "期望"
-#     ],
-#     "updateTime": 1758267685922, # 更新时间戳
-#     "relativity": 1.6605854E-4   # 与上下文的相关性
-#   },
-#   {
-#     "id": "aacdb351-b2d3-47b7-abdd-6945ec1f6778",
-#     "memory_key": "用户感兴趣的话题",
-#     "memory_value": "[user观点]用户对人工智能、未来科技和电影评论等话题最感兴趣。",
-#     "memory_type": "UserMemory",  # 内存类型
-#     "memoryTime": null,          # 记忆时间
-#     "conversation_id": "memos_conversation_567",
-#     "status": "activated",
-#     "confidence": 0.0,
-#     "tags": [
-#         "兴趣",
-#         "话题"
-#     ],
-#     "updateTime": 1758267685924,
-#     "relativity": 9.536743E-5
-#   },
-#   {
-#     "id": "381119b8-1063-4434-ae62-6806bc5a046a",
-#     "memory_key": "用户的饮食和旅游偏好",
-#     "memory_value": "[user观点]用户偏爱辣味及健康饮食；旅游时喜欢自然景观、城市文化和冒险活动。",
-#     "memory_type": "WorkingMemory",  # 工作记忆
-#     "memoryTime": null,
-#     "conversation_id": "memos_conversation_567",
-#     "status": "activated",
-#     "confidence": 0.0,
-#     "tags": [
-#         "饮食",
-#         "旅游",
+# {
+#   "memory_detail_list": [
+#     {
+#       "id": "00d8bb4e-aa8c-4fee-a83e-bf67ed6c3ea1",
+#       "memory_key": "希望AI帮助的事项",
+#       "memory_value": "用户希望AI帮助规划日常学习计划、推荐电影和书籍，以及提供心情陪伴。",
+#       "memory_type": "WorkingMemory",
+#       "create_time": 1762675190743,
+#       "conversation_id": "memos_conversation_id_567",
+#       "status": "activated",
+#       "confidence": 0.99,
+#       "tags": [
+#         "帮助",
+#         "学习计划",
+#         "推荐",
+#         "陪伴"
+#       ],
+#       "update_time": 1762675209112,
+#       "relativity": 0.00013480317
+#     },
+#     {
+#       "id": "17f039d5-d034-41e9-a385-765992a4ab00",
+#       "memory_key": "希望AI提供的帮助类型",
+#       "memory_value": "用户希望AI提供建议、信息查询和灵感。",
+#       "memory_type": "WorkingMemory",
+#       "create_time": 1762675153211,
+#       "conversation_id": "memos_conversation_id_567",
+#       "status": "activated",
+#       "confidence": 0.99,
+#       "tags": [
+#         "AI",
+#         "帮助",
+#         "类型"
+#       ],
+#       "update_time": 1762675206651,
+#       "relativity": 0.00010301525
+#     },
+#     {
+#       "id": "89bc2453-1471-4a1a-936c-94708da071ed",
+#       "memory_key": "聊天风格偏好",
+#       "memory_value": "用户喜欢的聊天风格为幽默、温暖和轻松闲聊。",
+#       "memory_type": "WorkingMemory",
+#       "create_time": 1762675135023,
+#       "conversation_id": "memos_conversation_id_567",
+#       "status": "activated",
+#       "confidence": 0.99,
+#       "tags": [
+#         "聊天",
+#         "风格",
 #         "偏好"
-#     ],
-#     "updateTime": 1758267685921,
-#     "relativity": 1.9669533E-5
-#   },
-#   {
-#     "id": "895c2c35-6646-4241-909b-88e067e166b6",
-#     "memory_key": "用户的学习方式和运动习惯",
-#     "memory_value": "[user观点]用户偏好的学习方式包括阅读文章、观看视频和收听Podcast；运动习惯包括跑步和健身。",
-#     "memory_type": "WorkingMemory",
-#     "memoryTime": null,
-#     "conversation_id": "memos_conversation_567",
-#     "status": "activated",
-#     "confidence": 0.0,
-#     "tags": [
-#         "学习",
-#         "运动",
-#         "方式"
-#     ],
-#     "updateTime": 1758267685918,
-#     "relativity": 1.9073486E-5
-#   },
-#   {
-#     "id": "df36e0e7-81a3-4694-810e-3b230d85dc13",
-#     "memory_key": "用户的娱乐偏好",
-#     "memory_value": "[user观点]用户喜欢的电影类型包括科幻、动作和喜剧；电视剧类型则偏好悬疑和历史剧；书籍类型偏好科普、技术和自我成长。",
-#     "memory_type": "WorkingMemory",
-#     "memoryTime": null,
-#     "conversation_id": "memos_conversation_567",
-#     "status": "activated",
-#     "confidence": 0.0,
-#     "tags": [
-#         "娱乐",
-#         "电影",
+#       ],
+#       "update_time": 1762675205606,
+#       "relativity": 0.00007810917
+#     },
+#     {
+#       "id": "074b5caf-d294-41a6-9f7e-9c2a8b1d3ade",
+#       "memory_key": "感兴趣的话题",
+#       "memory_value": "用户最感兴趣的话题包括人工智能、未来科技和电影评论。",
+#       "memory_type": "WorkingMemory",
+#       "create_time": 1762675172952,
+#       "conversation_id": "memos_conversation_id_567",
+#       "status": "activated",
+#       "confidence": 0.99,
+#       "tags": [
+#         "话题",
+#         "兴趣"
+#       ],
+#       "update_time": 1762675207841,
+#       "relativity": 0.000029795949
+#     },
+#     {
+#       "id": "6e1a0715-5c83-4092-b226-762cc3500170",
+#       "memory_key": "书籍类型偏好",
+#       "memory_value": "用户喜欢的书籍类型包括科普、技术和自我成长类书籍。",
+#       "memory_type": "WorkingMemory",
+#       "create_time": 1762675029885,
+#       "conversation_id": "memos_conversation_id_567",
+#       "status": "activated",
+#       "confidence": 0.99,
+#       "tags": [
+#         "书籍",
+#         "类型",
+#         "偏好"
+#       ],
+#       "update_time": 1762675194083,
+#       "relativity": 0.00002005097
+#     },
+#     {
+#       "id": "5ee1c8c2-ea55-42e7-8fd8-71d0127198b5",
+#       "memory_key": "电视剧类型偏好",
+#       "memory_value": "用户喜欢的电视剧类型为悬疑和历史剧。",
+#       "memory_type": "UserMemory",
+#       "create_time": 1762675002841,
+#       "conversation_id": "memos_conversation_id_567",
+#       "status": "activated",
+#       "confidence": 0.99,
+#       "tags": [
 #         "电视剧",
-#         "书籍"
-#     ],
-#     "updateTime": 1758267685917,
-#     "relativity": 1.847744E-5
-#   }
-# ]
+#         "类型",
+#         "偏好"
+#       ],
+#       "update_time": 1762675002788,
+#       "relativity": 0.00001729489
+#     }
+#   ],
+#   "preference_detail_list": [],
+#   "preference_note": ""
+# }
 ```

@@ -37,39 +37,65 @@ res = requests.post(f"{BASE_URL}/search/memory", headers=headers, data=json.dump
 
 print(f"result: {res.json()}")
 # Example response (showing retrieved memory snippets)
-# result: {
-#   'code': 0, 
-#   'data': {
-#     'memory_detail_list': [
-#       {
-#         'id': '30017d87-c340-4ae0-ac13-9a2992333c2b', 
-#         'memory_key': "Assistant's acknowledgment of user's taste", 
-#         'memory_value': "[assistant viewpoint] The assistant acknowledged the user's preference for spicy food and noted the user's preference for light but spicy dishes, offering to recommend suitable options.", 
-#         'memory_type': 'WorkingMemory', 
-#         'memory_time': None, 
-#         'conversation_id': 'memos_conversation_345',
-#         'status': 'activated',
-#         'confidence': 0.0, 
-#         'tags': ['food preferences', 'recommendations'], 
-#         'update_time': 1760341879781,
-#         'relativity': 0.00031495094
-#       }, 
-#       {
-#         'id': '22a6092e-9b4f-479f-9cd7-37f56d1a6777',
-#         'memory_key': "User's food preferences", 
-#         'memory_value': '[user viewpoint] The user likes spicy food but does not prefer heavy or oily dishes, such as hotpot or spicy beef soup.',
-#         'memory_type': 'WorkingMemory',
-#         'memory_time': None,
-#         'conversation_id': 'memos_conversation_345', 
-#         'status': 'activated', 
-#         'confidence': 0.0, 
-#         'tags': ['food preferences', 'spicy', 'light dishes'],
-#         'update_time': 1760341879780, 
-#         'relativity': 0.0002937317
-#       }
-#     ]
-#   },
-#   'message': 'ok'
+# {
+#   "memory_detail_list": [
+#     {
+#       "id": "a8aec934-756b-4f7e-afdf-da4f567b2f85",
+#       "memory_key": "Dislike for heavy or oily dishes",
+#       "memory_value": "On September 25, 2025, the user clarified that while they enjoy spicy food, they do not like heavy or oily dishes, such as hotpot or spicy beef soup.",
+#       "memory_type": "WorkingMemory",
+#       "create_time": 1762675057192,
+#       "conversation_id": "memos_conversation_345",
+#       "status": "activated",
+#       "confidence": 0.99,
+#       "tags": [
+#         "food preference",
+#         "dietary restrictions",
+#         "heavy dishes"
+#       ],
+#       "update_time": 1762675059740,
+#       "relativity": 0.00003117323
+#     },
+#     {
+#       "id": "4dfefe7b-9593-4924-be9b-efe6d15bfaf0",
+#       "memory_key": "Preference for spicy food",
+#       "memory_value": "On September 12, 2025, the user expressed a liking for spicy food.",
+#       "memory_type": "WorkingMemory",
+#       "create_time": 1762675029246,
+#       "conversation_id": "memos_conversation_345",
+#       "status": "activated",
+#       "confidence": 0.99,
+#       "tags": [
+#         "food preference",
+#         "spicy food"
+#       ],
+#       "update_time": 1762675058836,
+#       "relativity": 0.000027298927
+#     }
+#   ],
+#   "preference_detail_list": [
+#     {
+#       "id": "e3ea3b4e-5a9a-4deb-a11c-1502d4a996ce",
+#       "preference_type": "explicit_preference",
+#       "preference": "The user likes spicy food but does not like heavy or oily dishes like hotpot or spicy beef soup.",
+#       "reasoning": "The user explicitly stated a liking for spicy food and a dislike for heavy or oily dishes. The dislike was specified by examples, indicating a clear preference for lighter dishes even if they are spicy.",
+#       "create_time": 1762675319726,
+#       "conversation_id": "memos_conversation_345",
+#       "status": "activated",
+#       "update_time": 1762674876250
+#     },
+#     {
+#       "id": "b306d189-99fc-42a4-b870-07ea00ffc1ca",
+#       "preference_type": "implicit_preference",
+#       "preference": "Preference for balance between flavor intensity and dish lightness",
+#       "reasoning": "The user explicitly states a preference for spicy food but dislikes heavy or oily dishes, suggesting a desire for a balance between intense flavors and the lightness of the dish. This implies a hidden motivation to enjoy the taste without the heaviness associated with certain spicy dishes, pointing to a preference for dishes that are both flavorful and light.",
+#       "create_time": 1762674876398,
+#       "conversation_id": "memos_conversation_345",
+#       "status": "activated",
+#       "update_time": 1762674885918
+#     }
+#   ],
+#   "preference_note": "\n# Note:\nFact memory are summaries of facts, while preference memory are summaries of user preferences.\nYour response must not violate any of the user's preferences, whether explicit or implicit, and briefly explain why you answer this way to avoid conflicts.\n"
 # }
 ```
 
@@ -109,90 +135,112 @@ res = requests.post(f"{BASE_URL}/search/memory", headers=headers, data=json.dump
 
 print(f"result: {res.json()}")
 # Example response (showing retrieved memory snippets)
-# result: {
-#   'code': 0, 
-#   'data': {
-#     'memory_detail_list': [
-#       {'id': 'e2d8dc71-dc05-41c0-a4ec-74cf1b29447b', 
-#        'memory_key': "User's preferred conversation style", 
-#        'memory_value': 'The user prefers a conversation style that is humorous, warm, and casual.', 
-#        'memory_type': 'WorkingMemory', 
-#        'memory_time': None, 
-#        'conversation_id': 'memos_conversation_id_567', 
-#        'status': 'activated', 
-#        'confidence': 0.0, 
-#        'tags': ['conversation', 'style', 'preferences'], 
-#        'update_time': 1760342037762, 
-#        'relativity': 0.00082969666
-#       }, 
-#       {
-#         'id': '9f0a99b3-87c1-47b8-92c6-fa6edaacaf2b', 
-#        'memory_key': "User's preferred conversation style", 
-#        'memory_value': '[user viewpoint] The user prefers conversations that are Humorous, Warm, and Casual.', 
-#        'memory_type': 'WorkingMemory', 
-#        memory_time': None, 
-#        'conversation_id': 'memos_conversation_id_567', 
-#        'status': 'activated', 
-#        'confidence': 0.0, 
-#        'tags': ['conversation', 'style'], 
-#        'update_time': 1760343893000, 
-#        'relativity': 0.00036263466
-#       }, 
-#       {
-#         'id': 'ac0f19ac-7a0e-47d8-a1b6-f9d9faa6cfcd', 
-#         'memory_key': "User's favorite book genres", 
-#         'memory_value': '[user viewpoint] The user likes reading books on Popular science, Technology, and Personal growth.', 
-#         'memory_type': 'WorkingMemory', 
-#         'memory_time': None, 
-#         'conversation_id': 'memos_conversation_id_567', 
-#         'status': 'activated', 
-#         'confidence': 0.0, 
-#         'tags': ['books', 'preferences'], 
-#         'update_time': 1760343892997, 
-#         'relativity': 7.033348e-05
-#       }, 
-#       {
-#         'id': 'f7f0d39a-8177-42c6-9194-d445332a0dad', 
-#         'memory_key': "User's entertainment preferences", 
-#         'memory_value': 'The user enjoys sci-fi, action, and comedy movies; mystery and historical drama TV shows; and popular science, technology, and personal growth books.', 
-#         'memory_type': 'WorkingMemory', 
-#         'memory_time': None, 
-#         'conversation_id': 
-#         'memos_conversation_id_567', 
-#         'status': 'activated', 
-#         'confidence': 0.0, 
-#         'tags': ['entertainment', 'movies', 'TV shows', 'books'], 
-#         'update_time': 1760342037756, 
-#         'relativity': 4.130602e-05
-#       }, 
-#       {
-#         'id': '46ce3e1b-431e-4361-90dc-df85c001d1e1', 
-#         'memory_key': '用户的运动和饮食习惯', 
-#         'memory_value': '[user观点]用户的运动习惯包括跑步和健身；饮食偏好为偏爱辣和健康饮食。', 
-#         'memory_type': 'UserMemory', 
-#         'memory_time': None, 
-#         'conversation_id': 'memos_conversation_id_567',
-#         'status': 'activated', 
-#         'confidence': 0.0, 
-#         'tags': ['运动', '饮食', '习惯'], 
-#         'update_time': 1760322048850,
-#         'relativity': 2.6285648e-05
-#       }, 
-#       {
-#         'id': 'a15f1804-c3fa-476a-886e-658cb9930780', 
-#         'memory_key': "User's desired AI assistance", 
-#         'memory_value': 'The user would like AI to help with daily study planning, movie and book recommendations, and emotional companionship.', 
-#         'memory_type': 'WorkingMemory',
-#         'memory_time': None, 
-#         'conversation_id': 'memos_conversation_id_567', 
-#         'status': 'activated', 
-#         'confidence': 0.0, 
-#         'tags': ['AI assistance', 'study', 'recommendations', 'companionship'], 
-#         'update_time': 1760342037764, 
-#         'relativity': 2.4139881e-05
-#       }
-#     ]
-#   }, 
-#   'message': 'ok'
+# {
+#   "memory_detail_list": [
+#     {
+#       "id": "d8ccc6b1-ca92-49d6-8f3c-beea6fa00e1e",
+#       "memory_key": "Preferred conversation style",
+#       "memory_value": "The user prefers a humorous, warm, and casual style in conversations.",
+#       "memory_type": "WorkingMemory",
+#       "create_time": 1762675887693,
+#       "conversation_id": "memos_conversation_id_567",
+#       "status": "activated",
+#       "confidence": 0.99,
+#       "tags": [
+#         "conversation",
+#         "style",
+#         "preferences"
+#       ],
+#       "update_time": 1762675961289,
+#       "relativity": 0.0007798947
+#     },
+#     {
+#       "id": "a5c99814-f69d-448d-87f9-28836244dad8",
+#       "memory_key": "Dietary preferences",
+#       "memory_value": "The user enjoys spicy food and maintains a healthy eating lifestyle.",
+#       "memory_type": "WorkingMemory",
+#       "create_time": 1762675848775,
+#       "conversation_id": "memos_conversation_id_567",
+#       "status": "activated",
+#       "confidence": 0.99,
+#       "tags": [
+#         "diet",
+#         "preferences",
+#         "healthy eating"
+#       ],
+#       "update_time": 1762675968743,
+#       "relativity": 0.000111509864
+#     },
+#     {
+#       "id": "7300e222-d526-4f59-bf30-b60952e9e508",
+#       "memory_key": "Travel interests",
+#       "memory_value": "The user is interested in nature, urban culture, and adventure when it comes to travel.",
+#       "memory_type": "WorkingMemory",
+#       "create_time": 1762675868195,
+#       "conversation_id": "memos_conversation_id_567",
+#       "status": "activated",
+#       "confidence": 0.99,
+#       "tags": [
+#         "travel",
+#         "interests",
+#         "adventure"
+#       ],
+#       "update_time": 1762675960296,
+#       "relativity": 0.00010057839
+#     },
+#     {
+#       "id": "61a4aa7d-3532-4ee7-902f-4798a82f92ab",
+#       "memory_key": "Favorite book genres",
+#       "memory_value": "The user is interested in popular science, technology, and personal growth as their favorite book genres.",
+#       "memory_type": "WorkingMemory",
+#       "create_time": 1762675781163,
+#       "conversation_id": "memos_conversation_id_567",
+#       "status": "activated",
+#       "confidence": 0.99,
+#       "tags": [
+#         "books",
+#         "genres",
+#         "preferences"
+#       ],
+#       "update_time": 1762675952467,
+#       "relativity": 0.00009639777
+#     },
+#     {
+#       "id": "10583713-7bdb-42ed-a01a-e5b54aeb34dd",
+#       "memory_key": "AI assistance goals",
+#       "memory_value": "The user would like AI to help with daily study planning, movie and book recommendations, and providing emotional companionship.",
+#       "memory_type": "WorkingMemory",
+#       "create_time": 1762675948115,
+#       "conversation_id": "memos_conversation_id_567",
+#       "status": "activated",
+#       "confidence": 0.99,
+#       "tags": [
+#         "AI",
+#         "assistance",
+#         "goals"
+#       ],
+#       "update_time": 1762675969747,
+#       "relativity": 0.000017721624
+#     },
+#     {
+#       "id": "1b736daf-73aa-4c04-aae8-8b308c9a6b8a",
+#       "memory_key": "Topics of interest",
+#       "memory_value": "The user is most interested in artificial intelligence, future tech, and film reviews.",
+#       "memory_type": "WorkingMemory",
+#       "create_time": 1762675925831,
+#       "conversation_id": "memos_conversation_id_567",
+#       "status": "activated",
+#       "confidence": 0.99,
+#       "tags": [
+#         "interests",
+#         "topics",
+#         "AI"
+#       ],
+#       "update_time": 1762675967351,
+#       "relativity": 0.00001625416
+#     }
+#   ],
+#   "preference_detail_list": [],
+#   "preference_note": ""
 # }
 ```

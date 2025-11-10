@@ -13,12 +13,6 @@ data = {
   "user_id": "memos_user_123",
   "conversation_id": "0928"
 }
-
-# MemOS will support returning matches, instruction, and full_instruction in the future:
-# "return_matches": true
-# "return_instruction": true
-# "return_full_instruction": true
-
 headers = {
   "Content-Type": "application/json",
   "Authorization": f"Token {os.environ['MEMOS_API_KEY']}"
@@ -39,11 +33,6 @@ client = MemOSClient(api_key="YOUR_API_KEY")
 query = "I want to travel during the National Day holiday. Please recommend a city I haven’t been to and a hotel brand I haven’t stayed at."
 user_id = "memos_user_123"
 conversation_id ="0928"
-
-# MemOS will support returning matches, instruction, and full_instruction in the future:
-# return_matches = True
-# return_instruction = True
-# return_full_instruction = True
 
 res = client.search_memory(query=query, user_id=user_id, conversation_id=conversation_id)
 
