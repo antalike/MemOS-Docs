@@ -1,6 +1,20 @@
 {
   "versions": [
     {
+      "releaseUrl": "https://github.com/MemTensor/MemOS/releases/tag/v1.1.2",
+      "name": "v1.1.2",
+      "date": "2025-10-11",
+      "changedInfo": [
+        {
+          "type": "fix",
+          "description": "api client get_message models",
+          "author": "CarltonXiang",
+          "pr": 359,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/359"
+        }
+      ]
+    },
+    {
       "releaseUrl": "https://github.com/MemTensor/MemOS/releases/tag/v1.1.1",
       "name": "v1.1.1",
       "date": "2025-09-24",
