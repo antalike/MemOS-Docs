@@ -40,7 +40,14 @@ const localizedMenus = computed(() => {
 })
 
 function handleLocaleSwitch() {
-  setLocale(locale.value === 'en' ? 'cn' : 'en')
+  const newLocale = locale.value === 'en' ? 'cn' : 'en'
+  // set locale cookie
+  if (import.meta.client) {
+    window.setLocaleCookie(newLocale)
+  }
+
+  // sync project locale state
+  setLocale(newLocale)
 }
 </script>
 
