@@ -31,6 +31,8 @@ const config: NuxtConfig = {
   app: {
     head: {
       script: [
+        { src: 'https://cdn.memtensor.com.cn/file/js-cookie-3.0.5.min.js', type: 'text/javascript' },
+        { src: 'https://cdn.memtensor.com.cn/file/locale.1.0.11.min.js', type: 'text/javascript' },
         ...armsScript
       ]
     }
@@ -82,12 +84,7 @@ const config: NuxtConfig = {
     // locale prefix added for every locale except default
     strategy: 'prefix_except_default',
     vueI18n: './i18n.config.ts',
-    detectBrowserLanguage: {
-      useCookie: true,
-      cookieKey: 'MEMOS_LANG',
-      cookieDomain: 'openmem.net',
-      fallbackLocale: 'en'
-    },
+    detectBrowserLanguage: false,
     pages: undefined
   },
 

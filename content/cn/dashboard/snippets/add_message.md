@@ -9,17 +9,15 @@ os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
 os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
 data = {
-  "messages": [
-    {"role": "user", "content": "我想暑假出去玩，你能帮我推荐下吗？"},
-    {"role": "assistant", "content": "好的！是自己出行还是和家人朋友一起呢？"},
-    {"role": "user", "content": "肯定要带孩子啊，我们家出门都是全家一起。"},
-    {"role": "assistant", "content": "明白了，所以你们是父母带孩子一块儿旅行，对吗？"},
-    {"role": "user", "content": "对，带上孩子和老人，一般都是全家行动。"},
-    {"role": "assistant", "content": "收到，那我会帮你推荐适合家庭出游的目的地。"}
-  ],
-  "user_id": "memos_user_123",
-  "conversation_id": "0610"
-}
+    "user_id": "memos_user_123",
+    "conversation_id": "0610",
+    "messages": [
+      {"role": "user", "content": "我暑假定好去广州旅游，住宿的话有哪些连锁酒店可选？"},
+      {"role": "assistant", "content": "您可以考虑【七天、全季、希尔顿】等等"},
+      {"role": "user", "content": "我选七天"},
+      {"role": "assistant", "content": "好的，有其他问题再问我。"}
+    ]
+  }
 headers = {
   "Content-Type": "application/json",
   "Authorization": f"Token {os.environ['MEMOS_API_KEY']}"
@@ -38,12 +36,10 @@ from memos.api.client import MemOSClient
 client = MemOSClient(api_key="YOUR_API_KEY")
 
 messages = [
-  {"role": "user", "content": "我想暑假出去玩，你能帮我推荐下吗？"},
-  {"role": "assistant", "content": "好的！是自己出行还是和家人朋友一起呢？"},
-  {"role": "user", "content": "肯定要带孩子啊，我们家出门都是全家一起。"},
-  {"role": "assistant", "content": "明白了，所以你们是父母带孩子一块儿旅行，对吗？"},
-  {"role": "user", "content": "对，带上孩子和老人，一般都是全家行动。"},
-  {"role": "assistant", "content": "收到，那我会帮你推荐适合家庭出游的目的地。"}
+  {"role": "user", "content": "我暑假定好去广州旅游，住宿的话有哪些连锁酒店可选？"},
+  {"role": "assistant", "content": "您可以考虑【七天、全季、希尔顿】等等"},
+  {"role": "user", "content": "我选七天"},
+  {"role": "assistant", "content": "好的，有其他问题再问我。"}
 ]
 user_id = "memos_user_123"
 conversation_id = "0610"
@@ -61,12 +57,10 @@ curl --request POST \
     "user_id": "memos_user_123",
     "conversation_id": "0610",
     "messages": [
-      {"role": "user", "content": "我想暑假出去玩，你能帮我推荐下吗？"},
-      {"role": "assistant", "content": "好的！是自己出行还是和家人朋友一起呢？"},
-      {"role": "user", "content": "肯定要带孩子啊，我们家出门都是全家一起。"},
-      {"role": "assistant", "content": "明白了，所以你们是父母带孩子一块儿旅行，对吗？"},
-      {"role": "user", "content": "对，带上孩子和老人，一般都是全家行动。"},
-      {"role": "assistant", "content": "收到，那我会帮你推荐适合家庭出游的目的地。"}
+      {"role": "user", "content": "我暑假定好去广州旅游，住宿的话有哪些连锁酒店可选？"},
+      {"role": "assistant", "content": "您可以考虑【七天、全季、希尔顿】等等"},
+      {"role": "user", "content": "我选七天"},
+      {"role": "assistant", "content": "好的，有其他问题再问我。"}
     ]
   }'
 ```
