@@ -12,7 +12,7 @@ const navigation = computed(() => {
       children: [
         {
           title: t('dashboard.nav.overview'),
-          path: '/dashboard/api/overview',
+          path: getLangPath('/dashboard/api/overview', locale.value),
           icon: 'i-lucide:info'
         },
         ...apiNavData.value.map((nav: NavLink) => {
@@ -25,12 +25,12 @@ const navigation = computed(() => {
           return {
             ...rest,
             title,
-            path
+            path: getLangPath(path, locale.value)
           }
         }),
         {
           title: t('dashboard.nav.errorcode'),
-          path: '/dashboard/api/error_code'
+          path: getLangPath('/dashboard/api/error_code', locale.value)
         }
       ]
     }
