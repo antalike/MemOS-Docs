@@ -41,46 +41,49 @@ When the user asks in a new session for National Day travel and hotel recommenda
 ::
 ```json [search_memory_res.json]
 {
-    "code": 0,
-    "data": {
-        "memory_detail_list": [
-            {
-                "id": "0a89db3a-2061-4c97-a1b8-45700f8745bc",
-                "memory_key": "Summer Family Trip Plan",
-                "memory_value": "[user perspective] The user plans a family trip during the summer vacation, bringing along children and elderly family members, traveling together as a whole family.",
-                "memory_type": "WorkingMemory",
-                "memory_time": null,
-                "conversation_id": "0610",
-                "status": "activated",
-                "confidence": 0.0,
-                "tags": [
-                    "summer vacation",
-                    "family trip",
-                    "plan"
-                ],
-                "update_time": 1758095885922,
-                "relativity": 0.007873535
-            },
-            {
-                "id": "c8b41a89-83b3-4512-b4f7-1dfca3570107",
-                "memory_key": "Family Trip Requirements",
-                "memory_value": "[assistant perspective] The assistant understands that the user will travel with family, including children and elderly, and plans to recommend destinations suitable for family trips.",
-                "memory_type": "WorkingMemory",
-                "memory_time": null,
-                "conversation_id": "0610",
-                "status": "activated",
-                "confidence": 0.0,
-                "tags": [
-                    "family trip",
-                    "recommendation"
-                ],
-                "update_time": 1758095885923,
-                "relativity": 0.0019950867
-            }
-        ],
-        "message_detail_list": null
+  "memory_detail_list": [
+    {
+      "id": "cf1230dd-3ebe-4832-809d-28a455b0e3ea",
+      "memory_key": "Summer travel plans to Guangzhou",
+      "memory_value": "The user has planned to travel to Guangzhou during the summer and has decided to choose 7 Days Inn for accommodation.",
+      "memory_type": "WorkingMemory",
+      "create_time": 1762748859685,
+      "conversation_id": "0610",
+      "status": "activated",
+      "confidence": 0.99,
+      "tags": [
+        "travel",
+        "Guangzhou",
+        "accommodation",
+        "hotels"
+      ],
+      "update_time": 1762748860562,
+      "relativity": 0.0016035014
+    }
+  ],
+  "preference_detail_list": [
+    {
+      "id": "1cdc9186-41d4-4f03-b1ac-e6b037383b9d",
+      "preference_type": "explicit_preference",
+      "preference": "User prefers to choose 7 Days Inn for accommodation during their trip to Guangzhou this summer.",
+      "reasoning": "The user explicitly stated 'I’ll choose 7 Days Inn,' which shows a clear preference for this hotel over other options provided by the assistant.",
+      "create_time": 1762749378166,
+      "conversation_id": "0610",
+      "status": "activated",
+      "update_time": 1762749115125
     },
-    "message": "ok"
+    {
+      "id": "e79a61e4-49fb-4365-9ccf-52c194aadd19",
+      "preference_type": "implicit_preference",
+      "preference": "Preference for cost-effective accommodations.",
+      "reasoning": "The user's choice of 7 Days Inn, a budget hotel chain, over other options like Hilton, which are typically more expensive, suggests a preference for cost-effective accommodations. This indicates an underlying motivation to manage travel expenses and prioritize affordability in hotel selection.",
+      "create_time": 1762749115269,
+      "conversation_id": "0610",
+      "status": "activated",
+      "update_time": 1762749336979
+    }
+  ],
+  "preference_note": "\n# Note:\nFact memory are summaries of facts, while preference memory are summaries of user preferences.\nYour response must not violate any of the user's preferences, whether explicit or implicit, and briefly explain why you answer this way to avoid conflicts.\n"
 }
 ```
 
@@ -91,38 +94,32 @@ Retrieve the **original conversation messages** for a specified user and convers
 ::code-snippet{name=get_message}
 ::
 ```json [get_message_res.json]
-{
-  "code": 0,
-  "data": {
-    "message_detail_list": [
-      {
-        "role": "user",
-        "content": "I want to travel during summer vacation, can you recommend something?",
-        "create_time": "2025-06-10 09:30:00",
-        "update_time": "2025-06-10 09:30:00"
-      },
-      {
-        "role": "assistant",
-        "content": "Sure! Are you traveling alone, with family or with friends?",
-        "create_time": "2025-06-10 09:30:00",
-        "update_time": "2025-06-10 09:30:00"
-      },
-      {
-        "role": "user",
-        "content": "I’m bringing my kid. My family always travels together.",
-        "create_time": "2025-06-10 09:30:00",
-        "update_time": "2025-06-10 09:30:00"
-      },
-      {
-        "role": "assistant",
-        "content": "Understood, I’ll recommend destinations suitable for family trips.",
-        "create_time": "2025-06-10 09:30:00",
-        "update_time": "2025-06-10 09:30:00"
-      }
-    ]
+[
+  {
+    "role": "user",
+    "content": "I’ve planned to travel to Guangzhou this summer. What chain hotels are available for accommodation?",
+    "chat_time": null,
+    "create_time": 1762748806000
   },
-  "message": ""
-}
+  {
+    "role": "assistant",
+    "content": "You can consider options like 7 Days Inn, All Seasons, Hilton, etc.",
+    "chat_time": null,
+    "create_time": 1762748806000
+  },
+  {
+    "role": "user",
+    "content": "I’ll choose 7 Days Inn.",
+    "chat_time": null,
+    "create_time": 1762748806000
+  },
+  {
+    "role": "assistant",
+    "content": "Alright, feel free to ask me if you have any other questions.",
+    "chat_time": null,
+    "create_time": 1762748806000
+  }
+]
 ```
 
 <br>
