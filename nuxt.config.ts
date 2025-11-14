@@ -9,17 +9,6 @@ const cnApiRoutes = getCnApiReferenceRoutes()
 // Get locale from command line arguments or environment variable
 const env = process.env.NUXT_ENV_CONFIG || 'prod'
 
-const armsScript = process.env.NODE_ENV === 'production'
-  ? [{ innerHTML: `var _czc = _czc || [];
-        (function () {
-          var um = document.createElement("script");
-          um.src = "https://v1.cnzz.com/z.js?id=1281423419&async=1";
-          var s = document.getElementsByTagName("script")[0];
-          s.parentNode.insertBefore(um, s);
-        })();`,
-    type: 'text/javascript' }]
-  : []
-
 const envConfig = await import(`./envConfig/config.${env}.ts`).then(m => m.default).catch(() => {
   return {
     env: 'prod',
@@ -32,8 +21,7 @@ const config: NuxtConfig = {
     head: {
       script: [
         { src: 'https://cdn.memtensor.com.cn/file/js-cookie-3.0.5.min.js', type: 'text/javascript' },
-        { src: 'https://cdn.memtensor.com.cn/file/locale.1.0.11.min.js', type: 'text/javascript' },
-        ...armsScript
+        { src: 'https://cdn.memtensor.com.cn/file/locale.1.0.11.min.js', type: 'text/javascript' }
       ]
     }
   },
