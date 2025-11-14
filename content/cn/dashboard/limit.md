@@ -50,6 +50,6 @@ MemOS 云服务目前向所有开发者提供以下接口的免费开发额度�
 
 ![image.png](https://cdn.memtensor.com.cn/img/1758251897005_7xgrmm_compressed.png)
 
-## 5.联系我们
+## 5. 联系我们
 
 ![image.png](https://cdn.memtensor.com.cn/img/1758685658684_nbhka4_compressed.png)
