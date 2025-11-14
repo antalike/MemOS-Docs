@@ -18,6 +18,7 @@ nav:
     - "(ri:play-line) Quick Start": dashboard/quick_start.md
     - "(ri:shield-line) Limitations and Quotas": dashboard/limit.md
     - "(ri:file-code-line) API Reference": dashboard/api/overview.md
+    - "(ri:wrench-line) MCP Service Configuration": dashboard/mcp.md
 
   - "(ri:lightbulb-line) Use Cases":
     - "(ri:money-dollar-circle-line) Financial Assistant": usecase/financial_assistant.md

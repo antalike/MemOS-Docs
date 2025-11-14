@@ -18,6 +18,7 @@ nav:
     - "(ri:play-line) 快速开始": dashboard/quick_start.md
     - "(ri:shield-line) 配额和限制": dashboard/limit.md
     - "(ri:file-code-line) API 文档": dashboard/api/overview.md
+    - "(ri:wrench-line) MCP 服务配置": dashboard/mcp.md
 
   - "(ri:lightbulb-line) 最佳实践":
     - "(ri:money-dollar-circle-line) 让理财助手读懂客户行为背后的偏好": usecase/financial_assistant.md
