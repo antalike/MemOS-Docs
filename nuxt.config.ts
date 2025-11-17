@@ -21,7 +21,7 @@ const config: NuxtConfig = {
     head: {
       script: [
         { src: 'https://cdn.memtensor.com.cn/file/js-cookie-3.0.5.min.js', type: 'text/javascript' },
-        { src: 'https://cdn.memtensor.com.cn/file/locale.1.0.11.min.js', type: 'text/javascript' }
+        { src: 'https://cdn.memtensor.com.cn/file/locale.1.0.14.min.js', type: 'text/javascript' }
       ]
     }
   },
