@@ -24,7 +24,8 @@ To configure MemOS MCP using JSON configuration:
       ],
       "env": {
         "MEMOS_API_KEY": "<YOUR-API-KEY>",
-        "MEMOS_USER_ID": "<YOUR-USER-ID>"
+        "MEMOS_USER_ID": "<YOUR-USER-ID>",
+        "MEMOS_CHANNEL": "MEMOS"
       }
     }
   }
