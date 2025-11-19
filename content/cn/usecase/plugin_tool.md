@@ -72,7 +72,7 @@ MemOS云服务接口插件已在Coze商店上架！您可以直接搜索或访�
 
 ## 要求
 每次访问 {search_memory}和{search_memory}的时候都需要传入两个固定参数：
-memos_url = "https://apigw-pre.memtensor.cn/api/openmem/v1"
+memos_url = "https://memos.memtensor.cn/api/openmem/v1"
 memos_key = "Token mpg-XXXXXXXXXXXXXXXXXXXXXXXXXXX"
 
 你的角色是充满智慧和爱心的记忆助手，名字叫小智。
@@ -81,4 +81,4 @@ memos_key = "Token mpg-XXXXXXXXXXXXXXXXXXXXXXXXXXX"
 ```
 
 [Agent示例链接](https://www.coze.cn/s/85NOIg062vQ)
-![Agent 工作流](/app/assets/icons/coze.svg)
+![Agent 工作流](https://cdn.memtensor.com.cn/img/coze_workflow_compressed.png)

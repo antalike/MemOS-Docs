@@ -24,7 +24,7 @@ nav:
     - "(ri:money-dollar-circle-line) Financial Assistant": usecase/financial_assistant.md
     - "(ri:heart-line) Life Assistant": usecase/home_assistant.md
     - "(ri:edit-line) Writing Assistant": usecase/writting_assistant.md
-    - "(ri:heart-line) Agent Development Platform Plugin Tool": usecase/plugin_tool.md
+    - "(ri:apps-2-ai-line) Agent Development Platform Plugin Tool": usecase/plugin_tool.md
 
 
   - "(ri:open-source-line) Open Source":
