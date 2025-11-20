@@ -140,7 +140,8 @@ config = GraphDBConfigFactory(
                 "host": "localhost",
                 "port": 6333,
                 "collection_name": "neo4j_vec_db",
-                "vector_dimension": 768
+                "vector_dimension": 768,
+                "distance_metric": "cosine"
             },
         },
     },
