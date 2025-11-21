@@ -48,7 +48,7 @@ MemOS 的价值在于，它**抽象出记忆层**，让你只关注业务逻辑
 
 👉 进入 [快速开始](/overview/quick_start/overview)，通过一个最小示例展示如何给你的 Agent 加上“记忆能力”
 
-👉 或直接开始开发业务应用，我们提供了几个小案例供您参考 [让理财助手读懂客户行为背后的偏好](/usecase/financial_assistant)、[有记忆的写作助手更好用](/usecase/writting_assistant)、[构建拥有记忆的家庭生活助手](/usecase/home_assistant)
+👉 或直接开始开发业务应用，我们提供了几个小案例供您参考 [让理财助手读懂客户行为背后的偏好](/usecase/financial_assistant)、[有记忆的写作助手更好用](/usecase/writting_assistant)、[构建拥有记忆的家庭生活助手](/usecase/home_assistant)、[Agent开发平台插件工具](/usecase/plugin_tool)
 
 ## 4. 联系我们
 

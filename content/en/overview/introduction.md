@@ -48,7 +48,7 @@ In short: **MemOS transforms AI from a one-off conversation machine into a conti
 
 👉 Go to [Quick Start](/overview/quick_start/overview) for a minimal example showing how to equip your Agent with “memory capability.”
 
-👉 Or start directly developing business applications. We provide a few sample cases for reference: [Help a financial assistant understand client preferences behind behaviors](/usecase/financial_assistant), [A writing assistant is better with memory](/usecase/writting_assistant), [Build a home assistant with memory](/usecase/home_assistant)
+👉 Or start directly developing business applications. We provide a few sample cases for reference: [Help a financial assistant understand client preferences behind behaviors](/usecase/financial_assistant), [A writing assistant is better with memory](/usecase/writting_assistant), [Build a home assistant with memory](/usecase/home_assistant), [Agent Development Platform Plugin Tool](/usecase/plugin_tool)
 
 ## 4. Contact Us
 
