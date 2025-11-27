@@ -23,14 +23,26 @@ To configure MemOS MCP using JSON configuration:
         "@memtensor/memos-api-mcp"
       ],
       "env": {
-        "MEMOS_API_KEY": "<YOUR-API-KEY>",
-        "MEMOS_USER_ID": "<YOUR-USER-ID>",
-        "MEMOS_CHANNEL": "MEMOS"
+        "MEMOS_API_KEY": "mpg-xxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "MEMOS_USER_ID": "your-user-id",
+        "MEMOS_CHANNEL": "MODELSCOPE"
       }
     }
   }
 }
 ```
+
+How to obtain environment variables:
+- `MEMOS_API_KEY`: Register an account on the MemOS official website's [API Console](https://memos-dashboard.openmem.net/cn/apikeys/), then create a new api-key on the API keys page and copy it here.
+
+![Create a new api-key on the MemOS API Console](https://cdn.memtensor.com.cn/img/1763451978063_251scz_compressed.png)
+
+- `MEMOS_USER_ID`: A deterministic user-defined personal identifier.
+  - For the same user, this environment variable needs to remain consistent across different devices/clients;
+  - Please do not use random values, device IDs, or chat session IDs as user identifiers;
+  - Recommended: Use personal email address, full name, or employee ID as the user identifier.
+
+- `MEMOS_CHANNEL`: Fill in "MODELSCOPE" here.
 
 ## 3. Using MemOS MCP in different clients
 

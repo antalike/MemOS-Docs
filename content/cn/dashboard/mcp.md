@@ -23,14 +23,26 @@ MCP（Model Context Protocol，模型上下文协议）定义了应用程序和 
         "@memtensor/memos-api-mcp"
       ],
       "env": {
-        "MEMOS_API_KEY": "<YOUR-API-KEY>",
-        "MEMOS_USER_ID": "<YOUR-USER-ID>",
-        "MEMOS_CHANNEL": "MEMOS"
+        "MEMOS_API_KEY": "mpg-xxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "MEMOS_USER_ID": "your-user-id",
+        "MEMOS_CHANNEL": "MODELSCOPE"
       }
     }
   }
 }
 ```
+
+环境变量获取方式：
+- `MEMOS_API_KEY`: 在MemOS官网[API控制台](https://memos-dashboard.openmem.net/cn/apikeys/)上注册账号，然后在接口密钥页面新建api-key并复制粘贴在此处。
+
+![在MemOS API控制台上新建api-key](https://cdn.memtensor.com.cn/img/1763452232848_t268eh_compressed.png)
+
+- `MEMOS_USER_ID`: 确定性的用户自定义个人标识符。
+  - 对于同一用户，该环境变量需要在不同设备/客户端中保持一致；
+  - 请不要使用随机值、设备ID或聊天会话ID作为用户标识符；
+  - 推荐使用：个人email地址、姓名全称或员工ID作为用户标识符。
+
+- `MEMOS_CHANNEL`: 填写为"MODELSCOPE"即可。
 
 ## 3. 在不同的客户端中使用 MemOS MCP
 
