@@ -23,14 +23,26 @@ MCP（Model Context Protocol，模型上下文协议）定义了应用程序和 
         "@memtensor/memos-api-mcp"
       ],
       "env": {
-        "MEMOS_API_KEY": "<YOUR-API-KEY>",
-        "MEMOS_USER_ID": "<YOUR-USER-ID>",
-        "MEMOS_CHANNEL": "MEMOS"
+        "MEMOS_API_KEY": "mpg-xxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "MEMOS_USER_ID": "your-user-id",
+        "MEMOS_CHANNEL": "MODELSCOPE"
       }
     }
   }
 }
 ```
+
+环境变量获取方式：
+- `MEMOS_API_KEY`: 在MemOS官网[API控制台](https://memos-dashboard.openmem.net/cn/apikeys/)上注册账号，然后在接口密钥页面新建api-key并复制粘贴在此处。
+
+![在MemOS API控制台上新建api-key](https://cdn.memtensor.com.cn/img/1763452232848_t268eh_compressed.png)
+
+- `MEMOS_USER_ID`: 确定性的用户自定义个人标识符。
+  - 对于同一用户，该环境变量需要在不同设备/客户端中保持一致；
+  - 请不要使用随机值、设备ID或聊天会话ID作为用户标识符；
+  - 推荐使用：个人email地址、姓名全称或员工ID作为用户标识符。
+
+- `MEMOS_CHANNEL`: 填写为"MODELSCOPE"即可。
 
 ## 3. 在不同的客户端中使用 MemOS MCP
 
@@ -51,18 +63,6 @@ MCP（Model Context Protocol，模型上下文协议）定义了应用程序和 
 下面是在Claude Desktop中使用MemOS的示例，用户可借此判断是否已经成功在Claude Desktop中配置MemOS。
 
 ![在Claude Desktop中使用MemOS的示例](https://cdn.memtensor.com.cn/img/1763105412700_asgfq9_compressed.png)
-
-### 在[扣子空间](https://space.coze.cn/)中使用
-
-在扣子空间中使用MemOS，需点击左下角头像 -> "设置" -> "工具" -> "管理工具" -> "添加自定义工具"，然后将配置粘贴到弹出的配置编辑页面中，点击"确认"后在自定义工具列表里安装memos-api-mcp工具即可。
-
-![在扣子空间中使用MemOS-配置](https://cdn.memtensor.com.cn/img/1763105427788_5kj7pj_compressed.png)
-
-![在扣子空间中使用MemOS-验证](https://cdn.memtensor.com.cn/img/1763105452036_eicu5i_compressed.png)
-
-下面是在扣子空间中使用MemOS的示例，用户可借此判断是否在扣子空间中成功配置MemOS。
-
-![在扣子空间中使用MemOS-使用示例](https://cdn.memtensor.com.cn/img/1763105468804_63r0as_compressed.png)
 
 ### 在Cursor中使用
 在Cursor中使用MemOS，需进入"Cursor Settings" -> "Tools & MCP" -> "Add Custom MCP"(或"New MCP Server"), 并在弹出的mcp.json文件编辑页中粘贴配置，观察到memos-api-mcp处于启动状态，且能够在工具详情页面看到"add_message""search_memory""get_message"三项工具，即可在Cursor聊天面板中使用。
