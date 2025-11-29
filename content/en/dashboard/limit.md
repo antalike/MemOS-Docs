@@ -4,9 +4,9 @@ desc: MemOS provides each developer with free quota to quickly experience and va
 ---
 
 
-## 1. Free Quota
+## 1. Quota
 
-![image.png](https://cdn.memtensor.com.cn/img/1764313196213_l67bs9_compressed.png)
+![image.png](https://cdn.memtensor.com.cn/img/1764385130051_rrn42o_compressed.png)
 
 MemOS Cloud Services currently provides multiple pricing plans, from the free tier to the enterprise tier, to meet the needs of teams of different sizes. All plans are currently free for a limited time. Visit [MemOS Pricing page](https://memos.openmem.net/en/pricing) to apply for the plan that fits your needs.
 Take action now and use MemOS Cloud Services to support the growth of your projects.
@@ -38,7 +38,6 @@ To ensure stable and secure service, MemOS Cloud Service enforces the following 
 You can view the remaining quota for each API through the **API Console**, with filters for project, API key, and date to facilitate tracking and managing usage.
 
 <img width="3024" height="1890" alt="image" src="https://github.com/user-attachments/assets/49cddd25-6fbf-40d4-a750-58c3b2ac5547" />
-
 
 ## 4. Contact Us
 
