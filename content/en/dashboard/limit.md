@@ -23,8 +23,8 @@ To ensure stable and secure service, MemOS Cloud Service enforces the following 
 
 | API Name | Max Input per Request | Max Output per Request | 
 | --- | --- | --- |
-| addMessage | 4,000 tokens | - |
-| searchMemory | 4,000 tokens | 25 memories |
+| addMessage | 8k tokens | - |
+| searchMemory | 4k tokens | 25 memories |
 | getMessage | - | 50 messages |
 
 ::note
