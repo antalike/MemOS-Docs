@@ -10,7 +10,7 @@ MemOS 通过两个 Pydantic 工厂类，将 **模型逻辑** 与 **运行时配�
 | 工厂类 | 产出对象 | 常用后端 |
 |---------|----------|------------------|
 | `LLMFactory` | 聊天生成模型 | `ollama`, `openai`, `qwen`, `deepseek`, `huggingface` |
-| `EmbedderFactory` | 文本字吐到向量编码器 | `ollama`, `sentence_transformer`, `universal_api` |
+| `EmbedderFactory` | 文本到向量编码器 | `ollama`, `sentence_transformer`, `universal_api` |
 
 ## LLM 模块 <a id="llm-module"></a>
 
