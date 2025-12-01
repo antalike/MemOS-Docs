@@ -158,7 +158,7 @@
           "messages": {
             "type": "array",
             "title": "Messages",
-            "description": "表示内存内容的消息对象数组。",
+            "description": "表示内存内容的消息对象数组。数组中所有消息的总token数上限为8k。",
             "items": {
               "$ref": "#/components/schemas/MessageInput"
             }
@@ -254,7 +254,7 @@
             "type": "integer",
             "format": "int32",
             "title": "Message Limit Number",
-            "description": "限定返回的消息条数，用于控制消息列表的长度，不传时使用系统默认值 6。",
+            "description": "限定返回的消息条数，用于控制消息列表的长度，不传时使用系统默认值6，最大值为50",
             "default": 6
           }
         },
@@ -350,13 +350,13 @@
           "query": {
             "type": "string",
             "title": "Query",
-            "description": "要在记忆中查询的文本内容"
+            "description": "要在记忆中查询的文本内容，单次查询文本的token上限为4k。"
           },
           "memory_limit_number": {
             "type": "integer",
             "format": "int32",
             "title": "Memory Limit Number",
-            "description": "限定返回的事实记忆条数，用于控制事实记忆片段的长度，不传时使用系统默认值 6。",
+            "description": "限定返回的事实记忆条数，用于控制事实记忆片段的长度，不传时使用系统默认值6，最大值为25。",
             "default": 6
           },
           "include_preference": {
@@ -369,7 +369,7 @@
             "type": "integer",
             "format": "int32",
             "title": "Preference Limit Number",
-            "description": "限定返回的偏好记忆条数，用于控制偏好记忆片段的长度，不传时使用系统默认值 6。",
+            "description": "限定返回的偏好记忆条数，用于控制偏好记忆片段的长度，不传时使用系统默认值6，最大值为25。",
             "default": 6
           }
         },
