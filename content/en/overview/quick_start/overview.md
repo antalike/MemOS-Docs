@@ -184,6 +184,9 @@ We provide three concrete business reference cases for you to review:
   - With MemOS, user writing preferences, frequently used information, and contextual instructions can all be remembered.  
   - Next time, when writing a summary or email, no need to repeat reminders—achieve coherent and personalized writing experience.  
 
+- [Agent Development Platform Plugin Tool](/usecase/plugin_tool)
+  - The plugin tool directly accesses the MemOS cloud service interface, quickly adding long-term memory functionality to your Agent for more considerate and continuous conversations.
+
 ## 4. Contact Us
 
 <img src="https://cdn.memtensor.com.cn/img/1758685658684_nbhka4_compressed.png" alt="image" style="width:70%;">

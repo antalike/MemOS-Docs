@@ -187,6 +187,9 @@ MemOS 的记忆机制可以理解为一条完整的「工作流」：
   - 通过 MemOS，用户的写作偏好、常用信息、上下文指令都能被记住
   - 下次写总结或邮件时无需反复强调，实现连贯又个性化的创作体验。
 
+- [Agent开发平台插件工具](/usecase/plugin_tool)
+  - 上架的插件工具直接访问MemOS云服务接口，快速为您的Agent添加长期记忆功能，让对话更贴心、更连续。
+
 ## 4. 联系我们
 
 <img src="https://cdn.memtensor.com.cn/img/1758685658684_nbhka4_compressed.png" alt="image" style="width:70%;">

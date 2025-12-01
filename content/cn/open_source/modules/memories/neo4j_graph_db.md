@@ -48,7 +48,7 @@ config = GraphDBConfigFactory(
         "user": "your_neo4j_user_name",
         "password": "your_password",
         "db_name": "memory_user1",
-        "auto_create": True,
+        "auto_create": true,
         "embedding_dimension": 768
     }
 )
@@ -98,7 +98,7 @@ config = GraphDBConfigFactory(
         "password": "your_password",
         "db_name": "shared-graph",
         "user_name": "alice",
-        "use_multi_db": False,
+        "use_multi_db": false,
         "embedding_dimension": 768,
     },
 )
@@ -132,15 +132,17 @@ config = GraphDBConfigFactory(
         "password": "12345678",
         "db_name": "paper",
         "user_name": "bob",
-        "auto_create": False,
+        "auto_create": false,
         "embedding_dimension": 768,
+        "use_multi_db": false,
         "vec_config": {
             "backend": "qdrant",
             "config": {
                 "host": "localhost",
                 "port": 6333,
                 "collection_name": "neo4j_vec_db",
-                "vector_dimension": 768
+                "vector_dimension": 768,
+                "distance_metric": "cosine"
             },
         },
     },
