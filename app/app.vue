@@ -163,12 +163,6 @@ provide('navigation', filteredNavigation)
       </NuxtLayout>
     </template>
 
-    <!-- Document footer -->
-    <AppFooter
-      v-if="!isApiPage()"
-      class="mt-40"
-    />
-
     <ClientOnly>
       <LazyUContentSearch
         :files="processedFiles"
