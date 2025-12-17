@@ -58,7 +58,7 @@ export default defineContentConfig({
     }),
     dashboardApi: defineCollection({
       type: 'data',
-      source: '**/dashboard/api/api.json',
+      source: '**/api_docs/api.json',
       schema: z.object({
         openapi: z.string(),
         info: z.record(z.string(), z.any()).optional(),

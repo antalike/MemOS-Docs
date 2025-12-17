@@ -4,7 +4,23 @@ export default {
     research: '研究论文',
     changelog: '更新日志',
     docs: '文档',
-    openmem: '组织架构'
+    openmem: '组织架构',
+    menus: {
+      welcome: '欢迎',
+      cloud: 'MemOS Cloud',
+      openSource: '开源项目',
+      mcpAgent: 'MCP与Agent框架支持',
+      apiDocs: 'API接口文档',
+      samples: '示例项目',
+      changelog: '更新日志'
+    },
+    community: {
+      button: '加入社群',
+      title: '欢迎来到开发者社区',
+      wechat: '微信'
+    },
+    backToHome: '回到首页',
+    searchPlaceholder: '搜索'
   },
   community: {
     title: '社区',
@@ -12,7 +28,49 @@ export default {
     edit: '编辑文档'
   },
   footer: {
-    copyright: '© 2025 记忆张量（上海）科技有限公司 版权所有'
+    copyright: '© 2025 记忆张量（上海）科技有限公司 版权所有',
+    product: '产品',
+    memosCloud: 'MemOS Cloud',
+    memoryAssistant: '个人记忆助手',
+    mcpService: 'MCP服务',
+    githubProject: 'Github项目',
+    apiDocs: '开发者文档',
+    blog: '博客',
+    pricing: '定价',
+    aboutUs: '关于我们',
+    memtensor: '记忆张量',
+    openmem: 'OpenMem社区',
+    comminity: '加入社群',
+    joinUs: '岗位招聘',
+    icpFilingNumber: '沪ICP备2025129722号-3',
+    filingNumber: '沪公网安备 33010002000070号'
+  },
+  homepage: {
+    title: '别让你的 AI 再忘来忘去，用 MemOS',
+    description: '在这里，你将找到从上手入门到生产部署的一切指南，帮助你在最短时间内把 MemOS 集成到你的 AI 应用中',
+    buttonText: '现在就去',
+    items: [
+      {
+        title: 'MemOS Cloud',
+        description: '介绍如何在云端快速接入 MemOS，包括创建项目、获取 API Key等使用云服务的最佳方式——几分钟即可上线'
+      },
+      {
+        title: '开源项目',
+        description: '涵盖 MemOS 的开源 SDK、核心组件与示例项目。帮助你理解 MemOS 的运行机制，并在本地或自有环境中自由定制与扩展'
+      },
+      {
+        title: 'MCP与Agent框架支持',
+        description: '介绍如何通过 MCP调用 MemOS 记忆能力，以及如何将MemOS无缝接入coze、dify等主流 Agent框架中，作为统一的记忆后端'
+      },
+      {
+        title: 'API接口文档',
+        description: '涵盖 MemOS 的开源 SDK、核心组件与示例项目。帮助你理解 MemOS 的运行机制，并在本地或自有环境中自由定制与扩展'
+      },
+      {
+        title: '示例项目',
+        description: 'MemOS 提供面向真实业务的实战教程，通过清晰示例和最佳范式，帮助你快速构建拥有长期记忆、可直接上线的 AI 体验'
+      }
+    ]
   },
   changelog: {
     title: '更新日志',

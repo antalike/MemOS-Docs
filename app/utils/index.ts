@@ -23,3 +23,25 @@ export function getHomePath(path: string, locale: string) {
 export function copyText(text: string) {
   navigator.clipboard.writeText(text)
 }
+
+// 检测移动端的函数
+export function checkIsMobile() {
+  // SSR环境检查
+  if (typeof window === 'undefined' || typeof navigator === 'undefined') {
+    return false
+  }
+
+  try {
+    const mobileMediaQuery = window.matchMedia('(max-width: 768px)')
+
+    const mobileUserAgent = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+
+    const isTouchDevice = 'ontouchstart' in window || (navigator.maxTouchPoints && navigator.maxTouchPoints > 0)
+
+    return mobileMediaQuery.matches || (mobileUserAgent && isTouchDevice)
+  } catch (error) {
+    // 兜底返回false
+    console.warn('Error detecting mobile device:', error)
+    return false
+  }
+}

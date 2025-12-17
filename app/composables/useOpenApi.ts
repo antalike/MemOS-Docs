@@ -96,8 +96,8 @@ const useOpenApi = (collectionName: keyof Collections = 'openapi', parentPath: s
 
     if (collectionName === 'dashboardApi') {
       const targetPath = route.path.startsWith('/cn')
-        ? 'cn/dashboard/api/api'
-        : 'en/dashboard/api/api'
+        ? 'cn/api_docs/api'
+        : 'en/api_docs/api'
 
       doc = data.value?.find(item => item.stem === targetPath)
     } else {
