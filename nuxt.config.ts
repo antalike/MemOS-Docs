@@ -126,14 +126,14 @@ const config: NuxtConfig = {
     }
   },
 
-  routeRules: {
-    '/': {
-      redirect: '/open_source/home/overview'
-    },
-    '/cn': {
-      redirect: '/cn/open_source/home/overview'
-    }
-  },
+  // routeRules: {
+  //   '/': {
+  //     redirect: '/open_source/home/overview'
+  //   },
+  //   '/cn': {
+  //     redirect: '/cn/open_source/home/overview'
+  //   }
+  // },
 
   eslint: {
     config: {

@@ -1,10 +1,46 @@
 <script setup lang="ts">
+import type { ContentNavigationItem } from '@nuxt/content'
 import { useI18n } from 'vue-i18n'
 
 const route = useRoute()
 
-const { locale } = useI18n()
+const { locale, defaultLocale } = useI18n()
+const switchLocalePath = useSwitchLocalePath()
+const normalizedPath = computed(() => switchLocalePath(defaultLocale))
 const contentNavigation = useContentNavigation(locale)
+
+const filteredNavigation = computed(() => {
+  if (!contentNavigation.value) return []
+
+  const nav = contentNavigation.value
+  const path = route.path
+
+  if (path.includes('/dashboard/api')) {
+    return []
+  }
+
+  const getSegment = (p: string) => {
+    const normalized = p.replace(/^\/(cn|en)(\/|$)/, '/')
+    const parts = normalized.split('/').filter(Boolean)
+    return parts[0]
+  }
+
+  const hasDescendantWithSegment = (item: ContentNavigationItem, segment: string): boolean => {
+    if (item.path && getSegment(item.path) === segment) return true
+    if (item.children) {
+      return item.children.some((child: ContentNavigationItem) => hasDescendantWithSegment(child, segment))
+    }
+    return false
+  }
+
+  const currentSegment = getSegment(path)
+  if (!currentSegment) return []
+
+  const activeNode = nav.find(item => hasDescendantWithSegment(item, currentSegment))
+
+  return activeNode ? activeNode.children || [] : []
+})
+
 const { data: files } = useLazyAsyncData(`search`, () => queryCollectionSearchSections('docs'), {
   server: false,
   watch: [locale]
@@ -47,7 +83,10 @@ useHead({
 })
 
 function showContentNavigation() {
-  return route.path !== '/' && !isApiPage() && !route.path.includes('changelog')
+  return normalizedPath.value !== '/'
+    && !isApiPage()
+    && !normalizedPath.value.includes('changelog')
+    && !normalizedPath.value.includes('/dashboard/api')
 }
 
 function isApiPage() {
@@ -55,11 +94,9 @@ function isApiPage() {
     || route.path.startsWith('/cn/docs/api/')
     || route.path.startsWith('/api-reference')
     || route.path.startsWith('/cn/api-reference')
-    || route.path.startsWith('/dashboard/api')
-    || route.path.startsWith('/cn/dashboard/api')
 }
 
-provide('navigation', contentNavigation)
+provide('navigation', filteredNavigation)
 </script>
 
 <template>
@@ -79,7 +116,7 @@ provide('navigation', contentNavigation)
                 <!-- Use keep-alive to maintain menu state -->
                 <keep-alive>
                   <UContentNavigation
-                    :navigation="contentNavigation"
+                    :navigation="filteredNavigation"
                     highlight
                     :ui="{
                       linkTrailingBadge: 'font-semibold uppercase',
@@ -87,7 +124,11 @@ provide('navigation', contentNavigation)
                     }"
                   >
                     <template #link-title="{ link }">
-                      <UTooltip :text="link.title" :delay-duration="100" class="w-full min-w-0">
+                      <UTooltip
+                        :text="link.title"
+                        :delay-duration="100"
+                        class="w-full min-w-0"
+                      >
                         <span class="inline-flex items-center gap-2 w-full min-w-0 max-w-full">
                           <UIcon
                             v-if="link.icon && typeof link.icon === 'string'"
@@ -116,23 +157,17 @@ provide('navigation', contentNavigation)
     </template>
 
     <!-- Changelog page -->
-    <template v-if="!showContentNavigation() && route.path !== '/'">
+    <template v-if="!showContentNavigation()">
       <NuxtLayout>
         <NuxtPage />
       </NuxtLayout>
     </template>
 
-    <!-- Document home page -->
-    <template v-if="route.path === '/'">
-      <ClientOnly>
-        <NuxtLayout>
-          <NuxtPage />
-        </NuxtLayout>
-      </ClientOnly>
-    </template>
-
     <!-- Document footer -->
-    <AppFooter v-if="!isApiPage" />
+    <AppFooter
+      v-if="!isApiPage()"
+      class="mt-40"
+    />
 
     <ClientOnly>
       <LazyUContentSearch

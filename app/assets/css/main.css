@@ -6,10 +6,16 @@
 @theme static {
   --container-8xl: 90rem;
   --font-sans: 'Public Sans', sans-serif;
+  --color-primary: #1D4ED8;
+  --color-primary-light: #01C6FA;
 }
 
 :root {
   --ui-container: var(--container-8xl);
+  --ui-max-container: 1240px;
+  --ui-topbar-height: 66px;
+  --ui-header-height: 136px;
+  --ui-bg: #02020b;
 }
 
 header>div {

@@ -2,31 +2,39 @@ nav:
   # You can include icons using the syntax `(ri:icon-name)`.
   # The frontend will render these as actual icons.
   # You can find available icons at https://icones.js.org/
-  - "(ri:book-line) 概览":
-    - "(ri:home-line) MemOS简介": overview/introduction.md
-    - "(ri:rocket-line) 快速开始":
-      - "(ri:eye-line) 概览": overview/quick_start/overview.md
-      - "(ri:add-line) 记忆生产": overview/quick_start/mem_production.md
-      - "(ri:calendar-line) 记忆调度": overview/quick_start/mem_schedule.md
-      - "(ri:search-line) 记忆召回": overview/quick_start/mem_recall.md
-      - "(ri:refresh-line) 记忆生命周期管理": overview/quick_start/mem_lifecycle.md
-    - "(ri:question-line) FAQs": overview/faq.md
-    - "(ri:cpu-line) MemOS算法原理概述": overview/algorithm.md
+  - "(ri:cloud-line) MemOS Cloud":
+    - "(ri:book-line) 开始使用":
+      - "(ri:eye-line) 概览": memos_cloud/overview.md
+      - "(ri:home-line) MemOS 介绍":
+        - "(ri:add-line) 记忆生产": memos_cloud/introduction/mem_production.md
+        - "(ri:calendar-line) 记忆调度": memos_cloud/introduction/mem_schedule.md
+        - "(ri:search-line) 记忆召回": memos_cloud/introduction/mem_recall.md
+        - "(ri:refresh-line) 记忆生命周期管理": memos_cloud/introduction/mem_lifecycle.md
+        - "(ri:cpu-line) 算法原理概述": memos_cloud/introduction/algorithm.md
+      - "(ri:dashboard-line) 云服务与开源方案": memos_cloud/cloud_and_opensource.md
+      - "(ri:rocket-line) 快速开始": memos_cloud/quick_start.md
+      - "(ri:shield-line) 配额和限制": memos_cloud/limit.md
 
-  - "(ri:dashboard-line) 云平台":
-    - "(ri:eye-line) 云平台简介": dashboard/overview.md
-    - "(ri:play-line) 快速开始": dashboard/quick_start.md
-    - "(ri:shield-line) 配额和限制": dashboard/limit.md
-    - "(ri:file-code-line) API 文档": dashboard/api/overview.md
-    - "(ri:wrench-line) MCP 服务配置": dashboard/mcp.md
+    - "(ri:question-line) 支持与问题排查":
+      - "(ri:question-line) FAQs 常见问题解答": memos_cloud/faq.md
 
-  - "(ri:lightbulb-line) 最佳实践":
-    - "(ri:money-dollar-circle-line) 让理财助手读懂客户行为背后的偏好": usecase/financial_assistant.md
-    - "(ri:edit-line) 有记忆的写作助手更好用": usecase/writting_assistant.md
-    - "(ri:heart-line) 构建拥有记忆的家庭生活助手": usecase/home_assistant.md
-    - "(ri:apps-2-ai-line) Agent开发平台插件工具": usecase/plugin_tool.md
+    - "(ri:edit-box-line) 记忆操作":
+      - "(ri:message-3-line) 添加消息": memos_cloud/mem_operations/add_message.md
+      - "(ri:search-2-line) 检索消息": memos_cloud/mem_operations/retrieve_message.md
+      - "(ri:delete-bin-line) 删除记忆": memos_cloud/mem_operations/delete_memory.md
 
-  - "(ri:open-source-line) 开源项目":
+    - "(ri:function-line) 功能介绍":
+      - "(ri:flag-line) 基础功能":
+        - "(ri:filter-3-line) 记忆过滤器": memos_cloud/features/basic/filters.md
+        - "(ri:timer-flash-line) 异步模式": memos_cloud/features/basic/async_mode.md
+        - "(ri:image-add-line) 多模态消息": memos_cloud/features/basic/multimodal.md
+        - "(ri:price-tag-3-line) 自定义标签": memos_cloud/features/basic/custom_tags.md
+      - "(ri:vip-diamond-line) 高级功能":
+        - "(ri:book-read-line) 知识库": memos_cloud/features/advanced/knowledge_base.md
+        - "(ri:tools-line) 工具调用": memos_cloud/features/advanced/tool_calling.md
+        - "(ri:chat-history-line) 持续对话": memos_cloud/features/advanced/continuous_dialogue.md
+
+  - "(ri:github-line) 开源项目":
     - "(ri:rocket-line) 快速入门":
       - "(ri:install-line) 安装指南": open_source/getting_started/installation.md
       - "(ri:play-line) 快速启动": open_source/getting_started/quick_start.md
@@ -36,7 +44,7 @@ nav:
       - "(ri:file-code-line) REST API 服务": open_source/getting_started/rest_api_server.md
       - "(ri:code-line) 示例": open_source/getting_started/examples.md
 
-    - "(ri:cpu-line) MOS":
+    - "(ri:cpu-line) MemOS":
       - "(ri:eye-line) 概览": open_source/modules/mos/overview.md
       - "(ri:book-open-line) 简化版本": open_source/modules/mos/memos_neo.md
       - "(ri:tools-line) MCP服务": open_source/modules/mos/memos_mcp.md
@@ -83,3 +91,50 @@ nav:
       - "(ri:flask-line) 测试编写": open_source/contribution/writing_tests.md
 
     - "(ri:file-code-line) API 参考文档": api-reference/configure-memos
+
+  - "(ri:puzzle-line) MCP与Agent框架支持":
+    - "(ri:tools-line) MCP 服务":
+      - "(ri:book-open-line) 使用指南": mcp_agent/mcp/guide.md
+
+    - "(ri:robot-line) Agent开发":
+      - "(ri:book-open-line) 使用指南": mcp_agent/agent/guide.md
+
+  - "(ri:file-code-line) API文档":
+    - "(ri:rocket-line) 开始使用":
+      - "(ri:eye-line) 概述": api_docs/start/overview.md
+      - "(ri:settings-3-line) 项目配置": api_docs/start/configuration.md
+
+    - "(ri:edit-box-line) 核心操作":
+      - "(ri:message-3-line) 添加消息": api_docs/core/add_message.md
+      - "(ri:search-2-line) 检索记忆": api_docs/core/search_memory.md
+      - "(ri:delete-bin-line) 删除记忆": api_docs/core/delete_memory.md
+
+    - "(ri:chat-1-line) 消息":
+      - "(ri:feedback-line) 添加反馈": api_docs/message/add_feedback.md
+      - "(ri:file-list-line) 获取消息": api_docs/message/get_message.md
+      - "(ri:task-line) 获取任务状态": api_docs/message/get_task_status.md
+
+    - "(ri:chat-smile-2-line) 对话":
+      - "(ri:chat-4-line) 对话": api_docs/chat/chat.md
+
+    - "(ri:book-read-line) 知识库":
+      - "(ri:add-box-line) 创建知识库": api_docs/knowledge/create_kb.md
+      - "(ri:delete-back-2-line) 移除知识库": api_docs/knowledge/remove_kb.md
+      - "(ri:file-add-line) 添加知识库文档": api_docs/knowledge/add_kb_doc.md
+      - "(ri:file-search-line) 获取知识库文档": api_docs/knowledge/get_kb_doc.md
+      - "(ri:file-reduce-line) 删除知识库文档": api_docs/knowledge/delete_kb_doc.md
+
+    - "(ri:customer-service-line) 帮助与支持":
+      - "(ri:error-warning-line) 错误码": api_docs/help/error_codes.md
+
+  - "(ri:projector-line) 示例项目":
+    - "(ri:lightbulb-line) 最佳实践":
+      - "(ri:money-dollar-circle-line) 理财助手": usecase/financial_assistant.md
+      - "(ri:edit-line) 写作助手": usecase/writting_assistant.md
+      - "(ri:heart-line) 家庭生活助手": usecase/home_assistant.md
+      - "(ri:customer-service-2-line) 企微客服": usecase/wecom_customer_service.md
+
+    - "(ri:layout-grid-line) 框架与平台":
+      - "(ri:chrome-line) 浏览器插件": usecase/frameworks/browser_extension.md
+      - "(ri:brain-line) Claude MCP": usecase/frameworks/claude_mcp.md
+      - "(ri:puzzle-2-line) Coze 插件工具": usecase/frameworks/coze_plugin.md
