@@ -2,41 +2,25 @@
 import type { ContentNavigationItem } from '@nuxt/content'
 import { getHomePath } from '~/utils'
 
-const route = useRoute()
 const { t, locale } = useI18n()
 const { header } = useAppConfig()
+const localePath = useLocalePath()
 const homePath = computed(() => {
   return getHomePath('/', locale.value)
 })
 // docs navigation for mobile
 const navigation = inject<ContentNavigationItem[]>('navigation', [])
 const localizedMenus = computed(() => {
-  return [
-    {
-      to: getHomePath('/', locale.value),
-      label: t('header.home')
-    },
-    {
-      to: getLangPath('/overview/introduction', locale.value),
-      label: t('header.docs'),
-      active: !route.path.includes('/changelog')
-    },
-    {
-      label: t('header.research'),
-      target: '_blank',
-      to: 'https://memos.openmem.net/paper_memos_v2'
-    },
-    {
-      label: t('header.openmem'),
-      target: '_blank',
-      to: getHomePath('/openmem', locale.value)
-    },
-    {
-      label: t('header.changelog'),
-      to: getLangPath('/changelog', locale.value),
-      active: route.path.includes('/changelog')
-    }
+  const menus = [
+    { label: t('header.menus.welcome'), to: '/' },
+    { label: t('header.menus.cloud'), to: '/memos_cloud/overview' },
+    { label: t('header.menus.openSource'), to: '/open_source/getting_started/installation' },
+    { label: t('header.menus.mcpAgent'), to: '/mcp_agent/mcp/guide' },
+    { label: t('header.menus.apiDocs'), to: '/api_docs/start/overview' },
+    { label: t('header.menus.samples'), to: '/usecase/financial_assistant' },
+    { label: t('header.menus.changelog'), to: '/changelog' }
   ]
+  return menus.map(m => ({ ...m, to: localePath(m.to) }))
 })
 </script>
 
@@ -45,7 +29,8 @@ const localizedMenus = computed(() => {
     :to="homePath"
     :ui="{
       root: 'border-0 h-(--ui-topbar-height)',
-      container: 'lg:px-10'
+      container: 'lg:px-10',
+      header: 'h-(--ui-topbar-height)'
     }"
   >
     <template #left>
@@ -101,5 +86,8 @@ const localizedMenus = computed(() => {
       />
     </template>
   </UHeader>
-  <AppMenus class="sticky z-12 top-(--ui-topbar-height) pt-3 bg-default/75 backdrop-blur" />
+  <AppMenus
+    class="hidden sm:block sticky z-12 top-(--ui-topbar-height) pt-3 bg-default/75 backdrop-blur"
+    :items="localizedMenus"
+  />
 </template>

@@ -2,8 +2,10 @@
 const props = withDefaults(defineProps<{
   apiData: any
   showRequestCode?: boolean
+  showSurround?: boolean
 }>(), {
-  showRequestCode: false
+  showRequestCode: false,
+  showSurround: true
 })
 
 const collectionName = inject<CollectionName>('collectionName')
@@ -118,7 +120,7 @@ onUnmounted(() => {
       </div>
     </div>
     <slot name="markdown" />
-    <ApiSurround />
+    <ApiSurround v-if="showSurround" />
   </div>
   <div
     ref="sidebarRef"
