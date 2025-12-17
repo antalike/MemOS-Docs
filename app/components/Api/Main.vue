@@ -1,18 +1,19 @@
 <script setup lang="ts">
-withDefaults(defineProps<{
-  data: FlatPathProps | undefined
-  showRequestCode?: boolean
-}>(), {
-  showRequestCode: false
+defineOptions({
+  inheritAttrs: false
 })
+
+defineProps<{
+  data: FlatPathProps | undefined
+}>()
 </script>
 
 <template>
-  <div class="relative w-full flex gap-x-8 min-h-screen pt-10 px-4 lg:pt-10 lg:pr-10">
+  <div class="relative w-full flex gap-x-8 min-h-screen pt-10 lg:pt-10">
     <ApiContent
       v-if="data"
+      v-bind="$attrs"
       :api-data="data"
-      :show-request-code="showRequestCode"
     >
       <template #markdown>
         <slot name="markdown" />

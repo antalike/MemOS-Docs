@@ -1,40 +1,39 @@
 <script setup lang="ts">
-const { t, defaultLocale } = useI18n()
+const props = defineProps<{
+  items: Array<{
+    label: string
+    to: string
+  }>
+}>()
+
+const { defaultLocale } = useI18n()
+const localeRoute = useLocaleRoute()
 const switchLocalePath = useSwitchLocalePath()
-const localePath = useLocalePath()
 const normalizedPath = computed(() => switchLocalePath(defaultLocale))
 
 const active = ref<string>('0')
 
-const items = computed(() => {
-  const menus = [
-    { label: t('header.menus.welcome'), to: '/' },
-    { label: t('header.menus.cloud'), to: '/memos_cloud/overview' },
-    { label: t('header.menus.openSource'), to: '/open_source/getting_started/installation' },
-    { label: t('header.menus.mcpAgent'), to: '/mcp_agent/mcp/guide' },
-    { label: t('header.menus.apiDocs'), to: '/api_docs/start/overview' },
-    { label: t('header.menus.samples'), to: '/usecase/financial_assistant' },
-    { label: t('header.menus.changelog'), to: '/changelog' }
-  ]
-  return menus.map(m => ({ ...m, toLocale: localePath(m.to) }))
-})
-
-watch([items, normalizedPath], ([list, path]) => {
+watch([() => props.items, normalizedPath], ([list, path]) => {
   const idx = list.findIndex((i) => {
+    const itemRoute = localeRoute(i.to, defaultLocale)
+    const currentRoute = localeRoute(path, defaultLocale)
+
+    if (!itemRoute || !currentRoute) return false
+
     // Exact match for root path
-    if (i.to === '/' && path === '/') return true
-    if (i.to === '/') return false
+    if (itemRoute.path === '/' && currentRoute.path === '/') return true
+    if (itemRoute.path === '/') return false
 
     // Check if current path starts with the menu item's base path
     // e.g. /memos_cloud/overview matches /memos_cloud/features/...
-    const baseSegment = i.to.split('/')[1]
-    return path.startsWith(`/${baseSegment}`)
+    const baseSegment = itemRoute.path.split('/')[1]
+    return currentRoute.path.startsWith(`/${baseSegment}`)
   })
   if (idx !== -1) active.value = String(idx)
 }, { immediate: true })
 
 function onChange(index: string | number) {
-  const to = items.value?.[Number(index)]?.toLocale
+  const to = props.items?.[Number(index)]?.to
   if (to) {
     navigateTo(to)
   }

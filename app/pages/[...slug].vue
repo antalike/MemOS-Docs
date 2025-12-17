@@ -4,7 +4,8 @@ import type { FlatPathProps } from '~/utils/openapi'
 
 const route = useRoute()
 const { toc } = useAppConfig()
-const navigation = inject<ContentNavigationItem[]>('navigation', [])
+const navigation = inject<Ref<ContentNavigationItem[]>>('navigation')
+
 const { t, locale } = useI18n()
 const config = useRuntimeConfig()
 
@@ -20,8 +21,8 @@ const { data: page } = await useAsyncData(normalizedPath, () => {
 // OpenAPI integration
 const apiData = shallowRef<FlatPathProps | undefined>(undefined)
 if (page.value?.meta?.['openapi']) {
-  console.log(page.value?.meta?.['openapi'])
   const { getOpenApi, paths } = useOpenApi('dashboardApi', 'dashboard/api')
+  provide('collectionName', 'dashboardApi')
   await getOpenApi()
 
   const openapi = page.value.meta['openapi'] as string
@@ -30,7 +31,6 @@ if (page.value?.meta?.['openapi']) {
   if (method && path) {
     apiData.value = paths.value.find(p => p.path === path && p.method.toLowerCase() === method.toLowerCase()) as unknown as FlatPathProps
   }
-  console.log('apiData: ', apiData.value)
 }
 
 // Watch locale changes and refresh content
@@ -47,7 +47,9 @@ if (!page.value) {
   throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
 }
 
-const surround = await useSurroundWithDesc(normalizedPath, navigation || [], locale.value, config.public.env)
+const { data: surround } = await useAsyncData(`surround-${normalizedPath}`, () => useSurroundWithDesc(normalizedPath, navigation?.value || [], locale.value, config.public.env), {
+  watch: [locale, navigation]
+})
 
 const description = computed(() => {
   const frontmatterDesc = Object.keys(page.value || {}).includes('desc') ? page.value?.desc : undefined
@@ -88,78 +90,100 @@ useHead({
 </script>
 
 <template>
-  <div>
-    <ApiMain
-      v-if="apiData"
-      :data="apiData"
-      :show-request-code="true"
-    />
-
-    <UContainer v-else>
-      <UPage v-if="page">
-        <UPageHeader
-          :title="page.title"
-          :links="page.links"
+  <UContainer>
+    <template v-if="apiData">
+      <ApiMain
+        :data="apiData"
+        :show-request-code="true"
+        :show-surround="false"
+      >
+        <template
+          v-if="page"
+          #markdown
         >
-          <template #description>
-            <div class="flex items-center gap-4 mb-4" v-if="page.avatar">
-              <img
-                :src="page.avatar.src"
-                :alt="page.avatar.alt"
-                class="w-12 h-12 rounded-full object-cover"
-              />
-            </div>
-            <img
-              v-if="page.banner"
-              :src="page.banner"
-              alt="MemOS Banner"
-              class="w-full mt-4 rounded-lg object-cover"
-            />
-            <div v-if="description" v-html="description"></div>
-          </template>
-        </UPageHeader>
-
-        <!-- Document content -->
-        <UPageBody>
           <ContentRenderer
-            v-if="page"
+            class="wrap-break-word"
             :value="page"
           />
-
-          <USeparator v-if="surround?.length" />
-
-          <UContentSurround :surround="surround" />
-        </UPageBody>
-
-        <template
-          #right
-        >
-          <UContentToc
-            :title="toc?.title"
-            :links="page.body?.toc?.links"
-          >
-            <template
-              v-if="toc?.bottom"
-              #bottom
-            >
-              <div
-                class="hidden lg:block space-y-6"
-                :class="{ '!mt-6': page.body?.toc?.links?.length }"
-              >
-                <USeparator
-                  v-if="page.body?.toc?.links?.length"
-                  type="dashed"
-                />
-
-                <UPageLinks
-                  :title="t(`${toc.bottom.title}`)"
-                  :links="links"
-                />
-              </div>
-            </template>
-          </UContentToc>
         </template>
-      </UPage>
-    </UContainer>
-  </div>
+      </ApiMain>
+      <USeparator
+        v-if="surround?.length"
+        :ui="{
+          root: 'mt-8! mb-12!'
+        }"
+      />
+
+      <UContentSurround :surround="surround" />
+    </template>
+    <UPage v-else-if="page">
+      <UPageHeader
+        :title="page.title"
+        :links="page.links"
+      >
+        <template #description>
+          <div
+            v-if="page.avatar"
+            class="flex items-center gap-4 mb-4"
+          >
+            <img
+              :src="page.avatar.src"
+              :alt="page.avatar.alt"
+              class="w-12 h-12 rounded-full object-cover"
+            >
+          </div>
+          <img
+            v-if="page.banner"
+            :src="page.banner"
+            alt="MemOS Banner"
+            class="w-full mt-4 rounded-lg object-cover"
+          >
+          <div v-if="description" v-html="description" />
+        </template>
+      </UPageHeader>
+
+      <!-- Document content -->
+      <UPageBody>
+        <ContentRenderer
+          v-if="page"
+          :value="page"
+        />
+        <USeparator v-if="surround?.length" />
+
+        <UContentSurround :surround="surround" />
+      </UPageBody>
+
+      <template
+        #right
+      >
+        <UContentToc
+          :title="toc?.title"
+          :links="page.body?.toc?.links"
+          :ui="{
+            root: 'top-(--ui-topbar-height) lg:top-(--ui-header-height)'
+          }"
+        >
+          <template
+            v-if="toc?.bottom"
+            #bottom
+          >
+            <div
+              class="hidden lg:block space-y-6"
+              :class="{ '!mt-6': page.body?.toc?.links?.length }"
+            >
+              <USeparator
+                v-if="page.body?.toc?.links?.length"
+                type="dashed"
+              />
+
+              <UPageLinks
+                :title="t(`${toc.bottom.title}`)"
+                :links="links"
+              />
+            </div>
+          </template>
+        </UContentToc>
+      </template>
+    </UPage>
+  </UContainer>
 </template>
