@@ -20,7 +20,7 @@ nav:
 
     - "(ri:edit-box-line) 记忆操作":
       - "(ri:message-3-line) 添加消息": memos_cloud/mem_operations/add_message.md
-      - "(ri:search-2-line) 检索消息": memos_cloud/mem_operations/retrieve_message.md
+      - "(ri:search-2-line) 检索记忆": memos_cloud/mem_operations/search_memory.md
       - "(ri:delete-bin-line) 删除记忆": memos_cloud/mem_operations/delete_memory.md
 
     - "(ri:function-line) 功能介绍":
