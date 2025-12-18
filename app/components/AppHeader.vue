@@ -22,6 +22,15 @@ const localizedMenus = computed(() => {
   ]
   return menus.map(m => ({ ...m, to: localePath(m.to) }))
 })
+
+function gotoHome() {
+  navigateTo(homePath.value, {
+    external: true,
+    open: {
+      target: '_blank'
+    }
+  })
+}
 </script>
 
 <template>
@@ -53,7 +62,10 @@ const localizedMenus = computed(() => {
     <template #right>
       <LanguageSwitcher />
       <JoinCommunityButton />
-      <button class="flex items-center gap-1.5 h-7 px-2.5 bg-linear-270 from-15% from-primary to-118% to-primary-light rounded-md cursor-pointer">
+      <button
+        class="flex items-center gap-1.5 h-7 px-2.5 bg-linear-270 from-15% from-primary to-118% to-primary-light rounded-md cursor-pointer"
+        @click="gotoHome"
+      >
         <UIcon
           name="ri:home-4-line"
           class="size-4"

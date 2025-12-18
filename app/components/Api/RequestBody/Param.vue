@@ -41,6 +41,19 @@ function isRequired(list: string[] | undefined | null, prop: string) {
         >
           {{ schema.description }}
         </p>
+        <div
+          v-if="schema.enum && schema.enum.length"
+          class="flex flex-wrap gap-1.5 mt-2 text-xs"
+        >
+          <span class="text-gray-500">Enum:</span>
+          <span
+            v-for="(val, i) in schema.enum"
+            :key="i"
+            class="px-1.5 py-0.5 rounded bg-gray-100/50 dark:bg-white/5 text-gray-700 dark:text-gray-200"
+          >
+            {{ typeof val === 'string' ? `"${val}"` : val }}
+          </span>
+        </div>
         <!-- Handle anyOf -->
         <ApiRequestBodyArrayParam
           v-if="schema.anyOf?.length"

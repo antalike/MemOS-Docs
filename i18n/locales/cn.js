@@ -40,7 +40,7 @@ export default {
     aboutUs: '关于我们',
     memtensor: '记忆张量',
     openmem: 'OpenMem社区',
-    comminity: '加入社群',
+    community: '加入社群',
     joinUs: '岗位招聘',
     icpFilingNumber: '沪ICP备2025129722号-3',
     filingNumber: '沪公网安备 33010002000070号'
