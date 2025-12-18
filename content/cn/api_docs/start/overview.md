@@ -14,22 +14,22 @@ MemOS 提供了完整的接口，通过简单的 API 请求，即可将记忆
 
 通过以下两个简单的核心步骤开始使用 MemOS API：
 
-*   [**添加消息**](https://docs.openmem.net/cn/api_docs/core/add_message)：储存用户对话中的原始消息内容，生成记忆；
+*   [**添加消息**](/api_docs/core/add_message)：储存用户对话中的原始消息内容，生成记忆；
     
-*   [**检索记忆**](https://docs.openmem.net/cn/api_docs/core/search_memory)：检索召回用户的相关记忆片段，为模型生成的回答内容提供参考。
+*   [**检索记忆**](/api_docs/core/search_memory)：检索召回用户的相关记忆片段，为模型生成的回答内容提供参考。
     
 
 ## 3. 接口分类
 
 探索 MemOS 提供的丰富功能接口：
 
-*   [**核心操作 API**](https://docs.openmem.net/cn/api_docs/core/add_message)：提供记忆核心操作能力，实现记忆生产到消费的全流程。
+*   [**核心操作 API**](/api_docs/core/add_message)：提供记忆核心操作能力，实现记忆生产到消费的全流程。
 
-*   [**消息 API**](https://docs.openmem.net/cn/api_docs/message/add_feedback)：用于上传与管理原始消息内容数据。
+*   [**消息 API**](/api_docs/message/add_feedback)：用于上传与管理原始消息内容数据。
 
-*   [**对话 API**](https://docs.openmem.net/cn/api_docs/chat/chat)：提供免上下文管理的自然对话能力，一键获得“拥有记忆”的模型回答。
+*   [**对话 API**](/api_docs/chat/chat)：提供免上下文管理的自然对话能力，一键获得“拥有记忆”的模型回答。
 
-*   [**知识库 API**](https://docs.openmem.net/cn/api_docs//knowledge/create_kb)：用于上传与管理知识库及其文档。
+*   [**知识库 API**](/api_docs//knowledge/create_kb)：用于上传与管理知识库及其文档。
 
 *   
 
@@ -43,6 +43,6 @@ MemOS 提供了完整的接口，通过简单的 API 请求，即可将记忆
 
 ## 5. 下一步行动
 
-*   👉 [**添加消息**](https://docs.openmem.net/cn/api_docs/core/add_message)：生成你的第一条记忆；
+*   👉 [**添加消息**](/api_docs/core/add_message)：生成你的第一条记忆；
     
-*   👉 [**检索记忆**](https://docs.openmem.net/cn/api_docs/core/search_memory)：使用记忆过滤器实现记忆的高级检索。
+*   👉 [**检索记忆**](/api_docs/core/search_memory)：使用记忆过滤器实现记忆的高级检索。
