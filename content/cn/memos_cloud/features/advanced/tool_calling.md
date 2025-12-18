@@ -9,23 +9,23 @@ desc: 添加工具调用信息，将工具调用的决策、执行结果及其�
 
 ## 2. 工作原理
 
-1.  添加工具调用信息：
+1. 添加工具调用信息：
 
-    1.  `assistant` 消息： `tool_calls` 描述模型决定调用某个工具的行为及其参数。
+`assistant` 消息： `tool_calls` 描述模型决定调用某个工具的行为及其参数。
 
-    2.  `tool` 消息：携带真实的工具返回结果，并通过 `tool_call_id` 与对应的 `tool_calls` 精确关联。
+`tool` 消息：携带真实的工具返回结果，并通过 `tool_call_id` 与对应的 `tool_calls` 精确关联。
 
-2.  MemOS 处理工具相关记忆：
+2. MemOS 处理工具相关记忆：
 
-    1.  **工具信息（Tool Schema）：**MemOS 支持对工具信息的结构化管理与动态更新，统一不同工具的描述方式，使模型能够高效地进行工具检索、理解与发现，而无需在提示词中硬编码工具细节。
+*  **工具信息（Tool Schema）**：MemOS 支持对工具信息的结构化管理与动态更新，统一不同工具的描述方式，使模型能够高效地进行工具检索、理解与发现，而无需在提示词中硬编码工具细节。
 
-    2.  **轨迹记忆（Tool Trajectory Memory）：**MemOS 会对工具使用过程中的关键轨迹进行抽取与存储，包括“在什么上下文下调用了什么工具、使用了哪些参数、返回了什么结果”。这些轨迹可在后续对话中被检索和复用，帮助模型更稳定地重现工具使用模式，减少重复试探和调用错误。
+*  **轨迹记忆（Tool Trajectory Memory）**：MemOS 会对工具使用过程中的关键轨迹进行抽取与存储，包括“在什么上下文下调用了什么工具、使用了哪些参数、返回了什么结果”。这些轨迹可在后续对话中被检索和复用，帮助模型更稳定地重现工具使用模式，减少重复试探和调用错误。
 
 ## 3.使用示例
 
-有关 API 字段、格式等信息的完整列表，详见[Add Message 接口文档]()查看如何添加工具调用信息。
+有关 API 字段、格式等信息的完整列表，详见[Add Message 接口文档](/api_docs/core/add_message)查看如何添加工具调用信息。
 
-**添加工具调用信息**
+### 添加工具调用信息
 
 ::note{icon="websymbol:chat"}
 &nbsp;会话 A：用户在对话中询问【北京天气如何】，助手调用【天气工具】，天气工具得出结果【北京，温度7°C，阴天】。
@@ -85,7 +85,7 @@ res = requests.post(url=url, headers=headers, data=json.dumps(data))
 print(json.dumps(res.json(), indent=2, ensure_ascii=False))
 ```
 
-**检索工具记忆**
+### 检索工具记忆
 
 ::note{icon="websymbol:chat"}
 &nbsp;会话 B：在新会话中，用户询问【北京适合穿什么衣服】，MemOS能够召回过往【天气工具调用】的相关工具记忆，模型可在后续使用工具记忆，提升工具使用的准确率、有效性。
@@ -122,7 +122,7 @@ res = requests.post(url=url, headers=headers, data=json.dumps(data))
 print(json.dumps(res.json(), indent=2, ensure_ascii=False))
 ```
 
-**输出结果**
+### 输出结果
 
 ```python
 "tool_memory_detail_list": [
