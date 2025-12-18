@@ -352,7 +352,7 @@
       "post": {
         "summary": "上传文件",
         "description": "",
-        "operationId": "upload_file",
+        "operationId": "add_knowledgebase-file",
         "requestBody": {
           "required": true,
           "content": {
@@ -381,7 +381,7 @@
       "post": {
         "summary": "获取文件",
         "description": "",
-        "operationId": "get_file",
+        "operationId": "get_knowledgebase-file",
         "requestBody": {
           "required": true,
           "content": {
@@ -410,7 +410,7 @@
       "post": {
         "summary": "删除文件",
         "description": "",
-        "operationId": "delete_file",
+        "operationId": "delete_knowledgebase-file",
         "requestBody": {
           "required": true,
           "content": {
