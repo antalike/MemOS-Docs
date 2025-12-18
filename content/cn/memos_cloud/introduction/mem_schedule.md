@@ -65,7 +65,7 @@ desc: 记忆调度就像大脑的注意力机制，动态决定在合适的时�
 
   :::card
   ---
-  title: MemOS系统操作
+  title: ✨MemOS系统操作
   ---
   *   系统最初将这些条目都生成 **明文记忆**。
     
@@ -94,7 +94,7 @@ desc: 记忆调度就像大脑的注意力机制，动态决定在合适的时�
 
   :::card
   ---
-  title: MemOS系统操作
+  title: ✨MemOS系统操作
   ---
   *   系统继续生成新的 **明文记忆**。
     
@@ -133,7 +133,7 @@ desc: 记忆调度就像大脑的注意力机制，动态决定在合适的时�
 
   :::card
   ---
-  title: 有调度时，系统可以更快速返回
+  title: ✨有调度时，系统可以更快速返回
   ---
   *   看瓷砖
     
@@ -174,11 +174,6 @@ desc: 记忆调度就像大脑的注意力机制，动态决定在合适的时�
 
 了解MemOS更多核心能力
 
-*   [记忆召回](/overview/quick_start/mem_recall)
+*   [记忆召回](/memos_cloud/introduction/mem_recall)
     
-*   [记忆生命周期管理](/overview/quick_start/mem_lifecycle)
-      
-
-## 5. 联系我们
-<img src="https://cdn.memtensor.com.cn/img/1758685658684_nbhka4_compressed.png" alt="image" style="width:70%;">
-
+*   [记忆生命周期管理](/memos_cloud/introduction/mem_lifecycle)
