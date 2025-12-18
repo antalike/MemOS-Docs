@@ -77,6 +77,6 @@ Reasoning: 七天酒店通常以经济实惠著称，而用户选择七天酒店
 
 了解MemOS更多核心能力
 
-- [记忆调度](/overview/quick_start/mem_schedule)
-- [记忆召回](/overview/quick_start/mem_recall)
-- [记忆生命周期管理](/overview/quick_start/mem_lifecycle)
+- [记忆调度](/memos_cloud/introduction/mem_schedule)
+- [记忆召回](/memos_cloud/introduction/mem_recall)
+- [记忆生命周期管理](/memos_cloud/introduction/mem_lifecycle)
