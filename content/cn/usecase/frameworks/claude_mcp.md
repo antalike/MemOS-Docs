@@ -3,7 +3,7 @@ title: Claude MCP
 ---
 
 
-## 2. 配置 MCP 与 MemOS 云服务
+## 1. 配置 MCP 与 MemOS 云服务
 
 在客户端中填写如下配置：
 
@@ -41,7 +41,7 @@ title: Claude MCP
 - `MEMOS_CHANNEL`: 填写为"MODELSCOPE"即可。
 
 
-## 2. 在Claude 客服端中使用
+## 2. 在 Claude 客服端中使用
 在Claude Desktop中使用MemOS，需点击左下角头像 -> "Settings" -> "Developer" -> "Edit Config"， 并粘贴配置到Claude_desktop_config.json文件中，最后重启客户端，观察到memos-api-mcp服务处于running状态即可在聊天中使用。
 
 ![在Claude中使用MemOS-验证](https://cdn.memtensor.com.cn/img/1763105334517_9ayhrp_compressed.png)
