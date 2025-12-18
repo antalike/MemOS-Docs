@@ -46,8 +46,8 @@ pip install MemoryOS -U
 ::code-snippet{name=search_memory}
 
 **输出的记忆列表如下：**<br>
-::
-```
+
+```text
 # 示例输出（为了方便理解此处做了简化，仅供参考）
 
 # 偏好类型的记忆
