@@ -22,6 +22,10 @@ function normalizeTypeFromSchema(s: any): string {
   if (Array.isArray(s.anyOf)) {
     return s.anyOf.map((t: any) => normalizeTypeFromSchema(t)).join(' | ')
   }
+  // oneOf
+  if (Array.isArray(s.oneOf)) {
+    return s.oneOf.map((t: any) => normalizeTypeFromSchema(t)).join(' | ')
+  }
   // array
   if (s.type === 'array') {
     // best-effort derive item type
@@ -47,6 +51,12 @@ function extractRefName(s: any): string | undefined {
   }
   if (Array.isArray(s.anyOf)) {
     for (const opt of s.anyOf) {
+      const r = pickRef(opt)
+      if (r) return r
+    }
+  }
+  if (Array.isArray(s.oneOf)) {
+    for (const opt of s.oneOf) {
       const r = pickRef(opt)
       if (r) return r
     }
