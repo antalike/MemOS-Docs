@@ -704,6 +704,7 @@
           "tool_call_id": {
               "type": "string",
               "description": "role为tool时，工具调用消息的唯一标识。"
+            }
           },
           "tool_calls": {
             "type": "array",
@@ -737,7 +738,7 @@
             },
             "description": "role 为 assistant时，工具调用信息列表，用于在触发工具调用时传递。"
           },
-          "title": "MessageInput"
+        "title": "MessageInput"
       },
       "AddMessageRequest": {
         "type": "object",
@@ -980,23 +981,17 @@
           "user_id": {
             "type": "string",
             "title": "User ID",
-            "description": "检索的记忆所关联的用户唯一标识符。"
+            "description": "与查询的记忆关联的用户的唯一标识符。"
           },
           "conversation_id": {
             "type": "string",
             "title": "Conversation ID",
-            "description": "查询内容所在会话的唯一标识符，传入可明确当前会话，本会话的记忆应当比其他历史会话的权重高；不传可跨会话检索相关记忆。"
+            "description": "查询内容所在会话的唯一标识符，传入可以明确当前会话，本会话的记忆应当比其他历史会话的权重高。"
           },
           "query": {
             "type": "string",
             "title": "Query",
-            "description": "查询记忆的文本内容，单次查询文本的token上限为20k。"
-          },
-          "filter": {
-            "type": "object",
-            "title": "Filter",
-            "description": "过滤条件。可用字段包括：agent_id、app_id、create_time、update_time与info中的特定字段。支持逻辑运算符（AND，OR）和比较运算符（eq，时间还支持gte、lte、gt、lt）。对于info字段，支持过滤传入的business_type,biz_id,scene,custom_status。",
-            "example": "{\"and\": [{\"create_time\":{\"gte\":\"...\"}}]}"
+            "description": "要在记忆中查询的文本内容，单次查询文本的token上限为4k。"
           },
           "memory_limit_number": {
             "type": "integer",
@@ -1018,24 +1013,12 @@
             "description": "限定返回的偏好记忆条数，用于控制偏好记忆片段的长度，不传时使用系统默认值6，最大值为25。",
             "default": 6
           },
-          "include_tool_memory": {
-            "type": "boolean",
-            "title": "Include Preference",
-            "description": "是否要召回工具记忆，开启后系统会根据查询内容智能召回工具相关的记忆。不传时该功能默认关闭。",
-            "default": true
-          },
-          "tool_memory_limit_number": {
-            "type": "integer",
-            "format": "int32",
-            "title": "Preference Limit Number",
-            "description": "限定返回的工具记忆条数，用于控制召回的工具记忆个数，仅在`include_tool_memory=true`时生效,最大值为25。"
-          },
           "knowledgebase_ids": {
             "type": "array",
             "items": {
               "type": "string"
             },
-            "description": "选定可以检索的知识库范围。"
+            "description": "指定搜索的知识库范围，默认空"
           }
         },
         "title": "SearchMemoryRequest"
