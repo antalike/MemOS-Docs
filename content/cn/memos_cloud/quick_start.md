@@ -85,14 +85,14 @@ pip install MemoryOS -U
 
 现在你已经能够运行 MemOS，可以探索更多云平台功能：
 
-* 核心记忆操作：完整了解如何添加、检索与删除记忆；
+* [**核心记忆操作**](/memos_cloud/mem_operations/add_message)：完整了解如何添加、检索与删除记忆；
 
-* 功能介绍：探索更多云平台功能，如：记忆过滤、多模态消息、知识库等；
+* [**功能介绍**](/memos_cloud/features/basic/filters)：探索更多云平台功能，如：记忆过滤、多模态消息、知识库等；
 
-* API 接口文档：查看完整的 API 文档与调用示例。
+* [**API 接口文档**](/api_docs/start/overview)：查看完整的 API 文档与调用示例。
 
 
-## 4.下一步行动
+## 4.更多资料
 
 ### 了解MemOS记忆生产流程
 
