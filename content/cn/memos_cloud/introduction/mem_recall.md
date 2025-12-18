@@ -40,8 +40,3 @@ desc: 在 MemOS 中，记忆不仅仅是信息的存档，还要能够在需�
 了解MemOS更多核心能力
 
 *   [记忆生命周期管理](/memos_cloud/introduction/mem_lifecycle)
-    
-
-## 4. 联系我们
-
-<img src="https://cdn.memtensor.com.cn/img/1758685658684_nbhka4_compressed.png" alt="image" style="width:70%;">
