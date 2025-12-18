@@ -47,7 +47,5 @@ print(f"result: {res.json()}")
 
 ::note
 &nbsp;想知道是否删除成功？
-<div style="padding-left: 2em;">
 一键复制上述代码并运行，再次[检索记忆](/memos_cloud/mem_operations/search_memory)，看看记忆是否删除成功？
-</div>
 ::
