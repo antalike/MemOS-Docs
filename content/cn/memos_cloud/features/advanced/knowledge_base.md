@@ -282,13 +282,10 @@ print(f"result: {res.json()}")
 ### 检索知识库记忆
 
 ::note{icon="websymbol:chat"}
-
-&nbsp;会话 A：2025-12-11 发生<br>
-
+&nbsp;会话 A：2025-12-12 发生<br>
 <div style="padding-left: 2em;">
 用户在一个新的会话中，询问【软件报销制度】，MemOS 会自动召回【知识库记忆：软件报销制度内容】【用户记忆：创意平台设计师】，从而回答更加明确且“懂用户”的软件报销内容。
-
-<div>
+</div>
 ::
   
 ::code-group
