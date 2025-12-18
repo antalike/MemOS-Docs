@@ -1,6 +1,6 @@
-export function useDocsUrl(basePath: string = '/', locale: string = 'cn') {
+export function useHomeUrl(basePath: string = '/', locale: string = 'cn') {
   const { $config } = useNuxtApp()
-  const baseUrl = $config.public.docsUrl || 'https://memos-docs.openmem.net'
+  const baseUrl = $config.public.homeDomain || 'https://memos.openmem.net'
   const prefix = locale === 'cn' ? '/cn' : ''
 
   return `${baseUrl}${prefix}${basePath}`

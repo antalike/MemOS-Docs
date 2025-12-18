@@ -36,7 +36,7 @@ const items = computed(() => localeItems.value.map((item, index) => ({
         <BaseButton
           type="primary"
           trailing-icon="ri:arrow-right-line"
-          to="/dashboard/overview"
+          to="/memos_cloud/overview"
         >
           {{ $t('homepage.buttonText') }}
         </BaseButton>

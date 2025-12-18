@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { checkIsMobile } from '@/utils/index'
-import { useDashboardUrl, useDocsUrl, useGithubUrl, useOpenMemUrl } from '~/composables/useCommon'
 
 const { t, locale } = useI18n()
+const localePath = useLocalePath()
 const isMobile = ref(Boolean(checkIsMobile()))
 const columns = computed(() => [
   {
@@ -20,7 +20,7 @@ const columns = computed(() => [
       },
       {
         label: t('footer.mcpService'),
-        to: useDocsUrl('/dashboard/mcp/', locale.value),
+        to: localePath('/mcp_agent/mcp/guide'),
         target: '_blank'
       },
       {
@@ -35,7 +35,7 @@ const columns = computed(() => [
     children: [
       {
         label: t('footer.apiDocs'),
-        to: useDocsUrl('/overview/introduction/', locale.value),
+        to: localePath('/'),
         target: '_blank'
       },
       // {
@@ -44,7 +44,7 @@ const columns = computed(() => [
       // },
       {
         label: t('footer.pricing'),
-        to: useLangPath('/pricing', locale.value),
+        to: useHomeUrl('/pricing', locale.value),
         target: '_blank'
       }
     ]
