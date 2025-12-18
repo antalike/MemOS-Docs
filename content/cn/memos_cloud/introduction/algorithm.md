@@ -130,11 +130,4 @@ MemOS 的设计核心，是把「记忆」作为一个独立系统层，和计�
 
 ## 5. 下一步行动
 
-*   快使用我们的云服务体验MemOS的强大之处吧 [《云平台简介》](/dashboard/overview)
-    
-*   或使用MemOS开源项目自行部署体验 [《开源项目概览》](/open_source/home/overview)
-    
-
-## 6. 联系我们
-
-<img src="https://cdn.memtensor.com.cn/img/1758685658684_nbhka4_compressed.png" alt="image" style="width:70%;">
+*   了解[云服务与开源方案](/memos_cloud/cloud_and_opensource)，体验MemOS的强大之处吧!
