@@ -82,13 +82,13 @@ res = requests.post(url=url, headers=headers, data=json.dumps(data))
 
 print(f"result: {res.json()}")
 ```
-:::note{icon="websymbol:chat"}
+:::note
 想知道生成了哪些记忆？一键复制上述代码并运行，前往[**检索记忆**](/memos_cloud/mem_operations/search_memory)。
 :::
 
 ## 5. 使用场景
 
-**实时导入对话**
+### 实时导入对话
 
 你可以在用户每次收到模型回复时，实时调用接口添加消息，随时与 MemOS 同步用户与助手的对话。MemOS将在后端不断根据新的对话，更新用户记忆。
 
@@ -131,7 +131,7 @@ add_message("memos_assistant_123", "memos_conversation_123", "assistant","""你�
 
 ```
 
-**导入历史对话**
+### 导入历史对话
 
 如果你已经构建了 AI 对话应用，MemOS 也支持批量导入已有聊天记录，帮助对话助手记住用户，更个性化地回复。
 
@@ -147,7 +147,7 @@ add_message("memos_assistant_123", "memos_conversation_123", "assistant","""你�
 ]
 ```
 
-**记录用户偏好或行为**
+### 记录用户偏好或行为
 
 除了导入对话内容，用户的个人偏好、行为等数据，例如首次启动应用时填写的兴趣问卷信息，同样可以导入 MemOS，作为记忆的一部分。
 
