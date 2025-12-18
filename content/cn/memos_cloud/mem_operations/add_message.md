@@ -173,7 +173,7 @@ add_message("memos_assistant_123", "memos_conversation_123", "assistant","""你�
 
 ## 6. 更多功能
 
-:::note{icon="websymbol:chat"}
+:::note
 有关 API 字段、格式等信息的完整列表，详见[Add Message接口文档](/api_docs/core/add_message)。
 :::
 
@@ -182,7 +182,7 @@ add_message("memos_assistant_123", "memos_conversation_123", "assistant","""你�
 | 关联更多实体 | `agent_id` `app_id` | 当前用户的对话消息关联 Agent、应用等实体的唯一标识符，便于后续按实体维度检索记忆。 |
 | 消息 | `messages` | 用于添加的对话消息列表。<br>支持的角色类型包括：user / assistant / system / tool；<br>支持的消息类型包括：<br>• 文本<br>• 文档、图片，详见[多模态消息](/memos_cloud/features/basic/multimodal)。<br>• 工具调用信息，详见[工具调用](/memos_cloud/features/advanced/tool_calling)。 |
 | 异步模式 | `async_mode` | 控制添加消息后的处理方式，支持异步与同步两种模式，详见[异步模式](/memos_cloud/features/basic/async_mode)。 |
-| 自定义标签 | `tags` | 为当前用户的对话消息添加自定义标签，用于后续记忆检索与过滤，详见[自定义标签]()。 |
+| 自定义标签 | `tags` | 为当前用户的对话消息添加自定义标签，用于后续记忆检索与过滤，详见[自定义标签](/memos_cloud/features/basic/custom_tags)。 |
 | 元信息 | `info` | 自定义的元信息字段，用于补充当前用户的对话消息，并在后续记忆检索中作为过滤条件使用。 |
 | 写入公共记忆 | `allow_public` | 控制当前用户对话消息生成的记忆是否写入项目级公共记忆，供项目下所有用户共享。 |
 | 写入知识库记忆 | `allow_knowledgebase_ids` | 控制当前用户对话消息生成的记忆是否写入指定的项目关联的知识库中。 |
