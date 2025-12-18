@@ -3,87 +3,78 @@ title: 快速开始
 desc: 欢迎访问 MemOS 云平台，可参考本新手指南，快速接入记忆能力。
 ---
 
-## 1. 获取接口密钥
+在使用大模型构建应用时，一个常见问题是：**如何让 AI 记住用户的长期偏好？**  
+MemOS 提供了两个核心接口帮助你实现：
 
-注册并登录 [MemOS 云平台](https://memos-dashboard.openmem.net/quickstart)，此时系统已为您创建一个默认项目，从控制台复制您的默认 API Key。
+- `addMessage` —— 把原始对话交给我们，我们自动加工并存储记忆
+- `searchMemory` —— 在后续对话中召回事实记忆和偏好记忆，让 AI 回答更贴近用户需求
 
 ![image.png](https://cdn.memtensor.com.cn/img/1758184757210_hksk0g_compressed.png)
 
 
-## 2.核心记忆操作
+## 1.调用前准备
 
-如果是使用Python SDK，需先执行```pip install MemoryOS -U```
+* 注册并登录 MemOS 云平台 [（点击注册）](https://memos-dashboard.openmem.net/quickstart)；
 
-### 2.1 添加原始对话（addMessage）
+* 获取 API Key[（点击获取）](https://memos-dashboard.openmem.net/apikeys)；
+
+* 准备一个可发送 HTTP 请求的环境，Python 或 cURL。
+
+
+## 2.代码配置
+
+### 1.安装 SDK
+如果你选择 Python SDK，请确保已安装 Python 3.10+，然后执行：
+::
+
+```
+pip install MemoryOS -U 
+```
+
+### 2.添加原始对话（addMessage）
 
 **会话 A：2025-06-10 发生**<br>
 你只需要把`原始的对话记录`给到MemOS，MemOS 会<code style="font-weight: bold;">自动抽象加工并保存为记忆</code>**。**
 
 ::code-snippet{name=add_message}
-::
-```json [add_message_res.json]
-{
-	"code": 0,
-	"data": {
-		"success": true
-	},
-	"message": "ok"
-}
-```
 
-### 2.2 查询记忆（searchMemory）
+### 2.2 在会话中调用MemOS查询相关记忆（searchMemory）
 
 **会话 B：2025-9-28 发生**<br>
 用户在一个新的会话中，提出让AI推荐国庆旅游地点和酒店，MemOS 会自动召回【事实记忆：曾去过哪里】【偏好记忆：订酒店的偏好】供AI参考，从而推荐更加个性化的旅游计划
 
 ::code-snippet{name=search_memory}
+
+**输出的记忆列表如下：**<br>
 ::
 ```json [search_memory_res.json]
-{
-  "memory_detail_list": [
-    {
-      "id": "b89a6e16-4ba1-4568-8f93-bd1eb5e25521",
-      "memory_key": "暑假旅游计划",
-      "memory_value": "用户计划在暑假期间前往广州旅游，并选择了七天连锁酒店作为住宿。",
-      "memory_type": "UserMemory",
-      "create_time": 1762748360718,
-      "conversation_id": "0610",
-      "status": "activated",
-      "confidence": 0.99,
-      "tags": [
-        "旅游",
-        "广州",
-        "暑假",
-        "住宿"
-      ],
-      "update_time": 1762748360679,
-      "relativity": 0.011962891
-    }
-  ],
-  "preference_detail_list": [
-    {
-      "id": "015d5695-179d-4452-8696-f2bba9ffbcd8",
-      "preference_type": "explicit_preference",
-      "preference": "用户选择七天作为在广州旅游时的住宿酒店。",
-      "reasoning": "用户在询问住宿选择后，明确表示选择了七天酒店，体现了对七天酒店的偏好。",
-      "create_time": 1762748209953,
-      "conversation_id": "0610",
-      "status": "activated",
-      "update_time": 1762748105661
-    },
-    {
-      "id": "8770596c-9fc0-41c9-b16b-0480a54627a8",
-      "preference_type": "implicit_preference",
-      "preference": "用户可能更偏好经济型酒店。",
-      "reasoning": "用户选择七天酒店，而没有选择全季或希尔顿。七天酒店通常是经济型酒店，相比其他推荐的酒店可能更为实惠。用户的选择可能反映出对经济实惠的偏好，而不是追求高档或奢华的住宿体验。虽然用户没有明确表述偏好的原因，但选择七天这一行为可能暗示其对经济型住宿的倾向。",
-      "create_time": 1762748105820,
-      "conversation_id": "0610",
-      "status": "activated",
-      "update_time": 1762748295149
-    }
-  ],
-  "preference_note": "\n# 注意：\n事实记忆是事实的摘要，而偏好记忆是用户偏好的摘要。\n你的回复不得违反用户的任何偏好，无论是显式偏好还是隐式偏好，并简要解释你为什么这样回答以避免冲突。\n"
-}
+
+# 示例输出（为了方便理解此处做了简化，仅供参考）
+
+# 偏好类型的记忆
+# preference_detail_list [
+#     {
+#       "preference_type": "implicit_preference",  #隐性偏好
+#       "preference": "用户可能偏好性价比较高的酒店选择。",
+#       "reasoning": "七天酒店通常以经济实惠著称，而用户选择七天酒店可能表明其在住宿方面倾向于选择性价比较高的选项。虽然用户没有明确提到预算限制或具体酒店偏好，但在提供的选项中选择七天可能反映了对价格和实用性的重视。",
+#       "conversation_id": "0610"
+#     }
+#   ]
+
+# 事实类型的记忆
+# memory_detail_list [
+#     {
+#       "memory_key": "暑假广州旅游计划",
+#       "memory_value": "用户计划在暑假期间前往广州旅游，并选择了七天连锁酒店作为住宿选项。",
+#       "conversation_id": "0610",
+#       "tags": [
+#         "旅游",
+#         "广州",
+#         "住宿",
+#         "酒店"
+#       ]
+#     }
+#   ]
 ```
 
 
