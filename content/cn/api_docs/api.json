@@ -704,7 +704,6 @@
           "tool_call_id": {
               "type": "string",
               "description": "role为tool时，工具调用消息的唯一标识。"
-            }
           },
           "tool_calls": {
             "type": "array",
@@ -738,7 +737,7 @@
             },
             "description": "role 为 assistant时，工具调用信息列表，用于在触发工具调用时传递。"
           },
-        "title": "MessageInput"
+          "title": "MessageInput"
       },
       "AddMessageRequest": {
         "type": "object",
