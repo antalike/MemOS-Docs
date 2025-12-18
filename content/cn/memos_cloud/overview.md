@@ -46,11 +46,11 @@ MemOS 的价值在于，它**抽象出记忆层**，让你只关注业务逻辑
 
 ## 3. 下一步行动
 
-👉 进入 [快速开始](https://docs.openmem.net/cn/memos_cloud/quick_start)，通过一个最小示例展示如何给你的 Agent 加上“记忆能力”。
+👉 进入 [快速开始](/memos_cloud/quick_start)，通过一个最小示例展示如何给你的 Agent 加上“记忆能力”。
 
 👉 或直接开始开发业务应用，我们提供实践项目供您参考：
-*   [让理财助手读懂客户行为背后的偏好](https://docs.openmem.net/cn/usecase/financial_assistant)
-*   [有记忆的写作助手更好用](https://docs.openmem.net/cn/usecase/writting_assistant)
-*   [构建拥有记忆的家庭生活助手](https://docs.openmem.net/cn/usecase/home_assistant)
-*   [Clause MCP](https://docs.openmem.net/cn/usecase/frameworks/claude_mcp)
-*   [Coze插件工具](https://docs.openmem.net/cn/usecase/frameworks/coze_plugin)
+*   [让理财助手读懂客户行为背后的偏好](/usecase/financial_assistant)
+*   [有记忆的写作助手更好用](/usecase/writting_assistant)
+*   [构建拥有记忆的家庭生活助手](/usecase/home_assistant)
+*   [Clause MCP](/usecase/frameworks/claude_mcp)
+*   [Coze插件工具](/usecase/frameworks/coze_plugin)
