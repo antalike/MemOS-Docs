@@ -37,6 +37,7 @@ pip install MemoryOS -U
 你只需要把`原始的对话记录`给到MemOS，MemOS 会<code style="font-weight: bold;">自动抽象加工并保存为记忆</code>**。**
 
 ::code-snippet{name=add_message}
+::
 
 ### 3.在会话中调用MemOS查询相关记忆（searchMemory）
 
@@ -44,6 +45,7 @@ pip install MemoryOS -U
 用户在一个新的会话中，提出让AI推荐国庆旅游地点和酒店，MemOS 会自动召回【事实记忆：曾去过哪里】【偏好记忆：订酒店的偏好】供AI参考，从而推荐更加个性化的旅游计划
 
 ::code-snippet{name=search_memory}
+::
 
 **输出的记忆列表如下：**<br>
 
