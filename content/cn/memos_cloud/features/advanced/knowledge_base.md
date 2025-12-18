@@ -78,9 +78,8 @@ DAY 20 员工询问：内网代理打不开了，我该重新装哪个版本？
 # ✅ 知识库助手：你使用的是 Intel 芯片的 MacBook Pro，建议重新安装 Intel 版本 的内网代理客户端。以下是 Intel 版的下载链接和安装步骤：...
 ```
 
-::note{icon="websymbol:chat"}
+::note{icon="ri:triangular-flag-fill"}
 **&nbsp;优势总结**<br>
-<div style="padding-left: 2em;">
 RAG 擅长从知识库中检索与查询语义相似的信息，但它是**无状态的**：每一次查询都是独立的，缺乏对具体用户和上下文的理解。<br>
 
 MemOS 能够理解**关系、时间与偏好**等信息，将当前问题与历史记忆关联起来，在“带着背景”的前提下查找和使用知识：<br>
@@ -90,8 +89,8 @@ MemOS 能够理解**关系、时间与偏好**等信息，将当前问题与历
 * **个性化**：不同岗位和工作习惯，MemOS 能记住“这个客户不喜欢过于激进的推销”、“你更常使用 Python 而非 Java”、“你上次咨询过报销政策，这次是否需要进入申请流程”。<br>
 
 * **知识进化**：当实际流程中存在未写入文档的“经验规则”时，MemOS 会将其沉淀为新的记忆，持续补全和完善知识体系。
-</div>
 ::
+
 
 ## 2. 工作原理
 
@@ -112,12 +111,11 @@ MemOS 能够理解**关系、时间与偏好**等信息，将当前问题与历
 
 ## 3. 知识库要求
 
-**容量限制**
+### 容量限制
 
 MemOS 云服务目前为所有开发者提供了从免费版到企业版的多种定价方案，不同版本对应的知识库容量与数量限制不同。
 
-::note{icon="websymbol:chat"}
-&nbsp;目前，所有版本限时免费，欢迎前往[官网-价格](https://memos.openmem.net/cn/pricing)，申请符合你需求的版本。
+::note目前，所有版本限时免费，欢迎前往[官网-价格](https://memos.openmem.net/cn/pricing)，申请符合你需求的版本。
 ::
 
 | **版本**   | **知识库存储限制**                        |
@@ -128,17 +126,16 @@ MemOS 云服务目前为所有开发者提供了从免费版到企业版的多�
 
 
 ::warning
-&nbsp;请注意<br>
-<div style="padding-left: 2em;">
+&nbsp;注意<br>
 当你的服务等级发生降级时，若现有知识库已超出当前版本的容量限制，MemOS <strong>不会清空已有知识库数据</strong>，但将限制以下操作：<br>
 
 * 无法创建新的知识库
 * 无法继续上传新文档
 
-需将使用量调整至当前版本的容量范围内后，相关功能可恢复。</div>
+需将使用量调整至当前版本的容量范围内后，相关功能可恢复。
 ::
 
-**文档限制**
+### 文档限制
 
 1.  支持上传的文档类型：PDF、DOCX、 DOC、 TXT
 
@@ -147,19 +144,19 @@ MemOS 云服务目前为所有开发者提供了从免费版到企业版的多�
 3.  单次上传的文件数量上限：不超过20个
 
 ::warning
-&nbsp;请注意<br>
-<div style="padding-left: 2em;">
+&nbsp;注意<br>
 当单次上传的文件数量、单文件大小或页数超过上述限制时，该次上传任务将被判定为<strong>处理失败</strong>。<br>
-请根据限制要求调整文件后，重新发起上传请求。</div>
+请根据限制要求调整文件后，重新发起上传请求。
 ::
 
 ## 4. 使用示例
 
 以下是一个完整的知识库使用示例，帮助您快速上手使用构建专属您的「知识库助手」。
 
-**创建知识库：财务报销知识库**
+### 创建知识库：财务报销知识库
 
-```python
+::code-group
+```python [Python (HTTP)]
 import os
 import requests
 import json
@@ -182,8 +179,7 @@ res = requests.post(url=url, headers=headers, data=json.dumps(data))
 
 print(f"result: {res.json()}")
 ```
-
-```python
+```python [输出]
 "result": {
   "code": 0,
   "data": {
@@ -192,10 +188,12 @@ print(f"result: {res.json()}")
   "message": "ok"
 }
 ```
+::
 
-**上传文档：软件采购报销制度**
+### 上传文档：软件采购报销制度
 
-```python
+::code-group
+```python [Python (HTTP)]
 import os
 import requests
 import json
@@ -221,8 +219,7 @@ res = requests.post(url=url, headers=headers, data=json.dumps(data))
 
 print(f"result: {res.json()}")
 ```
-
-```python
+```python [输出]
 "result": {
   "code": 0,
   "data": [
@@ -236,8 +233,9 @@ print(f"result: {res.json()}")
   "message": "ok"
 }
 ```
+::
 
-**添加用户对话**
+### 添加用户对话
 
 ::note{icon="websymbol:chat"}
 &nbsp;会话 A：2025-06-10 发生<br>
@@ -281,7 +279,7 @@ res = requests.post(url=url, headers=headers, data=json.dumps(data))
 print(f"result: {res.json()}")
 ```
 
-**检索知识库记忆**
+### 检索知识库记忆
 
 ::note{icon="websymbol:chat"}
 
@@ -292,8 +290,10 @@ print(f"result: {res.json()}")
 
 <div>
 ::
+  
+::code-group
 
-```python
+```python [Python (HTTP)]
 import os
 import requests
 import json
@@ -322,7 +322,7 @@ json_res = res.json()
 print(json.dumps(json_res, indent=2, ensure_ascii=False))
 ```
 
-```python
+```python [输出]
 "memory_detail_list": [
   {
     "id": "2c760355-de4b-4a8f-b98d-b92851d23fa7",
@@ -364,8 +364,9 @@ print(json.dumps(json_res, indent=2, ensure_ascii=False))
   }
 ]
 ```
+::
 
-**反馈优化知识库**
+### 反馈优化知识库
 
 在企业中，常会出现企业政策/知识已更新，而知识库更新不及时的问题。目前，MemOS 支持通过“**自然语言对话”**对知识库的记忆反馈，用于夸素更新知识库记忆，从而提高准确性与时效性。
 
@@ -486,10 +487,10 @@ print(json.dumps(json_res, indent=2, ensure_ascii=False))
 ]
 ```
 
-[控制台-知识库]()中展示了知识库中所有通过自然语言交互，更正或补全知识库记忆的详情。
+[控制台-知识库](https://memos-dashboard.openmem.net/knowledgeBase/)中展示了知识库中所有通过自然语言交互，更正或补全知识库记忆的详情。
 
 ![image.png](https://cdn.memtensor.com.cn/img/1765970178683_5tuxe4_compressed.png)
 
-::note{icon="websymbol:chat"}
-&nbsp;有关反馈 API 字段、格式等信息的完整列表，详见[Add Feedback 接口文档]()。
+::note
+有关反馈 API 字段、格式等信息的完整列表，详见[Add Feedback 接口文档](/api_docs/message/add_feedback)。
 ::
