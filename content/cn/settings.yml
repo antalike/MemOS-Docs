@@ -132,9 +132,9 @@ nav:
       - "(ri:money-dollar-circle-line) 理财助手": usecase/financial_assistant.md
       - "(ri:edit-line) 写作助手": usecase/writting_assistant.md
       - "(ri:heart-line) 家庭生活助手": usecase/home_assistant.md
-      - "(ri:customer-service-2-line) 企微客服": usecase/wecom_customer_service.md
+      # - "(ri:customer-service-2-line) 企微客服": usecase/wecom_customer_service.md
 
     - "(ri:layout-grid-line) 框架与平台":
-      - "(ri:chrome-line) 浏览器插件": usecase/frameworks/browser_extension.md
+      # - "(ri:chrome-line) 浏览器插件": usecase/frameworks/browser_extension.md
       - "(ri:brain-line) Claude MCP": usecase/frameworks/claude_mcp.md
       - "(ri:puzzle-2-line) Coze 插件工具": usecase/frameworks/coze_plugin.md
