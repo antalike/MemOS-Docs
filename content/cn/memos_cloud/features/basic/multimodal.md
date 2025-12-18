@@ -7,13 +7,13 @@ MemOS 不仅支持文本，还支持多模态数据，包括文档和图片。�
 
 ## 1. 如何添加多模态消息
 
-:::note{icon="websymbol:chat"}
+:::note 注意<br>
 当消息包含多模态内容时，由于文件记忆的加工时间较长，您传入的`async_mode`字段失效，此时默认使用“异步模式”。您可通过`get/status`接口查询文件记忆的处理进度。
 :::
 
 当用户上传文档或图片时，MemOS 会提取文本、视觉信息和其他相关细节，并处理为用户记忆。
 
-**添加消息**
+### 添加消息
 
 ```python
 import os
@@ -57,7 +57,7 @@ res = requests.post(url=url, headers=headers, data=json.dumps(data))
 print(json.dumps(res.json(), indent=2, ensure_ascii=False))
 ```
 
-**检索记忆**
+### 检索记忆
 
 ```python
 import os
@@ -87,7 +87,57 @@ print("结果：")
 print(json.dumps(res.json(), indent=2, ensure_ascii=False))
 ```
 
-**输出结果**
+### 输出结果
+```python
+{
+  "code": 0,
+  "data": {
+    "memory_detail_list": [
+      {
+        "id": "a5136287-de10-4df2-afc5-e412cdb8b649",
+        "memory_key": "研究MemOS",
+        "memory_value": "用户正在研究MemOS，并分享了一张相关的图片，时间为2025年12月18日早上7:07（UTC）。",
+        "memory_type": "WorkingMemory",
+        "create_time": 1766041646311,
+        "conversation_id": "1211",
+        "status": "activated",
+        "confidence": 0.99,
+        "tags": [
+          "研究",
+          "MemOS",
+          "图片分享"
+        ],
+        "update_time": 1766041689234,
+        "relativity": 0.5170716
+      },
+      {
+        "id": "4a1d42f4-c9fa-41bf-805d-2ea985bba984",
+        "memory_key": "MemOS功能概述",
+        "memory_value": "MemOS是一个智能记忆系统，能够通过添加路径进行信息存储，并通过查询功能进行信息检索。系统支持多种文档格式，如PDF和DOC，并利用AI进行智能响应和处理。",
+        "memory_type": "WorkingMemory",
+        "create_time": 1766041689091,
+        "conversation_id": "1211",
+        "status": "activated",
+        "confidence": 0.99,
+        "tags": [
+          "MemOS",
+          "智能记忆",
+          "信息存储",
+          "查询功能",
+          "image",
+          "visual"
+        ],
+        "update_time": 1766041689234,
+        "relativity": 0.38406307
+      }
+    ],
+    "preference_detail_list": [],
+    "tool_memory_detail_list": [],
+    "preference_note": ""
+  },
+  "message": "ok"
+}
+```
 
 ## 2. 媒体类型
 
@@ -107,7 +157,7 @@ MemOS 目前支持以下的媒体类型：
 
 ## 4. 使用示例
 
-### 4.1 上传图片消息
+### 上传图片消息
 
 **使用图片网址**
 
@@ -198,7 +248,7 @@ res = requests.post(url=url, headers=headers, data=json.dumps(data))
 print(json.dumps(res.json(), indent=2, ensure_ascii=False))
 ```
 
-### 4.2 上传文档
+### 上传文档消息
 
 **使用文档网址**
 
@@ -290,7 +340,7 @@ print("结果：")
 print(json.dumps(res.json(), indent=2, ensure_ascii=False))
 ```
 
-### 4.3 完整示例
+### 完整示例
 
 以下是一个完整的示例，展示如何添加用户与助手包含了不同媒体类型的对话消息：
 
