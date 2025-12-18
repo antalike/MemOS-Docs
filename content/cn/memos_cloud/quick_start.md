@@ -9,7 +9,7 @@ MemOS 提供了两个核心接口帮助你实现：
 - `addMessage` —— 把原始对话交给我们，我们自动加工并存储记忆
 - `searchMemory` —— 在后续对话中召回事实记忆和偏好记忆，让 AI 回答更贴近用户需求
 
-![image.png](https://cdn.memtensor.com.cn/img/1758184757210_hksk0g_compressed.png)
+![image.svg](https://cdn.memtensor.com.cn/img/1762434889291_h9co0h_compressed.png)
 
 
 ## 1.调用前准备
