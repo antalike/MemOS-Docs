@@ -29,9 +29,8 @@ MemOS 提供了完整的接口，通过简单的 API 请求，即可将记忆
 
 *   [**对话 API**](/api_docs/chat/chat)：提供免上下文管理的自然对话能力，一键获得“拥有记忆”的模型回答。
 
-*   [**知识库 API**](/api_docs//knowledge/create_kb)：用于上传与管理知识库及其文档。
+*   [**知识库 API**](/api_docs/knowledge/create_kb)：用于上传与管理知识库及其文档。
 
-*   
 
 ## 4. 鉴权认证
 
