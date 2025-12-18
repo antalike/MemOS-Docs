@@ -81,9 +81,7 @@ print(f"result: {res.json()}")
 
 :::note
 注意<br>
-<div style="padding-left: 2em;">
 当消息包含多模态内容时，由于文件记忆的加工时间较长，您传入的`async_mode`字段失效，此时默认使用“异步模式”。您可通过`get/status`接口查询文件记忆的处理进度。
-<div>
 :::
 
 ## 2. 使用同步模式
