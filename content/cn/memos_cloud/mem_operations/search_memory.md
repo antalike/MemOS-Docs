@@ -7,7 +7,7 @@ desc: 通过语义检索和过滤功能，MemOS召回相关记忆。
 
 检索记忆是指 MemOS 在用户提出问题时，结合开发者预先定义的过滤条件，从记忆库中召回最相关、最重要的记忆内容。模型在生成回答时，会参考这些已召回的记忆，从而给出更加准确、贴切且符合用户上下文的回复。
 
-::note{icon="websymbol:chat"}
+::note
 **&nbsp;为什么需要检索记忆？**
 <div style="padding-left: 2em;">
 
@@ -39,8 +39,8 @@ desc: 通过语义检索和过滤功能，MemOS召回相关记忆。
 
 
 ## 4. 快速上手
-
-```python
+::code-group
+```python [Python (HTTP)]
 import os
 import requests
 import json
@@ -64,8 +64,7 @@ res = requests.post(url=url, headers=headers, data=json.dumps(data))
 
 print(f"result: {res.json()}")
 ```
-
-```python
+```python [输出]
 # 示例输出（为了方便理解此处做了简化，仅供参考）
 
 # 偏好类型的记忆
@@ -93,6 +92,7 @@ memory_detail_list [
     }
   ]
 ```
+::
 
 ::note
 &nbsp;请注意，`user_id`为必填项，当前每次检索记忆必须指定单个用户。
@@ -109,7 +109,8 @@ memory_detail_list [
 
 如下示例所示，如果你已经尝试[添加消息](/memos_cloud/mem_operations/add_message)，添加过用户`memos\_user\_345`的历史对话消息，你可以复制参考该示例检索用户记忆。
 
-```python
+::code-group
+```python [Python (HTTP)]
 import os
 import json
 import requests
@@ -137,63 +138,63 @@ data = {
 res = requests.post(f"{BASE_URL}/search/memory", headers=headers, data=json.dumps(data))
 
 print(f"result: {res.json()}")
-# 示例返回（展示已召回的记忆片段）
-# # {
-#   "memory_detail_list": [
-#     {
-#       "id": "c6c63472-25d3-49ee-b360-9b0702d96781",
-#       "memory_key": "辣味食物偏好",
-#       "memory_value": "用户喜欢吃辣的食物，但不太喜欢重油的菜肴，如麻辣火锅和毛血旺。用户更偏好清爽又带辣味的菜。",
-#       "memory_type": "UserMemory",
-#       "create_time": 1762674694466,
-#       "conversation_id": "memos_conversation_345",
-#       "status": "activated",
-#       "confidence": 0.99,
-#       "tags": [
-#         "饮食偏好",
-#         "辣味",
-#         "重油"
-#       ],
-#       "update_time": 1762674694423,
-#       "relativity": 0.00242424
-#     }
-#   ],
-#   "preference_detail_list": [
-#     {
-#       "id": "46d8372d-241a-4ffc-890b-ae13c90d5565",
-#       "preference_type": "explicit_preference",
-#       "preference": "用户喜欢辣味的食物，但不喜欢重油的辣味食物。",
-#       "reasoning": "用户在第一次查询中明确表示喜欢辣的食物，在第二次查询中进一步说明自己不喜欢重油的辣味食物，这表明用户的偏好是喜欢辣但清爽的食物。",
-#       "create_time": 1762675342352,
-#       "conversation_id": "memos_conversation_345",
-#       "status": "activated",
-#       "update_time": 1762674923302
-#     },
-#     {
-#       "id": "9d62c1ae-a069-478d-a2fd-cb4aadfb6868",
-#       "preference_type": "implicit_preference",
-#       "preference": "用户可能偏好较健康的饮食选择",
-#       "reasoning": "用户表达了对辣味的明确喜好，但对重油食物表示不喜欢。这表明用户可能更关注饮食的健康性，倾向于选择不那么油腻的食物。用户对辣味的喜好与对重油食物的排斥结合在一起，可能暗示着对健康饮食的隐性偏好。",
-#       "create_time": 1762674923448,
-#       "conversation_id": "memos_conversation_345",
-#       "status": "activated",
-#       "update_time": 1762674851542
-#     }
-#   ],
-#   "preference_note": "\n# 注意：\n事实记忆是事实的摘要，而偏好记忆是用户偏好的摘要。\n你的回复不得违反用户的任何偏好，无论是显式偏好还是隐式偏好，并简要解释你为什么这样回答以避免冲突。\n"
-# }
-
 ```
+```python [输出]
+ {
+  "memory_detail_list": [
+    {
+      "id": "c6c63472-25d3-49ee-b360-9b0702d96781",
+      "memory_key": "辣味食物偏好",
+      "memory_value": "用户喜欢吃辣的食物，但不太喜欢重油的菜肴，如麻辣火锅和毛血旺。用户更偏好清爽又带辣味的菜。",
+      "memory_type": "UserMemory",
+      "create_time": 1762674694466,
+      "conversation_id": "memos_conversation_345",
+      "status": "activated",
+      "confidence": 0.99,
+      "tags": [
+        "饮食偏好",
+        "辣味",
+        "重油"
+      ],
+      "update_time": 1762674694423,
+      "relativity": 0.00242424
+    }
+  ],
+  "preference_detail_list": [
+    {
+      "id": "46d8372d-241a-4ffc-890b-ae13c90d5565",
+      "preference_type": "explicit_preference",
+      "preference": "用户喜欢辣味的食物，但不喜欢重油的辣味食物。",
+      "reasoning": "用户在第一次查询中明确表示喜欢辣的食物，在第二次查询中进一步说明自己不喜欢重油的辣味食物，这表明用户的偏好是喜欢辣但清爽的食物。",
+      "create_time": 1762675342352,
+      "conversation_id": "memos_conversation_345",
+      "status": "activated",
+      "update_time": 1762674923302
+    },
+    {
+      "id": "9d62c1ae-a069-478d-a2fd-cb4aadfb6868",
+      "preference_type": "implicit_preference",
+      "preference": "用户可能偏好较健康的饮食选择",
+      "reasoning": "用户表达了对辣味的明确喜好，但对重油食物表示不喜欢。这表明用户可能更关注饮食的健康性，倾向于选择不那么油腻的食物。用户对辣味的喜好与对重油食物的排斥结合在一起，可能暗示着对健康饮食的隐性偏好。",
+      "create_time": 1762674923448,
+      "conversation_id": "memos_conversation_345",
+      "status": "activated",
+      "update_time": 1762674851542
+    }
+  ],
+  "preference_note": "\n# 注意：\n事实记忆是事实的摘要，而偏好记忆是用户偏好的摘要。\n你的回复不得违反用户的任何偏好，无论是显式偏好还是隐式偏好，并简要解释你为什么这样回答以避免冲突。\n"
+}
+```
+::
 
 **获取用户整体画像**
 
 如果你需要对自己开发的应用进行用户分析，或者希望在 AI 应用中向用户实时展示他们的“个人关键印象”，可以调用 MemOS 全局检索用户的记忆，帮助大模型生成用户的个性化画像。
 
-小Tips：此时可以不填写`conversation_id`哦～得到响应详情后，你可以挑选`memory_type` 为`UserMemory`的记忆，这类记忆提炼了与用户相关的个性化信息，适合用于生成用户画像或推荐内容。
+如下示例所示，如果你已经尝试[添加消息](/memos_cloud/mem_operations/add_message)，添加过用户`memos\_user\_567`的历史对话消息，你可以一键复制该示例检索用户记忆。
 
-如下示例所示，如果你已经参考 ++添加消息 > 记录用户偏好或行为++，添加过用户memos\_user\_567 的历史对话消息，你可以一键复制该示例检索用户记忆。
-
-```python
+::code-group
+```python [Python (HTTP)]
 import os
 import json
 import requests
@@ -220,128 +221,61 @@ data = {
 res = requests.post(f"{BASE_URL}/search/memory", headers=headers, data=json.dumps(data))
 
 print(f"result: {res.json()}")
-
-# 示例返回（展示已召回的记忆片段）
-# {
-#   "memory_detail_list": [
-#     {
-#       "id": "00d8bb4e-aa8c-4fee-a83e-bf67ed6c3ea1",
-#       "memory_key": "希望AI帮助的事项",
-#       "memory_value": "用户希望AI帮助规划日常学习计划、推荐电影和书籍，以及提供心情陪伴。",
-#       "memory_type": "WorkingMemory",
-#       "create_time": 1762675190743,
-#       "conversation_id": "memos_conversation_id_567",
-#       "status": "activated",
-#       "confidence": 0.99,
-#       "tags": [
-#         "帮助",
-#         "学习计划",
-#         "推荐",
-#         "陪伴"
-#       ],
-#       "update_time": 1762675209112,
-#       "relativity": 0.00013480317
-#     },
-#     {
-#       "id": "17f039d5-d034-41e9-a385-765992a4ab00",
-#       "memory_key": "希望AI提供的帮助类型",
-#       "memory_value": "用户希望AI提供建议、信息查询和灵感。",
-#       "memory_type": "WorkingMemory",
-#       "create_time": 1762675153211,
-#       "conversation_id": "memos_conversation_id_567",
-#       "status": "activated",
-#       "confidence": 0.99,
-#       "tags": [
-#         "AI",
-#         "帮助",
-#         "类型"
-#       ],
-#       "update_time": 1762675206651,
-#       "relativity": 0.00010301525
-#     },
-#     {
-#       "id": "89bc2453-1471-4a1a-936c-94708da071ed",
-#       "memory_key": "聊天风格偏好",
-#       "memory_value": "用户喜欢的聊天风格为幽默、温暖和轻松闲聊。",
-#       "memory_type": "WorkingMemory",
-#       "create_time": 1762675135023,
-#       "conversation_id": "memos_conversation_id_567",
-#       "status": "activated",
-#       "confidence": 0.99,
-#       "tags": [
-#         "聊天",
-#         "风格",
-#         "偏好"
-#       ],
-#       "update_time": 1762675205606,
-#       "relativity": 0.00007810917
-#     },
-#     {
-#       "id": "074b5caf-d294-41a6-9f7e-9c2a8b1d3ade",
-#       "memory_key": "感兴趣的话题",
-#       "memory_value": "用户最感兴趣的话题包括人工智能、未来科技和电影评论。",
-#       "memory_type": "WorkingMemory",
-#       "create_time": 1762675172952,
-#       "conversation_id": "memos_conversation_id_567",
-#       "status": "activated",
-#       "confidence": 0.99,
-#       "tags": [
-#         "话题",
-#         "兴趣"
-#       ],
-#       "update_time": 1762675207841,
-#       "relativity": 0.000029795949
-#     },
-#     {
-#       "id": "6e1a0715-5c83-4092-b226-762cc3500170",
-#       "memory_key": "书籍类型偏好",
-#       "memory_value": "用户喜欢的书籍类型包括科普、技术和自我成长类书籍。",
-#       "memory_type": "WorkingMemory",
-#       "create_time": 1762675029885,
-#       "conversation_id": "memos_conversation_id_567",
-#       "status": "activated",
-#       "confidence": 0.99,
-#       "tags": [
-#         "书籍",
-#         "类型",
-#         "偏好"
-#       ],
-#       "update_time": 1762675194083,
-#       "relativity": 0.00002005097
-#     },
-#     {
-#       "id": "5ee1c8c2-ea55-42e7-8fd8-71d0127198b5",
-#       "memory_key": "电视剧类型偏好",
-#       "memory_value": "用户喜欢的电视剧类型为悬疑和历史剧。",
-#       "memory_type": "UserMemory",
-#       "create_time": 1762675002841,
-#       "conversation_id": "memos_conversation_id_567",
-#       "status": "activated",
-#       "confidence": 0.99,
-#       "tags": [
-#         "电视剧",
-#         "类型",
-#         "偏好"
-#       ],
-#       "update_time": 1762675002788,
-#       "relativity": 0.00001729489
-#     }
-#   ],
-#   "preference_detail_list": [],
-#   "preference_note": ""
-# }
-
 ```
+```python[输出]
+示例返回（展示已召回的记忆片段）
+{
+  "memory_detail_list": [
+    {
+      "id": "00d8bb4e-aa8c-4fee-a83e-bf67ed6c3ea1",
+      "memory_key": "希望AI帮助的事项",
+      "memory_value": "用户希望AI帮助规划日常学习计划、推荐电影和书籍，以及提供心情陪伴。",
+      "memory_type": "WorkingMemory",
+      "create_time": 1762675190743,
+      "conversation_id": "memos_conversation_id_567",
+      "status": "activated",
+      "confidence": 0.99,
+      "tags": [
+        "帮助",
+        "学习计划",
+        "推荐",
+        "陪伴"
+      ],
+      "update_time": 1762675209112,
+      "relativity": 0.00013480317
+    },
+    {
+      "id": "17f039d5-d034-41e9-a385-765992a4ab00",
+      "memory_key": "希望AI提供的帮助类型",
+      "memory_value": "用户希望AI提供建议、信息查询和灵感。",
+      "memory_type": "WorkingMemory",
+      "create_time": 1762675153211,
+      "conversation_id": "memos_conversation_id_567",
+      "status": "activated",
+      "confidence": 0.99,
+      "tags": [
+        "AI",
+        "帮助",
+        "类型"
+      ],
+      "update_time": 1762675206651,
+      "relativity": 0.00010301525
+    }
+  ],
+  "preference_detail_list": [],
+  "preference_note": ""
+}
+```
+::
+
 
 ## 6. 更多功能
 
-::note{icon="websymbol:chat"}
-&nbsp;有关 API 字段、格式等信息的完整列表，详见[Search Memory接口文档]()。
-::
-
+::note
+&nbsp;有关 API 字段、格式等信息的完整列表，详见[Search Memory接口文档](/api_docs/core/search_memory)。
 | **功能**       | **字段**                                            | **说明**                                                     |
 | -------------- | --------------------------------------------------- | ------------------------------------------------------------ |
-| 记忆过滤器     | `info`                                              | 支持自定义结构化查询条件，精确筛选记忆，详见++记忆过滤器++。 |
-| 召回偏好记忆   | `include_preference`<br>`preference_limit_number`   | 偏好记忆是 MemOS 基于用户历史消息分析生成的用户偏好信息。开启后，可在检索结果中召回用户偏好记忆。 |
-| 召回工具记忆   | `include_tool_memory`<br>`tool_memory_limit_number` | 工具记忆是 MemOS 对已添加的工具调用信息进行分析后生成的记忆。开启后，可在检索结果中召回工具记忆，详见++工具记忆++。 |
-| 检索指定知识库 | `knowledgebase_ids`                                 | 指定本次检索可使用的项目关联知识库范围，详见++知识库++。     |
+| 记忆过滤器     | `info`                                              | 支持自定义结构化查询条件，精确筛选记忆，详见[记忆过滤器](/memos_cloud/features/basic/filters)。 |
+| 召回偏好记忆   | `include_preference`<br><span style="line-height:0.6;">&nbsp;</span><br>`preference_limit_number`   | 偏好记忆是 MemOS 基于用户历史消息分析生成的用户偏好信息。开启后，可在检索结果中召回用户偏好记忆。 |
+| 召回工具记忆   | `include_tool_memory`<br><span style="line-height:0.6;">&nbsp;</span><br>`tool_memory_limit_number` | 工具记忆是 MemOS 对已添加的工具调用信息进行分析后生成的记忆。开启后，可在检索结果中召回工具记忆，详见++工具记忆++。 |
+| 检索指定知识库 | `knowledgebase_ids`                                 | 指定本次检索可使用的项目关联知识库范围，详见[知识库](/memos_cloud/features/advanced/knowledge_base)。     |
