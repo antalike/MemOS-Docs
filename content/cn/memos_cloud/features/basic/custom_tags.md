@@ -5,7 +5,7 @@ desc: 添加消息时按照你的业务需求使用标签。
 
 MemOS 会为每条记忆自动生成标签，但这些标签可能与您业务中所使用的标签不完全一致。您可以在添加消息时传入自定义标签列表，MemOS 将基于您提供的标签含义，对记忆内容自动应用相关标签。
 
-:::note{icon="websymbol:chat"}
+:::note
 何时使用自定义标签？<br>
 
 您希望 MemOS 能使用产品团队现有的标签体系来标注记忆内容。
@@ -24,13 +24,13 @@ MemOS 会为每条记忆自动生成标签，但这些标签可能与您业务�
 
 ## 2. 使用示例
 
-:::note{icon="websymbol:chat"}
-标签内容应保持简洁，同时能够清楚区分不同类别的含义，便于识别和匹配。
+:::note 提示<br>
+*  标签内容应保持简洁，同时能够清楚区分不同类别的含义，便于识别和匹配。
 
-在同一项目维度下使用统一的列表，不轻易替换，以确保检索和过滤的一致性。
+*  在同一项目维度下使用统一的列表，不轻易替换，以确保检索和过滤的一致性。
 :::
 
-**添加消息**
+## #添加消息
 
 ```python
 import os
@@ -63,7 +63,7 @@ res = requests.post(url=url, headers=headers, data=json.dumps(data))
 print(f"result: {res.json()}")
 ```
 
-**检索记忆**
+### 检索记忆
 
 ```python
 import os
@@ -89,7 +89,7 @@ res = requests.post(url=url, headers=headers, data=json.dumps(data))
 print(f"result: {res.json()}")
 ```
 
-**输出结果**
+### 输出结果
 
 ```json
 "memory_detail_list": [
