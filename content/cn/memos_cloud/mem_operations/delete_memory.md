@@ -45,9 +45,9 @@ res = requests.post(url=url, headers=headers, data=json.dumps(data))
 print(f"result: {res.json()}")
 ```
 
-::note{icon="websymbol:chat"}
+::note
 &nbsp;想知道是否删除成功？
 <div style="padding-left: 2em;">
-一键复制上述代码并运行，再次++检索记忆++，看看记忆是否删除成功？
+一键复制上述代码并运行，再次[检索记忆](/memos_cloud/mem_operations/search_memory)，看看记忆是否删除成功？
 </div>
 ::
