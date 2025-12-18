@@ -11,7 +11,7 @@ nav:
         - "(ri:search-line) 记忆召回": memos_cloud/introduction/mem_recall.md
         - "(ri:refresh-line) 记忆生命周期管理": memos_cloud/introduction/mem_lifecycle.md
         - "(ri:cpu-line) 算法原理概述": memos_cloud/introduction/algorithm.md
-      - "(ri:dashboard-line) 云服务与开源方案": memos_cloud/cloud_and_opensource.md
+      - "(ri:dashboard-line) 云平台与开源方案": memos_cloud/cloud_and_opensource.md
       - "(ri:rocket-line) 快速开始": memos_cloud/quick_start.md
       - "(ri:shield-line) 配额和限制": memos_cloud/limit.md
 
