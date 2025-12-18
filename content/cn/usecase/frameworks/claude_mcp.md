@@ -2,7 +2,46 @@
 title: Claude MCP
 ---
 
-### 在Claude Desktop中使用
+
+## 2. 配置 MCP 与 MemOS 云服务
+
+在客户端中填写如下配置：
+
+```json
+{
+  "mcpServers": {
+    "memos-api-mcp": {
+      "timeout": 60,
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@memtensor/memos-api-mcp"
+      ],
+      "env": {
+        "MEMOS_API_KEY": "mpg-xxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "MEMOS_USER_ID": "your-user-id",
+        "MEMOS_CHANNEL": "MODELSCOPE"
+      }
+    }
+  }
+}
+```
+
+环境变量获取方式：
+- `MEMOS_API_KEY`: 在MemOS官网[API控制台](https://memos-dashboard.openmem.net/cn/apikeys/)上注册账号，然后在接口密钥页面新建api-key并复制粘贴在此处。
+
+![在MemOS API控制台上新建api-key](https://cdn.memtensor.com.cn/img/1763452232848_t268eh_compressed.png)
+
+- `MEMOS_USER_ID`: 确定性的用户自定义个人标识符。
+  - 对于同一用户，该环境变量需要在不同设备/客户端中保持一致；
+  - 请不要使用随机值、设备ID或聊天会话ID作为用户标识符；
+  - 推荐使用：个人email地址、姓名全称或员工ID作为用户标识符。
+
+- `MEMOS_CHANNEL`: 填写为"MODELSCOPE"即可。
+
+
+## 2. 在Claude 客服端中使用
 在Claude Desktop中使用MemOS，需点击左下角头像 -> "Settings" -> "Developer" -> "Edit Config"， 并粘贴配置到Claude_desktop_config.json文件中，最后重启客户端，观察到memos-api-mcp服务处于running状态即可在聊天中使用。
 
 ![在Claude中使用MemOS-验证](https://cdn.memtensor.com.cn/img/1763105334517_9ayhrp_compressed.png)
