@@ -107,8 +107,9 @@ print(f"result: {res.json()}")
 
 除了一键复制上述快速开始代码，本接口还提供了丰富的其他可配置参数，您在使用过程中可参考以下字段的解释来调用 Chat 接口实现对话。
 
-::note 有关 API 字段、格式等信息的完整列表，详见[Chat 接口文档](/api_docs/chat/chat)。
-::
+:::note
+有关 API 字段、格式等信息的完整列表，详见[Chat 接口文档](/api_docs/chat/chat)。
+:::
 
 ### 筛选召回的记忆
 
