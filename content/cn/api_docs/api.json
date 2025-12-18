@@ -473,7 +473,7 @@
             "type": "object",
             "title": "Filter",
             "description": "过滤条件。可用字段包括：agent_id、app_id、create_time、update_time与info中的特定字段。支持逻辑运算符（AND，OR）和比较运算符（eq，时间还支持gte、lte、gt、lt）。对于info字段，支持过滤传入的business_type,biz_id,scene,custom_status。",
-            "example": "{\"and\": [{\"create_time\":{\"gte\":\"...\"}}]}\"
+            "example": "{\"and\": [{\"create_time\":{\"gte\":\"...\"}}]}"
           },
           "knowledgebase_ids": {
             "type": "array",
