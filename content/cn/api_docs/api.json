@@ -79,7 +79,7 @@
     "/get/message": {
       "post": {
         "summary": "获取消息",
-        "description": "该接口用于获取指定会话的用户与助手历史对话记录，可按数量限制返回结果。如本章示例所示，您可以将返回的最近消息作为大模型生成回答的参考，以保持对话的连贯性和上下文理解；同时，也可在用户刷新或重新打开应用时恢复聊天上下文，确保用户体验连续一致，并为个性化交互提供支持。",
+        "description": "该接口用于获取指定会话的用户与助手历史对话记录，可按数量限制返回结果。",
         "operationId": "get_message",
         "requestBody": {
           "required": true,
@@ -112,8 +112,8 @@
     },
     "/search/memory": {
       "post": {
-        "summary": "查询记忆",
-        "description": "该接口用于查询指定用户的记忆，返回与输入查询内容最相关的记忆片段。您可以调用这些记忆片段作为参考，供大模型生成回答时使用。如本章示例所示，您可以在用户与 AI 对话过程中实时检索用户记忆，也可以对用户整体记忆进行全局检索，用于生成用户画像或支持个性化推荐，从而提升对话的连贯性与用户的个性化体验。<br><br>在最近的更新中，召回的记忆片段除了原有的“事实记忆”，新增了对“偏好记忆”的支持，使模型回答时“更懂用户”。",
+        "summary": "检索记忆",
+        "description": "该接口用于检索指定用户的记忆，返回与输入查询内容最相关的记忆片段，供Agent使用。召回的记忆片段包括“事实记忆”、“偏好记忆”、“工具记忆”。",
         "operationId": "search_memory",
         "requestBody": {
           "required": true,
@@ -206,7 +206,7 @@
     "/delete/memory": {
       "post": {
         "summary": "删除记忆",
-        "description": "",
+        "description": "该接口用于删除指定用户的记忆，支持批量删除。",
         "operationId": "delete_memory",
         "requestBody": {
           "required": true,
@@ -235,7 +235,7 @@
     "/add/feedback": {
       "post": {
         "summary": "添加反馈",
-        "description": "",
+        "description": "该接口用于添加对当前会话消息的反馈，MemOS能够基于用户的反馈更正记忆。",
         "operationId": "add_feedback",
         "requestBody": {
           "required": true,
@@ -264,7 +264,7 @@
     "/get/status": {
       "post": {
         "summary": "获取任务状态",
-        "description": "",
+        "description": "获取异步处理任务的状态。",
         "operationId": "get_status",
         "requestBody": {
           "required": true,
@@ -293,7 +293,7 @@
     "/create/knowledgebase": {
       "post": {
         "summary": "创建知识库",
-        "description": "",
+        "description": "创建与项目关联的知识库",
         "operationId": "create_knowledgebase",
         "requestBody": {
           "required": true,
@@ -321,8 +321,8 @@
     },
     "/delete/knowledgebase": {
       "post": {
-        "summary": "删除知识库",
-        "description": "",
+        "summary": "移除知识库",
+        "description": "从当前项目中移除知识库，彻底删除知识库需从控制台-知识库页面操作。",
         "operationId": "delete_knowledgebase",
         "requestBody": {
           "required": true,
@@ -350,8 +350,8 @@
     },
     "/add/knowledgebase-file": {
       "post": {
-        "summary": "上传文件",
-        "description": "",
+        "summary": "添加知识库文档",
+        "description": "向指定知识库上传文档",
         "operationId": "add_knowledgebase-file",
         "requestBody": {
           "required": true,
@@ -379,8 +379,8 @@
     },
     "/get/knowledgebase-file": {
       "post": {
-        "summary": "获取文件",
-        "description": "",
+        "summary": "获取知识库文档",
+        "description": "获取指定文档信息",
         "operationId": "get_knowledgebase-file",
         "requestBody": {
           "required": true,
@@ -408,8 +408,8 @@
     },
     "/delete/knowledgebase-file": {
       "post": {
-        "summary": "删除文件",
-        "description": "",
+        "summary": "删除知识库文档",
+        "description": "从指定知识库中删除文档",
         "operationId": "delete_knowledgebase-file",
         "requestBody": {
           "required": true,
@@ -457,17 +457,23 @@
           "user_id": {
             "type": "string",
             "title": "User ID",
-            "description": "用户唯一标识"
+            "description": "对话内容所关联的用户唯一标识符。"
           },
           "conversation_id": {
             "type": "string",
             "title": "Conversation ID",
-            "description": "会话ID，用于多轮对话上下文"
+            "description": "对话内容所在会话的唯一标识符，传入可明确当前会话，本会话的记忆应当比其他历史会话的权重高；不传可跨会话检索相关记忆，得到相关性更高的模型回答。"
           },
           "query": {
             "type": "string",
             "title": "Query",
-            "description": "用户输入的对话内容"
+            "description": "用户输入的对话内容。"
+          },
+          "filter": {
+            "type": "object",
+            "title": "Filter",
+            "description": "过滤条件。可用字段包括：agent_id、app_id、create_time、update_time与info中的特定字段。支持逻辑运算符（AND，OR）和比较运算符（eq，时间还支持gte、lte、gt、lt）。对于info字段，支持过滤传入的business_type,biz_id,scene,custom_status。",
+            "example": "{\"and\": [{\"create_time\":{\"gte\":\"...\"}}]}\"
           },
           "knowledgebase_ids": {
             "type": "array",
@@ -475,35 +481,7 @@
               "type": "string"
             },
             "title": "Knowledgebase IDs",
-            "description": "选定可以检索的知识库范围"
-          },
-          "filter": {
-            "type": "object",
-            "title": "Filter",
-            "description": "过滤条件",
-            "example": "{\"and\": [{\"create_time\": ...}]}"
-          },
-          "system_prompt": {
-            "type": "string",
-            "title": "System Prompt",
-            "description": "自定义系统指令"
-          },
-          "stream": {
-            "type": "boolean",
-            "title": "Stream",
-            "description": "是否流式返回 (true/false) 默认false(非流式返回)",
-            "default": false
-          },
-          "model_name": {
-            "type": "string",
-            "enum": [
-              "Qwen3-32B",
-              "deepseek-r1",
-              "Qwen2.5-72B-Instruct"
-            ],
-            "title": "Model Name",
-            "description": "模型名称",
-            "default": "Qwen2.5-72B-Instruct"
+            "description": "选定可以检索的知识库范围。"
           },
           "memory_limit_number": {
             "type": "integer",
@@ -511,61 +489,11 @@
             "description": "限定返回的事实记忆条数，用于控制召回的事实记忆个数。默认值： 6，最大值：25。",
             "default": 6
           },
-          "allow_public": {
-            "type": "boolean",
-            "title": "Allow Public",
-            "description": "是否允许加入公共记忆",
-            "default": false
-          },
           "include_preference": {
             "type": "boolean",
             "title": "Include Preference",
             "description": "是否要召回偏好记忆，开启后系统会根据查询内容智能召回与用户偏好相关的记忆。默认 =true",
             "default": true
-          },
-          "max_tokens": {
-            "type": "integer",
-            "title": "Max Tokens",
-            "description": "表示最大生成 token 数",
-            "default": 8192
-          },
-          "temperature": {
-            "type": "number",
-            "title": "Temperature",
-            "description": "控制生成随机性。取值范围：0 <= x <= 2",
-            "default": 0.7
-          },
-          "tags": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "title": "Tags",
-            "description": "自定义标签列表，用于标记对话内容的主题或分类"
-          },
-          "info": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string"
-            },
-            "title": "Info",
-            "description": "自定义元信息字段，能够存储任意与对话内容相关的结构化数据，例如位置、来源、版本等，主要用于在检索时精确过滤或追踪来源"
-          },
-          "app_id": {
-            "type": "string",
-            "title": "App ID",
-            "description": "对话内容所关联的应用唯一标识符"
-          },
-          "agent_id": {
-            "type": "string",
-            "title": "Agent ID",
-            "description": "对话内容所关联的 Agent 唯一标识符"
-          },
-          "top_p": {
-            "type": "number",
-            "title": "Top P",
-            "description": "Nucleus 采样参数。取值范围：0 <= x <= 1",
-            "default": 0.95
           },
           "preference_limit_number": {
             "type": "integer",
@@ -573,11 +501,83 @@
             "description": "限定返回的偏好记忆条数，用于控制召回的偏好记忆个数，仅在include_preference=true 时生效 默认值： 6，最大值：25",
             "default": 6
           },
-          "add_message_on_answer": {
+          "model_name": {
+            "type": "string",
+            "enum": [
+              "Qwen3-32B",
+              "deepseek-r1",
+              "qwen2.5-72B-Instruct"
+            ],
+            "title": "Model Name",
+            "description": "指定具体对话模型。",
+            "default": "qwen2.5-72B-Instruct"
+          },
+          "system_prompt": {
+            "type": "string",
+            "title": "System Prompt",
+            "description": "自定义系统指令。"
+          },
+          "stream": {
+            "type": "boolean",
+            "title": "Stream",
+            "description": "是否启用流式返回。",
+            "default": false
+          },
+          "max_tokens": {
+            "type": "integer",
+            "title": "Max Tokens",
+            "description": "表示最大生成 token 数。",
+            "default": 8192
+          },
+          "temperature": {
+            "type": "number",
+            "title": "Temperature",
+            "description": "控制生成随机性。取值范围：0 <= x <= 2",
+            "default": 0.7
+          },          
+          "top_p": {
+            "type": "number",
+            "title": "Top P",
+            "description": "Nucleus 采样参数。取值范围：0 <= x <= 1",
+            "default": 0.95
+          },
+         "add_message_on_answer": {
             "type": "boolean",
             "title": "Add Message On Answer",
-            "description": "是否自动将用户与助手的会话内容写入记忆。启用后，开发者无需再调用add/message接口添加消息为记忆",
+            "description": "是否自动将用户与助手的会话内容写入记忆。启用后，开发者无需再调用add/message接口添加消息为记忆。",
             "default": true
+          },
+          "app_id": {
+            "type": "string",
+            "title": "App ID",
+            "description": "对话内容所关联的应用唯一标识符。"
+          },
+          "agent_id": {
+            "type": "string",
+            "title": "Agent ID",
+            "description": "对话内容所关联的 Agent 唯一标识符。"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "title": "Tags",
+            "description": "自定义标签列表，用于标记对话内容的主题或分类。"
+          },
+          "info": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Info",
+            "description": "自定义元信息字段，能够存储任意与对话内容相关的结构化数据，例如位置、来源、版本等，主要用于在检索时精确过滤或追踪来源。"
+          },
+          "allow_public": {
+            "type": "boolean",
+            "title": "Allow Public",
+            "description": "是否允许加入公共记忆。",
+            "default": false
           },
           "allow_knowledgebase_ids": {
             "type": "array",
@@ -585,7 +585,7 @@
               "type": "string"
             },
             "title": "Allow Knowledgebase IDs",
-            "description": "添加的消息，产生的记忆允许被写入的知识库列表。为空表示不允许写入任何知识库，仅可写入指定的知识库 ID"
+            "description": "添加的消息产生的记忆允许被写入的知识库列表。"
           }
         },
         "title": "ChatRequest"
@@ -597,7 +597,7 @@
           "response": {
             "type": "string",
             "title": "Response",
-            "description": "返回具体chat信息"
+            "description": "回答的具体内容。"
           }
         }
       },
@@ -645,13 +645,13 @@
               "tool"
             ],
             "title": "Role",
-            "description": "角色 (user/assistant/system/tool)"
+            "description": "消息创建者的角色。"
           },
           "content": {
             "oneOf": [
               {
                 "type": "string",
-                "description": "纯文本内容"
+                "description": "消息文本内容"
               },
               {
                 "type": "array",
@@ -665,29 +665,29 @@
                         "image_url",
                         "file"
                       ],
-                      "description": "多模态类型"
+                      "description": "发送的消息类型"
                     },
                     "text": {
                       "type": "string",
-                      "description": "纯文本内容（type=text 时，必填），默认空"
+                      "description": "文本消息内容。type为text时必填。"
                     },
                     "image_url": {
                       "type": "object",
-                      "description": "图片 URL对象，默认空",
+                      "description": "图片消息内容对象。",
                       "properties": {
                         "url": {
                           "type": "string",
-                          "description": "图片 URL（type=image_url 时，必填），默认空"
+                          "description": "图片消息URL。type为image_url时必填。"
                         }
                       }
                     },
                     "file": {
                       "type": "object",
-                      "description": "文件数数据对象，默认空",
+                      "description": "文件消息内容对象。",
                       "properties": {
                         "file_data": {
                           "type": "string",
-                          "description": "文件数据（type=file 时必填，可访问的文件 URL或者base64, 只支持四种类型txt / pdf / doc / docx， 单文件不超过100MB、200页，总数不超过20个），默认空"
+                          "description": "可访问的文件URL或者base64, 只支持四种类型txt / pdf / doc / docx， 单文件不超过100MB、200页，总数不超过20个。type为file时必填。"
                         }
                       }
                     }
@@ -701,6 +701,11 @@
             ],
             "description": "消息内容文本。"
           },
+          "tool_call_id": {
+              "type": "string",
+              "description": "role为tool时，工具调用消息的唯一标识。"
+            }
+          },
           "tool_calls": {
             "type": "array",
             "items": {
@@ -708,38 +713,31 @@
               "properties": {
                 "id": {
                   "type": "string",
-                  "description": "模型生成的调用 ID，tool_calls下必传"
+                  "description": "工具调用的唯一标识，用于关联本次工具调用。添加包含工具调用的 assistant 消息时必填。"
                 },
                 "type": {
                   "type": "string",
-                  "description": "固定为function（OpenAI 仅支持函数类型工具调用），tool_calls下必传",
-                  "enum": [
-                    "function"
-                  ]
+                  "description": "工具调用类型。当前仅支持 function，tool_calls 中必填。",
+                  "enum": ["function"]
                 },
                 "function": {
                   "type": "object",
-                  "description": "调用的工具，tool_calls下必传",
+                  "description": "被调用的工具定义，tool_calls 中必填。",
                   "properties": {
                     "name": {
                       "type": "string",
-                      "description": "工具/函数名称，tool_calls下必传"
+                      "description": "工具（函数）名称，需与已注册的工具名一致，tool_calls 中必填。"
                     },
                     "arguments": {
                       "type": "string",
-                      "description": "调用参数（必须是 JSON 格式的字符串，而非原生 JSON 对象），tool_calls下必传"
+                      "description": "工具调用参数，需为 JSON 格式的字符串（而非原生 JSON 对象），tool_calls 中必填。"
                     }
                   }
                 }
               }
             },
-            "description": "工具调用列表"
+            "description": "role 为 assistant时，工具调用信息列表，用于在触发工具调用时传递。"
           },
-          "tool_call_id": {
-            "type": "string",
-            "description": "与某一次 tool 调用关联的 ID，用于 tool 角色消息，默认空"
-          }
-        },
         "title": "MessageInput"
       },
       "AddMessageRequest": {
@@ -763,20 +761,28 @@
           "messages": {
             "type": "array",
             "title": "Messages",
-            "description": "表示内存内容的消息对象数组。数组中所有消息的总token数上限为8k。",
+            "description": "添加的消息对象数组，数组中所有消息的总token数上限为20k。",
             "items": {
               "$ref": "#/components/schemas/MessageInput"
             }
           },
           "agent_id": {
             "type": "string",
-            "description": "对话内容所关联的 Agent 唯一标识符",
+            "description": "添加的消息所关联的 Agent 唯一标识符，主要用于在检索记忆时查询某用户与该 Agent 的专属记忆。",
             "default": ""
           },
           "app_id": {
             "type": "string",
-            "description": "对话内容所关联的应用唯一标识符",
+            "description": "添加的消息所关联的应用唯一标识符，主要用于在检索记忆时查询某用户在该 App 下的专属记忆。",
             "default": ""
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "自定义标签列表，用于标记添加消息的主题或分类。",
+            "default": []
           },
           "info": {
             "type": "object",
@@ -796,12 +802,12 @@
                 }
               ]
             },
-            "description": "额外信息配置",
+            "description": "自定义元信息字段，能够存储任意与添加信息相关的结构化数据，例如位置、来源、版本等，主要用于在检索时精确过滤或追踪来源。",
             "default": null
           },
           "allow_public": {
             "type": "boolean",
-            "description": "是否允许写入“公共知识库”",
+            "description": "添加的消息产生的记忆是否允许写入公共记忆库。开启后，生成的记忆可被项目下的其他用户检索。",
             "default": false
           },
           "allow_knowledgebase_ids": {
@@ -809,20 +815,12 @@
             "items": {
               "type": "string"
             },
-            "description": "允许写入的特定知识库ID",
-            "default": []
-          },
-          "tags": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "用户自定义标签",
+            "description": "添加的消息，产生的记忆允许被写入的知识库范围。",
             "default": []
           },
           "async_mode": {
             "type": "boolean",
-            "description": "是否异步处理",
+            "description": "是否启用异步添加记忆。开启后，记忆将在后台异步添加，避免阻塞调用链。",
             "default": true
           }
         },
@@ -840,12 +838,12 @@
           "task_id": {
             "type": "string",
             "title": "Task ID",
-            "description": "任务id"
+            "description": "记忆处理任务的唯一标识"
           },
           "status": {
             "type": "string",
             "title": "Staus",
-            "description": "任务状态"
+            "description": "记忆处理任务当前的状态。可能的状态：`running`/`completed`/`failed`"
           }
         },
         "title": "OpenMemAddMessageResponse"
