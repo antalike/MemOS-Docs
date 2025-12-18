@@ -137,4 +137,4 @@ desc: 在 MemOS 中，记忆并不是静态存放的，而是会随着时间�
 
 ## 4. 下一步行动
 
-还有疑惑？去看看 [FAQs](/memos_cloud/faq)能不能为您解答~
+还有疑惑？去看看[FAQs](/memos_cloud/faq)能不能为您解答~
