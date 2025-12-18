@@ -104,10 +104,9 @@ memory_detail_list [
 ### 对话中使用记忆
 
 在用户与 AI 对话的过程中，你可以调用 MemOS 检索与当前用户发言最相关的记忆，并将其填充到大模型的回复提示词中。
+*  填写`conversation_id`可以帮助 MemOS 理解当前会话的上下文，提升本会话相关记忆的权重，使对话模型的回复内容更加连贯。
 
-小Tips：填写`conversation_id`可以帮助 MemOS 理解当前会话的上下文，提升本会话相关记忆的权重，使对话模型的回复内容更加连贯。
-
-如下示例所示，如果你已经尝试[添加消息](/memos_cloud/mem_operations/add_message)，添加过用户`memos\_user\_345`的历史对话消息，你可以复制参考该示例检索用户记忆。
+如下示例所示，如果你已经尝试[添加消息](/memos_cloud/mem_operations/add_message)，添加过用户`memos_user_345`的历史对话消息，你可以复制参考该示例检索用户记忆。
 
 ::code-group
 ```python [Python (HTTP)]
@@ -187,11 +186,11 @@ print(f"result: {res.json()}")
 ```
 ::
 
-**获取用户整体画像**
+### 获取用户整体画像
 
-如果你需要对自己开发的应用进行用户分析，或者希望在 AI 应用中向用户实时展示他们的“个人关键印象”，可以调用 MemOS 全局检索用户的记忆，帮助大模型生成用户的个性化画像。
+如果你需要对自己开发的应用进行用户分析，或者希望在 AI 应用中向用户实时展示他们的“个人关键印象”，可以调用 MemOS 全局检索用户的记忆，帮助大模型生成用户的个性化画像。此时可以不填写`conversation_id`哦～
 
-如下示例所示，如果你已经尝试[添加消息](/memos_cloud/mem_operations/add_message)，添加过用户`memos\_user\_567`的历史对话消息，你可以一键复制该示例检索用户记忆。
+如下示例所示，如果你已经尝试[添加消息](/memos_cloud/mem_operations/add_message)，添加过用户`memos_user_567`的历史对话消息，你可以一键复制该示例检索用户记忆。
 
 ::code-group
 ```python [Python (HTTP)]
@@ -273,6 +272,7 @@ print(f"result: {res.json()}")
 
 ::note
 &nbsp;有关 API 字段、格式等信息的完整列表，详见[Search Memory接口文档](/api_docs/core/search_memory)。
+::
 | **功能**       | **字段**                                            | **说明**                                                     |
 | -------------- | --------------------------------------------------- | ------------------------------------------------------------ |
 | 记忆过滤器     | `info`                                              | 支持自定义结构化查询条件，精确筛选记忆，详见[记忆过滤器](/memos_cloud/features/basic/filters)。 |
