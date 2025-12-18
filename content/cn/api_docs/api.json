@@ -20,7 +20,7 @@
     "/add/message": {
       "post": {
         "summary": "添加消息",
-        "description": "该接口用于向指定会话添加一条或多条消息。如本章的使用示例所示，您既可以在用户与助手的对话进行时实时写入，也可批量导入已有的历史记录，或补充用户的偏好和行为信息。所有添加的消息内容都会被 MemOS 转化为记忆，用于后续对话的召回与参考，从而支持对话历史管理、用户行为记录以及个性化交互。",
+        "description": "该接口用于添加会话消息，支持多类型内容、批量添加。MemOS 会自动解析消息并处理记忆，用于后续对话时召回参考。",
         "operationId": "add_message",
         "requestBody": {
           "required": true,
@@ -754,12 +754,12 @@
           "user_id": {
             "type": "string",
             "title": "User ID",
-            "description": "与添加消息关联的用户的唯一标识符。"
+            "description": "添加的消息所关联的用户唯一标识符。"
           },
           "conversation_id": {
             "type": "string",
             "title": "Conversation ID",
-            "description": "与添加消息关联的会话的唯一标识符。"
+            "description": "添加的消息所关联的会话唯一标识符，相同 `conversation_id` 下的多轮消息会被识别为同一上下文。"
           },
           "messages": {
             "type": "array",
