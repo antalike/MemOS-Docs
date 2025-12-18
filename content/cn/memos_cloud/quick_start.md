@@ -47,22 +47,22 @@ pip install MemoryOS -U
 
 **输出的记忆列表如下：**<br>
 ::
-```json [search_memory_res.json]
-
+```
 # 示例输出（为了方便理解此处做了简化，仅供参考）
 
 # 偏好类型的记忆
-preference_detail_list [
+{
+  preference_detail_list [
     {
       "preference_type": "implicit_preference",  #隐性偏好
       "preference": "用户可能偏好性价比较高的酒店选择。",
       "reasoning": "七天酒店通常以经济实惠著称，而用户选择七天酒店可能表明其在住宿方面倾向于选择性价比较高的选项。虽然用户没有明确提到预算限制或具体酒店偏好，但在提供的选项中选择七天可能反映了对价格和实用性的重视。",
       "conversation_id": "0610"
     }
-  ]
+  ],
 
 # 事实类型的记忆
-memory_detail_list [
+  memory_detail_list [
     {
       "memory_key": "暑假广州旅游计划",
       "memory_value": "用户计划在暑假期间前往广州旅游，并选择了七天连锁酒店作为住宿选项。",
@@ -75,6 +75,7 @@ memory_detail_list [
       ]
     }
   ]
+}
 ```
 
 
