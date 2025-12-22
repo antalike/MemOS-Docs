@@ -609,6 +609,57 @@
             "type": "string",
             "title": "Response",
             "description": "回答的具体内容。"
+          },
+          "streaming_message": {
+            "type": "object",
+            "title": "Streaming Message Format",
+            "description": "当请求体中 `stream=true` 时，接口通过 SSE 推送的一条流式消息示例。",
+            "properties": {
+              "event": {
+                "type": "string",
+                "title": "Event",
+                "enum": [
+                  "message"
+                ],
+                "description": "流式事件类型，固定为 message。"
+              },
+              "data": {
+                "type": "object",
+                "title": "Data",
+                "required": [
+                  "type",
+                  "data"
+                ],
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "title": "Type",
+                    "description": "流式消息类型。reasoning：推理内容；text：正常回答文本；reference：记忆引用；internet_reference：互联网检索内容；time：时间；suggestion：推荐问题；end：结束。",
+                    "enum": [
+                      "reasoning",
+                      "text",
+                      "reference",
+                      "internet_reference",
+                      "time",
+                      "suggestion",
+                      "end"
+                    ]
+                  },
+                  "data": {
+                    "type": "string",
+                    "title": "Data",
+                    "description": "对应类型的文本内容。"
+                  }
+                }
+              }
+            },
+            "example": {
+              "event": "message",
+              "data": {
+                "type": "text",
+                "data": "欢迎来到 MemOS，今天想聊点什么？"
+              }
+            }
           }
         }
       },
