@@ -277,5 +277,5 @@ print(f"result: {res.json()}")
 | -------------- | --------------------------------------------------- | ------------------------------------------------------------ |
 | 记忆过滤器     | `info`                                              | 支持自定义结构化查询条件，精确筛选记忆，详见[记忆过滤器](/memos_cloud/features/basic/filters)。 |
 | 召回偏好记忆   | `include_preference`<br><span style="line-height:0.6;">&nbsp;</span><br>`preference_limit_number`   | 偏好记忆是 MemOS 基于用户历史消息分析生成的用户偏好信息。开启后，可在检索结果中召回用户偏好记忆。 |
-| 召回工具记忆   | `include_tool_memory`<br><span style="line-height:0.6;">&nbsp;</span><br>`tool_memory_limit_number` | 工具记忆是 MemOS 对已添加的工具调用信息进行分析后生成的记忆。开启后，可在检索结果中召回工具记忆，详见++工具记忆++。 |
+| 召回工具记忆   | `include_tool_memory`<br><span style="line-height:0.6;">&nbsp;</span><br>`tool_memory_limit_number` | 工具记忆是 MemOS 对已添加的工具调用信息进行分析后生成的记忆。开启后，可在检索结果中召回工具记忆，详见[工具调用](/memos_cloud/features/advanced/tool_calling)。 |
 | 检索指定知识库 | `knowledgebase_ids`                                 | 指定本次检索可使用的项目关联知识库范围，详见[知识库](/memos_cloud/features/advanced/knowledge_base)。     |
