@@ -197,6 +197,11 @@
                 "schema": {
                   "$ref": "#/components/schemas/ChatResponse"
                 }
+              },
+              "text/event-stream": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChatStreamResponse"
+                }
               }
             }
           }
@@ -623,6 +628,36 @@
           }
         },
         "title": "ChatResponse"
+      },
+      "ChatStreamResponse": {
+        "type": "object",
+        "properties": {
+          "event": {
+            "type": "string",
+            "description": "流式事件名称，当前默认为 message。",
+            "default": "message"
+          },
+          "data": {
+            "type": "object",
+            "description": "流式返回的数据内容。",
+            "properties": {
+              "type": {
+                "type": "string",
+                "description": "流式消息类型，用于标识当前数据的语义类别。<br>reasoning：推理内容<br>text：正常文本内容<br>end：流式结束标识",
+                "enum": [
+                  "reasoning",
+                  "text",
+                  "end"
+                ]
+              },
+              "data": {
+                "type": "string",
+                "description": "流式返回的文本内容。"
+              }
+            }
+          }
+        },
+        "title": "ChatStreamResponse"
       },
       "MessageInput": {
         "type": "object",

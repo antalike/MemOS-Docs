@@ -53,6 +53,14 @@ img[alt="MemOS Banner"] {
   display: none; 
 }
 
+.request-display pre[role="tabpanel"],
+.request-display button[role="tab"] {
+  font-size: 12px !important;
+}
+.request-display button[role="tab"] {
+  cursor: pointer;
+}
+
 /* Color-mix() functions - Chrome 107 incompatible (Chrome 111+ support) */
 /* Fallback colors with RGB values for better browser compatibility */
 @supports not (color: oklch(0% 0 0)) {

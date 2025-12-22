@@ -86,6 +86,7 @@ onUnmounted(() => {
           <CodeSnippet
             v-if="collectionName === 'dashboardApi' && normalizeName"
             :name="normalizeName"
+            class="request-display"
           />
           <ApiCodeRequest
             v-else-if="apiData?.requestBody"
@@ -134,6 +135,7 @@ onUnmounted(() => {
       <CodeSnippet
         v-if="collectionName === 'dashboardApi' && normalizeName"
         :name="normalizeName"
+        class="request-display"
       />
       <ApiCodeRequest
         v-else-if="apiData?.requestBody"

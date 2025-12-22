@@ -9,8 +9,10 @@ const switchLocalePath = useSwitchLocalePath()
 const normalizedPath = computed(() => switchLocalePath(defaultLocale))
 const contentNavigation = useContentNavigation(locale)
 
+const normalizePath = (p: string) => p.replace(/\/$/, '')
+
 const getSegment = (p: string) => {
-  const normalized = p.replace(/^\/(cn|en)(\/|$)/, '/')
+  const normalized = normalizePath(p).replace(/^\/(cn|en)(\/|$)/, '/')
   const parts = normalized.split('/').filter(Boolean)
   return parts[0]
 }
@@ -23,7 +25,7 @@ const filteredNavigation = computed(() => {
   const nav = contentNavigation.value
   const path = route.path
 
-  if (path.includes('/dashboard/api')) {
+  if (normalizePath(path).includes('/dashboard/api')) {
     return []
   }
 
@@ -44,8 +46,10 @@ const filteredNavigation = computed(() => {
   const mapNavigation = (items: ContentNavigationItem[], level = 0): ContentNavigationItem[] => {
     return items.map((item) => {
       const isOpen = level === 0 || hasActiveChild(item, route.path)
+      const isActive = item.path && normalizePath(item.path) === normalizePath(route.path)
       return {
         ...item,
+        active: isActive,
         defaultOpen: isOpen,
         children: item.children ? mapNavigation(item.children, level + 1) : undefined
       } as ContentNavigationItem
@@ -53,7 +57,7 @@ const filteredNavigation = computed(() => {
   }
 
   const hasActiveChild = (item: ContentNavigationItem, currentPath: string): boolean => {
-    if (item.path === currentPath) return true
+    if (item.path && normalizePath(item.path) === normalizePath(currentPath)) return true
     if (item.children) {
       return item.children.some(child => hasActiveChild(child, currentPath))
     }
@@ -105,17 +109,19 @@ useHead({
 })
 
 function showContentNavigation() {
-  return normalizedPath.value !== '/'
+  const path = normalizePath(normalizedPath.value)
+  return path !== '/'
     && !isApiPage()
-    && !normalizedPath.value.includes('changelog')
-    && !normalizedPath.value.includes('/dashboard/api')
+    && !path.includes('changelog')
+    && !path.includes('/dashboard/api')
 }
 
 function isApiPage() {
-  return route.path.startsWith('/docs/api')
-    || route.path.startsWith('/cn/docs/api/')
-    || route.path.startsWith('/api-reference')
-    || route.path.startsWith('/cn/api-reference')
+  const path = normalizePath(route.path)
+  return path.startsWith('/docs/api')
+    || path.startsWith('/cn/docs/api/')
+    || path.startsWith('/api-reference')
+    || path.startsWith('/cn/api-reference')
 }
 
 provide('navigation', filteredNavigation)
