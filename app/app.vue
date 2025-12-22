@@ -9,6 +9,14 @@ const switchLocalePath = useSwitchLocalePath()
 const normalizedPath = computed(() => switchLocalePath(defaultLocale))
 const contentNavigation = useContentNavigation(locale)
 
+const getSegment = (p: string) => {
+  const normalized = p.replace(/^\/(cn|en)(\/|$)/, '/')
+  const parts = normalized.split('/').filter(Boolean)
+  return parts[0]
+}
+
+const currentSegment = computed(() => getSegment(route.path))
+
 const filteredNavigation = computed(() => {
   if (!contentNavigation.value) return []
 
@@ -19,12 +27,6 @@ const filteredNavigation = computed(() => {
     return []
   }
 
-  const getSegment = (p: string) => {
-    const normalized = p.replace(/^\/(cn|en)(\/|$)/, '/')
-    const parts = normalized.split('/').filter(Boolean)
-    return parts[0]
-  }
-
   const hasDescendantWithSegment = (item: ContentNavigationItem, segment: string): boolean => {
     if (item.path && getSegment(item.path) === segment) return true
     if (item.children) {
@@ -33,12 +35,32 @@ const filteredNavigation = computed(() => {
     return false
   }
 
-  const currentSegment = getSegment(path)
-  if (!currentSegment) return []
+  if (!currentSegment.value) return []
 
-  const activeNode = nav.find(item => hasDescendantWithSegment(item, currentSegment))
+  const activeNode = nav.find(item => hasDescendantWithSegment(item, currentSegment.value))
 
-  return activeNode ? activeNode.children || [] : []
+  if (!activeNode) return []
+
+  const mapNavigation = (items: ContentNavigationItem[], level = 0): ContentNavigationItem[] => {
+    return items.map((item) => {
+      const isOpen = level === 0 || hasActiveChild(item, route.path)
+      return {
+        ...item,
+        defaultOpen: isOpen,
+        children: item.children ? mapNavigation(item.children, level + 1) : undefined
+      } as ContentNavigationItem
+    })
+  }
+
+  const hasActiveChild = (item: ContentNavigationItem, currentPath: string): boolean => {
+    if (item.path === currentPath) return true
+    if (item.children) {
+      return item.children.some(child => hasActiveChild(child, currentPath))
+    }
+    return false
+  }
+
+  return mapNavigation(activeNode.children || [])
 })
 
 const { data: files } = useLazyAsyncData(`search`, () => queryCollectionSearchSections('docs'), {
@@ -116,6 +138,8 @@ provide('navigation', filteredNavigation)
                 <!-- Use keep-alive to maintain menu state -->
                 <keep-alive>
                   <UContentNavigation
+                    v-if="filteredNavigation?.length"
+                    :key="currentSegment"
                     :navigation="filteredNavigation"
                     highlight
                     :ui="{
