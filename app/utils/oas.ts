@@ -353,6 +353,30 @@ export class SimpleOAS {
   }
 
   /**
+   * Get response Content-Types
+   */
+  getResponseContentTypes(path: string, method: HttpMethods, statusCode: string | number = '200'): string[] {
+    const operation = this.getOperation(path, method)
+    if (!operation?.responses) return []
+
+    const response = operation.responses[statusCode.toString()]
+    if (!response) return []
+
+    let responseObj = response as ResponseObject | ReferenceObject
+
+    // Resolve reference
+    if (isRef(responseObj)) {
+      responseObj = resolveRef(responseObj.$ref, this.api) as ResponseObject
+    }
+
+    if (responseObj && 'content' in responseObj && responseObj.content) {
+      return Object.keys(responseObj.content)
+    }
+
+    return []
+  }
+
+  /**
    * Get response Content-Type
    */
   getResponseContentType(path: string, method: HttpMethods, statusCode: string | number = '200'): string {
@@ -522,9 +546,19 @@ export class SimpleOAS {
   /**
    * Get response JSON Schema (supports polymorphism)
    */
-  getResponseAsJSONSchema(path: string, method: HttpMethods, statusCode: string | number): SchemaObject | null {
+  getResponseAsJSONSchema(path: string, method: HttpMethods, statusCode: string | number, contentType?: string): SchemaObject | null {
     const response = this.getResponseByStatusCode(path, method, statusCode)
     if (!response?.content) return null
+
+    if (contentType && response.content[contentType]) {
+      const mediaObj = response.content[contentType]
+      const schema = mediaObj.schema as SchemaObject
+      if (schema && usesPolymorphism(schema)) {
+        const resolvedSchemas = resolvePolymorphicSchema(schema, this.api)
+        return resolvedSchemas.length > 0 ? (resolvedSchemas[0] || null) : schema
+      }
+      return schema || null
+    }
 
     // Find JSON media type
     for (const [mediaType, mediaObj] of Object.entries(response.content)) {

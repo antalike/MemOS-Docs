@@ -8,7 +8,7 @@ const collectionName = inject<CollectionName>('collectionName')
 const {
   getResponseStatusCodes,
   getResponseByStatusCode,
-  getResponseContentType,
+  getResponseContentTypes,
   getResponseAsJSONSchema
 } = useOpenApi(collectionName)
 
@@ -17,11 +17,18 @@ const statusCodes = computed(() => {
 })
 
 const currentCode = ref<string>('200')
+const currentContentType = ref<string>('')
 
-const selectedContentType = computed(() => {
-  if (!currentCode.value) return
-  return getResponseContentType(props.path, props.method, currentCode.value)
+const contentTypes = computed(() => {
+  if (!currentCode.value) return []
+  return getResponseContentTypes(props.path, props.method, currentCode.value)
 })
+
+watch(contentTypes, (newTypes) => {
+  if (newTypes.length > 0 && (!currentContentType.value || !newTypes.includes(currentContentType.value))) {
+    currentContentType.value = newTypes[0]!
+  }
+}, { immediate: true })
 
 const selectedResponse = computed(() => {
   if (!currentCode.value) return null
@@ -30,7 +37,7 @@ const selectedResponse = computed(() => {
 
 const selectedSchema = computed(() => {
   if (!currentCode.value) return null
-  return getResponseAsJSONSchema(props.path, props.method, currentCode.value)
+  return getResponseAsJSONSchema(props.path, props.method, currentCode.value, currentContentType.value)
 })
 </script>
 
@@ -46,8 +53,20 @@ const selectedSchema = computed(() => {
             <USelect
               v-model="currentCode"
               :items="statusCodes"
+              :ui="{
+                base: 'text-xs',
+                item: 'text-xs'
+              }"
             />
-            <span>{{ selectedContentType }}</span>
+            <USelect
+              v-if="contentTypes.length > 1"
+              v-model="currentContentType"
+              :items="contentTypes"
+              :ui="{
+                base: 'text-xs'
+              }"
+            />
+            <span v-else>{{ currentContentType }}</span>
           </div>
         </template>
       </ApiSectionHeader>

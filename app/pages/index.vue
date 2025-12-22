@@ -74,6 +74,6 @@ const items = computed(() => localeItems.value.map((item, index) => ({
         </div>
       </UPageCard>
     </div>
-    <AppFooter class="mt-40" />
+    <AppFooter class="mt-28.5" />
   </UMain>
 </template>
