@@ -184,7 +184,7 @@ add_message("memos_assistant_123", "memos_conversation_123", "assistant","""你�
 | 关联更多实体 | `agent_id` `app_id` | 当前用户的对话消息关联 Agent、应用等实体的唯一标识符，便于后续按实体维度检索记忆。 |
 | 消息 | `messages` | 用于添加的对话消息列表。<br>支持的角色类型包括：user / assistant / system / tool；<br>支持的消息类型包括：<br>• 文本<br>• 文档、图片，详见[多模态消息](/memos_cloud/features/basic/multimodal)。<br>• 工具调用信息，详见[工具调用](/memos_cloud/features/advanced/tool_calling)。 |
 | 异步模式 | `async_mode` | 控制添加消息后的处理方式，支持异步与同步两种模式，详见[异步模式](/memos_cloud/features/basic/async_mode)。 |
-| 自定义标签 | `tags` | 为当前用户的对话消息添加自定义标签，用于后续记忆检索与过滤，详见[自定义标签](/memos_cloud/features/basic/custom_tags)。 |
-| 元信息 | `info` | 自定义的元信息字段，用于补充当前用户的对话消息，并在后续记忆检索中作为过滤条件使用。 |
-| 写入公共记忆 | `allow_public` | 控制当前用户对话消息生成的记忆是否写入项目级公共记忆，供项目下所有用户共享。 |
-| 写入知识库记忆 | `allow_knowledgebase_ids` | 控制当前用户对话消息生成的记忆是否写入指定的项目关联的知识库中。 |
+| 自定义标签 | `tags` | 为当前用户的对话消息添加自定义标签，用于后续记忆检索与过滤，例如检索时的"图召回"和其他内部推理的节点召回，详见[自定义标签](/memos_cloud/features/basic/custom_tags)。 |
+| 元信息 | `info` | 自定义元信息字段，用于补充当前用户的对话消息，并在后续记忆检索中作为过滤条件使用。<br><br>`info` 支持传入任意自定义键值对，所有字段均可正常存储和检索。<br><br>当前系统对以下字段提供了更优的查询性能支持：<br>• `business_type`（业务类型）<br>• `biz_id`（业务唯一标识）<br>• `scene`（业务或对话场景）<br>• `custom_status`（自定义状态）<br><br>是否使用上述字段并非强制要求，使用其他自定义字段在功能上完全一致，仅在检索性能上可能有所差异。<br><br>注意 info 为扁平化的键值对结构，字段名和字段值均需为字符串类型，用于在检索时进行条件过滤；非字符串值需先转换为字符串再传入。 |
+| 写入公共记忆 | `allow_public` | 控制当前用户对话消息生成的记忆是否要写入项目级公共记忆，供项目下所有用户共享，默认关闭。 |
+| 写入知识库记忆 | `allow_knowledgebase_ids` | 控制当前用户对话消息生成的记忆是否写入指定的项目关联的知识库中，供所有可访问该知识库的用户共享。默认为空，使用时您可以将需要写入的知识库列表传入。详见[知识库](/memos_cloud/features/advanced/knowledge_base)。 |

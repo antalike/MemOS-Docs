@@ -21,7 +21,7 @@ Supports defining memory filters using JSON format, allowing logical operators a
 ```json
 # Basic structure shown below
 {
-    "AND": [  # Or "OR"
+    "and": [  # Or 'or'
         { "field_name": "value" },
         { "field_name": { "operator": "value" } }
     ]
@@ -32,34 +32,34 @@ Supports defining memory filters using JSON format, allowing logical operators a
 
 ### 3.1 Instance Fields
 
-| Field Name | Operator | Example |
-| --- | --- | --- |
-| agent\_id | `=` | `{"agent_id":"agent_123"}` |
-| app\_id | `=` | `{"app_id":"app_123"}` |
+| Field Name | Data Type | Operator | Example |
+| --- | --- | --- | --- |
+| agent\_id | str | `=` | `{"agent_id":"agent_123"}` |
+| app\_id | str | `=` | `{"app_id":"app_123"}` |
 
 ### 3.2 Metadata Fields
 
 When adding messages, you can pass custom metadata field `info`. Currently, memory filters support filtering on the following four fields.
 
-| Field Name | Operator | Example |
-| --- | --- | --- |
-| business\_type | `=` | `{"business_type":"Shopping"}` |
-| biz\_id | `=` | `{"biz_id":"order_123456"}` |
-| scene | `=` | `{"scene": "Payment"}` |
-| custom\_status | `=` | `{"custom_status": "VIP3"}` |
+| Field Name | Data Type |  Operator | Example | Note |
+| --- | --- | --- | --- | --- |
+| business\_type | str | `=` | `{"business_type":"Shopping"}` | We have added a database index, resulting in faster query speed. | 
+| biz\_id | str | `=` | `{"biz_id":"order_123456"}` | We have added a database index, resulting in faster query speed. | 
+| scene | str | `=` | `{"scene": "Payment"}` | We have added a database index, resulting in faster query speed. | 
+| custom\_status | str | `=` | `{"custom_status": "VIP3"}` | You can define other fields on your own. |
 
 ### 3.3 Tag Fields
 
-| Field Name | Operator | Example |
-| --- | --- | --- |
-| tags | `=`,`contains` | `{"tags": {"contains": "finance"}` |
+| Field Name | Data Type | Operator | Example |
+| --- | --- | --- | --- |
+| tags | list |`contains` | `{"tags": {"contains": "finance"}` |
 
 ### 3.4 Time Fields
 
-| Field Name | Operator | Example |
-| --- | --- | --- |
-| create\_time | `=`,`>`,`≧`,`<`,`≦` | `{"create_time": {"gte": "2025-12-10"}}` |
-| update\_time | `=`,`>`,`≧`,`<`,`≦` | `{"update_time": {"lt": "2025-12-10"}}` |
+| Field Name | Data Type | Operator | Example |
+| --- | --- | --- | --- |
+| create\_time | str | `lt`, `gt`, `lte`, `gte` | `{"create_time": {"gte": "2025-12-10"}}` |
+| update\_time | str | `lt`, `gt`, `lte`, `gte` | `{"update_time": {"lte": "2025-12-10"}}` |
 
 ## 4. Usage Examples
 
