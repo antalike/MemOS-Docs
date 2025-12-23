@@ -220,10 +220,6 @@ docker images
 # 查看是否跑起来了
 docker ps -a
 
-# 预计还漏掉的包， pymilvus， psycopg2-binary
-pip install pymilvus psycopg2-binary
-
-
 # 根目录
  uvicorn memos.api.server_api:app --host 0.0.0.0 --port 8000 --workers 1
 

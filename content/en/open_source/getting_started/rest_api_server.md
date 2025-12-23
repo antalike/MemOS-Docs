@@ -219,9 +219,6 @@ docker images
 # Check if running
 docker ps -a
 
-# Estimated missing packages, pymilvus, psycopg2-binary
-pip install pymilvus psycopg2-binary
-
 
 # Root directory
  uvicorn memos.api.server_api:app --host 0.0.0.0 --port 8000 --workers 1
