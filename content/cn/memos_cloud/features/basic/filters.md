@@ -32,6 +32,8 @@ desc: 检索记忆时使用记忆过滤器，可以按照指定智能体、元�
 
 ### 3.1 实例字段
 
+字段详细解释见（[6. 更多功能](/memos_cloud/mem_operations/add_message)）
+
 | 字段名 | 数据类型 | 操作符 | 示例 |
 | --- | --- | --- | --- |
 | agent\_id | str | `=` | `{"agent_id":"agent_123"}` |
@@ -39,7 +41,7 @@ desc: 检索记忆时使用记忆过滤器，可以按照指定智能体、元�
 
 ### 3.2 元信息字段
 
-在记忆检索（search）时，可对在添加消息（[add](/memos_cloud/mem_operations/add_message)）阶段通过 info 写入的元信息属性进行过滤。为获得更优的检索性能，建议优先使用如下4个常用字段（已添加数据库索引，查询速度更快）。
+在记忆检索（search）时，可对在添加消息（[add](/memos_cloud/mem_operations/add_message)）阶段通过 info 写入的元信息属性进行过滤。为获得更优的检索性能，建议优先使用如下4个常用字段（已添加数据库索引，查询速度更快）。字段详细解释见（[6. 更多功能](/memos_cloud/mem_operations/add_message)）。
 
 | 字段名 | 数据类型 | 操作符 | 示例 |
 | --- | --- | --- | --- |
