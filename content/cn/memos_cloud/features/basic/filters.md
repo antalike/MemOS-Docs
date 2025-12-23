@@ -41,7 +41,7 @@ desc: 检索记忆时使用记忆过滤器，可以按照指定智能体、元�
 
 在记忆检索（search）时，可对在添加消息（[add](/memos_cloud/mem_operations/add_message)）阶段通过 info 写入的元信息属性进行过滤。为获得更优的检索性能，建议优先使用如下4个常用字段。
 
-| 字段名 | 数据类型 | 操作符 | 示例 | 备注 | 
+| 字段名 | 数据类型 | 操作符 | 示例 | 
 | --- | --- | --- | --- | --- |
 | business\_type | str | `=` | `{"business_type":"购物"}`  |
 | biz\_id | str | `=` | `{"biz_id":"order_123456"}`  |
