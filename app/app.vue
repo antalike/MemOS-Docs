@@ -109,7 +109,7 @@ useHead({
 })
 
 function showContentNavigation() {
-  const path = normalizePath(normalizedPath.value)
+  const path = normalizedPath.value
   return path !== '/'
     && !isApiPage()
     && !path.includes('changelog')
@@ -119,7 +119,7 @@ function showContentNavigation() {
 function isApiPage() {
   const path = normalizePath(route.path)
   return path.startsWith('/docs/api')
-    || path.startsWith('/cn/docs/api/')
+    || path.startsWith('/cn/docs/api')
     || path.startsWith('/api-reference')
     || path.startsWith('/cn/api-reference')
 }
