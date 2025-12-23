@@ -5,14 +5,14 @@ nav:
   - "(ri:cloud-line) MemOS Cloud":
     - "(ri:book-line) Getting Started":
       - "(ri:eye-line) Overview": memos_cloud/overview.md
-      - "(ri:home-line) MemOS Introduction":
+      - "(ri:rocket-line) Quick Start": memos_cloud/quick_start.md
+      - "(ri:home-line) Core Concepts":
         - "(ri:add-line) Memory Production": memos_cloud/introduction/mem_production.md
         - "(ri:calendar-line) Memory Schedule": memos_cloud/introduction/mem_schedule.md
         - "(ri:search-line) Memory Recall": memos_cloud/introduction/mem_recall.md
         - "(ri:refresh-line) Memory Lifecycle": memos_cloud/introduction/mem_lifecycle.md
         - "(ri:cpu-line) Algorithm Overview": memos_cloud/introduction/algorithm.md
       - "(ri:dashboard-line) Cloud Platform & Open Source": memos_cloud/cloud_and_opensource.md
-      - "(ri:rocket-line) Quick Start": memos_cloud/quick_start.md
       - "(ri:shield-line) Limitations and Quotas": memos_cloud/limit.md
 
     - "(ri:question-line) Support and Troubleshooting":
