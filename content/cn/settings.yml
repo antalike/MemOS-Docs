@@ -5,14 +5,14 @@ nav:
   - "(ri:cloud-line) MemOS Cloud":
     - "(ri:book-line) 开始使用":
       - "(ri:eye-line) 概览": memos_cloud/overview.md
-      - "(ri:home-line) MemOS 介绍":
+      - "(ri:rocket-line) 快速开始": memos_cloud/quick_start.md
+      - "(ri:home-line) 核心概念":
         - "(ri:add-line) 记忆生产": memos_cloud/introduction/mem_production.md
         - "(ri:calendar-line) 记忆调度": memos_cloud/introduction/mem_schedule.md
         - "(ri:search-line) 记忆召回": memos_cloud/introduction/mem_recall.md
         - "(ri:refresh-line) 记忆生命周期管理": memos_cloud/introduction/mem_lifecycle.md
         - "(ri:cpu-line) 算法原理概述": memos_cloud/introduction/algorithm.md
       - "(ri:dashboard-line) 云平台与开源方案": memos_cloud/cloud_and_opensource.md
-      - "(ri:rocket-line) 快速开始": memos_cloud/quick_start.md
       - "(ri:shield-line) 配额和限制": memos_cloud/limit.md
 
     - "(ri:question-line) 支持与问题排查":
