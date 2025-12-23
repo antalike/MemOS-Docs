@@ -43,10 +43,36 @@ os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
 os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
 # 带 tool_call 的消息序列
+tool_schema = [{
+    "name": "get_weather",
+    "description": "Get current weather information for a given location",
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "location": {
+                "type": "string",
+                "description": "City name, e.g. Beijing"
+            }
+        },
+        "required": [
+            "location"
+        ]
+    }
+}]
+
 data = {
     "user_id": "demo-user-id",
     "conversation_id": "demo-conv-id",
     "messages": [
+        {
+            "role": "system",
+            "content": f"""You are an assistant that can call tools.
+When a user's request can be fulfilled by a tool, you MUST call the appropriate tool.
+<tool_schema>
+{json.dumps(tool_schema, indent=2, ensure_ascii=False)}
+</tool_schema>
+"""
+        },
         {"role": "user", "content": "What's the weather like in Beijing right now?"},
         {
             "role": "assistant",
