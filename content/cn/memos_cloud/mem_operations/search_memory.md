@@ -52,7 +52,7 @@ os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 data = {
   "query": "我国庆想出去玩，帮我推荐个没去过的城市，以及没住过的酒店品牌",
   "user_id": "memos_user_123",
-  "conversation_id": "0928"
+  "conversation_id": "0928" #非必填，填写后我们会在召回记忆时优先考虑该会话中的内容，但不是强制命中，仅提升相关性权重
 }
 headers = {
   "Content-Type": "application/json",
@@ -104,7 +104,10 @@ memory_detail_list [
 ### 对话中使用记忆
 
 在用户与 AI 对话的过程中，你可以调用 MemOS 检索与当前用户发言最相关的记忆，并将其填充到大模型的回复提示词中。
-*  填写`conversation_id`可以帮助 MemOS 理解当前会话的上下文，提升本会话相关记忆的权重，使对话模型的回复内容更加连贯。
+
+::note
+`conversation_id`为非必填项，如填写可以帮助 MemOS 理解当前会话的上下文，提升本会话相关记忆的权重，使对话模型的回复内容更加连贯。
+::
 
 如下示例所示，如果你已经尝试[添加消息](/memos_cloud/mem_operations/add_message)，添加过用户`memos_user_345`的历史对话消息，你可以复制参考该示例检索用户记忆。
 
@@ -275,7 +278,7 @@ print(f"result: {res.json()}")
 ::
 | **功能**       | **字段**                                            | **说明**                                                     |
 | -------------- | --------------------------------------------------- | ------------------------------------------------------------ |
-| 记忆过滤器     | `info`                                              | 支持自定义结构化查询条件，精确筛选记忆，详见[记忆过滤器](/memos_cloud/features/basic/filters)。 |
+| 记忆过滤器     | `filter`                                              | 支持自定义结构化查询条件，精确筛选记忆，详见[记忆过滤器](/memos_cloud/features/basic/filters)。 |
 | 召回偏好记忆   | `include_preference`<br><span style="line-height:0.6;">&nbsp;</span><br>`preference_limit_number`   | 偏好记忆是 MemOS 基于用户历史消息分析生成的用户偏好信息。开启后，可在检索结果中召回用户偏好记忆。 |
 | 召回工具记忆   | `include_tool_memory`<br><span style="line-height:0.6;">&nbsp;</span><br>`tool_memory_limit_number` | 工具记忆是 MemOS 对已添加的工具调用信息进行分析后生成的记忆。开启后，可在检索结果中召回工具记忆，详见[工具调用](/memos_cloud/features/advanced/tool_calling)。 |
-| 检索指定知识库 | `knowledgebase_ids`                                 | 指定本次检索可使用的项目关联知识库范围，详见[知识库](/memos_cloud/features/advanced/knowledge_base)。     |
+| 检索指定知识库 | `knowledgebase_ids`                                 | 用于指定本次检索可访问的项目关联知识库范围。开发者可借此实现精细的权限控制，灵活定义不同终端用户可访问的知识库集合，详见[知识库](/memos_cloud/features/advanced/knowledge_base)。     |
