@@ -38,7 +38,7 @@ headers = {
   "Content-Type": "application/json",
   "Authorization": f"Token {os.environ['MEMOS_API_KEY']}"
 }
-url = f"{os.environ['MEMOS_BASE_URL']}/add/message"
+url = f"{os.environ['MEMOS_BASE_URL']}/delete/memory"
 
 res = requests.post(url=url, headers=headers, data=json.dumps(data))
 
