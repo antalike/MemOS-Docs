@@ -1,3 +1,4 @@
 ---
-title: 对话
+title: Chat
+openapi: "POST /chat"
 ---

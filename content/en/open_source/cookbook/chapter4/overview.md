@@ -146,7 +146,7 @@ We define the following environment variables:
 api_url="your api url"
 api_key="your api key"
 
-# all possibly used models：
+# all possibly used models:
 MEDXPERT_THINKER = 'o3'
 MEDXPERT_THINK_EXTRACTOR = 'gpt-4o'
 CONCEPT_GRAPH_EXTENDER = 'gpt-4o-mini'

@@ -65,7 +65,7 @@ When using MemOS cloud services, the role of scheduling can be observed through 
 
   :::card
   ---
-  title: MemOS System Operation
+  title: ✨ MemOS System Operation
   ---
   *   Initially, the system generated these items as **Plaintext Memories**.
     
@@ -94,7 +94,7 @@ When using MemOS cloud services, the role of scheduling can be observed through 
 
   :::card
   ---
-  title: MemOS System Operation
+  title: ✨ MemOS System Operation
   ---
   *   The system continued to generate new **Plaintext Memories**.
     
@@ -133,7 +133,7 @@ When using MemOS cloud services, the role of scheduling can be observed through 
 
   :::card
   ---
-  title: With scheduling, the system can return more quickly
+  title: ✨ With scheduling, the system can return more quickly
   ---
   *   Checking tiles
     
@@ -174,10 +174,6 @@ Developers can **extend scheduling strategies** to customize system behavior, ma
 
 Learn more about MemOS core capabilities:
 
-*   [Memory Recall](/overview/quick_start/mem_recall)
+*   [Memory Recall](/memos_cloud/introduction/mem_recall)
     
-*   [Memory Lifecycle Management](/overview/quick_start/mem_lifecycle)
-      
-
-## 5. Contact Us
-<img src="https://cdn.memtensor.com.cn/img/1758685658684_nbhka4_compressed.png" alt="image" style="width:70%;">
+*   [Memory Lifecycle Management](/memos_cloud/introduction/mem_lifecycle)

@@ -3,7 +3,7 @@ nav:
   # The frontend will render these as actual icons.
   # You can find available icons at https://icones.js.org/
   - "(ri:cloud-line) MemOS Cloud":
-    - "(ri:book-line) 开始使用":
+    - "(ri:book-line) Getting Started":
       - "(ri:eye-line) Overview": memos_cloud/overview.md
       - "(ri:home-line) MemOS Introduction":
         - "(ri:add-line) Memory Production": memos_cloud/introduction/mem_production.md
@@ -11,30 +11,30 @@ nav:
         - "(ri:search-line) Memory Recall": memos_cloud/introduction/mem_recall.md
         - "(ri:refresh-line) Memory Lifecycle": memos_cloud/introduction/mem_lifecycle.md
         - "(ri:cpu-line) Algorithm Overview": memos_cloud/introduction/algorithm.md
-      - "(ri:dashboard-line) 云平台与开源方案": memos_cloud/cloud_and_opensource.md
+      - "(ri:dashboard-line) Cloud Platform & Open Source": memos_cloud/cloud_and_opensource.md
       - "(ri:rocket-line) Quick Start": memos_cloud/quick_start.md
       - "(ri:shield-line) Limitations and Quotas": memos_cloud/limit.md
 
-    - "(ri:question-line) 支持与问题排查":
-      - "(ri:question-line) FAQs 常见问题解答": memos_cloud/faq.md
+    - "(ri:question-line) Support and Troubleshooting":
+      - "(ri:question-line) FAQs": memos_cloud/faq.md
 
-    - "(ri:edit-box-line) 记忆操作":
-      - "(ri:message-3-line) 添加消息": memos_cloud/mem_operations/add_message.md
-      - "(ri:search-2-line) 检索消息": memos_cloud/mem_operations/retrieve_message.md
-      - "(ri:delete-bin-line) 删除记忆": memos_cloud/mem_operations/delete_memory.md
+    - "(ri:edit-box-line) Memory Operations":
+      - "(ri:message-3-line) Add Message": memos_cloud/mem_operations/add_message.md
+      - "(ri:search-2-line) Search Memory": memos_cloud/mem_operations/search_memory.md
+      - "(ri:delete-bin-line) Delete Memory": memos_cloud/mem_operations/delete_memory.md
 
-    - "(ri:function-line) 功能介绍":
-      - "(ri:flag-line) 基础功能":
-        - "(ri:filter-3-line) 记忆过滤器": memos_cloud/features/basic/filters.md
-        - "(ri:timer-flash-line) 异步模式": memos_cloud/features/basic/async_mode.md
-        - "(ri:image-add-line) 多模态消息": memos_cloud/features/basic/multimodal.md
-        - "(ri:price-tag-3-line) 自定义标签": memos_cloud/features/basic/custom_tags.md
-      - "(ri:vip-diamond-line) 高级功能":
-        - "(ri:book-read-line) 知识库": memos_cloud/features/advanced/knowledge_base.md
-        - "(ri:tools-line) 工具调用": memos_cloud/features/advanced/tool_calling.md
-        - "(ri:chat-history-line) 持续对话": memos_cloud/features/advanced/continuous_dialogue.md
+    - "(ri:function-line) Features":
+      - "(ri:flag-line) Basic Features":
+        - "(ri:filter-3-line) Memory Filters": memos_cloud/features/basic/filters.md
+        - "(ri:timer-flash-line) Async Mode": memos_cloud/features/basic/async_mode.md
+        - "(ri:image-add-line) Multimodal Messages": memos_cloud/features/basic/multimodal.md
+        - "(ri:price-tag-3-line) Custom Tags": memos_cloud/features/basic/custom_tags.md
+      - "(ri:vip-diamond-line) Advanced Features":
+        - "(ri:book-read-line) Knowledge Base": memos_cloud/features/advanced/knowledge_base.md
+        - "(ri:tools-line) Tool Calling": memos_cloud/features/advanced/tool_calling.md
+        - "(ri:chat-history-line) Continuous Dialogue": memos_cloud/features/advanced/continuous_dialogue.md
 
-  - "(ri:open-source-line) Open Source":
+  - "(ri:github-line) Open Source":
     - "(ri:rocket-line) Getting Started":
       - "(ri:install-line) Installation": open_source/getting_started/installation.md
       - "(ri:play-line) Quick Start": open_source/getting_started/quick_start.md
@@ -92,49 +92,49 @@ nav:
 
     - "(ri:file-code-line) API Reference": api-reference/configure-memos
 
-  - "(ri:puzzle-line) MCP与Agent框架支持":
-    - "(ri:tools-line) MCP 服务":
-      - "(ri:book-open-line) 使用指南": mcp_agent/mcp/guide.md
+  - "(ri:puzzle-line) MCP and Agent Framework Support":
+    - "(ri:tools-line) MCP Services":
+      - "(ri:book-open-line) Guide": mcp_agent/mcp/guide.md
 
-    - "(ri:robot-line) Agent开发":
-      - "(ri:book-open-line) 使用指南": mcp_agent/agent/guide.md
+    - "(ri:robot-line) Agent Development":
+      - "(ri:book-open-line) Guide": mcp_agent/agent/guide.md
 
-  - "(ri:file-code-line) API文档":
-    - "(ri:rocket-line) 开始使用":
-      - "(ri:eye-line) 概述": api_docs/start/overview.md
-      - "(ri:settings-3-line) 项目配置": api_docs/start/configuration.md
+  - "(ri:file-code-line) API Documentation":
+    - "(ri:rocket-line) Get Started":
+      - "(ri:eye-line) Overview": api_docs/start/overview.md
+      - "(ri:settings-3-line) Configuration": api_docs/start/configuration.md
 
-    - "(ri:edit-box-line) 核心操作":
+    - "(ri:edit-box-line) Core Operations":
       - "(ri:message-3-line) Add Message": api_docs/core/add_message.md
       - "(ri:search-2-line) Search Memory": api_docs/core/search_memory.md
-      - "(ri:delete-bin-line) 删除记忆": api_docs/core/delete_memory.md
+      - "(ri:delete-bin-line) Delete Memory": api_docs/core/delete_memory.md
 
-    - "(ri:chat-1-line) 消息":
-      - "(ri:feedback-line) 添加反馈": api_docs/message/add_feedback.md
+    - "(ri:chat-1-line) Messages":
+      - "(ri:feedback-line) Add Feedback": api_docs/message/add_feedback.md
       - "(ri:file-list-line) Get Message": api_docs/message/get_message.md
-      - "(ri:task-line) 获取任务状态": api_docs/message/get_task_status.md
+      - "(ri:task-line) Get Task Status": api_docs/message/get_status.md
 
-    - "(ri:chat-smile-2-line) 对话":
-      - "(ri:chat-4-line) 对话": api_docs/chat/chat.md
+    - "(ri:chat-smile-2-line) Chat":
+      - "(ri:chat-4-line) Chat": api_docs/chat/chat.md
 
-    - "(ri:book-read-line) 知识库":
-      - "(ri:add-box-line) 创建知识库": api_docs/knowledge/create_kb.md
-      - "(ri:delete-back-2-line) 移除知识库": api_docs/knowledge/remove_kb.md
-      - "(ri:file-add-line) 添加知识库文档": api_docs/knowledge/add_kb_doc.md
-      - "(ri:file-search-line) 获取知识库文档": api_docs/knowledge/get_kb_doc.md
-      - "(ri:file-reduce-line) 删除知识库文档": api_docs/knowledge/delete_kb_doc.md
+    - "(ri:book-read-line) Knowledge Base":
+      - "(ri:add-box-line) Create Knowledgebase": api_docs/knowledge/create_kb.md
+      - "(ri:delete-back-2-line) Delete Knowledgebase": api_docs/knowledge/remove_kb.md
+      - "(ri:file-add-line) Create Knowledgebase File": api_docs/knowledge/add_kb_doc.md
+      - "(ri:file-search-line) Get Knowledgebase File": api_docs/knowledge/get_kb_doc.md
+      - "(ri:file-reduce-line) Delete Knowledgebase File": api_docs/knowledge/delete_kb_doc.md
 
-    - "(ri:customer-service-line) 帮助与支持":
+    - "(ri:customer-service-line) Help & Support":
       - "(ri:error-warning-line) Error Codes": api_docs/help/error_codes.md
 
   - "(ri:projector-line) Use Cases":
-    - "(ri:lightbulb-line) 最佳实践":
+    - "(ri:lightbulb-line) Best Practice":
       - "(ri:money-dollar-circle-line) Financial Assistant": usecase/financial_assistant.md
-      - "(ri:edit-line) Life Assistant": usecase/writting_assistant.md
+      - "(ri:edit-line) Writing Assistant": usecase/writting_assistant.md
       - "(ri:heart-line) Life Assistant": usecase/home_assistant.md
-      - "(ri:customer-service-2-line) 企微客服": usecase/wecom_customer_service.md
+      # - "(ri:customer-service-2-line) WeCom Customer Service": usecase/wecom_customer_service.md
 
-    - "(ri:layout-grid-line) 框架与平台":
-      - "(ri:chrome-line) 浏览器插件": usecase/frameworks/browser_extension.md
+    - "(ri:layout-grid-line) Frameworks & Platforms":
+      # - "(ri:chrome-line) Browser Extension": usecase/frameworks/browser_extension.md
       - "(ri:brain-line) Claude MCP": usecase/frameworks/claude_mcp.md
-      - "(ri:puzzle-2-line) Coze 插件工具": usecase/frameworks/coze_plugin.md
+      - "(ri:puzzle-2-line) Coze Plugin Tools": usecase/frameworks/coze_plugin.md

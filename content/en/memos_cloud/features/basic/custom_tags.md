@@ -1,3 +1,115 @@
 ---
-title: 自定义标签
+title: Custom Tags
+desc: Use tags according to your business needs when adding messages.
 ---
+
+MemOS automatically generates tags for each memory, but these tags may not fully align with the tags used in your business. You can pass a list of custom tags when adding messages, and MemOS will automatically apply relevant tags to the memory content based on the meaning of the tags you provided.
+
+:::note
+When to use custom tags?
+
+You want MemOS to use the existing tag system of your product team to annotate memory content.
+
+You need to apply these tags to generate structured content.
+:::
+
+## 1. Tag Mechanism
+
+*   **Automatic Tag Generation**: MemOS analyzes semantics when processing memories and automatically generates relevant tags for subsequent retrieval and filtering.
+    
+*   **Custom Tags**: When adding messages, you can pass a set of custom tags via the `tags` field as a candidate tag set.
+    
+*   **Semantic-based Matching**: MemOS judges the semantic similarity between the memory content and the tag list provided by the developer, selects matching tags, and writes them into the `tags` field of the memory along with the system-generated tags.
+    
+
+## 2. Usage Examples
+
+:::note 
+Tip
+*  Tag content should be concise while clearly distinguishing the meaning of different categories to facilitate identification and matching.
+
+*  Use a unified list under the same project dimension and do not replace it easily to ensure consistency in retrieval and filtering.
+:::
+
+## 3. Add Message
+
+```python
+import os
+import json
+import requests
+
+# Replace with your MemOS API Key
+os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
+os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
+
+data = {
+    "user_id": "memos_user_001",
+    "conversation_id": "1210",
+    "messages": [
+        {"role": "user","content": "How is the weather today?"},
+        {"role": "assistant","content": "Shanghai, December 10th, Cloudy, temperature is 8-12 degrees."}
+    ],
+    "tags":["Weather","Cloudy"],
+    "async_mode":False
+}
+
+headers = {
+  "Content-Type": "application/json",
+  "Authorization": f"Token {os.environ['MEMOS_API_KEY']}"
+}
+url = f"{os.environ['MEMOS_BASE_URL']}/add/message"
+
+res = requests.post(url=url, headers=headers, data=json.dumps(data))
+
+print(f"result: {res.json()}")
+```
+
+### Search Memory
+
+```python
+import os
+import json
+import requests
+
+# Replace with your MemOS API Key
+os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
+os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
+
+data = {
+    "user_id": "001",
+    "query": "Shanghai Weather"
+}
+headers = {
+  "Content-Type": "application/json",
+  "Authorization": f"Token {os.environ['MEMOS_API_KEY']}"
+}
+url = f"{os.environ['MEMOS_BASE_URL']}/search/memory"
+
+res = requests.post(url=url, headers=headers, data=json.dumps(data))
+
+print(f"result: {res.json()}")
+```
+
+### Output Result
+
+```json
+"memory_detail_list": [
+  {
+    "id": "9bc102cb-76d8-4a59-86d7-8fd1c4542407",
+    "memory_key": "Weather Condition",
+    "memory_value": "On December 10, 2025, the weather in Shanghai is cloudy, with temperatures between 8 and 12 degrees.",
+    "memory_type": "WorkingMemory",
+    "create_time": 1765376340736,
+    "conversation_id": "1210",
+    "status": "activated",
+    "confidence": 0.99,
+    "tags": [
+      "Weather",
+      "Cloudy",
+      "Temperature"
+    ],
+    "update_time": 1765376340737,
+    "relativity": 0.82587826
+  }
+]
+```
