@@ -49,6 +49,7 @@ const items = computed(() => localeItems.value.map((item, index) => ({
         spotlight
         spotlight-color="primary"
         :class="[
+          'group',
           'xl:col-span-4',
           index === items.length - 2 ? 'xl:col-start-3' : '',
           index === items.length - 1 ? 'xl:col-start-7' : ''
@@ -59,7 +60,9 @@ const items = computed(() => localeItems.value.map((item, index) => ({
         }"
         :to="item.to"
       >
-        <div class="flex items-center justify-center h-40 bg-[#171823] rounded-xl mb-8">
+        <div
+          class="flex items-center justify-center h-40 bg-[#171823] bg-cover rounded-xl mb-8 bg-[url(https://cdn.memtensor.com.cn/img/1766476630033_bbjhot_compressed.png)] group-hover:bg-[url(https://cdn.memtensor.com.cn/img/1766476753478_f7b4hm_compressed.png)]"
+        >
           <UIcon
             :name="item.icon!"
             class="size-14 bg-linear-270 from-15% from-linear-primary to-118% to-primary-light"

@@ -1,3 +1,4 @@
 ---
-title: 删除知识库文档
+title: Delete Knowledge Base File
+openapi: "POST /delete/knowledgebase-file"
 ---

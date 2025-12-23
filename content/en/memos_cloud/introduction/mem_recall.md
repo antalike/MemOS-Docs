@@ -39,9 +39,4 @@ In MemOS, recall and completion are not achieved through a single path, but thro
 
 Learn more about MemOS core capabilities:
 
-*   [Memory Lifecycle Management](/overview/quick_start/mem_lifecycle)
-    
-
-## 4. Contact Us
-
-<img src="https://cdn.memtensor.com.cn/img/1758685658684_nbhka4_compressed.png" alt="image" style="width:70%;">
+*   [Memory Lifecycle Management](/memos_cloud/introduction/mem_lifecycle)

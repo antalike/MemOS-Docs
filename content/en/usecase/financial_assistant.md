@@ -199,7 +199,7 @@ def demo_questions():
 def preset_user_behaviors():
     """Show preset user behavior memories"""
     conversation_id = generate_conversation_id()
-    print(f"\n📊 Preset user behavior memories（conversation_id={conversation_id}）:")
+    print(f"\n📊 Preset user behavior memories(conversation_id={conversation_id}):")
     print("=" * 60)
 
     behaviors = [{

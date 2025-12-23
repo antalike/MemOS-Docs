@@ -803,13 +803,11 @@
           },
           "agent_id": {
             "type": "string",
-            "description": "添加的消息所关联的 Agent 唯一标识符，主要用于在检索记忆时查询某用户与该Agent的专属记忆。",
-            "default": ""
+            "description": "添加的消息所关联的 Agent 唯一标识符，主要用于在检索记忆时查询某用户与该Agent的专属记忆。"
           },
           "app_id": {
             "type": "string",
-            "description": "添加的消息所关联的应用唯一标识符，主要用于在检索记忆时查询某用户在该App下的专属记忆。",
-            "default": ""
+            "description": "添加的消息所关联的应用唯一标识符，主要用于在检索记忆时查询某用户在该App下的专属记忆。"
           },
           "tags": {
             "type": "array",
@@ -837,8 +835,7 @@
                 }
               ]
             },
-            "description": "自定义元信息字段，能够存储任意与添加信息相关的结构化数据，例如位置、来源、版本等，主要用于在检索时精确过滤或追踪来源。",
-            "default": null
+            "description": "自定义元信息字段，能够存储任意与添加信息相关的结构化数据，例如位置、来源、版本等，主要用于在检索时精确过滤或追踪来源。"
           },
           "allow_public": {
             "type": "boolean",

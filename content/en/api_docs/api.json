@@ -125,6 +125,302 @@
           }
         }
       }
+    },
+    "/chat": {
+      "post": {
+        "summary": "Chat",
+        "description": "",
+        "operationId": "chat",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChatRequest"
+              },
+              "example": {
+                "user_id": "memos_user_2025-12-15-01",
+                "stream": false,
+                "query": "What fun places are in Shanghai?",
+                "model_name": "deepseek-r1",
+                "conversation_id": "23006762-a064-456e-a33b-d2452bdfa09f",
+                "knowledgebase_ids": [
+                  "2448808afa784cc5f7595da21ae5a3fd"
+                ],
+                "filter": {
+                  "and": [
+                    {
+                      "create_time": {
+                        "gt": "2025-09-19"
+                      }
+                    }
+                  ]
+                },
+                "system_prompt": "Recommend parks",
+                "add_message_on_answer": false,
+                "allow_public": false,
+                "allow_knowledgebase_ids": [],
+                "agent_id": "agent_id_2025-12-15-01",
+                "app_id": "app_id_2025-12-15-01",
+                "tags": [],
+                "info": {},
+                "max_tokens": 8192,
+                "temperature": 0.7,
+                "top_p": 0.95
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChatResponse"
+                }
+              },
+              "text/event-stream": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChatStreamResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/delete/memory": {
+      "post": {
+        "summary": "Delete Memory",
+        "description": "This API is used to delete specified user memories, supporting batch deletion.",
+        "operationId": "delete_memory",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteMemoryRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteMemoryResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/add/feedback": {
+      "post": {
+        "summary": "Add Feedback",
+        "description": "This API is used to add feedback to current session messages, allowing MemOS to correct memories based on user feedback.",
+        "operationId": "add_feedback",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddFeedbackRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddFeedbackResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/get/status": {
+      "post": {
+        "summary": "Get Task Status",
+        "description": "Get the status of an asynchronous processing task.",
+        "operationId": "get_status",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetStatusRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetStatusResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/create/knowledgebase": {
+      "post": {
+        "summary": "Create Knowledgebase",
+        "description": "Create a knowledgebase associated with the project.",
+        "operationId": "create_knowledgebase",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateKnowledgebaseRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateKnowledgebaseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/delete/knowledgebase": {
+      "post": {
+        "summary": "Delete Knowledgebase",
+        "description": "Delete a knowledgebase from the current project. To permanently delete it, please operate from the Console - Knowledgebase page.",
+        "operationId": "delete_knowledgebase",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteKnowledgebaseRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteKnowledgebaseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/add/knowledgebase-file": {
+      "post": {
+        "summary": "Create Knowledgebase File",
+        "description": "Upload a document to a specified knowledgebase.",
+        "operationId": "add_knowledgebase-file",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UploadFileRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UploadFileResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/get/knowledgebase-file": {
+      "post": {
+        "summary": "Get Knowledgebase File",
+        "description": "Get information about a specified document.",
+        "operationId": "get_knowledgebase-file",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetFileRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetFileResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/delete/knowledgebase-file": {
+      "post": {
+        "summary": "Delete Knowledgebase File",
+        "description": "Delete a document from a specified knowledgebase.",
+        "operationId": "delete_knowledgebase-file",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteFileRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteFileResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -137,6 +433,214 @@
       }
     },
     "schemas": {
+      "ChatRequest": {
+        "type": "object",
+        "required": [
+          "user_id",
+          "conversation_id",
+          "query"
+        ],
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "title": "User ID",
+            "description": "Unique identifier of the user associated with the conversation."
+          },
+          "conversation_id": {
+            "type": "string",
+            "title": "Conversation ID",
+            "description": "Unique identifier of the conversation. Providing this clarifies the current session, prioritizing its memory over historical sessions. If omitted, cross-session memory retrieval is performed for more relevant responses."
+          },
+          "query": {
+            "type": "string",
+            "title": "Query",
+            "description": "User input content."
+          },
+          "filter": {
+            "type": "object",
+            "title": "Filter",
+            "description": "Filter conditions. Available fields include: agent_id, app_id, create_time, update_time, and specific fields in info. Supports logical operators (AND, OR) and comparison operators (eq, time also supports gte, lte, gt, lt). For the info field, supports filtering by business_type, biz_id, scene, custom_status.",
+            "example": "{\"and\": [{\"create_time\":{\"gte\":\"...\"}}]}"
+          },
+          "knowledgebase_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "title": "Knowledgebase IDs",
+            "description": "Selected scope of knowledgebases for retrieval."
+          },
+          "memory_limit_number": {
+            "type": "integer",
+            "title": "Memory Limit Number",
+            "description": "Limits the number of returned fact memories, controlling the count of recalled fact memories. Default: 6, Max: 25.",
+            "default": 6
+          },
+          "include_preference": {
+            "type": "boolean",
+            "title": "Include Preference",
+            "description": "Whether to recall preference memories. When enabled, the system intelligently recalls memories related to user preferences based on the query. Default = true.",
+            "default": true
+          },
+          "preference_limit_number": {
+            "type": "integer",
+            "title": "Preference Limit Number",
+            "description": "Limits the number of returned preference memories, controlling the count of recalled preference memories. Effective only when include_preference=true. Default: 6, Max: 25.",
+            "default": 6
+          },
+          "model_name": {
+            "type": "string",
+            "enum": [
+              "Qwen3-32B",
+              "deepseek-r1",
+              "qwen2.5-72B-Instruct"
+            ],
+            "title": "Model Name",
+            "description": "Specifies the concrete conversation model.",
+            "default": "qwen2.5-72B-Instruct"
+          },
+          "system_prompt": {
+            "type": "string",
+            "title": "System Prompt",
+            "description": "Custom system instructions."
+          },
+          "stream": {
+            "type": "boolean",
+            "title": "Stream",
+            "description": "Whether to enable streaming response.",
+            "default": false
+          },
+          "max_tokens": {
+            "type": "integer",
+            "title": "Max Tokens",
+            "description": "Indicates the maximum number of generated tokens.",
+            "default": 8192
+          },
+          "temperature": {
+            "type": "number",
+            "title": "Temperature",
+            "description": "Controls generation randomness. Range: 0 <= x <= 2.",
+            "default": 0.7
+          },          
+          "top_p": {
+            "type": "number",
+            "title": "Top P",
+            "description": "Nucleus sampling parameter. Range: 0 <= x <= 1.",
+            "default": 0.95
+          },
+         "add_message_on_answer": {
+            "type": "boolean",
+            "title": "Add Message On Answer",
+            "description": "Whether to automatically write user and assistant conversation content into memory. When enabled, developers do not need to call the add/message API to add messages as memory.",
+            "default": true
+          },
+          "app_id": {
+            "type": "string",
+            "title": "App ID",
+            "description": "Unique identifier of the application associated with the conversation."
+          },
+          "agent_id": {
+            "type": "string",
+            "title": "Agent ID",
+            "description": "Unique identifier of the Agent associated with the conversation."
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "title": "Tags",
+            "description": "List of custom tags used to mark the topic or category of the conversation."
+          },
+          "info": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Info",
+            "description": "Custom metadata field capable of storing any structured data related to the conversation, such as location, source, version, etc., primarily for precise filtering or source tracking during retrieval."
+          },
+          "allow_public": {
+            "type": "boolean",
+            "title": "Allow Public",
+            "description": "Whether to allow adding to public memory.",
+            "default": false
+          },
+          "allow_knowledgebase_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "title": "Allow Knowledgebase IDs",
+            "description": "List of knowledgebases where memories generated from added messages are allowed to be written."
+          }
+        },
+        "title": "ChatRequest"
+      },
+      "ChatResponseData": {
+        "type": "object",
+        "title": "ChatResponseData",
+        "properties": {
+          "response": {
+            "type": "string",
+            "title": "Response",
+            "description": "Specific content of the answer."
+          }
+        }
+      },
+      "ChatResponse": {
+        "type": "object",
+        "required": [
+          "code",
+          "message"
+        ],
+        "properties": {
+          "code": {
+            "type": "integer",
+            "title": "Code",
+            "description": "API status code. See <a href=\"/api_docs/help/error_codes\" class=\"text-primary border-b border-transparent hover:border-primary font-medium focus-visible:outline-primary [&amp;&gt;code]:border-dashed hover:[&amp;&gt;code]:border-primary hover:[&amp;&gt;code]:text-primary transition-colors [&amp;&gt;code]:transition-colors\">Error Code List</a> for details."
+          },
+          "data": {
+            "$ref": "#/components/schemas/ChatResponseData"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "description": "Message"
+          }
+        },
+        "title": "ChatResponse"
+      },
+      "ChatStreamResponse": {
+        "type": "object",
+        "properties": {
+          "event": {
+            "type": "string",
+            "description": "Stream event name, currently defaults to message.",
+            "default": "message"
+          },
+          "data": {
+            "type": "object",
+            "description": "Streamed data content.",
+            "properties": {
+              "type": {
+                "type": "string",
+                "description": "Stream message type, used to identify the semantic category of the current data.<br>reasoning: Reasoning content<br>text: Normal text content<br>end: End of stream indicator",
+                "enum": [
+                  "reasoning",
+                  "text",
+                  "end"
+                ]
+              },
+              "data": {
+                "type": "string",
+                "description": "Streamed text content."
+              }
+            }
+          }
+        },
+        "title": "ChatStreamResponse"
+      },
       "AddMessageRequest": {
         "type": "object",
         "required": [
@@ -162,6 +666,60 @@
             "items": {
               "$ref": "#/components/schemas/MessageInput"
             }
+          },
+          "agent_id": {
+            "type": "string",
+            "description": "Unique identifier of the Agent associated with the added message, primarily used to query exclusive memories between a user and that Agent during retrieval."
+          },
+          "app_id": {
+            "type": "string",
+            "description": "Unique identifier of the App associated with the added message, primarily used to query exclusive memories of a user under that App during retrieval."
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of custom tags used to mark the topic or category of the added message.",
+            "default": []
+          },
+          "info": {
+            "type": "object",
+            "additionalProperties": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "number"
+                }
+              ]
+            },
+            "description": "Custom metadata field capable of storing any structured data related to the added message, such as location, source, version, etc., primarily for precise filtering or source tracking during retrieval."
+          },
+          "allow_public": {
+            "type": "boolean",
+            "description": "Whether memories generated from the added message are allowed to be written to the public memory store. When enabled, generated memories can be retrieved by other users in the project.",
+            "default": false
+          },
+          "allow_knowledgebase_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Scope of knowledgebases where memories generated from the added message are allowed to be written.",
+            "default": []
+          },
+          "async_mode": {
+            "type": "boolean",
+            "description": "Whether to enable asynchronous memory addition. When enabled, memory will be added asynchronously in the background to avoid blocking the call chain.",
+            "default": true
           }
         },
         "title": "AddMessageRequest"
@@ -173,24 +731,112 @@
           "content"
         ],
         "properties": {
+          "chat_time": {
+            "type": "string",
+            "title": "Chat Time",
+            "description": "Time of the conversation, as a structured timestamp or Chinese text. Providing this parameter allows memory to include time information."
+          },
           "role": {
             "type": "string",
             "enum": [
               "user",
-              "assistant"
+              "assistant",
+              "system",
+              "tool"
             ],
             "title": "Role",
             "description": "Sender role."
           },
           "content": {
-            "type": "string",
             "title": "Content",
-            "description": "Content of the message."
+            "description": "Content of the message.",
+            "oneOf": [
+              {
+                "type": "string",
+                "description": "Message text content"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "text",
+                        "image_url",
+                        "file"
+                      ],
+                      "description": "Type of the message sent"
+                    },
+                    "text": {
+                      "type": "string",
+                      "description": "Text message content. Required when type is text."
+                    },
+                    "image_url": {
+                      "type": "object",
+                      "description": "Image message content object.",
+                      "properties": {
+                        "url": {
+                          "type": "string",
+                          "description": "Image message URL. Required when type is image_url."
+                        }
+                      }
+                    },
+                    "file": {
+                      "type": "object",
+                      "description": "File message content object.",
+                      "properties": {
+                        "file_data": {
+                          "type": "string",
+                          "description": "Accessible file URL or base64. Supports txt / pdf / doc / docx. Single file max 100MB, 200 pages, total max 20 files. Required when type is file."
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
+                },
+                "description": "List of multi-modal content"
+              }
+            ]
           },
-          "chat_time": {
-            "type": "string",
-            "title": "Chat Time",
-            "description": "Time of the conversation, as a structured timestamp or Chinese text. Allows memory to include time information."
+          "tool_call_id": {
+              "type": "string",
+              "description": "Unique identifier for the tool call message when role is tool."
+          },
+          "tool_calls": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Unique identifier for the tool call, used to associate with this tool call. Required in tool_calls."
+                },
+                "type": {
+                  "type": "string",
+                  "description": "Tool call type, currently only supports function. Required in tool_calls.",
+                  "enum": ["function"]
+                },
+                "function": {
+                  "type": "object",
+                  "description": "Defined tool to be called. Required in tool_calls.",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "description": "Tool (function) name. Required in tool_calls."
+                    },
+                    "arguments": {
+                      "type": "string",
+                      "description": "Tool call arguments, must be a JSON formatted string. Required in tool_calls."
+                    }
+                  }
+                }
+              }
+            },
+            "description": "List of tool call information when role is assistant, used to pass when triggering tool calls."
           }
         },
         "title": "MessageInput"
@@ -229,6 +875,21 @@
             "title": "Success",
             "description": "Indicates if the message was added successfully. true = success, false = failure.",
             "example": true
+          },
+          "task_id": {
+            "type": "string",
+            "title": "Task ID",
+            "description": "Unique identifier of the memory processing task."
+          },
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "enum": [
+              "running",
+              "completed",
+              "failed"
+            ],
+            "description": "Current status of the memory processing task."
           }
         },
         "title": "OpenMemAddMessageResponse",
@@ -355,6 +1016,19 @@
             "title": "Query",
             "description": "Text content to search within the memories.The token limit for a single query is 4k."
           },
+          "filter": {
+            "type": "object",
+            "title": "Filter",
+            "description": "Filter conditions. Available fields include: agent_id, app_id, create_time, update_time, and specific fields in info. Supports logical operators (AND, OR) and comparison operators (eq, time also supports gte, lte, gt, lt). For the info field, supports filtering by business_type, biz_id, scene, custom_status.",
+            "example": "{\"and\": [{\"create_time\":{\"gte\":\"...\"}}]}"
+          },
+          "knowledgebase_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Specified scope of knowledgebases for retrieval. Default is empty."
+          },
           "memory_limit_number": {
             "type": "integer",
             "format": "int32",
@@ -373,6 +1047,19 @@
             "format": "int32",
             "title": "Preference Limit Number",
             "description": "Limits the number of preference memory items returned, controlling the length of fact memory. Defaults to 6 if not provided. The maximum allowed value is 25.",
+            "default": 6
+          },
+          "include_tool_memory": {
+            "type": "boolean",
+            "title": "Include Tool Memory",
+            "description": "Whether to enable tool memory recall. When enabled, the system will intelligently retrieve tool-related memories based on the query. Default is false if not provided.",
+            "default": false
+          },
+          "tool_memory_limit_number": {
+            "type": "integer",
+            "format": "int32",
+            "title": "Tool Memroy Limit Number",
+            "description": "Limits the number of tool memory items returned, controlling the count of recalled tool memories. Effective only when include_tool_memory=true. Default is 6 if not provided, max is 25.",
             "default": 6
           }
         },
@@ -421,6 +1108,14 @@
             "description": "List of preference memory details returned. Each item includes:",
             "items": {
               "$ref": "#/components/schemas/PreferenceDetail"
+            }
+          },
+          "tool_memory_detail_list": {
+            "type": "array",
+            "title": "Tool Memory Detail List",
+            "description": "List of tool memory fragment details returned.",
+            "items": {
+              "$ref": "#/components/schemas/ToolMemoryDetail"
             }
           },
           "preference_note": {
@@ -565,10 +1260,592 @@
             "description": "Last modification or update time of preference memory, usually in ISO 8601 format."
           }
         },
-        "title": "MemoryDetail"
+        "title": "PreferenceDetail"
       },
-      "title": "SearchMemoryResponseData",
-      "description": "Object containing the query result."
+      "ToolUsedStatus": {
+        "type": "object",
+        "properties": {
+          "used_tool": {
+            "type": "string",
+            "title": "Used Tool",
+            "description": "Name of the tool used."
+          },
+          "experience": {
+            "type": "string",
+            "title": "Experience",
+            "description": "Tool usage experience or collaboration suggestions."
+          },
+          "error_type": {
+            "type": "string",
+            "title": "Error Type",
+            "description": "Error description when call fails."
+          },
+          "success_rate": {
+            "type": "string",
+            "title": "Success Rate",
+            "description": "Success rate of this tool trajectory."
+          }
+        },
+        "title": "ToolUsedStatus"
+      },
+      "ToolMemoryDetail": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "ID",
+            "description": "Unique identifier of the tool memory fragment."
+          },
+          "tool_type": {
+            "type": "string",
+            "title": "Tool Type",
+            "description": "Tool memory type. ToolTrajectoryMemory: tool trajectory memory; ToolSchema: tool info memory.",
+            "enum": [
+              "ToolTrajectoryMemory",
+              "ToolSchema"
+            ]
+          },
+          "tool_value": {
+            "type": "string",
+            "title": "Tool Value",
+            "description": "Specific content of the tool memory."
+          },
+          "tool_used_status": {
+            "type": "array",
+            "title": "Tool Used Status",
+            "description": "List of tool trajectory memories, each record contains tool used and experience info.",
+            "items": {
+              "$ref": "#/components/schemas/ToolUsedStatus"
+            }
+          },
+          "create_time": {
+            "type": "string",
+            "title": "Create Time",
+            "description": "Tool memory creation time (ISO 8601 format)."
+          },
+          "conversation_id": {
+            "type": "string",
+            "title": "Conversation ID",
+            "description": "Unique identifier of the conversation associated with the tool memory."
+          },
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "description": "Tool memory status, currently activated.",
+            "enum": [
+              "activated"
+            ]
+          },
+          "update_time": {
+            "type": "string",
+            "title": "Update Time",
+            "description": "Last update time of the tool memory (ISO 8601 format)."
+          }
+        },
+        "title": "ToolMemoryDetail"
+      },
+      "DeleteMemoryRequest": {
+        "type": "object",
+        "required": [
+          "user_ids",
+          "memory_ids"
+        ],
+        "properties": {
+          "user_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "title": "User IDs",
+            "description": "List of users whose memories can be deleted."
+          },
+          "memory_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "title": "Memory IDs",
+            "description": "Unique identifiers of the memories to be deleted."
+          }
+        },
+        "title": "DeleteMemoryRequest"
+      },
+      "DeleteMemoryResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "title": "Code",
+            "description": "API status code. See <a href=\"/api_docs/help/error_codes\" class=\"text-primary border-b border-transparent hover:border-primary font-medium focus-visible:outline-primary [&amp;&gt;code]:border-dashed hover:[&amp;&gt;code]:border-primary hover:[&amp;&gt;code]:text-primary transition-colors [&amp;&gt;code]:transition-colors\">Error Code</a> for details."
+          },
+          "data": {
+            "type": "object",
+            "title": "Data",
+            "properties": {
+              "success": {
+                "type": "boolean",
+                "title": "Success",
+                "description": "Whether deletion was successful. true for success, false for failure.",
+                "example": true
+              }
+            },
+            "description": "Returned deletion information"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "description": "API response message"
+          }
+        },
+        "title": "DeleteMemoryResponse"
+      },
+      "AddFeedbackRequest": {
+        "type": "object",
+        "required": [
+          "user_id",
+          "conversation_id",
+          "feedback_content"
+        ],
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "title": "User ID",
+            "description": "Unique identifier of the user associated with the feedback content."
+          },
+          "conversation_id": {
+            "type": "string",
+            "title": "Conversation ID",
+            "description": "Unique identifier of the conversation associated with the feedback content."
+          },
+          "feedback_content": {
+            "type": "string",
+            "title": "Feedback Content",
+            "description": "Feedback content text."
+          },
+          "agent_id": {
+            "type": "string",
+            "title": "Agent ID",
+            "description": "Unique identifier of the Agent associated with the feedback content, primarily used to query exclusive memories between a user and that Agent during retrieval."
+          },
+          "app_id": {
+            "type": "string",
+            "title": "App ID",
+            "description": "Unique identifier of the App associated with the feedback content, primarily used to query exclusive memories of a user under that App during retrieval."
+          },
+          "feedback_time": {
+            "type": "string",
+            "title": "Feedback Time",
+            "description": "Time when the feedback occurred, can be a structured timestamp or natural language time description. Providing this parameter allows memory to include time information."
+          },
+          "allow_public": {
+            "type": "boolean",
+            "title": "Allow Public",
+            "description": "Whether memories generated from the feedback content are allowed to be written to the public memory store. When enabled, generated memories can be retrieved by other users in the project.",
+            "default": false
+          },
+          "allow_knowledgebase_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "title": "Allow Knowledgebase IDs",
+            "description": "List of knowledgebases where memories generated from the feedback content are allowed to be written."
+          }
+        },
+        "title": "AddFeedbackRequest"
+      },
+      "AddFeedbackResponse": {
+        "type": "object",
+        "required": [
+          "code",
+          "message"
+        ],
+        "properties": {
+          "code": {
+            "type": "integer",
+            "title": "Code",
+            "description": "API status code. See <a href=\"/api_docs/help/error_codes\" class=\"text-primary border-b border-transparent hover:border-primary font-medium focus-visible:outline-primary [&amp;&gt;code]:border-dashed hover:[&amp;&gt;code]:border-primary hover:[&amp;&gt;code]:text-primary transition-colors [&amp;&gt;code]:transition-colors\">Error Code</a> for details."
+          },
+          "data": {
+            "type": "object",
+            "title": "Data",
+            "properties": {
+              "success": {
+                "type": "boolean",
+                "title": "Success",
+                "description": "Whether addition was successful. true for success, false for failure."
+              },
+              "status": {
+                "type": "string",
+                "title": "Status",
+                "description": "Task status: running, completed"
+              },
+              "task_id": {
+                "type": "string",
+                "title": "Task ID",
+                "description": "Task ID"
+              }
+            }
+          },
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "description": "API response message"
+          }
+        },
+        "title": "AddFeedbackResponse"
+      },
+      "GetStatusRequest": {
+        "type": "object",
+        "required": [
+          "task_id"
+        ],
+        "properties": {
+          "task_id": {
+            "type": "string",
+            "title": "Task ID",
+            "description": "Async Task ID"
+          }
+        },
+        "title": "GetStatusRequest"
+      },
+      "GetStatusResponse": {
+        "type": "object",
+        "required": [
+          "code",
+          "message"
+        ],
+        "properties": {
+          "code": {
+            "type": "integer",
+            "title": "Code",
+            "description": "API status code. See <a href=\"/api_docs/help/error_codes\" class=\"text-primary border-b border-transparent hover:border-primary font-medium focus-visible:outline-primary [&amp;&gt;code]:border-dashed hover:[&amp;&gt;code]:border-primary hover:[&amp;&gt;code]:text-primary transition-colors [&amp;&gt;code]:transition-colors\">Error Code</a> for details."
+          },
+          "data": {
+            "type": "object",
+            "title": "Data",
+            "properties": {
+              "status": {
+                "type": "string",
+                "title": "Status",
+                "enum": [
+                  "running",
+                  "completed",
+                  "failed"
+                ],
+                "description": "Current status of the memory processing task."
+              }
+            }
+          },
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "description": "API response message"
+          }
+        },
+        "title": "GetStatusResponse"
+      },
+      "CreateKnowledgebaseRequest": {
+        "type": "object",
+        "required": [
+          "knowledgebase_name"
+        ],
+        "properties": {
+          "knowledgebase_name": {
+            "type": "string",
+            "title": "Knowledgebase Name",
+            "description": "Knowledgebase Name"
+          },
+          "knowledgebase_description": {
+            "type": "string",
+            "title": "Knowledgebase Description",
+            "description": "Description information"
+          }
+        },
+        "title": "CreateKnowledgebaseRequest"
+      },
+      "CreateKnowledgebaseResponse": {
+        "type": "object",
+        "required": [
+          "code",
+          "message"
+        ],
+        "properties": {
+          "code": {
+            "type": "integer",
+            "title": "Code",
+            "description": "API status code. See <a href=\"/api_docs/help/error_codes\" class=\"text-primary border-b border-transparent hover:border-primary font-medium focus-visible:outline-primary [&amp;&gt;code]:border-dashed hover:[&amp;&gt;code]:border-primary hover:[&amp;&gt;code]:text-primary transition-colors [&amp;&gt;code]:transition-colors\">Error Code</a> for details."
+          },
+          "data": {
+            "type": "object",
+            "title": "Data",
+            "properties": {
+              "id": {
+                "type": "string",
+                "title": "KNOWLEDGEBASE ID",
+                "description": "Knowledgebase ID returned after successful creation"
+              }
+            }
+          },
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "description": "API response message"
+          }
+        },
+        "title": "CreateKnowledgebaseResponse"
+      },
+      "DeleteKnowledgebaseRequest": {
+        "type": "object",
+        "required": [
+          "knowledgebase_id"
+        ],
+        "properties": {
+          "knowledgebase_id": {
+            "type": "string",
+            "title": "Knowledgebase ID",
+            "description": "Knowledgebase ID to be deleted"
+          }
+        },
+        "title": "DeleteKnowledgebaseRequest"
+      },
+      "DeleteKnowledgebaseResponse": {
+        "type": "object",
+        "required": [
+          "code",
+          "message"
+        ],
+        "properties": {
+          "code": {
+            "type": "integer",
+            "title": "Code",
+            "description": "API status code. See <a href=\"/api_docs/help/error_codes\" class=\"text-primary border-b border-transparent hover:border-primary font-medium focus-visible:outline-primary [&amp;&gt;code]:border-dashed hover:[&amp;&gt;code]:border-primary hover:[&amp;&gt;code]:text-primary transition-colors [&amp;&gt;code]:transition-colors\">Error Code</a> for details."
+          },
+          "data": {
+            "type": "object",
+            "title": "Data",
+            "properties": {
+              "success": {
+                "type": "boolean",
+                "title": "Success",
+                "description": "Whether removal was successful. true for success, false for failure."
+              }
+            }
+          },
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "description": "API response message"
+          }
+        },
+        "title": "DeleteKnowledgebaseResponse"
+      },
+      "UploadFileRequest": {
+        "type": "object",
+        "required": [
+          "knowledgebase_id",
+          "file"
+        ],
+        "properties": {
+          "knowledgebase_id": {
+            "type": "string",
+            "title": "Knowledgebase ID",
+            "description": "Target Knowledgebase ID"
+          },
+          "file": {
+            "type": "array",
+            "title": "File",
+            "description": "List of documents to upload",
+            "items": {
+              "type": "object",
+              "properties": {
+                "content": {
+                  "type": "string",
+                  "title": "Content",
+                  "description": "Document content, supports URL or Base64"
+                }
+              }
+            }
+          }
+        },
+        "title": "UploadFileRequest"
+      },
+      "UploadFileResponse": {
+        "type": "object",
+        "required": [
+          "code",
+          "message"
+        ],
+        "properties": {
+          "code": {
+            "type": "integer",
+            "title": "Code",
+            "description": "API status code. See <a href=\"/api_docs/help/error_codes\" class=\"text-primary border-b border-transparent hover:border-primary font-medium focus-visible:outline-primary [&amp;&gt;code]:border-dashed hover:[&amp;&gt;code]:border-primary hover:[&amp;&gt;code]:text-primary transition-colors [&amp;&gt;code]:transition-colors\">Error Code</a> for details."
+          },
+          "data": {
+            "type": "object",
+            "title": "Data",
+            "properties": {
+              "id": {
+                "type": "string",
+                "title": "ID",
+                "description": "Document ID"
+              },
+              "name": {
+                "type": "string",
+                "title": "Name",
+                "description": "Document Name"
+              },
+              "sizeMB": {
+                "type": "integer",
+                "title": "Size MB",
+                "description": "Document Size"
+              },
+              "status": {
+                "type": "string",
+                "title": "Status",
+                "description": "Document processing status",
+                "enum":[
+                  "running",
+                  "completed",
+                  "failed"
+                ]
+              }
+            }
+          },
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "description": "API response message"
+          }
+        },
+        "title": "UploadFileResponse"
+      },
+      "GetFileRequest": {
+        "type": "object",
+        "required": [
+          "file_ids"
+        ],
+        "properties": {
+          "file_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "title": "File IDs",
+            "description": "List of file IDs"
+          }
+        },
+        "title": "GetFileRequest"
+      },
+      "GetFileResponse": {
+        "type": "object",
+        "required": [
+          "code",
+          "message"
+        ],
+        "properties": {
+          "code": {
+            "type": "integer",
+            "title": "Code",
+            "description": "API status code. See <a href=\"/api_docs/help/error_codes\" class=\"text-primary border-b border-transparent hover:border-primary font-medium focus-visible:outline-primary [&amp;&gt;code]:border-dashed hover:[&amp;&gt;code]:border-primary hover:[&amp;&gt;code]:text-primary transition-colors [&amp;&gt;code]:transition-colors\">Error Code</a> for details."
+          },
+          "data": {
+            "type": "object",
+            "title": "Data",
+            "properties": {
+              "file_detail_list": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "title": "ID",
+                      "description": "Document ID"
+                    },
+                    "name": {
+                      "type": "string",
+                      "title": "Name",
+                      "description": "Document Name"
+                    },
+                    "size": {
+                      "type": "string",
+                      "title": "Size",
+                      "description": "Document Size"
+                    },
+                    "status": {
+                      "type": "string",
+                      "title": "Status",
+                      "description": "Document processing status",
+                      "enum":[
+                        "running",
+                        "completed",
+                        "failed"
+                      ]
+                    }
+                  }
+                },
+                "title": "File Detail List"
+              }
+            }
+          },
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "description": "API response message"
+          }
+        },
+        "title": "GetFileResponse"
+      },
+      "DeleteFileRequest": {
+        "type": "object",
+        "required": [
+          "file_ids"
+        ],
+        "properties": {
+          "file_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "title": "File IDs",
+            "description": "List of document IDs to delete"
+          }
+        },
+        "title": "DeleteFileRequest"
+      },
+      "DeleteFileResponse": {
+        "type": "object",
+        "required": [
+          "code",
+          "message"
+        ],
+        "properties": {
+          "code": {
+            "type": "integer",
+            "title": "Code",
+            "description": "API status code. See <a href=\"/api_docs/help/error_codes\" class=\"text-primary border-b border-transparent hover:border-primary font-medium focus-visible:outline-primary [&amp;&gt;code]:border-dashed hover:[&amp;&gt;code]:border-primary hover:[&amp;&gt;code]:text-primary transition-colors [&amp;&gt;code]:transition-colors\">Error Code</a> for details."
+          },
+          "data": {
+            "type": "object",
+            "title": "Data",
+            "properties": {
+              "success": {
+                "type": "boolean",
+                "title": "Success",
+                "description": "Whether deletion was successful. true for success, false for failure."
+              }
+            }
+          },
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "description": "API response message"
+          }
+        },
+        "title": "DeleteFileResponse"
+      }
     }
   }
 }

@@ -1,6 +1,6 @@
 ---
 title: Limits
-desc: MemOS provides each developer with free quota to quickly experience and validate its memory capabilities.
+desc: Register and log in to enjoy free quota, facilitating quick experience and verification of memory functions.
 ---
 
 
@@ -19,13 +19,13 @@ Take action now and use MemOS Cloud Services to support the growth of your proje
 
 ## 2. Resource Limits
 
-To ensure stable and secure service, MemOS Cloud Service enforces the following limits on API calls, calculated at the account level:
+To ensure service stability and security, MemOS Cloud Services imposes the following limits on core API calls, calculated per account:
 
-| API Name | Max Input per Request | Max Output per Request | 
-| --- | --- | --- |
-| addMessage | 8k tokens | - |
-| searchMemory | 4k tokens | 25 memories |
-| getMessage | - | 50 messages |
+| **API Name**   | **Single Input Limit** | **Single Output Limit** |
+|----------------|------------------------|-------------------------|
+| addMessage     | 20,000 token           | -                       |
+| searchMemory   | 20,000 token           | Fact Memory: 25 items<br>Preference Memory: 25 items<br>Tool Memory: 25 items |
+| Chat           | 8,000 token            | Memory Retrieval:<br>- Fact Memory: 25 items<br>- Preference Memory: 25 items<br>- Tool Memory: 25 items |
 
 ::note
 **Note**
@@ -38,7 +38,3 @@ To ensure stable and secure service, MemOS Cloud Service enforces the following 
 You can view the remaining quota for each API through the **API Console**, with filters for project, API key, and date to facilitate tracking and managing usage.
 
 <img width="3024" height="1890" alt="image" src="https://github.com/user-attachments/assets/49cddd25-6fbf-40d4-a750-58c3b2ac5547" />
-
-## 4. Contact Us
-
-![image.png](https://cdn.memtensor.com.cn/img/1758685658684_nbhka4_compressed.png)

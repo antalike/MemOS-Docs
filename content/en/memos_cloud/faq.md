@@ -3,8 +3,6 @@ title: FAQs
 desc: We have compiled the most common questions about using MemOS. No need to search around; you can quickly find the answers here.
 ---
 
-## 1. Frequently Asked Questions
-
 ### Q: What is the difference between MemOS and a standard RAG framework?
 
 | **Comparison Dimension** | **RAG** | **MemOS** | **Advantages of MemOS** |
@@ -102,15 +100,3 @@ Yes. Scheduling is not only about “retrievability” but also about being “f
 ### Q: Which products and industries does MemOS serve?
 MemOS has been applied across multiple domains, including major internet companies (covering verticals such as e-commerce and travel), telecom operators, financial securities, manufacturing, and education & scientific research. We have partnered with leading state-owned enterprises and top industry teams, validating memory-driven capabilities in scenarios such as embodied intelligence, AI customer service, knowledge management, intelligent investment advisory, industrial operations & maintenance, and AI-powered learning.
 Some projects are still in joint development, and details cannot yet be disclosed — but we will continue to share more concrete case stories in the future!
-
-
-## 2. Next Steps
-
-*   Start using our cloud service to experience the power of MemOS [Cloud Platform Overview](/dashboard/overview)
-    
-*   For a deeper understanding of MemOS algorithms, see [Overview of MemOS Algorithm Principles](/overview/algorithm)
-
-
-## 3. Contact Us
-
-<img src="https://cdn.memtensor.com.cn/img/1758685658684_nbhka4_compressed.png" alt="image" style="width:70%;">

@@ -63,7 +63,7 @@ function gotoHome() {
       <LanguageSwitcher />
       <JoinCommunityButton />
       <button
-        class="flex items-center gap-1.5 h-7 px-2.5 bg-linear-270 from-15% from-linear-primary to-118% to-primary-light rounded-md cursor-pointer"
+        class="hidden sm:flex items-center gap-1.5 h-7 px-2.5 bg-linear-270 from-15% from-linear-primary to-118% to-primary-light rounded-md cursor-pointer"
         @click="gotoHome"
       >
         <UIcon
