@@ -7,7 +7,6 @@ desc: MemOS provides a REST API service written using FastAPI. Users can perform
 <div style="text-align: center; margin-top: 10px">APIs supported by MemOS REST API Server</div>  
 
 ### Features
-The following is the English translation of your content, keeping proper nouns unchanged:
 
 - Register new user: Register a new user using configuration information and default cube.
 - Get recommended queries: Get recommended query statements for a specific user.
@@ -64,6 +63,17 @@ EMBEDDING_DIMENSION=1024
 #### Reference configuration environment variables above, .env file should be configured
 
 #### Configure Dockerfile (Current Dockerfile is in root directory)
+
+Contains quick mode and full mode, distinguishing between using simplified packages and full packages
+
+● Simplified package: Simplify dependencies related to Nvidia that are too large in size, achieve lightweight mirroring, and make local deployment lighter and faster.
+
+url: registry.cn-shanghai.aliyuncs.com/memtensor/memos:base-v1.0
+
+● Full package: Convert all MemOS dependencies into images, Experience complete functionality. By configuring Dockerfiles, you can directly build and start the package.
+
+url: registry.cn-shanghai.aliyuncs.com/memtensor/memos-full-base:v1.0.0
+
 ```bash
 # Lean package url
 FROM registry.cn-shanghai.aliyuncs.com/memtensor/memos:base-v1.0
