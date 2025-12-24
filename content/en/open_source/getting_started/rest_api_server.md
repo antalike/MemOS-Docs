@@ -88,7 +88,7 @@ CHAT_MODEL_LIST=[{"backend": "deepseek", "api_base": "http://xxx:3000/v1", "api_
 
 #### Reference configuration environment variables above, .env file should be configured
 
-#### Configure Dockerfile
+#### Configure Dockerfile(cd docker)
 
 Contains quick mode and full mode, distinguishing between using simplified packages and full packages
 
@@ -120,28 +120,7 @@ EXPOSE 8000
 CMD ["uvicorn", "memos.api.server_api:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
 
 ```
-
-#### Local build - supports amd x86: windows, intel chip build method (choose step 3 ignore step 4 according to chip type)
-##### (Image name:version: Example: memos-api-server:v1.0.1):
-
-```bash
-docker build -t memos-api-server:v1.0.1 .  
-```
-
-![MemOS buildSuccess](https://cdn.memtensor.com.cn/img/memos_build_success_ay2epm_compressed.png)
-<div style="text-align: center; margin-top: 10px；font-size:12px">Example image, build command as per custom image name:version</div>  
-
-##### Start service using docker run:
-
-```bash
-docker run --env-file .env -p 8000:8000 memos-api-server:v1.0.1
-```
-
-#### Local build - arm: mac m chip (choose step 4 ignore step 3 according to chip type)
-##### Support arm: mac m chip build method docker compose up
-##### Enter docker directory, configure docker-compose.yml file. Reference <a href="https://github.com/MemTensor/MemOS/blob/main/docker/docker-compose.yml">docker-compose.yml</a>.
-
-##### Build and start service using docker compose up:
+#### Build and start service using docker compose up:
 ```bash
 # Enter docker directory
 docker compose up
