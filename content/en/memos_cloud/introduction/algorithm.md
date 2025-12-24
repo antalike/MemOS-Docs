@@ -131,11 +131,4 @@ From Next-Token Prediction to Next-Scene Prediction
 
 ## 5. Next Steps
 
-*   Try our cloud service to experience the power of MemOS [《Cloud Platform Overview》](/dashboard/overview)
-    
-*   Or deploy and explore with the MemOS open-source project [《Open-Source Project Overview》](/open_source/home/overview)
-    
-
-## 6. Contact Us
-
-<img src="https://cdn.memtensor.com.cn/img/1758685658684_nbhka4_compressed.png" alt="image" style="width:70%;">
+*   Learn about [Cloud Platform & Open Source](/memos_cloud/cloud_and_opensource) and experience the power of MemOS!

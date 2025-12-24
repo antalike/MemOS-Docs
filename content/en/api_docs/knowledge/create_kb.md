@@ -1,3 +1,4 @@
 ---
-title: 创建知识库
+title: Create Knowledge Base
+openapi: "POST /create/knowledgebase"
 ---

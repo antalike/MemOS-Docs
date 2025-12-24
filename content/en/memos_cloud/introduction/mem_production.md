@@ -74,10 +74,6 @@ In MemOS, **memory production** is the full process of converting raw input into
 
 Learn more about MemOS core capabilities:
 
-- [Memory Scheduling](/overview/quick_start/mem_schedule)
-- [Memory Recall](/overview/quick_start/mem_recall)
-- [Memory Lifecycle Management](/overview/quick_start/mem_lifecycle)
-
-## 4. Contact Us
-
-<img src="https://cdn.memtensor.com.cn/img/1758685658684_nbhka4_compressed.png" alt="image" style="width:70%;">
+- [Memory Scheduling](/memos_cloud/introduction/mem_schedule)
+- [Memory Recall](/memos_cloud/introduction/mem_recall)
+- [Memory Lifecycle Management](/memos_cloud/introduction/mem_lifecycle)
