@@ -4,7 +4,6 @@ desc: 添加消息时按照你的业务需求使用标签。
 ---
 ::warning 注意
 <br>
-
 <br>
 
 **[需要先在addMessage的时候传入tag list（点此查看详细 API 文档）](/api_docs/core/add_message)**
