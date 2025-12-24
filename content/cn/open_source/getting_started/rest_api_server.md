@@ -25,30 +25,51 @@ desc: MemOS 提供了一个使用 FastAPI 编写的 REST API 服务。用户可�
 #### 1、在根目录中创建一个 `.env` 文件并设置你的环境变量。完整模式参考 <a href="https://github.com/MemTensor/MemOS/blob/main/docker/.env.example">.env.example</a>。
 ##### .env 快速模式配置如下
 ```bash 
-# 用户key，用于初始化或默认请求用户
-OPENAI_API_KEY=your-openai-api-key  
+# OpenAI API 密钥 (当 provider=openai 时必须)
+OPENAI_API_KEY=sk-xxx
+# OpenAI API 基础 URL
+OPENAI_API_BASE=http://xxx:3000/v1
 
-# OpenAI 接口地址，默认 https://api.openai.com/v1。如走代理或自建兼容服务，改这里。
-OPENAI_API_BASE=your-openai-ip
-
-# http_bge（HTTP 服务版 BGE 重排）或 cosine_local（本地余弦）。
-MOS_RERANKER_BACKEND=cosine_local
-
-# universal_api：使用 OpenAI 聊天与嵌入 ，
-# Ollama：使用本地 Ollama 嵌入
-MOS_EMBEDDER_BACKEND=universal_api
-
-# 嵌入模型
+# 启用默认 cube 配置
+MOS_ENABLE_DEFAULT_CUBE_CONFIG=true
+# Embedder 模型名称
 MOS_EMBEDDER_MODEL=bge-m3
-
-# 接口地址（OpenAI 为 https://api.openai.com/v1；Azure 为你的 endpoint）
-MOS_EMBEDDER_API_BASE=your-openai-ip
-
-# 对应 provider 的 Key
+# Embedder API 基础 URL
+MOS_EMBEDDER_API_BASE=http://xxx:8081/v1
+# Embedder API 密钥
 MOS_EMBEDDER_API_KEY=EMPTY
-
-# 向量维度
+# Embedding 向量维度
 EMBEDDING_DIMENSION=1024
+# Reranker 后端 (http_bge | etc.)
+MOS_RERANKER_BACKEND=cosine_local
+# Reranker 服务 URL
+MOS_RERANKER_URL=localhost
+
+# Neo4j 连接 URI
+# 可选值: neo4j-community | neo4j | nebular | polardb
+NEO4J_BACKEND=neo4j-community
+# 当 backend=neo4j* 时必须
+NEO4J_URI=bolt://localhost:7687
+NEO4J_USER=neo4j
+NEO4J_PASSWORD=12345678
+NEO4J_DB_NAME=neo4j
+MOS_NEO4J_SHARED_DB=false
+
+# Bocha 搜索 API 密钥
+BOCHA_API_KEY=sk-xxx
+
+# 从 .env.full 添加
+DEFAULT_USE_REDIS_QUEUE=false
+
+# Memory Reader LLM 模型
+MEMRADER_MODEL=gpt-4o-mini
+# Memory Reader API 密钥
+MEMRADER_API_KEY=sk-xxx
+# Memory Reader API 基础 URL
+MEMRADER_API_BASE=http://xxx:3000/v1
+
+# 聊天模型列表
+CHAT_MODEL_LIST=[{"backend": "deepseek", "api_base": "http://xxx:3000/v1", "api_key": "sk-xxx", "model_name_or_path": "deepseek-r1", "support_models": ["deepseek-r1"]}]
 ```
 
 
@@ -119,7 +140,7 @@ docker run --env-file .env -p 8000:8000 memos-api-server:v1.0.1
 ```
 
 #### 本地构建-arm：mac m 芯片(根据芯片类型选择3步骤忽略2步骤)
-##### 支持aarm：mac m 芯片芯片的构建方式 docker compose up
+##### 支持arm：mac m 芯片的构建方式 docker compose up
 ##### 进入docker目录下，配置docker-compose.yml文件。参考<a href="https://github.com/MemTensor/MemOS/blob/main/docker/docker-compose.yml">docker-compose.yml</a>。
 
 ##### 使用docker compose up 构建并切动服务 ：
