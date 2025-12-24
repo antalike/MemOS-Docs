@@ -197,7 +197,7 @@ print(f"result: {res.json()}")
 "result": {
   "code": 0,
   "data": {
-    "id": "替换成上方创建的知识库ID"
+    "id": "idxxxxx"  # 替换成上方创建的知识库ID
   },
   "message": "ok"
 }
@@ -217,7 +217,7 @@ os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
 os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
 data = {
-    "knowledgebase_id": "替换成上方创建的知识库ID",
+    "knowledgebase_id": "idxxxxx",  # 替换成上方创建的知识库ID
     "file": [
         {"content": "https://cdn.memtensor.com.cn/file/软件采购报销制度.pdf"}
     ]
@@ -317,7 +317,7 @@ data = {
     "user_id": "memos_user_123",
     "conversation_id": "1211",
     "query": "帮我查一下软件采购报销额度。",
-    "knowledgebase_ids":["替换成上方创建的知识库ID"]
+    "knowledgebase_ids":["idxxxxx"]  # 替换成上方创建的知识库ID
 }
 headers = {
   "Content-Type": "application/json",
@@ -403,7 +403,7 @@ data = {
     "user_id": "memos_user_123",
     "conversation_id": "1212",
     "feedback_content": "办公类软件的采购上限是600元，而不是800元。",
-    "allow_knowledgebase_ids":["替换成上方创建的知识库ID"]
+    "allow_knowledgebase_ids":["idxxxxx"]  # 替换成上方创建的知识库ID
 }
 
 headers = {
@@ -437,7 +437,7 @@ data = {
     "user_id": "memos_user_123",
     "conversation_id": "1211",
     "query": "帮我查一下软件采购报销额度。",
-    "knowledgebase_ids":["替换成上方创建的知识库ID"]
+    "knowledgebase_ids":["idxxxxx"]  # 替换成上方创建的知识库ID
 }
 headers = {
   "Content-Type": "application/json",
