@@ -7,7 +7,6 @@ desc: MemOS 提供了一个使用 FastAPI 编写的 REST API 服务。用户可�
 <div style="text-align: center; margin-top: 10px">MemOS REST API 服务支持的 API</div>  
 
 ### 功能特点
-以下是你的英文内容的中文翻译，专有名词保持不变：
 
 - 注册新用户：使用配置信息和默认的 cube 注册一个新用户。
 - 获取推荐查询：为指定用户获取推荐的查询语句。
@@ -72,6 +71,16 @@ EMBEDDING_DIMENSION=1024
 #### 参考上方配置环境变量，已经好配置.env文件
 
 #### 配置Dockerfile文件（当前Dockerfile文件在根目录下）
+包含快速模式和完整模式，可区分使用精简包和全量包
+
+● 精简包：简化体量过大的 nvidia相关等依赖，对镜像实现轻量化，使本地部署更加轻量快速。
+
+url: registry.cn-shanghai.aliyuncs.com/memtensor/memos:base-v1.0
+
+● 全量包：将 MemOS 全部依赖包打为镜像，镜像已上传至仓库，通过配置 Dockerfile可直接构建启动。
+
+url: registry.cn-shanghai.aliyuncs.com/memtensor/memos-full-base:v1.0.0
+
 ```bash
 # 精简包 url
 FROM registry.cn-shanghai.aliyuncs.com/memtensor/memos:base-v1.0
