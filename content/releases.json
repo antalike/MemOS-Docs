@@ -1,6 +1,1539 @@
 {
   "versions": [
     {
+      "releaseUrl": "https://github.com/MemTensor/MemOS/releases/tag/v2.0.0",
+      "name": "v2.0.0",
+      "date": "2025-12-24",
+      "changedInfo": [
+        {
+          "type": "feat",
+          "description": "simplify simple tree",
+          "author": "CaralHsi",
+          "pr": 461,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/461"
+        },
+        {
+          "type": "feat",
+          "description": "max worker",
+          "author": "CaralHsi",
+          "pr": 475,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/475"
+        },
+        {
+          "type": "feat",
+          "description": "add topk for working mem",
+          "author": "fridayL",
+          "pr": 476,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/476"
+        },
+        {
+          "type": "feat",
+          "description": "update readme",
+          "author": "fridayL",
+          "pr": 477,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/477"
+        },
+        {
+          "type": "feat",
+          "description": "change url",
+          "author": "fridayL",
+          "pr": 478,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/478"
+        },
+        {
+          "type": "fix",
+          "description": "chat time issue 2023->2025",
+          "author": "whipser030",
+          "pr": 479,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/479"
+        },
+        {
+          "type": "scheduler",
+          "description": "feat: implementation of redis queue and new api search functions of mixture and fine mode",
+          "author": "tangg555",
+          "pr": 462,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/462"
+        },
+        {
+          "type": "feat",
+          "description": "update readme",
+          "author": "fridayL",
+          "pr": 481,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/481"
+        },
+        {
+          "type": "add",
+          "description": "pool health && log",
+          "author": "wustzdy",
+          "pr": 482,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/482"
+        },
+        {
+          "type": "feat",
+          "description": "reorganize playground code and merge to API",
+          "author": "fridayL",
+          "pr": 488,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/488"
+        },
+        {
+          "type": "fix",
+          "description": "lack mem_cube_id bug in pref async",
+          "author": "Wang-Daoji",
+          "pr": 494,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/494"
+        },
+        {
+          "type": "feat",
+          "description": "add redis_scheduler",
+          "author": "fridayL",
+          "pr": 499,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/499"
+        },
+        {
+          "type": "update",
+          "description": "API Reference link in README.md",
+          "author": "CarltonXiang",
+          "pr": 500,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/500"
+        },
+        {
+          "type": "hotfix",
+          "description": "bug in pref init",
+          "author": "Wang-Daoji",
+          "pr": 502,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/502"
+        },
+        {
+          "type": "feat",
+          "description": "& refactor: add searcher to handler_init and remove logger info from get_messages",
+          "author": "tangg555",
+          "pr": 501,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/501"
+        },
+        {
+          "type": "feat",
+          "description": "log support time rotating",
+          "author": "CarltonXiang",
+          "pr": 504,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/504"
+        },
+        {
+          "type": "fix",
+          "description": "init bug pref",
+          "author": "Wang-Daoji",
+          "pr": 508,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/508"
+        },
+        {
+          "type": "fix",
+          "description": "format error",
+          "author": "CarltonXiang",
+          "pr": 510,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/510"
+        },
+        {
+          "type": "feat",
+          "description": "sync  change",
+          "author": "fridayL",
+          "pr": 512,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/512"
+        },
+        {
+          "type": "feat",
+          "description": "abstract CubeView to Add & Search Handler",
+          "author": "CaralHsi",
+          "pr": 498,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/498"
+        },
+        {
+          "type": "feat",
+          "description": "enhance APIADDRequest with custom_tags, info, and is_feedback fields",
+          "author": "CaralHsi",
+          "pr": 515,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/515"
+        },
+        {
+          "type": "feat",
+          "description": "add headers for embedding and reranker",
+          "author": "fridayL",
+          "pr": 519,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/519"
+        },
+        {
+          "type": "docs",
+          "description": "update .env.example with comprehensive variables and comments",
+          "author": "fancyboi999",
+          "pr": 511,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/511"
+        },
+        {
+          "type": "refactor",
+          "description": "Consolidate backward compatibility into API models; simplify handler logic",
+          "author": "CaralHsi",
+          "pr": 520,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/520"
+        },
+        {
+          "type": "feat",
+          "description": "add deepsearch agent for memos",
+          "author": "fridayL",
+          "pr": 517,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/517"
+        },
+        {
+          "type": "add",
+          "description": "status of reasoning in playground",
+          "author": "Wang-Daoji",
+          "pr": 523,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/523"
+        },
+        {
+          "type": "feat",
+          "description": "deepsearch agent dock search pipeline",
+          "author": "fridayL",
+          "pr": 524,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/524"
+        },
+        {
+          "type": "feat",
+          "description": "update prompt and format need raw",
+          "author": "fridayL",
+          "pr": 528,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/528"
+        },
+        {
+          "type": "fix",
+          "description": "cube init",
+          "author": "fridayL",
+          "pr": 529,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/529"
+        },
+        {
+          "type": "feat",
+          "description": "add full text memory by jieba",
+          "author": "fridayL",
+          "pr": 532,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/532"
+        },
+        {
+          "type": "fa_bu_hui",
+          "description": "pref",
+          "author": "Wang-Daoji",
+          "pr": 534,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/534"
+        },
+        {
+          "type": "fix",
+          "description": "remove",
+          "author": "fridayL",
+          "pr": 535,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/535"
+        },
+        {
+          "type": "feat",
+          "description": "enable multi-cube chat (read/write) & unify ChatRequest/ADDRequest normalization",
+          "author": "CaralHsi",
+          "pr": 521,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/521"
+        },
+        {
+          "type": "feat",
+          "description": "Multi-Model Memory Reader with Modular Parser Architecture",
+          "author": "CaralHsi",
+          "pr": 536,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/536"
+        },
+        {
+          "type": "feat",
+          "description": "remove dup func name and add agentic search",
+          "author": "fridayL",
+          "pr": 537,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/537"
+        },
+        {
+          "type": "fix",
+          "description": "Make from_memory_type and to_memory_type optional and add task_i…",
+          "author": "glin93",
+          "pr": 538,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/538"
+        },
+        {
+          "type": "fix",
+          "description": "log timeRotating",
+          "author": "CarltonXiang",
+          "pr": 539,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/539"
+        },
+        {
+          "type": "update",
+          "description": "pool size",
+          "author": "wustzdy",
+          "pr": 545,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/545"
+        },
+        {
+          "type": "feat",
+          "description": "add full text mem",
+          "author": "fridayL",
+          "pr": 544,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/544"
+        },
+        {
+          "type": "feat",
+          "description": "fix tiny parameter bug in multi model reader and add a multi-model memreader example",
+          "author": "CaralHsi",
+          "pr": 546,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/546"
+        },
+        {
+          "type": "fix",
+          "description": "scheduler logger memory size retrieval",
+          "author": "glin93",
+          "pr": 547,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/547"
+        },
+        {
+          "type": "dev",
+          "description": "1.0.1 zdy like",
+          "author": "wustzdy",
+          "pr": 551,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/551"
+        },
+        {
+          "type": "feat",
+          "description": "add func Base class and add strategy logs, low search mode",
+          "author": "fridayL",
+          "pr": 552,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/552"
+        },
+        {
+          "type": "hotfix",
+          "description": "align KB knowledgeBaseUpdate logs with spec",
+          "author": "glin93",
+          "pr": 555,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/555"
+        },
+        {
+          "type": "feat",
+          "description": "multimodal reader",
+          "author": "CaralHsi",
+          "pr": 560,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/560"
+        },
+        {
+          "type": "delete_node_by_prams",
+          "description": "for filter && simple support",
+          "author": "wustzdy",
+          "pr": 558,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/558"
+        },
+        {
+          "type": "feat",
+          "description": "add filter for search_memories",
+          "author": "endxxxx",
+          "pr": 553,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/553"
+        },
+        {
+          "type": "fix",
+          "description": "contains",
+          "author": "wustzdy",
+          "pr": 564,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/564"
+        },
+        {
+          "type": "fix",
+          "description": "full_fields",
+          "author": "wustzdy",
+          "pr": 566,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/566"
+        },
+        {
+          "type": "feat",
+          "description": "complete multi modal",
+          "author": "CaralHsi",
+          "pr": 562,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/562"
+        },
+        {
+          "type": "hot",
+          "description": "func main/delete memory",
+          "author": "Wang-Daoji",
+          "pr": 565,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/565"
+        },
+        {
+          "type": "feat",
+          "description": "sync hotfix to dev and add full text for polardb",
+          "author": "fridayL",
+          "pr": 563,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/563"
+        },
+        {
+          "type": "update",
+          "description": "delete_node_by_prams add delete_node_by_prams",
+          "author": "wustzdy",
+          "pr": 568,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/568"
+        },
+        {
+          "type": "feat",
+          "description": "insert fulltext search into pipeline",
+          "author": "fridayL",
+          "pr": 567,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/567"
+        },
+        {
+          "type": "feat",
+          "description": "feedback interface",
+          "author": "whipser030",
+          "pr": 541,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/541"
+        },
+        {
+          "type": "remove",
+          "description": "dump.rdb",
+          "author": "glin93",
+          "pr": 576,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/576"
+        },
+        {
+          "type": "feat",
+          "description": "add langchain markdown chunker",
+          "author": "fridayL",
+          "pr": 574,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/574"
+        },
+        {
+          "type": "debug",
+          "description": "scheduler",
+          "author": "tangg555",
+          "pr": 577,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/577"
+        },
+        {
+          "type": "fix",
+          "description": "function log_add_messages",
+          "author": "glin93",
+          "pr": 582,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/582"
+        },
+        {
+          "type": "dev",
+          "description": "zdy delete 120002",
+          "author": "wustzdy",
+          "pr": 580,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/580"
+        },
+        {
+          "type": "feat",
+          "description": "timer add log args",
+          "author": "CarltonXiang",
+          "pr": 581,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/581"
+        },
+        {
+          "type": "scheduler",
+          "description": "fix bugs due to init from env",
+          "author": "tangg555",
+          "pr": 585,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/585"
+        },
+        {
+          "type": "fix",
+          "description": "submit add for playground query",
+          "author": "fridayL",
+          "pr": 586,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/586"
+        },
+        {
+          "type": "feat(scheduler)",
+          "description": "Propagate trace_id across process boundaries for mem…",
+          "author": "tangg555",
+          "pr": 592,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/592"
+        },
+        {
+          "type": "scheduler",
+          "description": "new feat to addressed repeated task issues",
+          "author": "tangg555",
+          "pr": 594,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/594"
+        },
+        {
+          "type": "feat",
+          "description": "split chunk for pure string",
+          "author": "CaralHsi",
+          "pr": 593,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/593"
+        },
+        {
+          "type": "fix",
+          "description": "dequeue timestamp logging for pydantic models",
+          "author": "glin93",
+          "pr": 596,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/596"
+        },
+        {
+          "type": "feat",
+          "description": "Feedback Function",
+          "author": "whipser030",
+          "pr": 597,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/597"
+        },
+        {
+          "type": "fix(scheduler)",
+          "description": "Correctly process feedback logs by checking for 'text…",
+          "author": "glin93",
+          "pr": 600,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/600"
+        },
+        {
+          "type": "chore(feedback)",
+          "description": "propagate source_doc_id in KB logs if available",
+          "author": "glin93",
+          "pr": 601,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/601"
+        },
+        {
+          "type": "feat",
+          "description": "add delete memory log; fix decode sources",
+          "author": "CaralHsi",
+          "pr": 599,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/599"
+        },
+        {
+          "type": "fix",
+          "description": "feedback messages",
+          "author": "whipser030",
+          "pr": 604,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/604"
+        },
+        {
+          "type": "fix",
+          "description": "input Pydantic bug",
+          "author": "CaralHsi",
+          "pr": 602,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/602"
+        },
+        {
+          "type": "feat(scheduler)",
+          "description": "Unify web log submission checks and add debug logs",
+          "author": "glin93",
+          "pr": 610,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/610"
+        },
+        {
+          "type": "feat",
+          "description": "add document for memory extract",
+          "author": "fridayL",
+          "pr": 606,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/606"
+        },
+        {
+          "type": "feat",
+          "description": "add file in info",
+          "author": "fridayL",
+          "pr": 611,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/611"
+        },
+        {
+          "type": "feat",
+          "description": "remove reqiumentxt",
+          "author": "fridayL",
+          "pr": 612,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/612"
+        },
+        {
+          "type": "scheduler",
+          "description": "new feat about orchestrator task schedule",
+          "author": "tangg555",
+          "pr": 614,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/614"
+        },
+        {
+          "type": "fix",
+          "description": "file_ids",
+          "author": "wustzdy",
+          "pr": 615,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/615"
+        },
+        {
+          "type": "feat",
+          "description": "add file ids",
+          "author": "fridayL",
+          "pr": 617,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/617"
+        },
+        {
+          "type": "feat",
+          "description": "reorgnaize chunk code and use markdown chunker",
+          "author": "fridayL",
+          "pr": 618,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/618"
+        },
+        {
+          "type": "feat",
+          "description": "Fix inconsistent trace_id in scheduler dequeue logs",
+          "author": "glin93",
+          "pr": 619,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/619"
+        },
+        {
+          "type": "feat",
+          "description": "Improve MultiModalStructMemReader: Better Language Detection, Prompt Selection, and Source-Aware Processing",
+          "author": "CaralHsi",
+          "pr": 620,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/620"
+        },
+        {
+          "type": "dev",
+          "description": "zdy 1205",
+          "author": "wustzdy",
+          "pr": 623,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/623"
+        },
+        {
+          "type": "fix",
+          "description": "scheduler memory get with user_name and retries",
+          "author": "glin93",
+          "pr": 624,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/624"
+        },
+        {
+          "type": "fix",
+          "description": "Populate source_doc_id in memory metadata for scheduler logging",
+          "author": "glin93",
+          "pr": 625,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/625"
+        },
+        {
+          "type": "feat",
+          "description": "reverted code and add memory_type",
+          "author": "fridayL",
+          "pr": 627,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/627"
+        },
+        {
+          "type": "feat",
+          "description": "a range of new feats to make a better redis scheduler",
+          "author": "tangg555",
+          "pr": 630,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/630"
+        },
+        {
+          "type": "merge",
+          "description": "latest dev and pr",
+          "author": "tangg555",
+          "pr": 632,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/632"
+        },
+        {
+          "type": "fix",
+          "description": "get_subgraph",
+          "author": "wustzdy",
+          "pr": 633,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/633"
+        },
+        {
+          "type": "patch",
+          "description": "The supplementary catch-all method for polardb keyword search uses LIKE instead of TFIDF for recall",
+          "author": "whipser030",
+          "pr": 635,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/635"
+        },
+        {
+          "type": "feat",
+          "description": "add sources chunk content",
+          "author": "fridayL",
+          "pr": 639,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/639"
+        },
+        {
+          "type": "handle",
+          "description": "special characters",
+          "author": "wustzdy",
+          "pr": 643,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/643"
+        },
+        {
+          "type": "fix",
+          "description": "bugs: fix bugs in memory schedule",
+          "author": "tangg555",
+          "pr": 641,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/641"
+        },
+        {
+          "type": "feat",
+          "description": "Enhance File Parsing Pipeline with Chunk-Level Source Tracking & Unified Multi-Modal Parsing",
+          "author": "CaralHsi",
+          "pr": 645,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/645"
+        },
+        {
+          "type": "new",
+          "description": "feat: add enhancement and env variable for scheduler",
+          "author": "tangg555",
+          "pr": 650,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/650"
+        },
+        {
+          "type": "feat",
+          "description": "add file_info for file parser",
+          "author": "fridayL",
+          "pr": 651,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/651"
+        },
+        {
+          "type": "refactor",
+          "description": "scheduler and polardb",
+          "author": "tangg555",
+          "pr": 652,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/652"
+        },
+        {
+          "type": "feat",
+          "description": "image parse in file",
+          "author": "CaralHsi",
+          "pr": 654,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/654"
+        },
+        {
+          "type": "add",
+          "description": "nodes batch",
+          "author": "wustzdy",
+          "pr": 658,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/658"
+        },
+        {
+          "type": "optimize",
+          "description": "add batch",
+          "author": "wustzdy",
+          "pr": 661,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/661"
+        },
+        {
+          "type": "feat",
+          "description": "Pass source_doc_id in task completion logs",
+          "author": "glin93",
+          "pr": 664,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/664"
+        },
+        {
+          "type": "fix(rabbitmq)",
+          "description": "Handle exchange and routing key based on cloud env for…",
+          "author": "glin93",
+          "pr": 667,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/667"
+        },
+        {
+          "type": "dix",
+          "description": "delete quota",
+          "author": "wustzdy",
+          "pr": 666,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/666"
+        },
+        {
+          "type": "fix",
+          "description": "quote",
+          "author": "wustzdy",
+          "pr": 670,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/670"
+        },
+        {
+          "type": "fix",
+          "description": "redis key",
+          "author": "wustzdy",
+          "pr": 672,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/672"
+        },
+        {
+          "type": "fix",
+          "description": "fix ids for memory",
+          "author": "fridayL",
+          "pr": 674,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/674"
+        },
+        {
+          "type": "fix",
+          "description": "init feedback failed",
+          "author": "whipser030",
+          "pr": 675,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/675"
+        },
+        {
+          "type": "new",
+          "description": "feat of scheduler",
+          "author": "tangg555",
+          "pr": 669,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/669"
+        },
+        {
+          "type": "new",
+          "description": "feat for status tracker",
+          "author": "tangg555",
+          "pr": 676,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/676"
+        },
+        {
+          "type": "feat",
+          "description": "set add memory batch",
+          "author": "fridayL",
+          "pr": 678,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/678"
+        },
+        {
+          "type": "feat",
+          "description": "add bs params",
+          "author": "fridayL",
+          "pr": 679,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/679"
+        },
+        {
+          "type": "optimize",
+          "description": "pool",
+          "author": "wustzdy",
+          "pr": 681,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/681"
+        },
+        {
+          "type": "revert",
+          "description": "\"optimize pool\"",
+          "author": "tangg555",
+          "pr": 682,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/682"
+        },
+        {
+          "type": "feat",
+          "description": "feedback add strict info filter",
+          "author": "whipser030",
+          "pr": 685,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/685"
+        },
+        {
+          "type": "optimize",
+          "description": "pool",
+          "author": "wustzdy",
+          "pr": 686,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/686"
+        },
+        {
+          "type": "scheduler",
+          "description": "a range of bugs fixture and new features",
+          "author": "tangg555",
+          "pr": 692,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/692"
+        },
+        {
+          "type": "feat",
+          "description": "update prompt for playground",
+          "author": "fridayL",
+          "pr": 694,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/694"
+        },
+        {
+          "type": "scheduler",
+          "description": "more logs and revision of add",
+          "author": "tangg555",
+          "pr": 697,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/697"
+        },
+        {
+          "type": "fix",
+          "description": "Special characters",
+          "author": "wustzdy",
+          "pr": 700,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/700"
+        },
+        {
+          "type": "add",
+          "description": "polardb pool config",
+          "author": "wustzdy",
+          "pr": 702,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/702"
+        },
+        {
+          "type": "fix",
+          "description": "embedding fail need a safety way",
+          "author": "whipser030",
+          "pr": 704,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/704"
+        },
+        {
+          "type": "feat",
+          "description": "Relax cloud env check to support any non-empty MEMSCHEDULER_RAB…",
+          "author": "glin93",
+          "pr": 706,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/706"
+        },
+        {
+          "type": "fix",
+          "description": "cloud playground env detection",
+          "author": "glin93",
+          "pr": 707,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/707"
+        },
+        {
+          "type": "patch",
+          "description": "deduplicate add objects",
+          "author": "whipser030",
+          "pr": 714,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/714"
+        },
+        {
+          "type": "revert",
+          "description": "\"Fix/rabbitmq publish cache\"",
+          "author": "CaralHsi",
+          "pr": 719,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/719"
+        },
+        {
+          "type": "patch",
+          "description": "use manager _add_memories_parallel",
+          "author": "whipser030",
+          "pr": 721,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/721"
+        },
+        {
+          "type": "fix",
+          "description": "search dedup to remove duplicate memory content",
+          "author": "glin93",
+          "pr": 722,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/722"
+        },
+        {
+          "type": "fix",
+          "description": "delete special charactors",
+          "author": "whipser030",
+          "pr": 724,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/724"
+        },
+        {
+          "type": "feat",
+          "description": "update evaluation; add general string parser",
+          "author": "CaralHsi",
+          "pr": 715,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/715"
+        },
+        {
+          "type": "feat",
+          "description": "include embedding config",
+          "author": "fridayL",
+          "pr": 726,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/726"
+        },
+        {
+          "type": "fix",
+          "description": "add source_doc_id record",
+          "author": "whipser030",
+          "pr": 728,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/728"
+        },
+        {
+          "type": "scheduler",
+          "description": "improve add apis",
+          "author": "tangg555",
+          "pr": 703,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/703"
+        },
+        {
+          "type": "add",
+          "description": "log",
+          "author": "wustzdy",
+          "pr": 730,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/730"
+        },
+        {
+          "type": "scheduler",
+          "description": "address log issue",
+          "author": "tangg555",
+          "pr": 731,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/731"
+        },
+        {
+          "type": "scheduler",
+          "description": "fix replace_working_memory problem",
+          "author": "tangg555",
+          "pr": 734,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/734"
+        },
+        {
+          "type": "remove",
+          "description": "DETACH",
+          "author": "wustzdy",
+          "pr": 736,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/736"
+        },
+        {
+          "type": "feat",
+          "description": "change pref deafult reranker",
+          "author": "fridayL",
+          "pr": 735,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/735"
+        },
+        {
+          "type": "feat",
+          "description": "more proper lang in multi-modal parser",
+          "author": "CaralHsi",
+          "pr": 733,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/733"
+        },
+        {
+          "type": "update",
+          "description": "delete from cypher to delete",
+          "author": "wustzdy",
+          "pr": 737,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/737"
+        },
+        {
+          "type": "fix",
+          "description": "add reranker  to init components",
+          "author": "whipser030",
+          "pr": 739,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/739"
+        },
+        {
+          "type": "revert",
+          "description": "remove create log item_id inheritance",
+          "author": "glin93",
+          "pr": 743,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/743"
+        },
+        {
+          "type": "scheduler",
+          "description": "try to fix bugs",
+          "author": "tangg555",
+          "pr": 745,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/745"
+        },
+        {
+          "type": "scheduler",
+          "description": "fix bugs in log",
+          "author": "tangg555",
+          "pr": 746,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/746"
+        },
+        {
+          "type": "scheduler",
+          "description": "fix bugs",
+          "author": "tangg555",
+          "pr": 750,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/750"
+        },
+        {
+          "type": "fix",
+          "description": "time bug",
+          "author": "CaralHsi",
+          "pr": 758,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/758"
+        },
+        {
+          "type": "dev",
+          "description": "zdy 1221 01 user names",
+          "author": "wustzdy",
+          "pr": 759,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/759"
+        },
+        {
+          "type": "fix",
+          "description": "search time cost",
+          "author": "fridayL",
+          "pr": 752,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/752"
+        },
+        {
+          "type": "patch",
+          "description": "add feedback post process, llm judge update validality",
+          "author": "whipser030",
+          "pr": 761,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/761"
+        },
+        {
+          "type": "fix",
+          "description": "interface SDK",
+          "author": "zZhangSir",
+          "pr": 760,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/760"
+        },
+        {
+          "type": "feat",
+          "description": "add openai request body log",
+          "author": "CarltonXiang",
+          "pr": 763,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/763"
+        },
+        {
+          "type": "feat",
+          "description": "change deafult memos cube",
+          "author": "fridayL",
+          "pr": 765,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/765"
+        },
+        {
+          "type": "update",
+          "description": "readme",
+          "author": "tangbotony",
+          "pr": 766,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/766"
+        },
+        {
+          "type": "chore",
+          "description": "bump version to v2.0.0",
+          "author": "CarltonXiang",
+          "pr": 716,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/716"
+        }
+      ]
+    },
+    {
+      "releaseUrl": "https://github.com/MemTensor/MemOS/releases/tag/v1.1.3",
+      "name": "v1.1.3",
+      "date": "2025-11-07",
+      "changedInfo": [
+        {
+          "type": "add",
+          "description": "change deafult pre_load",
+          "author": "fridayL",
+          "pr": 338,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/338"
+        },
+        {
+          "type": "feat",
+          "description": "add memory size in product api",
+          "author": "CaralHsi",
+          "pr": 348,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/348"
+        },
+        {
+          "type": "feat",
+          "description": "update load cubes",
+          "author": "fridayL",
+          "pr": 350,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/350"
+        },
+        {
+          "type": "milvus",
+          "description": "implement",
+          "author": "Wang-Daoji",
+          "pr": 354,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/354"
+        },
+        {
+          "type": "fix",
+          "description": "code ruff format",
+          "author": "fridayL",
+          "pr": 355,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/355"
+        },
+        {
+          "type": "chore",
+          "description": "bump version to v1.1.2",
+          "author": "tangg555",
+          "pr": 360,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/360"
+        },
+        {
+          "type": "fix",
+          "description": "remove old mem",
+          "author": "CaralHsi",
+          "pr": 361,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/361"
+        },
+        {
+          "type": "feat",
+          "description": "only single-db mode in nebula now; modify index gql for better efficiency",
+          "author": "CaralHsi",
+          "pr": 363,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/363"
+        },
+        {
+          "type": "feat",
+          "description": "add server api prd",
+          "author": "fridayL",
+          "pr": 362,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/362"
+        },
+        {
+          "type": "feat",
+          "description": "add neo4j db for user_name",
+          "author": "fridayL",
+          "pr": 365,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/365"
+        },
+        {
+          "type": "feat",
+          "description": "add chat complete for new server_api",
+          "author": "fridayL",
+          "pr": 366,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/366"
+        },
+        {
+          "type": "fix",
+          "description": "nebula efficiency",
+          "author": "CaralHsi",
+          "pr": 369,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/369"
+        },
+        {
+          "type": "feat",
+          "description": "sync test to dev",
+          "author": "fridayL",
+          "pr": 375,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/375"
+        },
+        {
+          "type": "eval",
+          "description": "scripts",
+          "author": "Nyakult",
+          "pr": 377,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/377"
+        },
+        {
+          "type": "feat",
+          "description": "merge dev into main and change api-server",
+          "author": "fridayL",
+          "pr": 376,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/376"
+        },
+        {
+          "type": "fix",
+          "description": "sqlite list users error",
+          "author": "fridayL",
+          "pr": 384,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/384"
+        },
+        {
+          "type": "feat",
+          "description": "introduce async memory add for TreeTextMemory using MemScheduler",
+          "author": "CaralHsi",
+          "pr": 373,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/373"
+        },
+        {
+          "type": "add",
+          "description": "pm and pref eval scripts",
+          "author": "Nyakult",
+          "pr": 385,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/385"
+        },
+        {
+          "type": "meger",
+          "description": "update about scheduler and new api to Dev",
+          "author": "tangg555",
+          "pr": 386,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/386"
+        },
+        {
+          "type": "feat",
+          "description": "add reranker strategies and update configs",
+          "author": "fridayL",
+          "pr": 390,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/390"
+        },
+        {
+          "type": "modify",
+          "description": "code in evaluation",
+          "author": "Wang-Daoji",
+          "pr": 392,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/392"
+        },
+        {
+          "type": "fix",
+          "description": "bug in pref_mem return",
+          "author": "Wang-Daoji",
+          "pr": 399,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/399"
+        },
+        {
+          "type": "add",
+          "description": "polardb",
+          "author": "wustzdy",
+          "pr": 395,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/395"
+        },
+        {
+          "type": "feat",
+          "description": "fix mode",
+          "author": "lijicode",
+          "pr": 400,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/400"
+        },
+        {
+          "type": "feat",
+          "description": "remove long waring for internet and add content for memreader",
+          "author": "fridayL",
+          "pr": 401,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/401"
+        },
+        {
+          "type": "feat",
+          "description": "redis for sync history memories and new api of mixture search",
+          "author": "tangg555",
+          "pr": 398,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/398"
+        },
+        {
+          "type": "memos",
+          "description": "online api eval scripts and readme",
+          "author": "Nyakult",
+          "pr": 403,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/403"
+        },
+        {
+          "type": "feat",
+          "description": "fix sources",
+          "author": "lijicode",
+          "pr": 404,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/404"
+        },
+        {
+          "type": "fix",
+          "description": "porlar",
+          "author": "lijicode",
+          "pr": 406,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/406"
+        },
+        {
+          "type": "hotfix",
+          "description": "memos playground prompt reverse",
+          "author": "fridayL",
+          "pr": 408,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/408"
+        },
+        {
+          "type": "feat",
+          "description": "fix polardb graph",
+          "author": "lijicode",
+          "pr": 411,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/411"
+        },
+        {
+          "type": "feat",
+          "description": "async add api",
+          "author": "CaralHsi",
+          "pr": 410,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/410"
+        },
+        {
+          "type": "use",
+          "description": "nacos",
+          "author": "lijicode",
+          "pr": 407,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/407"
+        },
+        {
+          "type": "feat",
+          "description": "async add api",
+          "author": "CaralHsi",
+          "pr": 413,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/413"
+        },
+        {
+          "type": "revision",
+          "description": "of mixture api: add conversation turn and reduce 2 stage ranking to 1 stage",
+          "author": "tangg555",
+          "pr": 405,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/405"
+        },
+        {
+          "type": "feat",
+          "description": "add recall strategy",
+          "author": "whipser030",
+          "pr": 414,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/414"
+        },
+        {
+          "type": "revert",
+          "description": "\"Feat: add recall strategy \"",
+          "author": "CaralHsi",
+          "pr": 415,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/415"
+        },
+        {
+          "type": "feat",
+          "description": "remove usage data",
+          "author": "fridayL",
+          "pr": 417,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/417"
+        },
+        {
+          "type": "feat",
+          "description": "add moniter schedule",
+          "author": "CaralHsi",
+          "pr": 419,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/419"
+        },
+        {
+          "type": "pm",
+          "description": "& prefEval scripts updates",
+          "author": "Nyakult",
+          "pr": 421,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/421"
+        },
+        {
+          "type": "add",
+          "description": "polardb pool",
+          "author": "wustzdy",
+          "pr": 420,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/420"
+        },
+        {
+          "type": "fix",
+          "description": "message schema bug",
+          "author": "CaralHsi",
+          "pr": 426,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/426"
+        },
+        {
+          "type": "fix",
+          "description": "commit",
+          "author": "wustzdy",
+          "pr": 427,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/427"
+        },
+        {
+          "type": "update",
+          "description": "polardb pool timeout",
+          "author": "wustzdy",
+          "pr": 441,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/441"
+        },
+        {
+          "type": "feat",
+          "description": "fix self-input prompt error",
+          "author": "fridayL",
+          "pr": 443,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/443"
+        },
+        {
+          "type": "feat",
+          "description": "fix polardb value",
+          "author": "lijicode",
+          "pr": 445,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/445"
+        },
+        {
+          "type": "fix",
+          "description": "prompt error",
+          "author": "Wang-Daoji",
+          "pr": 447,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/447"
+        },
+        {
+          "type": "fix",
+          "description": "fix search config input bug; patch retrieve_utils path set; adjust reader strategy template.",
+          "author": "whipser030",
+          "pr": 448,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/448"
+        },
+        {
+          "type": "eval",
+          "description": "result",
+          "author": "Nyakult",
+          "pr": 428,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/428"
+        },
+        {
+          "type": "useless",
+          "description": "quotes",
+          "author": "wustzdy",
+          "pr": 450,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/450"
+        },
+        {
+          "type": "revert",
+          "description": "\"fix prompt error\"",
+          "author": "CaralHsi",
+          "pr": 452,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/452"
+        },
+        {
+          "type": "revert",
+          "description": "\"fix: fix search config input bug; patch retrieve_utils path set; adjust reader strategy template.\"",
+          "author": "CaralHsi",
+          "pr": 453,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/453"
+        },
+        {
+          "type": "revert",
+          "description": "\"Useless quotes\"",
+          "author": "CaralHsi",
+          "pr": 454,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/454"
+        },
+        {
+          "type": "fix",
+          "description": "prompt error",
+          "author": "Wang-Daoji",
+          "pr": 455,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/455"
+        },
+        {
+          "type": "fix",
+          "description": "fix strategy reader input; code reformat",
+          "author": "whipser030",
+          "pr": 457,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/457"
+        },
+        {
+          "type": "dev",
+          "description": "ccl1103",
+          "author": "lijicode",
+          "pr": 449,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/449"
+        },
+        {
+          "type": "doc",
+          "description": "Update readme",
+          "author": "Nyakult",
+          "pr": 458,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/458"
+        },
+        {
+          "type": "fix",
+          "description": "fix pg query for group error string",
+          "author": "fridayL",
+          "pr": 465,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/465"
+        },
+        {
+          "type": "feat",
+          "description": "freeze usage update in Searcher",
+          "author": "CaralHsi",
+          "pr": 466,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/466"
+        },
+        {
+          "type": "feat",
+          "description": "API1.1",
+          "author": "CaralHsi",
+          "pr": 434,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/434"
+        },
+        {
+          "type": "doc",
+          "description": "update readme",
+          "author": "CaralHsi",
+          "pr": 469,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/469"
+        },
+        {
+          "type": "chore",
+          "description": "bump version to v1.1.3",
+          "author": "CaralHsi",
+          "pr": 470,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/470"
+        },
+        {
+          "type": "chore",
+          "description": "bump version to v1.1.3",
+          "author": "CaralHsi",
+          "pr": 471,
+          "prUrl": "https://github.com/MemTensor/MemOS/pull/471"
+        }
+      ]
+    },
+    {
       "releaseUrl": "https://github.com/MemTensor/MemOS/releases/tag/v1.1.2",
       "name": "v1.1.2",
       "date": "2025-10-11",
