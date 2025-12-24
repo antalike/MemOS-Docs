@@ -126,7 +126,17 @@ const highlightVersions = computed(() => {
   }))
 })
 
-const opensourceVersions = ref<Version[]>(releasesData.versions)
+// Filter opensource versions to only include specific types
+const allowedTypes = ['feat', 'fix', 'docs', 'style', 'refactor', 'test', 'chore', 'ci']
+
+const opensourceVersions = computed<Version[]>(() => {
+  return releasesData.versions.map(version => ({
+    ...version,
+    changedInfo: version.changedInfo.filter(change =>
+      allowedTypes.includes(change.type)
+    )
+  })).filter(version => version.changedInfo.length > 0) // Remove versions with no changes after filtering
+})
 
 function handleTabChange(val: string | number) {
   if (val === '2') {
