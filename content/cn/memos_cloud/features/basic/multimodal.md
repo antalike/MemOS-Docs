@@ -32,7 +32,7 @@ os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
 os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
 data = {
-    "user_id": "MemOS_user_001",
+    "user_id": "memos_user_123",
     "conversation_id": "1211",
     "messages": [
         {
@@ -77,7 +77,7 @@ os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
 data = {
   "query": "帮我总结一下这张图",
-  "user_id": "MemOS_user_001",
+  "user_id": "memos_user_123",
   "conversation_id": "1214"
 }
 
@@ -180,7 +180,7 @@ os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
 os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
 data = {
-    "user_id": "MemOS_user_001",
+    "user_id": "memos_user_123",
     "conversation_id": "1211",
     "messages": [
         {
@@ -228,8 +228,9 @@ image_path = "path/to/your/image.jpg"
 with open(image_path, "rb") as image_file:
     base64_image = base64.b64encode(image_file.read()).decode("utf-8")
 
+
 data = {
-    "user_id": "MemOS_user_001",
+    "user_id": "memos_user_123",
     "conversation_id": "1211",
     "messages": [
         {
@@ -269,7 +270,7 @@ os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
 os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
 data = {
-    "user_id": "MemOS_user_001",
+    "user_id": "memos_user_123",
     "conversation_id": "1211",
     "messages": [
         {
@@ -320,7 +321,7 @@ def file_to_base64(file_path):
 base64_document = file_to_base64(document_path)
 
 data = {
-    "user_id": "MemOS_user_001",
+    "user_id": "memos_user_123",
     "conversation_id": "1211",
     "messages": [
         {
@@ -361,7 +362,7 @@ os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
 os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
 data = {
-    "user_id": "MemOS_user_001",
+    "user_id": "memos_user_123",
     "conversation_id": "1211",
     "messages": [
         {

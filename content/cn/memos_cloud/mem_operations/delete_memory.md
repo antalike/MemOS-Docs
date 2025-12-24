@@ -32,7 +32,7 @@ os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
 data = {
     "user_ids": ["memos_user_123"],
-    "memory_ids":["4a50618f-797d-4c3b-b914-94d7d1246c8d"]
+    "memory_ids":["4a50618f-797d-4c3b-b914-94d7d1246c8d"]  # 替换为真实的记忆 ID
   }
 headers = {
   "Content-Type": "application/json",
