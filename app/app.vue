@@ -45,7 +45,7 @@ const filteredNavigation = computed(() => {
 
   const mapNavigation = (items: ContentNavigationItem[], level = 0): ContentNavigationItem[] => {
     return items.map((item) => {
-      const isOpen = level === 0 || hasActiveChild(item, route.path)
+      const isOpen = level === 0 || hasActiveChild(item, route.path) || item.icon === 'i-ri-flag-line' || item.icon === 'i-ri-vip-diamond-line'
       const isActive = item.path && normalizePath(item.path) === normalizePath(route.path)
       return {
         ...item,
@@ -109,7 +109,7 @@ useHead({
 })
 
 function showContentNavigation() {
-  const path = normalizePath(normalizedPath.value)
+  const path = normalizedPath.value
   return path !== '/'
     && !isApiPage()
     && !path.includes('changelog')
@@ -119,7 +119,7 @@ function showContentNavigation() {
 function isApiPage() {
   const path = normalizePath(route.path)
   return path.startsWith('/docs/api')
-    || path.startsWith('/cn/docs/api/')
+    || path.startsWith('/cn/docs/api')
     || path.startsWith('/api-reference')
     || path.startsWith('/cn/api-reference')
 }

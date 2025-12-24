@@ -50,7 +50,16 @@ img[alt="MemOS Banner"] {
 }
 
 .scrollbar-hide::-webkit-scrollbar {
-  display: none; 
+  display: none;
+}
+
+html {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+html::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera*/
 }
 
 .request-display pre[role="tabpanel"],

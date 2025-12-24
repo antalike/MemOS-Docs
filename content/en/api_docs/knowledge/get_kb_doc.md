@@ -1,3 +1,4 @@
 ---
-title: 获取知识库文档
+title: Get Knowledge Base File
+openapi: "POST /get/knowledgebase-file"
 ---
