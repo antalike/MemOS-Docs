@@ -3,8 +3,8 @@ title: 添加消息
 desc: MemOS 会将您添加的多模态内容如文本、文件、图片等，自动处理为可检索的个人记忆。
 ---
 
-::note
-**&nbsp;[➡️ 直接看 API文档 点这里哦](/api_docs/core/add_message)**
+::warning
+**[➡️ 直接看 API文档 点这里哦](/api_docs/core/add_message)**
 ::
 
 ## 1. 如何添加消息？
