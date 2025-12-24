@@ -109,7 +109,7 @@ memory_detail_list [
 `conversation_id`为非必填项，如填写可以帮助 MemOS 理解当前会话的上下文，提升本会话相关记忆的权重，使对话模型的回复内容更加连贯。
 ::
 
-如下示例所示，如果你已经尝试[添加消息](/memos_cloud/mem_operations/add_message)，添加过用户`memos_user_345`的历史对话消息，你可以复制参考该示例检索用户记忆。
+如下示例所示，如果你已经尝试[添加消息](/memos_cloud/mem_operations/add_message)，添加过用户`memos_user_123`的历史对话消息，你可以复制参考该示例检索用户记忆。
 
 ::code-group
 ```python [Python (HTTP)]
@@ -131,7 +131,7 @@ BASE_URL = os.environ['MEMOS_BASE_URL']
 query_text = "国庆节我要去云南玩了，有什么美食推荐吗？"
 
 data = {
-    "user_id": "memos_user_345",
+    "user_id": "memos_user_123",
     "conversation_id": "memos_conversation_789",  # 新建了一个会话ID
     "query": query_text,
 }
@@ -193,7 +193,7 @@ print(f"result: {res.json()}")
 
 如果你需要对自己开发的应用进行用户分析，或者希望在 AI 应用中向用户实时展示他们的“个人关键印象”，可以调用 MemOS 全局检索用户的记忆，帮助大模型生成用户的个性化画像。此时可以不填写`conversation_id`哦～
 
-如下示例所示，如果你已经尝试[添加消息](/memos_cloud/mem_operations/add_message)，添加过用户`memos_user_567`的历史对话消息，你可以一键复制该示例检索用户记忆。
+如下示例所示，如果你已经尝试[添加消息](/memos_cloud/mem_operations/add_message)，添加过用户`memos_user_123`的历史对话消息，你可以一键复制该示例检索用户记忆。
 
 ::code-group
 ```python [Python (HTTP)]
@@ -215,7 +215,7 @@ BASE_URL = os.environ['MEMOS_BASE_URL']
 query_text = "我的人物关键词是什么？"
 
 data = {
-    "user_id": "memos_user_567",
+    "user_id": "memos_user_123",
     "query": query_text,
 }
 

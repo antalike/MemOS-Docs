@@ -43,7 +43,7 @@ os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
 os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
 data = {
-    "user_id": "memos_user_001",
+    "user_id": "memos_user_123",
     "conversation_id": "1210",
     "messages": [
         {"role": "user","content": "今天天气如何？"},
@@ -76,7 +76,7 @@ os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
 os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
 data = {
-    "user_id": "001",
+    "user_id": "memos_user_123",
     "query": "上海 天气"
 }
 headers = {

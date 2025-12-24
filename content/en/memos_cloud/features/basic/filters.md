@@ -52,7 +52,7 @@ When adding messages, you can pass custom metadata field `info`. Currently, memo
 
 | Field Name | Data Type | Operator | Example |
 | --- | --- | --- | --- |
-| tags | list |`contains` | `{"tags": {"contains": "finance"}` |
+| tags | list |`contains` | `{"tags": {"contains": "finance"}}` |
 
 ### 3.4 Time Fields
 

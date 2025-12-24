@@ -61,7 +61,7 @@ tool_schema = [{
 }]
 
 data = {
-    "user_id": "demo-user-id",
+    "user_id": "memos_user_123",
     "conversation_id": "demo-conv-id",
     "messages": [
         {
@@ -129,7 +129,7 @@ os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
 
 data = {
-    "user_id": "demo-user-id",
+    "user_id": "memos_user_123",
     "conversation_id": "0928",
     "query": "北京适合穿什么衣服",
     "memory_limit_number": 10,
@@ -157,7 +157,7 @@ print(json.dumps(res.json(), indent=2, ensure_ascii=False))
    {
     "id": "7ec50fd8-19ec-42a2-a7c7-ce3cebdb70cf",
     "tool_type": "ToolSchemaMemory",
-    "tool_value": {"name": "get_weather", "description": "Get current weather information for a given location", "parameters": {"type": "object", "properties": {"location": {"type": "string", "description": "City name, e.g. Beijing"}}, "required": ["location"]}}",
+    "tool_value": {"name": "get_weather", "description": "Get current weather information for a given location", "parameters": {"type": "object", "properties": {"location": {"type": "string", "description": "City name, e.g. Beijing"}}, "required": ["location"]}},
     "create_time": 1766494806624,
     "conversation_id": "demo-conv-id",
     "status": "activated",
