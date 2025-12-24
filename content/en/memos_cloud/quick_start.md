@@ -138,8 +138,8 @@ MemOS provides rich project examples. Depending on your specific project, you ca
   - MemOS-MindDock creates a unified cross-platform AI memory layer for users.
   - It automatically records, organizes, and injects personal information and preferences, allowing all AIs to continuously and stably "know you".
 
-- [Coze × MemOS Plugin Tool](usecase/frameworks/coze_plugin)
+- [Coze × MemOS Plugin Tool](/usecase/frameworks/coze_plugin)
   - Use the MemOS plugin tool listed on the Coze platform to directly access cloud service interfaces in the workflow, quickly adding long-term memory capabilities to your Agent.
     
-- [Claude MCP](usecase/frameworks/claude_mcp)
+- [Claude MCP](/usecase/frameworks/claude_mcp)
   - MemOS provides a way to interact with the cloud platform through MCP, directly accessing cloud service interfaces in the Claude client.
