@@ -140,7 +140,7 @@ query_text = "国庆节我要去云南玩了，有什么美食推荐吗？"
 
 data = {
     "user_id": "memos_user_123",
-    "conversation_id": "memos_conversation_789",  # 新建了一个会话ID
+    "conversation_id": "memos_conversation_123",  # 新建了一个会话ID
     "query": query_text,
 }
 
@@ -158,7 +158,7 @@ print(f"result: {res.json()}")
       "memory_value": "用户喜欢吃辣的食物，但不太喜欢重油的菜肴，如麻辣火锅和毛血旺。用户更偏好清爽又带辣味的菜。",
       "memory_type": "UserMemory",
       "create_time": 1762674694466,
-      "conversation_id": "memos_conversation_345",
+      "conversation_id": "memos_conversation_123",
       "status": "activated",
       "confidence": 0.99,
       "tags": [
@@ -177,7 +177,7 @@ print(f"result: {res.json()}")
       "preference": "用户喜欢辣味的食物，但不喜欢重油的辣味食物。",
       "reasoning": "用户在第一次查询中明确表示喜欢辣的食物，在第二次查询中进一步说明自己不喜欢重油的辣味食物，这表明用户的偏好是喜欢辣但清爽的食物。",
       "create_time": 1762675342352,
-      "conversation_id": "memos_conversation_345",
+      "conversation_id": "memos_conversation_123",
       "status": "activated",
       "update_time": 1762674923302
     },
@@ -187,7 +187,7 @@ print(f"result: {res.json()}")
       "preference": "用户可能偏好较健康的饮食选择",
       "reasoning": "用户表达了对辣味的明确喜好，但对重油食物表示不喜欢。这表明用户可能更关注饮食的健康性，倾向于选择不那么油腻的食物。用户对辣味的喜好与对重油食物的排斥结合在一起，可能暗示着对健康饮食的隐性偏好。",
       "create_time": 1762674923448,
-      "conversation_id": "memos_conversation_345",
+      "conversation_id": "memos_conversation_123",
       "status": "activated",
       "update_time": 1762674851542
     }
@@ -242,7 +242,7 @@ print(f"result: {res.json()}")
       "memory_value": "用户希望AI帮助规划日常学习计划、推荐电影和书籍，以及提供心情陪伴。",
       "memory_type": "WorkingMemory",
       "create_time": 1762675190743,
-      "conversation_id": "memos_conversation_id_567",
+      "conversation_id": "memos_conversation_456",
       "status": "activated",
       "confidence": 0.99,
       "tags": [
@@ -260,7 +260,7 @@ print(f"result: {res.json()}")
       "memory_value": "用户希望AI提供建议、信息查询和灵感。",
       "memory_type": "WorkingMemory",
       "create_time": 1762675153211,
-      "conversation_id": "memos_conversation_id_567",
+      "conversation_id": "memos_conversation_456",
       "status": "activated",
       "confidence": 0.99,
       "tags": [
@@ -302,7 +302,7 @@ BASE_URL = os.environ['MEMOS_BASE_URL']
 query_text = "我的人物关键词是什么？"
 
 data = {
-    "user_id": "memos_user_567",
+    "user_id": "memos_user_123",
     "query": query_text,
     "filter": {
         "and": [
@@ -327,7 +327,7 @@ print(f"result: {res.json()}")
       "memory_value": "用户希望AI帮助规划日常学习计划、推荐电影和书籍，以及提供心情陪伴。",
       "memory_type": "WorkingMemory",
       "create_time": 1762675190743,
-      "conversation_id": "memos_conversation_id_567",
+      "conversation_id": "memos_conversation_456",
       "status": "activated",
       "confidence": 0.99,
       "tags": [
