@@ -3,10 +3,13 @@ title: 自定义标签
 desc: 添加消息时按照你的业务需求使用标签。
 ---
 ::warning
+<br>
+
 **[需要先在addMessage的时候传入tag list（点此查看详细 API 文档）](/api_docs/core/add_message)**
 <br>
 
 **[才能在searchMemory的时候使用标签进行过滤（点此查看详细 API 文档）](/api_docs/core/search_memory)**
+<br>
 <br>
 
 **本文聚焦于功能说明，接口字段及限制请参考上方链接查看完整文档**
