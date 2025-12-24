@@ -2,7 +2,8 @@
 title: 自定义标签
 desc: 添加消息时按照你的业务需求使用标签。
 ---
-::warning 注意
+::warning 
+注意
 <br>
 <br>
 
