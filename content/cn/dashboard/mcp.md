@@ -20,7 +20,7 @@ MCP（Model Context Protocol，模型上下文协议）定义了应用程序和 
       "command": "npx",
       "args": [
         "-y",
-        "@memtensor/memos-api-mcp"
+        "@memtensor/memos-api-mcp@latest"
       ],
       "env": {
         "MEMOS_API_KEY": "mpg-xxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
@@ -134,7 +134,7 @@ Use retrieved memories **only if relevant**. If none are relevant, answer normal
 ```
 名称：MemOS记忆管理助手
 类型：本地(stdio)
-命令：npx -y @memtensor/memos-api-mcp
+命令：npx -y @memtensor/memos-api-mcp@latest
 环境变量：
 MEMOS_API_KEY=<YOUR-API-KEY>
 MEMOS_USER_ID=<YOUR-USER-ID>
