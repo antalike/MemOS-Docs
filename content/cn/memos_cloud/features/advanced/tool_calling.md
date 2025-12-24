@@ -3,6 +3,17 @@ title: 工具调用
 desc: 添加工具调用信息，将工具调用的决策、执行结果及其使用轨迹统一纳入 MemOS 记忆。
 ---
 
+::warning
+**[需要先在addMessage的时候传入工具记忆（点此查看详细 API 文档）](/api_docs/core/add_message)**
+<br>
+
+**[才能在searchMemory的时候搜索到工具记忆（点此查看详细 API 文档）](/api_docs/core/search_memory)**
+<br>
+
+**本文聚焦于功能说明，接口字段及限制请参考上方链接查看完整文档**
+
+::
+
 ## 1. 何时使用
 
 当您的 Agent 需要通过工具（function / tool）获取外部信息，并希望这些「工具调用的上下文与结果」能够被 MemOS 一并理解、关联和沉淀为可检索记忆时，适合使用这种消息结构。
