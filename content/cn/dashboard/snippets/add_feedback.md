@@ -9,7 +9,7 @@ os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
 os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
 data = data = {
-  "user_id": "memos_user_feedback_123",
+  "user_id": "memos_user_123",
   "conversation_id": "memos_feedback_conv",
   "feedback_content": "不对，我们现在改成一线城市餐补150元每天，住宿补贴700元每天；二三线城市还是原来那样。",
   "allow_knowledgebase_ids":["basee5ec9050-c964-484f-abf1-ce3e8e2aa5b7"] # 替换为知识库 ID
@@ -31,7 +31,7 @@ from memos.api.client import MemOSClient
 # 使用 API Key 初始化客户端
 client = MemOSClient(api_key="YOUR_API_KEY")
 
-user_id = "memos_user_feedback_123"
+user_id = "memos_user_123"
 conversation_id = "memos_feedback_conv"
 feedback_content = "不对，我们现在改成一线城市餐补150元每天，住宿补贴700元每天；二三线城市还是原来那样。"
 allow_knowledgebase_ids = ["basee5ec9050-c964-484f-abf1-ce3e8e2aa5b7"] # 替换为知识库 ID
