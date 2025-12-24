@@ -2,6 +2,10 @@
 title: 知识库
 desc: 创建项目关联的知识库，检索记忆时结合用户记忆与知识库补充知识。
 ---
+::warning
+**[本文是对【MemOS知识库】功能做展开介绍，可点此直接查看详细 API 文档](/api_docs/knowledge/add_kb_doc)**
+::
+
 
 ## 1. MemOS 知识库 vs 传统 RAG
 
