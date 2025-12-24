@@ -94,7 +94,7 @@ Contains quick mode and full mode, distinguishing between using simplified packa
 
 ● Simplified package: Simplify dependencies related to Nvidia that are too large in size, achieve lightweight mirroring, and make local deployment lighter and faster.
 
-url: registry.cn-shanghai.aliyuncs.com/memtensor/memos:base-v1.0
+url: registry.cn-shanghai.aliyuncs.com/memtensor/memos-base:v1.0
 
 ● Full package: Convert all MemOS dependencies into images, Experience complete functionality. By configuring Dockerfiles, you can directly build and start the package.
 
@@ -102,7 +102,7 @@ url: registry.cn-shanghai.aliyuncs.com/memtensor/memos-full-base:v1.0.0
 
 ```bash
 # Lean package url
-FROM registry.cn-shanghai.aliyuncs.com/memtensor/memos:base-v1.0
+FROM registry.cn-shanghai.aliyuncs.com/memtensor/memos-base:v1.0
 # Full package url
 # FROM registry.cn-shanghai.aliyuncs.com/memtensor/memos-full-base:v1.0.0
 

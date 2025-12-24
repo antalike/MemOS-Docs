@@ -96,7 +96,7 @@ CHAT_MODEL_LIST=[{"backend": "deepseek", "api_base": "http://xxx:3000/v1", "api_
 
 ● 精简包：简化体量过大的 nvidia相关等依赖，对镜像实现轻量化，使本地部署更加轻量快速。
 
-url: registry.cn-shanghai.aliyuncs.com/memtensor/memos:base-v1.0
+url: registry.cn-shanghai.aliyuncs.com/memtensor/memos-base:v1.0
 
 ● 全量包：将 MemOS 全部依赖包打为镜像，可体验完整功能，通过配置 Dockerfile可直接构建启动。
 
@@ -104,7 +104,7 @@ url: registry.cn-shanghai.aliyuncs.com/memtensor/memos-full-base:v1.0.0
 
 ```bash
 # 精简包 url
-FROM registry.cn-shanghai.aliyuncs.com/memtensor/memos:base-v1.0
+FROM registry.cn-shanghai.aliyuncs.com/memtensor/memos-base:v1.0
 
 # 全量包 url
 # FROM registry.cn-shanghai.aliyuncs.com/memtensor/memos-full-base:v1.0.0
