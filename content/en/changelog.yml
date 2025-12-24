@@ -1,41 +1,40 @@
 versions:
   - name: v2.0.0
-    date: 2025-12-24
-    changedInfo:
-      New Features:
-        - type: Knowledge Base and Memory Capabilities
-          changedInfo:
-            - Introduced knowledge base support for integrating domain knowledge into long-term memory system with document upload and URL parsing
-            - Dynamically evolve and update memories based on conversation content, enabling automatic knowledge base iteration
-        - type: Feedback and Memory Management
-          changedInfo:
-            - Support memory content replacement, supplementation, and semantic adjustment via natural language feedback
-            - Added memory deletion API, supporting memory management through both API and MCP
-        - type: Conversation and Retrieval
-          changedInfo:
-            - Added chat API with memory retrieval for responses
-            - Support custom tag/info for memory filtering and retrieval
-        - type: Multimodal and Tool Memory
-          changedInfo:
-            - Support experience extraction and retrieval from tool invocation history
-            - Support image-based memories and document image understanding
-      Improvements:
-        - type: Data and Infrastructure
-          changedInfo:
-            - Upgraded underlying database with improved stability and connection management
-        - type: Scheduling Module
-          changedInfo:
-            - Introduced Redis Streams multi-level queue architecture for physical isolation by tenant and task
-            - Support dynamic task priority adjustment and automatic recovery, ensuring zero data loss
-        - type: Deployment and Engineering
-          changedInfo:
-            - Lightweight deployment options with quick mode and full mode (Open Source)
-      Bug Fixes:
-        - type: Memory Scheduling and Update Tasks
-          changedInfo:
-            - Fixed API compatibility issues in memory scheduling tasks, ensuring proper user memory isolation
-            - Fixed memory update task logging issues, ensuring new memories are correctly displayed
-
+  date: 2025-12-24
+  changedInfo:
+    New Features:
+      - type: Knowledge Base & Memory
+        changedInfo:
+          - Added knowledge base support for long-term memory from documents and URLs
+      - type: Feedback & Memory Management
+        changedInfo:
+          - Added natural language feedback and correction for memories
+          - Added memory deletion API by memory ID
+          - Added MCP support for memory deletion and feedback
+      - type: Conversation & Retrieval
+        changedInfo:
+          - Added chat API with memory-aware retrieval
+          - Added memory filtering with custom tags (Cloud & Open Source)
+      - type: Multimodal & Tool Memory
+        changedInfo:
+          - Added tool memory for tool usage history
+          - Added image memory support for conversations and documents
+    Improvements:
+      - type: Data & Infrastructure
+        changedInfo:
+          - Upgraded database for better stability and performance
+      - type: Scheduler
+        changedInfo:
+          - Rebuilt scheduler with Redis Streams and queue isolation
+          - Added task priority, auto-recovery, and quota-based scheduling
+      - type: Deployment & Engineering
+        changedInfo:
+          - Added lightweight deployment with quick and full modes
+    Bug Fixes:
+      - type: Memory Scheduling & Updates
+        changedInfo:
+          - Fixed legacy scheduling API to ensure correct memory isolation
+          - Fixed memory update logging to show new memories correctly
 
   - name: v1.1.3
     date: 2025-11-05
