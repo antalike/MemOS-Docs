@@ -6,6 +6,7 @@ desc: 通过语义检索和过滤功能，MemOS召回相关记忆。
 ::warning
 **[直接看 API文档 点这里哦](/api_docs/core/search_memory)**
 <br>
+<br>
 
 **本文聚焦于功能说明，接口字段及限制请参考上方链接查看完整文档**
 ::
