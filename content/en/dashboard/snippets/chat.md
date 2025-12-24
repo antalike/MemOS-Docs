@@ -9,7 +9,7 @@ os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
 os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
 data = {
-  "user_id": "memos_user_chat_123",
+  "user_id": "memos_user_123",
   "conversation_id": "memos_chat_conv",
   "query": "Introduce MemOS to me"
 }
@@ -30,7 +30,7 @@ from memos.api.client import MemOSClient
 # Initialize client with API Key
 client = MemOSClient(api_key="YOUR_API_KEY")
 
-user_id = "memos_user_chat_123"
+user_id = "memos_user_123"
 conversation_id = "memos_chat_conv"
 query = "Introduce MemOS to me"
 

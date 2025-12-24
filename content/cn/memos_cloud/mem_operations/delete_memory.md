@@ -3,6 +3,14 @@ title: 删除记忆
 desc: 从 MemOS 删除记忆，支持批量删除多个用户的记忆。
 ---
 
+::warning
+**[直接看 API文档 点这里哦](/api_docs/core/delete_memory)**
+<br>
+<br>
+
+**本文聚焦于功能说明，详细接口字段及限制请点击上方文字链接查看**
+::
+
 ## 1. 如何删除记忆
 
 通过删除记忆，您能够快速按照用户要求删除记忆，清除错误记忆。MemOS 支持删除特定记忆，也支持同时批量删除多个用户的记忆。
@@ -32,7 +40,7 @@ os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
 data = {
     "user_ids": ["memos_user_123"],
-    "memory_ids":["4a50618f-797d-4c3b-b914-94d7d1246c8d"]
+    "memory_ids":["4a50618f-797d-4c3b-b914-94d7d1246c8d"]  # 替换为真实的记忆 ID
   }
 headers = {
   "Content-Type": "application/json",

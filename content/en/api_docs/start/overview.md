@@ -23,11 +23,9 @@ Start using MemOS API through these two simple core steps:
 
 Explore the rich functional interfaces provided by MemOS:
 
-*   [**Core Operation API**](/api_docs/core/add_message): Provides core memory operation capabilities, realizing the full process from memory production to consumption.
+*   [**Core API**](/api_docs/core/add_message): Provides core memory operation capabilities, realizing the full process from memory production to consumption.
 
 *   [**Message API**](/api_docs/message/add_feedback): Used for uploading and managing original message content data.
-
-*   [**Chat API**](/api_docs/chat/chat): Provides natural dialogue capabilities without context management, getting "memory-enabled" model responses with one click.
 
 *   [**Knowledge Base API**](/api_docs/knowledge/create_kb): Used for uploading and managing knowledge bases and their documents.
 
