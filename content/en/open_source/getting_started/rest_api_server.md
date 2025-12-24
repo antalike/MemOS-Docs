@@ -83,12 +83,12 @@ CHAT_MODEL_LIST=[{"backend": "deepseek", "api_base": "http://xxx:3000/v1", "api_
 ```
 
 
-### Docker use repository dependency package image/start (Recommended use)
+### Method 1： Docker use repository dependency package image/start (Recommended use)
 ::steps{level="4"}
 
 #### Reference configuration environment variables above, .env file should be configured
 
-#### Configure Dockerfile (Current Dockerfile is in root directory)
+#### Configure Dockerfile
 
 Contains quick mode and full mode, distinguishing between using simplified packages and full packages
 
@@ -165,7 +165,7 @@ docker compose up
 
 
 
-### Client Install with Docker Compose up
+### Method 2：Client Install with Docker Compose up
 ::steps{level="4"}
 Development Docker Compose up comes pre-configured with qdrant, neo4j.
 Running the server requires the `OPENAI_API_KEY` environment variable.
@@ -318,7 +318,7 @@ docker compose up
 
 ::
 
-### Client Install with uv
+### Method 3：Client Install with uv
 
 ::steps{level="4"}
 
@@ -361,7 +361,7 @@ After startup is complete, access API via [http://localhost:8000/docs](http://lo
 
 ::
 
-### Without Docker
+### Method 4： Without Docker
 ::steps{level="4"}
 #### Reference configuration environment variables above, .env file should be configured
 
@@ -446,7 +446,7 @@ uvicorn memos.api.product_api:app --host 0.0.0.0 --port 8000 --reload
 ::
 
 
-### Start using pyCharm
+### Method 5：Start using pyCharm
 
 #### Run server_api
 ```bash

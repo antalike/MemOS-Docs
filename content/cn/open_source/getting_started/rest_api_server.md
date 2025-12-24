@@ -86,12 +86,12 @@ CHAT_MODEL_LIST=[{"backend": "deepseek", "api_base": "http://xxx:3000/v1", "api_
 ```
 
 
-###  Dodcker 使用仓库依赖包镜像启动(推荐使用)
+### 方式一：Dodcker 使用仓库依赖包镜像启动(推荐使用)
 ::steps{level="4"}
 
 #### 参考上方配置环境变量，已经好配置.env文件
 
-#### 配置Dockerfile文件（当前Dockerfile文件在根目录下）
+#### 配置Dockerfile文件(cd docker)
 包含快速模式和完整模式，可区分使用精简包和全量包
 
 ● 精简包：简化体量过大的 nvidia相关等依赖，对镜像实现轻量化，使本地部署更加轻量快速。
@@ -167,7 +167,7 @@ docker compose up
 
 
 
-### 客户端install Docker Compose up
+### 方式二：客户端install Docker Compose up
 ::steps{level="4"}
 开发环境的 Docker Compose up 已预配置了 qdrant、neo4j。
 运行服务器需要环境变量 `OPENAI_API_KEY`。
@@ -320,7 +320,7 @@ docker compose up
 
 ::
 
-### 客户端install 使用 uv 命令
+### 方式三：客户端install 使用 uv 命令
 
 ::steps{level="4"}
 
@@ -362,7 +362,7 @@ export PYTHONPATH=/you-file-absolute-path/MemOS/src
 
 ::
 
-### 不使用 Docker
+### 方式四：不使用 Docker
 ::steps{level="4"}
 #### 参考上方配置环境变量，已经好配置.env文件
 
@@ -447,7 +447,7 @@ uvicorn memos.api.product_api:app --host 0.0.0.0 --port 8000 --reload
 ::
 
 
-### 使用 pyCharm 启动
+### 方式五：使用 pyCharm 启动
 
 #### 运行 server_api
 ```bash
