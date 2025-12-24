@@ -25,7 +25,8 @@ To ensure service stability and security, MemOS Cloud Services imposes the follo
 |----------------|------------------------|-------------------------|
 | addMessage     | 20,000 token           | -                       |
 | searchMemory   | 20,000 token           | Fact Memory: 25 items<br>Preference Memory: 25 items<br>Tool Memory: 25 items |
-| Chat           | 8,000 token            | Memory Retrieval:<br>- Fact Memory: 25 items<br>- Preference Memory: 25 items<br>- Tool Memory: 25 items |
+
+Document upload features are currently limited to a maximum of 500 pages. For higher-level or special requirements, please contact the project team.
 
 ::note
 **Note**

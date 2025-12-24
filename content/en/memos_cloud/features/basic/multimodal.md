@@ -2,17 +2,26 @@
 title: Multimodal Messages
 desc: Integrate images and documents into interactions with MemOS when adding messages.
 ---
+::warning
+**[This article expands on how to add multimodal data in the [Add Memory - addMessage API], click here to view the detailed API documentation directly](/api_docs/core/add_message)**
+::
 
-MemOS supports not only text but also multimodal data, including documents and images. Users can seamlessly integrate text, documents, and images into interactions with MemOS, enabling the system to extract relevant information from multiple media types, enriching memory content, and enhancing the capabilities of the memory system.
+MemOS supports not only text but also multimodal data, including documents and images. Users can seamlessly integrate text, documents, and images into their interactions with MemOS, enabling the system to extract relevant information from multiple media types, enrich memory content, and enhance the capabilities of the memory system.
 
 ## 1. How to Add Multimodal Messages
 
 :::note 
 Note<br>
-When the message contains multimodal content, due to the longer processing time for file memories, the `async_mode` field you pass in will be invalid, and "Async Mode" will be used by default. You can query the processing progress of file memories via the `get/status` interface.
+When a message contains multimodal content, since file memory processing takes a long time, the `async_mode` field you pass becomes invalid, and "Async Mode" is used by default. You can query the processing progress of file memory via the `get/status` interface.
 :::
 
-When users upload documents or images, MemOS extracts text, visual information, and other relevant details, and processes them into user memory.
+When a user uploads a document or image, MemOS extracts text, visual information, and other relevant details, and processes them into user memory.
+
+:::note
+**Multimodal Messages and Tool Memory**
+
+In addition to processing document and image content, MemOS also supports processing tool calling information. When you add tool calling information to a message, the system processes it into tool memory, including Tool Schema and Tool Trajectory Memory. See [Tool Calling](/memos_cloud/features/advanced/tool_calling) for details.
+:::
 
 ### Add Message
 
@@ -34,7 +43,7 @@ data = {
             "content": [
                 {
                   "type": "text",
-                  "text": "I am researching MemOS."
+                  "text": "I am studying MemOS."
                 },
                 {
                   "type": "image_url",
@@ -44,7 +53,7 @@ data = {
                 }
             ]
         },
-        {"role": "assistant", "content": "Okay, do you need me to answer anything for you?"}
+        {"role": "assistant", "content": "Okay, do you need any help?"}
     ]
   }
 headers = {
@@ -58,7 +67,7 @@ res = requests.post(url=url, headers=headers, data=json.dumps(data))
 print(json.dumps(res.json(), indent=2, ensure_ascii=False))
 ```
 
-### Retrieve Memory
+### Search Memory
 
 ```python
 import os
@@ -96,15 +105,15 @@ print(json.dumps(res.json(), indent=2, ensure_ascii=False))
     "memory_detail_list": [
       {
         "id": "a5136287-de10-4df2-afc5-e412cdb8b649",
-        "memory_key": "Researching MemOS",
-        "memory_value": "The user is researching MemOS and shared a relevant image at 7:07 AM on December 18, 2025 (UTC).",
+        "memory_key": "Studying MemOS",
+        "memory_value": "The user is studying MemOS and shared a relevant image at 7:07 AM on December 18, 2025 (UTC).",
         "memory_type": "WorkingMemory",
         "create_time": 1766041646311,
         "conversation_id": "1211",
         "status": "activated",
         "confidence": 0.99,
         "tags": [
-          "Research",
+          "Study",
           "MemOS",
           "Image Sharing"
         ],
@@ -114,7 +123,7 @@ print(json.dumps(res.json(), indent=2, ensure_ascii=False))
       {
         "id": "4a1d42f4-c9fa-41bf-805d-2ea985bba984",
         "memory_key": "MemOS Feature Overview",
-        "memory_value": "MemOS is an intelligent memory system capable of storing information through adding paths and retrieving information through query functions. The system supports various document formats such as PDF and DOC, and utilizes AI for intelligent response and processing.",
+        "memory_value": "MemOS is an intelligent memory system capable of storing information by adding paths and retrieving information through query functions. The system supports various document formats, such as PDF and DOC, and utilizes AI for intelligent response and processing.",
         "memory_type": "WorkingMemory",
         "create_time": 1766041689091,
         "conversation_id": "1211",
@@ -153,16 +162,16 @@ MemOS currently supports the following media types:
 
 1.  When adding messages, upload no more than 20 files per request, with a single file size not exceeding 100 MB and 200 pages.
     
-2.  When the number of files, single file size, or number of pages exceeds the above limits, the task will be judged as "Processing Failed". You need to adjust according to the limit requirements and re-initiate the request.
+2.  When the number of files, single file size, or page count exceeds the above limits, the current task will be judged as "Processing Failed". You need to adjust according to the limit requirements and re-initiate the request.
     
 
 ## 4. Usage Examples
 
 ### Upload Image Message
 
-**Using Image URL**
+**Use Image URL**
 
-When adding messages, you can directly upload the URL of the image.
+When adding a message, you can directly upload the image URL.
 
 ```python
 import os
@@ -201,9 +210,9 @@ res = requests.post(url=url, headers=headers, data=json.dumps(data))
 print(json.dumps(res.json(), indent=2, ensure_ascii=False))
 ```
 
-**Using Base64 Image Encoding for Local Images**
+**Upload Local Image using Base64 Encoding**
 
-To upload local images or embed images directly, you can use Base64 image encoding.
+To upload a local image or embed an image directly, you can use Base64 image encoding.
 
 ```python
 import os
@@ -215,12 +224,13 @@ import base64
 os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
 os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
-# Path to image file
+# Path to the image file
 image_path = "path/to/your/image.jpg"
 
-# Encode image with Base64
+# Encode image using Base64
 with open(image_path, "rb") as image_file:
     base64_image = base64.b64encode(image_file.read()).decode("utf-8")
+
 
 data = {
     "user_id": "memos_user_123",
@@ -251,7 +261,7 @@ print(json.dumps(res.json(), indent=2, ensure_ascii=False))
 
 ### Upload Document Message
 
-**Using Document URL**
+**Use Document URL**
 
 ```python
 import os
@@ -290,7 +300,7 @@ res = requests.post(url=url, headers=headers, data=json.dumps(data))
 print(json.dumps(res.json(), indent=2, ensure_ascii=False))
 ```
 
-**Using Base64 Encoding for Local Documents**
+**Upload Local Document using Base64 Encoding**
 
 ```python
 import os
@@ -302,7 +312,7 @@ import base64
 os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
 os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
-# Path to document file
+# Path to the document file
 document_path = "path/to/your/document.pdf"
 
 # Function to convert file to Base64 string
@@ -310,7 +320,7 @@ def file_to_base64(file_path):
     with open(file_path, "rb") as file:
         return base64.b64encode(file.read()).decode('utf-8')
 
-# Encode document with Base64
+# Encode document using Base64
 base64_document = file_to_base64(document_path)
 
 data = {
@@ -343,7 +353,7 @@ print(json.dumps(res.json(), indent=2, ensure_ascii=False))
 
 ### Complete Example
 
-The following is a complete example showing how to add conversation messages containing different media types between the user and the assistant:
+Here is a complete example showing how to add conversation messages containing different media types between a user and an assistant:
 
 ```python
 import os
@@ -363,7 +373,7 @@ data = {
             "content": [
                 {
                     "type": "text",
-                    "text": "I am researching MemOS."
+                    "text": "I am studying MemOS."
                 }  # Text message
             ]
         },
