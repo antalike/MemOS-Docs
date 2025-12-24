@@ -4,9 +4,7 @@ desc: 检索记忆时使用记忆过滤器，可以按照指定智能体、元�
 ---
 
 ::warning 注意
-
 <br>
-
 <br>
 
 **[需要先在addMessage的时候传入相关字段（点此查看详细 API 文档）](/api_docs/core/add_message)**
