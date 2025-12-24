@@ -140,7 +140,7 @@ query_text = "I'm going to Yunnan for the National Day holiday. Do you have any 
 
 data = {
     "user_id": "memos_user_123",
-    "conversation_id": "memos_conversation_789",  # Created a new conversation ID
+    "conversation_id": "memos_conversation_123",  # Created a new conversation ID
     "query": query_text,
 }
 
@@ -158,7 +158,7 @@ print(f"result: {res.json()}")
       "memory_value": "User likes spicy food but doesn't like heavy oil dishes, such as spicy hot pot and Mao Xue Wang. User prefers refreshing and spicy dishes.",
       "memory_type": "UserMemory",
       "create_time": 1762674694466,
-      "conversation_id": "memos_conversation_345",
+      "conversation_id": "memos_conversation_123",
       "status": "activated",
       "confidence": 0.99,
       "tags": [
@@ -177,7 +177,7 @@ print(f"result: {res.json()}")
       "preference": "User likes spicy food but dislikes heavy oil spicy food.",
       "reasoning": "In the first query, the user explicitly stated they like spicy food. In the second query, they further explained they don't like heavy oil spicy food. This indicates the user's preference is for spicy but refreshing food.",
       "create_time": 1762675342352,
-      "conversation_id": "memos_conversation_345",
+      "conversation_id": "memos_conversation_123",
       "status": "activated",
       "update_time": 1762674923302
     },
@@ -187,7 +187,7 @@ print(f"result: {res.json()}")
       "preference": "User may prefer healthier dietary choices",
       "reasoning": "The user expressed a clear preference for spicy flavors but disliked heavy oil food. This indicates the user may be more concerned about dietary health and tends to choose less greasy food. The combination of liking spicy food and rejecting heavy oil food may imply an implicit preference for healthy eating.",
       "create_time": 1762674923448,
-      "conversation_id": "memos_conversation_345",
+      "conversation_id": "memos_conversation_123",
       "status": "activated",
       "update_time": 1762674851542
     }
@@ -242,7 +242,7 @@ print(f"result: {res.json()}")
       "memory_value": "User hopes AI can help plan daily study schedules, recommend movies and books, and provide emotional companionship.",
       "memory_type": "WorkingMemory",
       "create_time": 1762675190743,
-      "conversation_id": "memos_conversation_id_567",
+      "conversation_id": "memos_conversation_456",
       "status": "activated",
       "confidence": 0.99,
       "tags": [
@@ -260,7 +260,7 @@ print(f"result: {res.json()}")
       "memory_value": "User hopes AI provides suggestions, information query, and inspiration.",
       "memory_type": "WorkingMemory",
       "create_time": 1762675153211,
-      "conversation_id": "memos_conversation_id_567",
+      "conversation_id": "memos_conversation_456",
       "status": "activated",
       "confidence": 0.99,
       "tags": [
@@ -302,7 +302,7 @@ BASE_URL = os.environ['MEMOS_BASE_URL']
 query_text = "What are my persona keywords?"
 
 data = {
-    "user_id": "memos_user_567",
+    "user_id": "memos_user_123",
     "query": query_text,
     "filter": {
         "and": [
@@ -327,7 +327,7 @@ Example return (showing recalled memory fragments)
       "memory_value": "The user hopes AI can help plan daily study schedules, recommend movies and books, and provide emotional companionship.",
       "memory_type": "WorkingMemory",
       "create_time": 1762675190743,
-      "conversation_id": "memos_conversation_id_567",
+      "conversation_id": "memos_conversation_456",
       "status": "activated",
       "confidence": 0.99,
       "tags": [
