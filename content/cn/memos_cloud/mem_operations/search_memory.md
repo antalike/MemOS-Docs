@@ -270,6 +270,76 @@ print(f"result: {res.json()}")
 ```
 ::
 
+### 使用过滤器筛选记忆
+
+MemOS 提供了强大的记忆过滤器功能，允许开发者根据记忆的属性进行筛选。这一功能在需要根据记忆的特定特征进行检索时尤为有用，例如根据记忆的创建时间、关联的对话 ID 或记忆的类型等。
+
+以下是一个使用记忆过滤器的示例，筛选出所有标签中包含"学习计划"且创建时间晚于2025-11-09的记忆：
+::code-group
+```python [Python (HTTP)]
+import os
+import json
+import requests
+
+os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
+os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
+
+# headers 和 base URL
+headers = {
+  "Authorization": f"Token {os.environ['MEMOS_API_KEY']}",
+  "Content-Type": "application/json"
+}
+BASE_URL = os.environ['MEMOS_BASE_URL']
+
+query_text = "我的人物关键词是什么？"
+
+data = {
+    "user_id": "memos_user_567",
+    "query": query_text,
+    "filter": {
+        "and": [
+            {"tags": {"contains": "学习计划"}},
+            {"create_time": {"gt": "2025-11-09"}}
+        ]
+    } # 通过传入filter字段，筛选出所有标签中包含"学习计划"且创建时间晚于2025-11-09的记忆
+}
+
+# 调用 /search/memory 查询相关记忆
+res = requests.post(f"{BASE_URL}/search/memory", headers=headers, data=json.dumps(data))
+
+print(f"result: {res.json()}")
+```
+```python[输出]
+示例返回（展示已召回的记忆片段）
+{
+  "memory_detail_list": [
+    {
+      "id": "00d8bb4e-aa8c-4fee-a83e-bf67ed6c3ea1",
+      "memory_key": "希望AI帮助的事项",
+      "memory_value": "用户希望AI帮助规划日常学习计划、推荐电影和书籍，以及提供心情陪伴。",
+      "memory_type": "WorkingMemory",
+      "create_time": 1762675190743,
+      "conversation_id": "memos_conversation_id_567",
+      "status": "activated",
+      "confidence": 0.99,
+      "tags": [
+        "帮助",
+        "学习计划",
+        "推荐",
+        "陪伴"
+      ],
+      "update_time": 1762675209112,
+      "relativity": 0.00013480317
+    }
+  ],
+  "preference_detail_list": [],
+  "preference_note": ""
+}
+```
+::
+
+有关过滤器中更多筛选选项，请参考[记忆过滤器](/memos_cloud/features/basic/filters)。
+
 
 ## 6. 更多功能
 
@@ -278,7 +348,6 @@ print(f"result: {res.json()}")
 ::
 | **功能**       | **相关字段**                                            | **说明**                                                     |
 | -------------- | --------------------------------------------------- | ------------------------------------------------------------ |
-| 记忆过滤器     | `filter`                                              | 支持自定义结构化查询条件，精确筛选记忆，详见[记忆过滤器](/memos_cloud/features/basic/filters)。 |
 | 召回偏好记忆   | `include_preference`<br><span style="line-height:0.6;">&nbsp;</span><br>`preference_limit_number`   | 偏好记忆是 MemOS 基于用户历史消息分析生成的用户偏好信息。开启后，可在检索结果中召回用户偏好记忆。 |
 | 召回工具记忆   | `include_tool_memory`<br><span style="line-height:0.6;">&nbsp;</span><br>`tool_memory_limit_number` | 工具记忆是 MemOS 对已添加的工具调用信息进行分析后生成的记忆。开启后，可在检索结果中召回工具记忆，详见[工具调用](/memos_cloud/features/advanced/tool_calling)。 |
 | 检索指定知识库 | `knowledgebase_ids`                                 | 用于指定本次检索可访问的项目关联知识库范围。开发者可借此实现精细的权限控制，灵活定义不同终端用户可访问的知识库集合，详见[知识库](/memos_cloud/features/advanced/knowledge_base)。     |
