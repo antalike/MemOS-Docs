@@ -20,7 +20,7 @@ To configure MemOS MCP using JSON configuration:
       "command": "npx",
       "args": [
         "-y",
-        "@memtensor/memos-api-mcp"
+        "@memtensor/memos-api-mcp@latest"
       ],
       "env": {
         "MEMOS_API_KEY": "mpg-xxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
@@ -134,7 +134,7 @@ To use MemOS in Chatbox, click "Settings" in the lower left corner -> "MCP" -> "
 ```
 Name: MemOS Memory Management
 Type: Local (stdio)
-Command: npx -y @memtensor/memos-api-mcp
+Command: npx -y @memtensor/memos-api-mcp@latest
 Environment Variables:
 MEMOS_API_KEY={{api_key applied for on the MemOS official website API Console}}
 MEMOS_USER_ID={{custom USER_ID}}
