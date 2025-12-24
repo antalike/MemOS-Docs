@@ -197,7 +197,7 @@ print(f"result: {res.json()}")
 "result": {
   "code": 0,
   "data": {
-    "id": "base3c88e38e-396c-4abb-aa00-1f0b66fe9794"
+    "id": "idxxxxx"   #Replace with the Knowledge Base ID created above
   },
   "message": "ok"
 }
@@ -217,7 +217,7 @@ os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
 os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
 data = {
-    "knowledgebase_id": "base3c88e38e-396c-4abb-aa00-1f0b66fe9794",
+    "knowledgebase_id": "idxxxxx",    #Replace with the Knowledge Base ID created above
     "file": [
         {"content": "https://cdn.memtensor.com.cn/file/Software_Procurement_Reimbursement_Policy.pdf"}
     ]
@@ -317,7 +317,7 @@ data = {
     "user_id": "memos_user_123",
     "conversation_id": "1211",
     "query": "Check the software procurement reimbursement limit for me.",
-    "knowledgebase_ids":["base3c88e38e-396c-4abb-aa00-1f0b66fe9794"]
+    "knowledgebase_ids":["idxxxxx"]    #Replace with the Knowledge Base ID created above
 }
 headers = {
   "Content-Type": "application/json",
@@ -403,7 +403,7 @@ data = {
     "user_id": "memos_user_123",
     "conversation_id": "1212",
     "feedback_content": "The procurement limit for office software is 600 yuan, not 800 yuan.",
-    "allow_knowledgebase_ids":["base3c88e38e-396c-4abb-aa00-1f0b66fe9794"]
+    "allow_knowledgebase_ids":["idxxxxx"]    #Replace with the Knowledge Base ID created above
 }
 
 headers = {
@@ -437,7 +437,7 @@ data = {
     "user_id": "memos_user_123",
     "conversation_id": "1211",
     "query": "Check the software procurement reimbursement limit for me.",
-    "knowledgebase_ids":["base3c88e38e-396c-4abb-aa00-1f0b66fe9794"]
+    "knowledgebase_ids":["idxxxxx"]    #Replace with the Knowledge Base ID created above
 }
 headers = {
   "Content-Type": "application/json",
