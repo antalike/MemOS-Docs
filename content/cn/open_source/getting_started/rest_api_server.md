@@ -77,7 +77,7 @@ EMBEDDING_DIMENSION=1024
 
 url: registry.cn-shanghai.aliyuncs.com/memtensor/memos:base-v1.0
 
-● 全量包：将 MemOS 全部依赖包打为镜像，镜像已上传至仓库，通过配置 Dockerfile可直接构建启动。
+● 全量包：将 MemOS 全部依赖包打为镜像，可体验完整功能，通过配置 Dockerfile可直接构建启动。
 
 url: registry.cn-shanghai.aliyuncs.com/memtensor/memos-full-base:v1.0.0
 

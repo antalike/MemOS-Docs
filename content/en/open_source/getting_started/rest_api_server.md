@@ -70,7 +70,7 @@ Contains quick mode and full mode, distinguishing between using simplified packa
 
 url: registry.cn-shanghai.aliyuncs.com/memtensor/memos:base-v1.0
 
-● Full package: Convert all MemOS dependencies into images, which have been uploaded to the repository. By configuring Dockerfiles, you can directly build and start the package.
+● Full package: Convert all MemOS dependencies into images, Experience complete functionality. By configuring Dockerfiles, you can directly build and start the package.
 
 url: registry.cn-shanghai.aliyuncs.com/memtensor/memos-full-base:v1.0.0
 
