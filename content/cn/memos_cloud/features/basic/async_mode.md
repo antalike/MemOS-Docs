@@ -3,7 +3,7 @@ title: 异步模式
 desc: 添加消息时使用异步模式，接口请求立即返回，而实际处理在MemOS后台排队完成。
 ---
 ::warning
-**[本文是对【添加记忆-addMessage接口】里的异步模式，进行详解 （点此查看详细 API 文档）](/api_docs/core/add_message)**
+**[本文是对【添加记忆-addMessage接口】里的异步模式做展开介绍，可点此直接查看详细 API 文档](/api_docs/core/add_message)**
 ::
 
 :::note
