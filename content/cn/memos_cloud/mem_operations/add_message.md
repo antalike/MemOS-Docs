@@ -4,10 +4,7 @@ desc: MemOS 会将您添加的多模态内容如文本、文件、图片等，�
 ---
 
 ::note
-**&nbsp;[直接看 详细的API文档 点这里哦](/api_docs/core/add_message)**
-<br>
-
-**&nbsp;以下是对能力的介绍**
+**&nbsp;[➡️ 直接看 API文档 点这里哦](/api_docs/core/add_message)**
 ::
 
 ## 1. 如何添加消息？
