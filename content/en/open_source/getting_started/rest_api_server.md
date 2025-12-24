@@ -67,6 +67,9 @@ EMBEDDING_DIMENSION=1024
 ```bash
 # Lean package url
 FROM registry.cn-shanghai.aliyuncs.com/memtensor/memos:base-v1.0
+# Full package url
+# FROM registry.cn-shanghai.aliyuncs.com/memtensor/memos-full-base:v1.0.0
+
 
 WORKDIR /app
 
