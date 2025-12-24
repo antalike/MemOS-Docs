@@ -1,17 +1,19 @@
 ---
 title: Async Mode
-desc: When using async mode for adding messages, the API request returns immediately, while the actual processing is queued in the MemOS background.
+desc: Use async mode when adding messages; the interface returns immediately while actual processing is queued in the background by MemOS.
 ---
+::warning
+**[This article expands on the async mode in the [Add Memory - addMessage API], click here to view the detailed API documentation directly](/api_docs/core/add_message)**
+::
 
 :::note
-The `async_mode` parameter currently defaults to `true`. Memory addition operations will be processed asynchronously by default, queuing for background execution instead of waiting for processing to complete before returning a response.
+The `async_mode` parameter currently defaults to `true`. Memory addition operations are processed asynchronously by default, queued for background execution instead of waiting for processing to complete before returning a response.
 :::
-
 ## 1. Using Async Mode
 
-### Process Flow
+### Processing Flow
 
-When the `async_mode` parameter is set to `true`, the API will return a response immediately and queue the memory processing in the background:
+When the `async_mode` parameter is set to `true`, the API returns a response immediately and queues the memory for processing in the background:
 
 ```json
 {
@@ -25,14 +27,16 @@ When the `async_mode` parameter is set to `true`, the API will return a response
 }
 ```
 
-At this point, the user's previously sent messages can be immediately retrieved as memories, ensuring context continuity in the conversation without waiting for memory processing latency:
+In async mode, memory writing is divided into two stages: "Rough Processing" and "Refined Processing". The system first performs millisecond-level rough processing on the current turn of messages, enabling them to be quickly retrieved in the next turn of conversation;
+<br>
+Subsequently, refined processing (taking seconds or more) continues in the background to improve memory quality. Processing progress can be queried via the [get/status](/api_docs/message/get_status) interface: during the rough processing stage, the task status is "running", and updates to "completed" after refined processing is finished.
 
 ```json
 "memory_detail_list": [
   {
     "id": "c436a738-eec9-4010-b65d-dc9c135d3a37",
-    "memory_key": "user: [09:44 AM on 10 December, 2025 UTC]: I have decided to go to Guangzhou for a trip during the summer vacation. What chain hotels are available for accommodation?",
-    "memory_value": "user: [09:44 AM on 10 December, 2025 UTC]: I have decided to go to Guangzhou for a trip during the summer vacation. What chain hotels are available for accommodation?\nassistant: [09:44 AM on 10 December, 2025 UTC]: You can consider [7 Days Inn, All Seasons, Hilton], etc.\nuser: [09:44 AM on 10 December, 2025 UTC]: I choose 7 Days Inn.\nassistant: [09:44 AM on 10 December, 2025 UTC]: Okay, ask me if you have other questions.\n",
+    "memory_key": "user: [09:44 AM on 10 December, 2025 UTC]: I've booked a trip to Guangzhou for the summer vacation. What chain hotels are available for accommodation?",
+    "memory_value": "user: [09:44 AM on 10 December, 2025 UTC]: I've booked a trip to Guangzhou for the summer vacation. What chain hotels are available for accommodation?\nassistant: [09:44 AM on 10 December, 2025 UTC]: You can consider [7 Days Inn, Ji Hotel, Hilton], etc.\nuser: [09:44 AM on 10 December, 2025 UTC]: I'll choose 7 Days Inn\nassistant: [09:44 AM on 10 December, 2025 UTC]: Okay, let me know if you have any other questions.\n",
     "memory_type": "WorkingMemory",
     "create_time": 1765359875901,
     "update_time": 1765359875902,
@@ -45,7 +49,7 @@ At this point, the user's previously sent messages can be immediately retrieved 
 ]
 ```
 
-You can also use the `get/status` interface to get the status of the asynchronous task:
+Get the async task status via the [get/status](/api_docs/message/get_status) interface:
 
 ```python
 import os
@@ -72,24 +76,24 @@ print(f"result: {res.json()}")
 
 ### When to Use Async Mode
 
-*   **Reduce API Response Latency**: Users don't need to wait and can continue using memories within the application;
+*   **Reduce Interface Response Latency**: Users do not need to wait and can continuously use memory within the application;
     
-*   **Batch Add Memories**: Process large amounts of data simultaneously without blocking the application;
+*   **Batch Add Memories**: Process large amounts of data simultaneously to avoid blocking the application;
     
 
-*   **Background Task Processing**: Offload time-consuming memory processing operations to the background to improve system concurrency.
+*   **Background Task Processing**: Offload time-consuming memory processing operations to the background to improve system concurrency capabilities.
     
 
 :::note
 Note<br>
-When the message contains multimodal content, due to the longer processing time for file memories, the `async_mode` field you pass in will be invalid, and "Async Mode" will be used by default. You can query the processing progress of file memories via the `get/status` interface.
+When a message contains multimodal content, since file memory processing takes a long time, the `async_mode` field you pass becomes invalid, and "Async Mode" is used by default. You can query the processing progress of file memory via the `get/status` interface.
 :::
 
 ## 2. Using Sync Mode
 
-### Process Flow
+### Processing Flow
 
-When the `async_mode` parameter is set to `false`, the API will return the result after memory processing is complete:
+When the `async_mode` parameter is set to `false`, the API returns the result after memory processing is completed:
 
 ```json
 {
@@ -103,13 +107,13 @@ When the `async_mode` parameter is set to `false`, the API will return the resul
 }
 ```
 
-At this point, retrieving memory will yield memories that have been fully processed:
+At this point, retrieving memory will return memories that have been fully processed:
 
 ```json
 "memory_detail_list":[
   {
-    "memory_key": "Guangzhou Summer Trip Plan",
-    "memory_value": "The user plans to travel to Guangzhou during the summer vacation and selected 7 Days Inn as the accommodation option.",
+    "memory_key": "Summer Vacation Guangzhou Travel Plan",
+    "memory_value": "The user plans to travel to Guangzhou during the summer vacation and has chosen 7 Days Inn as the accommodation option.",
     "conversation_id": "0610",
     "tags": [
       "Travel",
@@ -122,8 +126,8 @@ At this point, retrieving memory will yield memories that have been fully proces
 "preference_detail_list":[
   {
     "preference_type": "implicit_preference",
-    "preference": "The user may prefer cost-effective hotel choices.",
-    "reasoning": "7 Days Inn is usually known for being economical, and the user's choice of 7 Days Inn may indicate a preference for cost-effective options in terms of accommodation. Although the user did not explicitly mention budget constraints or specific hotel preferences, choosing 7 Days Inn among the provided options may reflect an emphasis on price and practicality.",
+    "preference": "The user may prefer high cost-performance hotel choices.",
+    "reasoning": "7 Days Inn is usually known for being economical. The user's choice of 7 Days Inn may indicate a preference for high cost-performance options in accommodation. Although the user did not explicitly mention budget constraints or specific hotel preferences, choosing 7 Days Inn among the provided options may reflect an emphasis on price and practicality.",
     "conversation_id": "0610"
   }
 ]
@@ -131,15 +135,15 @@ At this point, retrieving memory will yield memories that have been fully proces
 
 ### When to Use Sync Mode
 
-*   **Debugging and Development Phase**: View the results after memory processing directly, facilitating debugging of memory retrieval;
+*   **Debugging and Development Phase**: View the results after memory processing directly, facilitating memory retrieval debugging;
     
-*   **Immediate Query**: Need to confirm memory creation or update upon API call return, such as performance testing, functional verification, etc.
+*   **Instant Query**: Need to confirm that memory has been created or updated when the API call returns, such as in performance testing, functional verification, etc.
     
-*   **Small Scale Operations**: When the data volume is small and latency impact is minimal, sync mode can be used.
+*   **Small-scale Operations**: Sync mode can be used when the data volume is small and latency impact is minimal.
     
 
 ### Important Notes
 
-*   The default behavior for asynchronous processing is now `async_mode=true`.
+*   The default behavior for async processing is now `async_mode=true`.
     
-*   If you need synchronous mode, please set `async_mode=false` when adding messages.
+*   If you need sync mode, please set `async_mode=false` when adding messages.
