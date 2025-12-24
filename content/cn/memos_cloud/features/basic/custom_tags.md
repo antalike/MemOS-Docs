@@ -2,6 +2,16 @@
 title: 自定义标签
 desc: 添加消息时按照你的业务需求使用标签。
 ---
+::warning
+**[需要先在addMessage的时候传入tag list（点此查看详细 API 文档）](/api_docs/core/add_message)**
+<br>
+
+**[才能在searchMemory的时候使用标签进行过滤（点此查看详细 API 文档）](/api_docs/core/search_memory)**
+<br>
+
+**本文聚焦于功能说明，接口字段及限制请参考上方链接查看完整文档**
+
+::
 
 MemOS 会为每条记忆自动生成标签，但这些标签可能与您业务中所使用的标签不完全一致。您可以在添加消息时传入自定义标签列表，MemOS 将基于您提供的标签含义，对记忆内容自动应用相关标签。
 
