@@ -6,8 +6,8 @@ desc: 欢迎访问 MemOS 云平台，可参考本新手指南，快速接入�
 在使用大模型构建应用时，一个常见问题是：**如何让 AI 记住用户的长期偏好？**  
 MemOS 提供了两个核心接口帮助你实现：
 
-- `addMessage` —— 把原始对话交给我们，我们自动加工并存储记忆
-- `searchMemory` —— 在后续对话中召回事实记忆和偏好记忆，让 AI 回答更贴近用户需求
+- `addMessage` —— 把原始对话交给我们，我们自动加工并存储记忆[（点此查看详细 API 文档）](/api_docs/core/add_message)
+- `searchMemory` —— 在后续对话中召回事实记忆和偏好记忆，让 AI 回答更贴近用户需求[（点此查看详细 API 文档）](/api_docs/core/search_memory)
 
 ![image.svg](https://cdn.memtensor.com.cn/img/1762434889291_h9co0h_compressed.png)
 
