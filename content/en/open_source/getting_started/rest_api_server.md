@@ -3,7 +3,7 @@ title: REST API Server
 desc: MemOS provides a REST API service written using FastAPI. Users can perform all operations via REST interfaces.
 ---
 
-![MemOS Architecture](https://statics.memtensor.com.cn/memos/openapi.png)
+![MemOS Architecture](https://cdn.memtensor.com.cn/img/memos_run_server_success_compressed.png)
 <div style="text-align: center; margin-top: 10px">APIs supported by MemOS REST API Server</div>  
 
 ### Features
@@ -23,9 +23,29 @@ The following is the English translation of your content, keeping proper nouns u
 
 ### Configure Environment Variables
 
-#### 1. Create a `.env` file in the root directory and set your environment variables. Reference <a href="https://github.com/MemTensor/MemOS/blob/main/docker/.env.example">.env.example</a>.
+#### 1. Create a `.env` file in the root directory and set your environment variables. Complete Mode Reference <a href="https://github.com/MemTensor/MemOS/blob/main/docker/.env.example">.env.example</a>.
+##### .env The quick mode configuration is as follows
+```bash
+#User key, used to initialize or default request users
+OPENAI_API_KEY=your-openai-api-key  
+#OpenAI interface address, default https://api.openai.com/v1 If using proxy or self built compatible services, change here.
+OPENAI_API_BASE=your-openai-ip
+#Http-bge (HTTP Service BGE rearrangement) or cosine local (local cosine).
+MOS_RERANKER_BACKEND=cosine_local
+#Universial-API: Use OpenAI for chatting and embedding,
+#Ollama: Use local Ollama embedding
+MOS_EMBEDDER_BACKEND=universal_api
+#Embedded model
+MOS_EMBEDDER_MODEL=bge-m3
+#Interface address (OpenAI is) https://api.openai.com/v1 Azure for your endpoint
+MOS_EMBEDDER_API_BASE=your-openai-ip
+#Corresponding provider's key
+MOS_EMBEDDER_API_KEY=EMPTY
+#Vector dimension
+EMBEDDING_DIMENSION=1024
+```
 
-#### 2. Configure dependency versions in docker/requirement.txt, etc. Reference <a href="https://github.com/MemTensor/MemOS/blob/main/docker/requirements.txt">requirements.txt</a>.
+#### 2. Configure dependency versions in docker/requirement.txt （negligible）, Complete Mode Reference <a href="https://github.com/MemTensor/MemOS/blob/main/docker/requirements.txt">requirements.txt</a>.
 
 
 ### Start Docker 
@@ -36,6 +56,73 @@ The following is the English translation of your content, keeping proper nouns u
  docker images
 
 ```
+
+
+### Docker use repository dependency package image/start (Recommended use)
+::steps{level="4"}
+
+#### Reference configuration environment variables above, .env file should be configured
+
+#### Configure Dockerfile (Current Dockerfile is in root directory)
+```bash
+# Lean package url
+FROM registry.cn-shanghai.aliyuncs.com/memtensor/memos:base-v1.0
+
+WORKDIR /app
+
+ENV HF_ENDPOINT=https://hf-mirror.com
+
+ENV PYTHONPATH=/app/src
+
+COPY src/ ./src/
+
+EXPOSE 8000
+
+CMD ["uvicorn", "memos.api.server_api:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+
+```
+
+#### Local build - supports amd x86: windows, intel chip build method (choose step 2 ignore step 3 according to chip type)
+##### (Image name:version: Example: memos-api-server:v1.0.1):
+
+```bash
+docker build -t memos-api-server:v1.0.1 .  
+```
+
+![MemOS buildSuccess](https://cdn.memtensor.com.cn/img/memos_build_success_ay2epm_compressed.png)
+<div style="text-align: center; margin-top: 10px；font-size:12px">Example image, build command as per custom image name:version</div>  
+
+##### Start service using docker run:
+
+```bash
+docker run --env-file .env -p 8000:8000 memos-api-server:v1.0.1
+```
+
+#### Local build - arm: mac m chip (choose step 3 ignore step 2 according to chip type)
+##### Support arm: mac m chip build method docker compose up
+##### Enter docker directory, configure docker-compose.yml file. Reference <a href="https://github.com/MemTensor/MemOS/blob/main/docker/docker-compose.yml">docker-compose.yml</a>.
+
+##### Build and start service using docker compose up:
+```bash
+# Enter docker directory
+docker compose up
+```
+![MemOS buildComposeupSuccess](https://cdn.memtensor.com.cn/img/memos_build_composeup_success_jgdd8e_compressed.png)
+<div style="text-align: center; margin-top: 10px">Example image, port as per docker custom configuration</div>  
+
+
+
+
+
+
+#### Access API via [http://localhost:8000/docs](http://localhost:8000/docs).
+
+![MemOS Architecture](https://cdn.memtensor.com.cn/img/memos_run_server_success_compressed.png)
+
+
+#### Test cases (Register user->Add user memory->Query user memory) Refer to Docker Compose up test cases
+
+::
 
 
 
@@ -232,72 +319,6 @@ export PYTHONPATH=/you-file-absolute-path/MemOS/src
 
 After startup is complete, access API via [http://localhost:8000/docs](http://localhost:8000/docs).
 
-
-::
-
-### Docker use repository dependency package image/start (Recommended use)
-::steps{level="4"}
-
-#### Reference configuration environment variables above, .env file should be configured
-
-#### Configure Dockerfile (Current Dockerfile is in root directory)
-```bash
-# Lean package url
-FROM registry.cn-shanghai.aliyuncs.com/memtensor/memos:base-v1.0
-
-WORKDIR /app
-
-ENV HF_ENDPOINT=https://hf-mirror.com
-
-ENV PYTHONPATH=/app/src
-
-COPY src/ ./src/
-
-EXPOSE 8000
-
-CMD ["uvicorn", "memos.api.server_api:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
-
-```
-
-#### Local build - supports amd x86: windows, intel chip build method (choose step 2 ignore step 3 according to chip type)
-##### (Image name:version: Example: memos-api-server:v1.0.1):
-
-```bash
-docker build -t memos-api-server:v1.0.1 .  
-```
-
-![MemOS buildSuccess](https://cdn.memtensor.com.cn/img/memos_build_success_ay2epm_compressed.png)
-<div style="text-align: center; margin-top: 10px；font-size:12px">Example image, build command as per custom image name:version</div>  
-
-##### Start service using docker run:
-
-```bash
-docker run --env-file .env -p 8000:8000 memos-api-server:v1.0.1
-```
-
-#### Local build - arm: mac m chip (choose step 3 ignore step 2 according to chip type)
-##### Support arm: mac m chip build method docker compose up
-##### Enter docker directory, configure docker-compose.yml file. Reference <a href="https://github.com/MemTensor/MemOS/blob/main/docker/docker-compose.yml">docker-compose.yml</a>.
-
-##### Build and start service using docker compose up:
-```bash
-# Enter docker directory
-docker compose up
-```
-![MemOS buildComposeupSuccess](https://cdn.memtensor.com.cn/img/memos_build_composeup_success_jgdd8e_compressed.png)
-<div style="text-align: center; margin-top: 10px">Example image, port as per docker custom configuration</div>  
-
-
-
-
-
-
-#### Access API via [http://localhost:8000/docs](http://localhost:8000/docs).
-
-![MemOS Architecture](https://statics.memtensor.com.cn/memos/openapi.png)
-
-
-#### Test cases (Register user->Add user memory->Query user memory) Refer to Docker Compose up test cases
 
 ::
 

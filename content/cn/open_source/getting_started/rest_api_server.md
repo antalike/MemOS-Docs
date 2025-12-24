@@ -3,7 +3,7 @@ title: REST API 服务
 desc: MemOS 提供了一个使用 FastAPI 编写的 REST API 服务。用户可以通过 REST 接口执行所有操作。
 ---
 
-![MemOS Architecture](https://statics.memtensor.com.cn/memos/openapi.png)
+![MemOS Architecture](https://cdn.memtensor.com.cn/img/memos_run_server_success_compressed.png)
 <div style="text-align: center; margin-top: 10px">MemOS REST API 服务支持的 API</div>  
 
 ### 功能特点
@@ -23,11 +23,38 @@ desc: MemOS 提供了一个使用 FastAPI 编写的 REST API 服务。用户可�
 
 ### 配置环境变量
 
-#### 1、在根目录中创建一个 `.env` 文件并设置你的环境变量。参考 <a href="https://github.com/MemTensor/MemOS/blob/main/docker/.env.example">.env.example</a>。
+#### 1、在根目录中创建一个 `.env` 文件并设置你的环境变量。完整模式参考 <a href="https://github.com/MemTensor/MemOS/blob/main/docker/.env.example">.env.example</a>。
+##### .env 快速模式配置如下
+```bash 
+# 用户key，用于初始化或默认请求用户
+OPENAI_API_KEY=your-openai-api-key  
+
+# OpenAI 接口地址，默认 https://api.openai.com/v1。如走代理或自建兼容服务，改这里。
+OPENAI_API_BASE=your-openai-ip
+
+# http_bge（HTTP 服务版 BGE 重排）或 cosine_local（本地余弦）。
+MOS_RERANKER_BACKEND=cosine_local
+
+# universal_api：使用 OpenAI 聊天与嵌入 ，
+# Ollama：使用本地 Ollama 嵌入
+MOS_EMBEDDER_BACKEND=universal_api
+
+# 嵌入模型
+MOS_EMBEDDER_MODEL=bge-m3
+
+# 接口地址（OpenAI 为 https://api.openai.com/v1；Azure 为你的 endpoint）
+MOS_EMBEDDER_API_BASE=your-openai-ip
+
+# 对应 provider 的 Key
+MOS_EMBEDDER_API_KEY=EMPTY
+
+# 向量维度
+EMBEDDING_DIMENSION=1024
+```
 
 
 
-#### 2、配置docker/requirement.txt中依赖包的版本等。参考 <a href="https://github.com/MemTensor/MemOS/blob/main/docker/requirements.txt">requirements.txt</a>。
+#### 2、配置docker/requirement.txt中依赖包的版本等（可忽略）。完整版可参考 <a href="https://github.com/MemTensor/MemOS/blob/main/docker/requirements.txt">requirements.txt</a>。
 
 ### 启动docker 
 ```bash
@@ -37,6 +64,73 @@ desc: MemOS 提供了一个使用 FastAPI 编写的 REST API 服务。用户可�
  docker images
 
 ```
+
+
+###  Dodcker 使用仓库依赖包镜像启动(推荐使用)
+::steps{level="4"}
+
+#### 参考上方配置环境变量，已经好配置.env文件
+
+#### 配置Dockerfile文件（当前Dockerfile文件在根目录下）
+```bash
+# 精简包 url
+FROM registry.cn-shanghai.aliyuncs.com/memtensor/memos:base-v1.0
+
+WORKDIR /app
+
+ENV HF_ENDPOINT=https://hf-mirror.com
+
+ENV PYTHONPATH=/app/src
+
+COPY src/ ./src/
+
+EXPOSE 8000
+
+CMD ["uvicorn", "memos.api.server_api:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+
+```
+
+#### 本地构建-支持amd x86：windows,inter芯片的构建方式(根据芯片类型选择2步骤忽略3步骤)
+#####  （镜像名称:版本号：例如：memos-api-server:v1.0.1）：
+
+```bash
+docker build -t memos-api-server:v1.0.1 .  
+```
+
+![MemOS buildSuccess](https://cdn.memtensor.com.cn/img/memos_build_success_ay2epm_compressed.png)
+<div style="text-align: center; margin-top: 10px；font-size:12px">示例图片，构建命令按自定义的镜像名称:版本</div>  
+
+##### 使用docker run 启动服务 ：
+
+```bash
+docker run --env-file .env -p 8000:8000 memos-api-server:v1.0.1
+```
+
+#### 本地构建-arm：mac m 芯片(根据芯片类型选择3步骤忽略2步骤)
+##### 支持aarm：mac m 芯片芯片的构建方式 docker compose up
+##### 进入docker目录下，配置docker-compose.yml文件。参考<a href="https://github.com/MemTensor/MemOS/blob/main/docker/docker-compose.yml">docker-compose.yml</a>。
+
+##### 使用docker compose up 构建并切动服务 ：
+```bash
+# 在docker目录下
+docker compose up
+```
+![MemOS buildComposeupSuccess](https://cdn.memtensor.com.cn/img/memos_build_composeup_success_jgdd8e_compressed.png)
+<div style="text-align: center; margin-top: 10px">示例图片，端口按 docker 自定义的配置</div>  
+
+
+
+
+
+
+#### 通过 [http://localhost:8000/docs](http://localhost:8000/docs) 访问 API。
+
+![MemOS Architecture](https://cdn.memtensor.com.cn/img/memos_run_server_success_compressed.png)
+
+
+#### 测试用例 (注册用户->添加用户记忆->查询用户记忆) 参考Docker Compose up测试用例
+
+::
 
 
 
@@ -232,72 +326,6 @@ export PYTHONPATH=/you-file-absolute-path/MemOS/src
 
 启动完成后，通过 [http://localhost:8000/docs](http://localhost:8000/docs) 访问 API。
 
-
-::
-
-###  Dodcker 使用仓库依赖包镜像启动(推荐使用)
-::steps{level="4"}
-
-#### 参考上方配置环境变量，已经好配置.env文件
-
-#### 配置Dockerfile文件（当前Dockerfile文件在根目录下）
-```bash
-# 精简包 url
-FROM registry.cn-shanghai.aliyuncs.com/memtensor/memos:base-v1.0
-
-WORKDIR /app
-
-ENV HF_ENDPOINT=https://hf-mirror.com
-
-ENV PYTHONPATH=/app/src
-
-COPY src/ ./src/
-
-EXPOSE 8000
-
-CMD ["uvicorn", "memos.api.server_api:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
-
-```
-
-#### 本地构建-支持amd x86：windows,inter芯片的构建方式(根据芯片类型选择2步骤忽略3步骤)
-#####  （镜像名称:版本号：例如：memos-api-server:v1.0.1）：
-
-```bash
-docker build -t memos-api-server:v1.0.1 .  
-```
-
-![MemOS buildSuccess](https://cdn.memtensor.com.cn/img/memos_build_success_ay2epm_compressed.png)
-<div style="text-align: center; margin-top: 10px；font-size:12px">示例图片，构建命令按自定义的镜像名称:版本</div>  
-
-##### 使用docker run 启动服务 ：
-
-```bash
-docker run --env-file .env -p 8000:8000 memos-api-server:v1.0.1
-```
-
-#### 本地构建-arm：mac m 芯片(根据芯片类型选择3步骤忽略2步骤)
-##### 支持aarm：mac m 芯片芯片的构建方式 docker compose up
-##### 进入docker目录下，配置docker-compose.yml文件。参考<a href="https://github.com/MemTensor/MemOS/blob/main/docker/docker-compose.yml">docker-compose.yml</a>。
-
-##### 使用docker compose up 构建并切动服务 ：
-```bash
-# 在docker目录下
-docker compose up
-```
-![MemOS buildComposeupSuccess](https://cdn.memtensor.com.cn/img/memos_build_composeup_success_jgdd8e_compressed.png)
-<div style="text-align: center; margin-top: 10px">示例图片，端口按 docker 自定义的配置</div>  
-
-
-
-
-
-
-#### 通过 [http://localhost:8000/docs](http://localhost:8000/docs) 访问 API。
-
-![MemOS Architecture](https://statics.memtensor.com.cn/memos/openapi.png)
-
-
-#### 测试用例 (注册用户->添加用户记忆->查询用户记忆) 参考Docker Compose up测试用例
 
 ::
 
