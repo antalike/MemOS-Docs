@@ -4,10 +4,13 @@ desc: 检索记忆时使用记忆过滤器，可以按照指定智能体、元�
 ---
 
 ::warning
+<br>
+
 **[需要先在addMessage的时候传入相关字段（点此查看详细 API 文档）](/api_docs/core/add_message)**
 <br>
 
 **[才能在searchMemory的时候使用过滤条件（点此查看详细 API 文档）](/api_docs/core/search_memory)**
+<br>
 <br>
 
 **本文聚焦于功能说明，接口字段及限制请参考上方链接查看完整文档**
