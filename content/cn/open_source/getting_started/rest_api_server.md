@@ -123,7 +123,7 @@ CMD ["uvicorn", "memos.api.server_api:app", "--host", "0.0.0.0", "--port", "8000
 
 ```
 
-#### 本地构建-支持amd x86：windows,inter芯片的构建方式(根据芯片类型选择2步骤忽略3步骤)
+#### 本地构建-支持amd x86：windows,inter芯片的构建方式(根据芯片类型选择3步骤忽略4步骤)
 #####  （镜像名称:版本号：例如：memos-api-server:v1.0.1）：
 
 ```bash
@@ -139,7 +139,7 @@ docker build -t memos-api-server:v1.0.1 .
 docker run --env-file .env -p 8000:8000 memos-api-server:v1.0.1
 ```
 
-#### 本地构建-arm：mac m 芯片(根据芯片类型选择3步骤忽略2步骤)
+#### 本地构建-arm：mac m 芯片(根据芯片类型选择4步骤忽略3步骤)
 ##### 支持arm：mac m 芯片的构建方式 docker compose up
 ##### 进入docker目录下，配置docker-compose.yml文件。参考<a href="https://github.com/MemTensor/MemOS/blob/main/docker/docker-compose.yml">docker-compose.yml</a>。
 

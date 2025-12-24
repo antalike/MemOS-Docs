@@ -121,7 +121,7 @@ CMD ["uvicorn", "memos.api.server_api:app", "--host", "0.0.0.0", "--port", "8000
 
 ```
 
-#### Local build - supports amd x86: windows, intel chip build method (choose step 2 ignore step 3 according to chip type)
+#### Local build - supports amd x86: windows, intel chip build method (choose step 3 ignore step 4 according to chip type)
 ##### (Image name:version: Example: memos-api-server:v1.0.1):
 
 ```bash
@@ -137,7 +137,7 @@ docker build -t memos-api-server:v1.0.1 .
 docker run --env-file .env -p 8000:8000 memos-api-server:v1.0.1
 ```
 
-#### Local build - arm: mac m chip (choose step 3 ignore step 2 according to chip type)
+#### Local build - arm: mac m chip (choose step 4 ignore step 3 according to chip type)
 ##### Support arm: mac m chip build method docker compose up
 ##### Enter docker directory, configure docker-compose.yml file. Reference <a href="https://github.com/MemTensor/MemOS/blob/main/docker/docker-compose.yml">docker-compose.yml</a>.
 
