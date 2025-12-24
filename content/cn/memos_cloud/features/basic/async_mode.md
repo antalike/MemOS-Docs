@@ -2,6 +2,9 @@
 title: 异步模式
 desc: 添加消息时使用异步模式，接口请求立即返回，而实际处理在MemOS后台排队完成。
 ---
+::warning
+**[本文是对【添加记忆-addMessage接口】里的异步模式做展开介绍，可点此直接查看详细 API 文档](/api_docs/core/add_message)**
+::
 
 :::note
 `async_mode`参数当前默认为`true`，记忆添加操作默认将异步处理，排队等待后台执行，而不是等待处理完成再返回响应。
@@ -26,7 +29,7 @@ desc: 添加消息时使用异步模式，接口请求立即返回，而实际�
 
 在异步模式下，记忆写入将分为“粗加工”和“精加工”两个阶段：系统会先对本轮消息进行毫秒级的粗加工，使其在下一轮对话时即可被快速检索到；
 <br>
-随后在后台继续进行秒级及以上的精加工以提升记忆质量。处理进度可通过 [getStatus](/api_docs/message/get_status) 接口查询：粗加工阶段任务状态为“进行中”，精加工完成后状态更新为“已完成”。
+随后在后台继续进行秒级及以上的精加工以提升记忆质量。处理进度可通过 [get/status](/api_docs/message/get_status) 接口查询：粗加工阶段任务状态为“进行中”，精加工完成后状态更新为“已完成”。
 
 ```json
 "memory_detail_list": [
@@ -46,7 +49,7 @@ desc: 添加消息时使用异步模式，接口请求立即返回，而实际�
 ]
 ```
 
-通过[getStatus](/api_docs/message/get_status)接口，获取异步任务状态：
+通过[get/status](/api_docs/message/get_status)接口，获取异步任务状态：
 
 ```python
 import os

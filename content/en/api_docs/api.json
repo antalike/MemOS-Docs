@@ -139,7 +139,7 @@
                 "$ref": "#/components/schemas/ChatRequest"
               },
               "example": {
-                "user_id": "memos_user_2025-12-15-01",
+                "user_id": "memos_user_123",
                 "stream": false,
                 "query": "What fun places are in Shanghai?",
                 "model_name": "deepseek-r1",

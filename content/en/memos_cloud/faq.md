@@ -98,5 +98,5 @@ Yes. Scheduling is not only about “retrievability” but also about being “f
 
 
 ### Q: Which products and industries does MemOS serve?
-MemOS has been applied across multiple domains, including major internet companies (covering verticals such as e-commerce and travel), telecom operators, financial securities, manufacturing, and education & scientific research. We have partnered with leading state-owned enterprises and top industry teams, validating memory-driven capabilities in scenarios such as embodied intelligence, AI customer service, knowledge management, intelligent investment advisory, industrial operations & maintenance, and AI-powered learning.
+MemOS has been applied across multiple domains, including [companionship, gaming, tourism, telecom operators, financial securities, manufacturing, and education & scientific research]. We have partnered with leading state-owned enterprises and top industry teams, validating memory-driven capabilities in scenarios such as embodied intelligence, AI customer service, knowledge management, intelligent investment advisory, industrial operations & maintenance, and AI-powered learning.
 Some projects are still in joint development, and details cannot yet be disclosed — but we will continue to share more concrete case stories in the future!

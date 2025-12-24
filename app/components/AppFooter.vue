@@ -15,7 +15,7 @@ const columns = computed(() => [
       },
       {
         label: t('footer.memoryAssistant'),
-        to: 'https://alidocs.dingtalk.com/i/nodes/wva2dxOW4YreyQ6rI7ylgy6LVbkz3BRL',
+        to: 'https://alidocs.dingtalk.com/i/p/e3ZxX84Z5KM6X7dRZxX8v66wA7xaBG7d?dontjump=true',
         target: '_blank'
       },
       {

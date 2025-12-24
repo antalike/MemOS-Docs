@@ -36,7 +36,7 @@ Simply put: **MemOS makes AI no longer a disposable chat machine, but a partner 
 
 *   **Personalized Conversation**: Remember user's name, habits, interests, and instruction preferences, automatically supplementing them next time.
     
-*   **Team Knowledge Base**: Transform fragmented conversations into structured knowledge for collaborative use by multiple Agents.
+*   **Team Knowledge Base**: Transform fragmented conversations into structured knowledge for collaborative use by multiple Agents. See [Knowledge Base](/memos_cloud/features/advanced/knowledge_base) for details.
     
 *   **Task Continuity**: Maintain memory across sessions and applications, allowing AI to calmly handle long-process tasks.
     

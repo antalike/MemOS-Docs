@@ -3,6 +3,22 @@ title: 工具调用
 desc: 添加工具调用信息，将工具调用的决策、执行结果及其使用轨迹统一纳入 MemOS 记忆。
 ---
 
+::warning 
+注意
+<br>
+<br>
+
+**[需要先在addMessage的时候传入工具记忆（点此查看详细 API 文档）](/api_docs/core/add_message)**
+<br>
+
+**[才能在searchMemory的时候搜索到工具记忆（点此查看详细 API 文档）](/api_docs/core/search_memory)**
+<br>
+<br>
+
+**本文聚焦于功能说明，详细接口字段及限制请点击上方文字链接查看**
+
+::
+
 ## 1. 何时使用
 
 当您的 Agent 需要通过工具（function / tool）获取外部信息，并希望这些「工具调用的上下文与结果」能够被 MemOS 一并理解、关联和沉淀为可检索记忆时，适合使用这种消息结构。
@@ -61,7 +77,7 @@ tool_schema = [{
 }]
 
 data = {
-    "user_id": "demo-user-id",
+    "user_id": "memos_user_123",
     "conversation_id": "demo-conv-id",
     "messages": [
         {
@@ -129,7 +145,7 @@ os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
 
 data = {
-    "user_id": "demo-user-id",
+    "user_id": "memos_user_123",
     "conversation_id": "0928",
     "query": "北京适合穿什么衣服",
     "memory_limit_number": 10,
@@ -157,7 +173,7 @@ print(json.dumps(res.json(), indent=2, ensure_ascii=False))
    {
     "id": "7ec50fd8-19ec-42a2-a7c7-ce3cebdb70cf",
     "tool_type": "ToolSchemaMemory",
-    "tool_value": {"name": "get_weather", "description": "Get current weather information for a given location", "parameters": {"type": "object", "properties": {"location": {"type": "string", "description": "City name, e.g. Beijing"}}, "required": ["location"]}}",
+    "tool_value": {"name": "get_weather", "description": "Get current weather information for a given location", "parameters": {"type": "object", "properties": {"location": {"type": "string", "description": "City name, e.g. Beijing"}}, "required": ["location"]}},
     "create_time": 1766494806624,
     "conversation_id": "demo-conv-id",
     "status": "activated",

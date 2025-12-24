@@ -3,6 +3,22 @@ title: 记忆过滤器
 desc: 检索记忆时使用记忆过滤器，可以按照指定智能体、元信息、时间范围等条件进行过滤。
 ---
 
+::warning 
+注意
+<br>
+<br>
+
+**[需要先在addMessage的时候传入相关字段（点此查看详细 API 文档）](/api_docs/core/add_message)**
+<br>
+
+**[才能在searchMemory的时候使用过滤条件（点此查看详细 API 文档）](/api_docs/core/search_memory)**
+<br>
+<br>
+
+**本文聚焦于功能说明，详细接口字段及限制请点击上方文字链接查看**
+
+::
+
 ## 1. 何时使用记忆过滤器
 
 在处理大规模的记忆时，你需要精确控制可以被检索的记忆范围。记忆过滤器（Filter）提供了对检索范围的精细控制能力，主要包括：
@@ -55,7 +71,7 @@ desc: 检索记忆时使用记忆过滤器，可以按照指定智能体、元�
 
 | 字段名 | 数据类型 | 操作符 | 示例 |
 | --- | --- | --- | --- |
-| tags | list | `contains` | `{"tags": {"contains": "finance"}` |
+| tags | list | `contains` | `{"tags": {"contains": "finance"}}` |
 
 ### 3.4 时间字段
 

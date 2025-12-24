@@ -2,6 +2,10 @@
 title: 知识库
 desc: 创建项目关联的知识库，检索记忆时结合用户记忆与知识库补充知识。
 ---
+::warning
+**[本文是对【MemOS知识库】功能做展开介绍，可点此直接查看详细 API 文档](/api_docs/knowledge/create_kb)**
+::
+
 
 ## 1. MemOS 知识库 vs 传统 RAG
 
@@ -193,7 +197,7 @@ print(f"result: {res.json()}")
 "result": {
   "code": 0,
   "data": {
-    "id": "base3c88e38e-396c-4abb-aa00-1f0b66fe9794"
+    "id": "idxxxxx"  # 替换成上方创建的知识库ID
   },
   "message": "ok"
 }
@@ -213,7 +217,7 @@ os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
 os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
 data = {
-    "knowledgebase_id": "base3c88e38e-396c-4abb-aa00-1f0b66fe9794",
+    "knowledgebase_id": "idxxxxx",  # 替换成上方创建的知识库ID
     "file": [
         {"content": "https://cdn.memtensor.com.cn/file/软件采购报销制度.pdf"}
     ]
@@ -264,7 +268,7 @@ os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
 os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
 data = {
-    "user_id": "designer_001",
+    "user_id": "memos_user_123",
     "conversation_id": "0610",
     "messages": [
     {
@@ -310,10 +314,10 @@ os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
 os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
 data = {
-    "user_id": "designer_001",
+    "user_id": "memos_user_123",
     "conversation_id": "1211",
     "query": "帮我查一下软件采购报销额度。",
-    "knowledgebase_ids":["base3c88e38e-396c-4abb-aa00-1f0b66fe9794"]
+    "knowledgebase_ids":["idxxxxx"]  # 替换成上方创建的知识库ID
 }
 headers = {
   "Content-Type": "application/json",
@@ -396,10 +400,10 @@ os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
 os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
 data = {
-    "user_id": "finance_supervisor",
+    "user_id": "memos_user_123",
     "conversation_id": "1212",
     "feedback_content": "办公类软件的采购上限是600元，而不是800元。",
-    "allow_knowledgebase_ids":["base3c88e38e-396c-4abb-aa00-1f0b66fe9794"]
+    "allow_knowledgebase_ids":["idxxxxx"]  # 替换成上方创建的知识库ID
 }
 
 headers = {
@@ -430,10 +434,10 @@ os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
 os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
 data = {
-    "user_id": "user_001",
+    "user_id": "memos_user_123",
     "conversation_id": "1211",
     "query": "帮我查一下软件采购报销额度。",
-    "knowledgebase_ids":["base3c88e38e-396c-4abb-aa00-1f0b66fe9794"]
+    "knowledgebase_ids":["idxxxxx"]  # 替换成上方创建的知识库ID
 }
 headers = {
   "Content-Type": "application/json",
