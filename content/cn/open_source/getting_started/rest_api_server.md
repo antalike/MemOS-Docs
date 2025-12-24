@@ -76,6 +76,9 @@ EMBEDDING_DIMENSION=1024
 # 精简包 url
 FROM registry.cn-shanghai.aliyuncs.com/memtensor/memos:base-v1.0
 
+# 全量包 url
+# FROM registry.cn-shanghai.aliyuncs.com/memtensor/memos-full-base:v1.0.0
+
 WORKDIR /app
 
 ENV HF_ENDPOINT=https://hf-mirror.com
