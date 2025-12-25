@@ -12,8 +12,8 @@ desc: Create a knowledge base associated with the project, and combine user memo
 MemOS Knowledge Base supports developers in integrating business knowledge into the long-term memory system of intelligent applications.
 <br>
 The system uses uploaded documents as the underlying data source to build and maintain an independent memory layer, supporting natural language interaction applications such as Q&A. As end-users continue to use it, MemOS dynamically evolves and updates memories based on conversation content, thereby promoting automatic iteration and self-evolution of the knowledge base.
-<brbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbrbr>
-<brbr>
+<br>
+<br>
 Unlike the static storage of traditional RAG, MemOS makes the knowledge base part of "memory". AI applications with "memory" can not only query information more accurately but also better understand the background and the user. Let's look at two real scenarios to compare the two solutions:Unlike the static storage of traditional RAG, MemOS makes the knowledge base part of "memory". AI applications with "memory" can not only query information more accurately but also better understand the background and the user. Let's look at two real scenarios to compare the two solutions:Unlike the static storage of traditional RAG, MemOS makes the knowledge base part of "memory". AI applications with "memory" can not only query information more accurately but also better understand the background and the user. Let's look at two real scenarios to compare the two solutions:Unlike the static storage of traditional RAG, MemOS makes the knowledge base part of "memory". AI applications with "memory" can not only query information more accurately but also better understand the background and the user. Let's look at two real scenarios to compare the two solutions:
 
 <brbr>
