@@ -22,6 +22,12 @@
   "navigation": {
     "groups": [
       {
+        "group": "product",
+        "pages": [
+          "/mintdocs/api-reference/product/search_post"
+        ]
+      },
+      {
         "group": "users",
         "pages": [
           "/mintdocs/api-reference/users/get",
