@@ -282,7 +282,7 @@ data = {
                 {
                   "type": "file",
                   "file": {
-                    "file_data": "https://cdn.memtensor.com.cn/file/MemOS: A Memory OS for AI System.pdf"
+                    "file_data": "https://cdn.memtensor.com.cn/file/MemOS 2.pdf"
                   }
                 }
             ]
@@ -394,7 +394,7 @@ data = {
                 {
                     "type": "file",
                     "file": {
-                        "file_data": "https://cdn.memtensor.com.cn/file/MemOS: A Memory OS for AI System.pdf"
+                        "file_data": "https://cdn.memtensor.com.cn/file/MemOS 2.pdf"
                     }
                 }  # Upload document
             ]
