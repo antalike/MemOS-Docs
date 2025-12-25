@@ -1,14 +1,13 @@
 <script setup lang="ts">
 import type { NuxtError } from '#app'
 
-const { locale } = useI18n()
-
+const localePath = useLocalePath()
 const props = defineProps<{
   error: NuxtError
 }>()
 
 if (props.error?.statusCode === 404) {
-  navigateTo(getLangPath('/overview/introduction', locale.value))
+  navigateTo(localePath('/'))
 }
 
 useHead({
