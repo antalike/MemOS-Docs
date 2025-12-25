@@ -25,7 +25,6 @@ MemOS provides two core interfaces to help you achieve this:
 
 ### 1. Install SDK
 If you choose Python SDK, please ensure Python 3.10+ is installed, then execute:
-::
 
 ```
 pip install MemoryOS -U 
