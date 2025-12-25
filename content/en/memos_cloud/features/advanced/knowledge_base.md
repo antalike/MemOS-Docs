@@ -255,7 +255,7 @@ print(f"result: {res.json()}")
 &nbsp;Session A: Occurred on 2025-06-10<br>
 <div style="padding-left: 2em;">
 The designer indicated in the chat that they are a [Designer in the Creative Platform Department].
-</div>
+</divdiv>
 ::
 
 ```python
@@ -500,8 +500,8 @@ The output result is as follows (Simplified):
 
 The [Console - Knowledge Base](https://memos-dashboard.openmem.net/knowledgeBase/) displays details of all corrections or completions of knowledge base memories through natural language interaction.
 
-![image.png](https://cdn.memtensor.com.cn/img/1765970178683_5tuxe4_compressed.png)
+![image.png](https://cdn.memtensor.com.cn/img/1766634697599_d1j187_compressed.png)
 
 ::note
-For a complete list of feedback API fields, formats, etc., please refer to [Add Feedback API Documentation](/api_docs/message/add_feedback).
+For a complete list of feedback API fields, formats, etc., please refer to For a complete list of feedback API fields, formats, etc., please refer to [Add Feedback API Documentation](/api_docs/message/add_feedback)..
 ::
