@@ -8,21 +8,23 @@ desc: MemOS provides a REST API service written using FastAPI. Users can perform
 
 ### Features
 
-- Register new user: Register a new user using configuration information and default cube.
-- Get recommended queries: Get recommended query statements for a specific user.
-- Get all user memories: Get all memory content for a specific user.
 - Add new memory: Create a new memory for a specific user.
 - Search memories: Search for memory content for a specific user.
+- Get all user memories: Get all memory content for a specific user.
+- Memory feedback: Feedback memory content for a specific user.
 - Chat with MemOS: Chat with MemOS, returning SSE streaming response.
 
 
 ## Run Locally
 
+### 1、Clone Repository
+#### fork MemOS repository code(https://github.com/MemTensor/MemOS) to your own repository
 
+#### Clone forked repository to local folder
 
-### Configure Environment Variables
+### 2、Configure Environment Variables
 
-#### 1. Create a `.env` file in the root directory and set your environment variables. Complete Mode Reference <a href="https://github.com/MemTensor/MemOS/blob/main/docker/.env.example">.env.example</a>.
+#### Create a `.env` file in the root directory and set your environment variables. Complete Mode Reference <a href="https://github.com/MemTensor/MemOS/blob/main/docker/.env.example">.env.example</a>.
 ##### .env The quick mode configuration is as follows
 ```bash
 # OpenAI API Key (required when provider=openai)
@@ -70,10 +72,10 @@ CHAT_MODEL_LIST=[{"backend": "deepseek", "api_base": "http://xxx:3000/v1", "api_
 
 ```
 
-#### 2. Configure dependency versions in docker/requirement.txt （negligible）, Complete Mode Reference <a href="https://github.com/MemTensor/MemOS/blob/main/docker/requirements.txt">requirements.txt</a>.
+##### Configure dependency versions in docker/requirement.txt （negligible）, Complete Mode Reference <a href="https://github.com/MemTensor/MemOS/blob/main/docker/requirements.txt">requirements.txt</a>.
 
 
-### Start Docker 
+### 3、Start Docker 
 ```bash
  # Check docker status
  docker ps
