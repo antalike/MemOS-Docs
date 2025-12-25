@@ -8,21 +8,23 @@ desc: MemOS 提供了一个使用 FastAPI 编写的 REST API 服务。用户可�
 
 ### 功能特点
 
-- 注册新用户：使用配置信息和默认的 cube 注册一个新用户。
-- 获取推荐查询：为指定用户获取推荐的查询语句。
-- 获取用户所有记忆：获取某个用户的所有记忆内容。
 - 添加新记忆：为指定用户创建一条新的记忆。
 - 搜索记忆：为指定用户搜索其记忆内容。
+- 获取用户所有记忆：获取某个用户的所有记忆内容。
+- 记忆反馈：为指定用户反馈记忆内容。
 - 与 MemOS 对话：与 MemOS 进行对话，返回 SSE 流式响应。
 
 
 ## 本地运行
 
+### 1、克隆仓库
+#### fork MemOS 仓库代码(https://github.com/MemTensor/MemOS) 到自己的仓库
 
+#### 克隆 fork 后的仓库到本地文件夹下
 
-### 配置环境变量
+### 2、配置环境变量
 
-#### 1、在根目录中创建一个 `.env` 文件并设置你的环境变量。完整模式参考 <a href="https://github.com/MemTensor/MemOS/blob/main/docker/.env.example">.env.example</a>。
+#### 在根目录中创建一个 `.env` 文件并设置你的环境变量。完整模式参考 <a href="https://github.com/MemTensor/MemOS/blob/main/docker/.env.example">.env.example</a>。
 ##### .env 快速模式配置如下
 ```bash 
 # OpenAI API 密钥 (当 provider=openai 时必须)
@@ -73,10 +75,10 @@ CHAT_MODEL_LIST=[{"backend": "deepseek", "api_base": "http://xxx:3000/v1", "api_
 ```
 
 
+##### 配置docker/requirement.txt中依赖包的版本等（可忽略）。完整版可参考 <a href="https://github.com/MemTensor/MemOS/blob/main/docker/requirements.txt">requirements.txt</a>。
 
-#### 2、配置docker/requirement.txt中依赖包的版本等（可忽略）。完整版可参考 <a href="https://github.com/MemTensor/MemOS/blob/main/docker/requirements.txt">requirements.txt</a>。
 
-### 启动docker 
+### 3、启动docker 
 ```bash
  #查看docker状态
  docker ps
