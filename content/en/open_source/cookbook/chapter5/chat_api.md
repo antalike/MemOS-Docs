@@ -1,3 +1,8 @@
+---
+title: Unified Chat API for Semantic Search, Q&A, and Memory Management
+desc: This chapter introduces a single, unified Chat API that allows AI developers to perform semantic search, conversational Q&A, and memory addition in one interface. By following a simple workflow—searching memory, chatting with the LLM, and adding the current turn to memory—developers can integrate powerful AI capabilities without building separate pipelines for each function. Examples for both streaming and non-streaming API calls are provided for easy integration.
+---
+
 ## Chapter 5: Chat API
 
 **🎯 Problem Scenario:** You are an AI application developer but do not want to build a complete memory search, Q&A, and memory addition workflow yourself.
