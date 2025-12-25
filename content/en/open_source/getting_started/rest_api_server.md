@@ -92,15 +92,17 @@ CHAT_MODEL_LIST=[{"backend": "deepseek", "api_base": "http://xxx:3000/v1", "api_
 
 #### Configure Dockerfile(cd docker)
 
-Contains quick mode and full mode, distinguishing between using simplified packages and full packages
+Contains quick mode and full mode, distinguishing between using simplified packages (x86 and arm) and full packages (x86 and arm)
 
 ● Simplified package: Simplify dependencies related to Nvidia that are too large in size, achieve lightweight mirroring, and make local deployment lighter and faster.
 
-url: registry.cn-shanghai.aliyuncs.com/memtensor/memos-base:v1.0
+###### url: registry.cn-shanghai.aliyuncs.com/memtensor/memos-base:v1.0
+###### url: registry.cn-shanghai.aliyuncs.com/memtensor/memos-base-arm:v1.0
 
 ● Full package: Convert all MemOS dependencies into images, Experience complete functionality. By configuring Dockerfiles, you can directly build and start the package.
 
-url: registry.cn-shanghai.aliyuncs.com/memtensor/memos-full-base:v1.0.0
+###### url: registry.cn-shanghai.aliyuncs.com/memtensor/memos-full-base:v1.0.0
+###### url: registry.cn-shanghai.aliyuncs.com/memtensor/memos-full-base-arm:v1.0.0
 
 ```bash
 # Lean package url

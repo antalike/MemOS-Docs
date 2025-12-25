@@ -94,22 +94,21 @@ CHAT_MODEL_LIST=[{"backend": "deepseek", "api_base": "http://xxx:3000/v1", "api_
 #### 参考上方配置环境变量，已经好配置.env文件
 
 #### 配置Dockerfile文件(cd docker)
-包含快速模式和完整模式，可区分使用精简包和全量包
+包含快速模式和完整模式，可区分使用精简包（区分arm和x86）和全量包（区分arm和x86）
 
 ● 精简包：简化体量过大的 nvidia相关等依赖，对镜像实现轻量化，使本地部署更加轻量快速。
 
-url: registry.cn-shanghai.aliyuncs.com/memtensor/memos-base:v1.0
+##### url: registry.cn-shanghai.aliyuncs.com/memtensor/memos-base:v1.0
+##### url: registry.cn-shanghai.aliyuncs.com/memtensor/memos-base-arm:v1.0
 
 ● 全量包：将 MemOS 全部依赖包打为镜像，可体验完整功能，通过配置 Dockerfile可直接构建启动。
 
-url: registry.cn-shanghai.aliyuncs.com/memtensor/memos-full-base:v1.0.0
+##### url: registry.cn-shanghai.aliyuncs.com/memtensor/memos-full-base:v1.0.0
+##### url: registry.cn-shanghai.aliyuncs.com/memtensor/memos-full-base-arm:v1.0.0
 
 ```bash
 # 精简包 url
 FROM registry.cn-shanghai.aliyuncs.com/memtensor/memos-base:v1.0
-
-# 全量包 url
-# FROM registry.cn-shanghai.aliyuncs.com/memtensor/memos-full-base:v1.0.0
 
 WORKDIR /app
 
