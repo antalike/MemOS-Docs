@@ -25,7 +25,21 @@
         "group": "product",
         "openapi": "/mintdocs/openapi.json",
         "pages": [
-          "POST /product/search"
+          "POST /product/search",
+          "POST /product/add",
+          "GET /product/scheduler/allstatus",
+          "GET /product/scheduler/status",
+          "GET /product/scheduler/task_queue_status",
+          "POST /product/scheduler/wait",
+          "GET /product/scheduler/wait/stream",
+          "POST /product/chat/complete",
+          "POST /product/chat/stream",
+          "POST /product/chat/stream/playground",
+          "POST /product/suggestions",
+          "POST /product/get_all",
+          "POST /product/get_memory",
+          "POST /product/delete_memory",
+          "POST /product/feedback"
         ]
       },
       {
