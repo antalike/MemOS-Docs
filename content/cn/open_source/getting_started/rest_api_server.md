@@ -25,8 +25,8 @@ desc: MemOS 提供了一个使用 FastAPI 编写的 REST API 服务。用户可�
 ### 2、配置环境变量
 
 #### 在根目录中创建一个 `.env` 文件并设置你的环境变量。完整模式参考 <a href="https://github.com/MemTensor/MemOS/blob/main/docker/.env.example">.env.example</a>。
-##### 密钥  可以通过硅基流动申请 ['APIKey'](https://cloud.siliconflow.com/me/account/ak)
-##### 基础url 可以通过百炼申请 ['百炼'](https://bailian.console.aliyun.com/?spm=a2c4g.11186623.0.0.2f2165b08fRk4l&tab=api#/api)
+##### API KEY  可以通过硅基流动申请 ['APIKey'](https://cloud.siliconflow.com/me/account/ak)
+##### API BASE 可以通过百炼申请 ['百炼'](https://bailian.console.aliyun.com/?spm=a2c4g.11186623.0.0.2f2165b08fRk4l&tab=api#/api)
 
 ##### .env 快速模式配置如下
 ```bash 

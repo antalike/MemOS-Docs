@@ -26,7 +26,7 @@ desc: MemOS provides a REST API service written using FastAPI. Users can perform
 
 #### Create a `.env` file in the root directory and set your environment variables. Complete Mode Reference <a href="https://github.com/MemTensor/MemOS/blob/main/docker/.env.example">.env.example</a>.
 
-##### Key Can be applied for through ['APIKey'](https://cloud.siliconflow.com/me/account/ak)
+##### API Key Can be applied for through ['APIKey'](https://cloud.siliconflow.com/me/account/ak)
 ##### Base Url can apply through ['Bailian'](https://bailian.console.aliyun.com/?spm=a2c4g.11186623.0.0.2f2165b08fRk4l&tab=api#/api)
 ##### .env The quick mode configuration is as follows
 ```bash
