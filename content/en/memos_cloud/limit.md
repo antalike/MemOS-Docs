@@ -38,4 +38,4 @@ Document upload features are currently limited to a maximum of 500 pages. For hi
 
 You can view the remaining quota for each API through the **API Console**, with filters for project, API key, and date to facilitate tracking and managing usage.
 
-<img width="3024" height="1890" alt="image" src="https://github.com/user-attachments/assets/49cddd25-6fbf-40d4-a750-58c3b2ac5547" />
+<img width="3024" height="1890" alt="image" src="https://cdn.memtensor.com.cn/img/1766632428696_iufnrl_compressed.png" />
