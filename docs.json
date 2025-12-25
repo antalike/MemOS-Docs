@@ -23,6 +23,7 @@
     "groups": [
       {
         "group": "product",
+        "openapi": "/mintdocs/openapi.json",
         "pages": [
           "POST /product/search"
         ]
