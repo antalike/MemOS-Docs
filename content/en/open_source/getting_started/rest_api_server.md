@@ -67,6 +67,9 @@ MEMRADER_API_KEY=sk-xxx
 # Memory Reader API Base URL
 MEMRADER_API_BASE=http://xxx:3000/v1
 
+# Enable chat api
+ENABLE_CHAT_API=true
+
 # Chat Model List
 CHAT_MODEL_LIST=[{"backend": "deepseek", "api_base": "http://xxx:3000/v1", "api_key": "sk-xxx", "model_name_or_path": "deepseek-r1", "support_models": ["deepseek-r1"]}]
 
