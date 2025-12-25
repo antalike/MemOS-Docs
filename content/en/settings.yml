@@ -74,6 +74,7 @@ nav:
         - "(ri:node-tree) OLLAMA": open_source/cookbook/chapter2/ollama.md
       - "(ri:search-2-line) Chapter 3: Intelligent Novel Analysis System": open_source/cookbook/chapter3/overview.md
       - "(ri:graduation-cap-line) Chapter 4: Using MemOS to Build a Production-Grade Knowledge Q&A System": open_source/cookbook/chapter4/overview.md
+      - "(entypo:chat) Chapter 5 Using Chat API to Q&A": content/en/open_source/cookbook/chapter5/chat_api.md
 
     - "(ri:star-line) Best Practice":
       - "(ri:speed-line) Performance Tuning": open_source/best_practice/performance_tuning.md
