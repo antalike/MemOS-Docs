@@ -1,4 +1,41 @@
 versions:
+  - name: v2.0.0
+    date: 2025-12-24
+    changedInfo:
+      New Features:
+        - type: Knowledge Base & Memory
+          changedInfo:
+            - Added knowledge base support for long-term memory from documents and URLs
+        - type: Feedback & Memory Management
+          changedInfo:
+            - Added natural language feedback and correction for memories
+            - Added memory deletion API by memory ID
+            - Added MCP support for memory deletion and feedback
+        - type: Conversation & Retrieval
+          changedInfo:
+            - Added chat API with memory-aware retrieval
+            - Added memory filtering with custom tags (Cloud & Open Source)
+        - type: Multimodal & Tool Memory
+          changedInfo:
+            - Added tool memory for tool usage history
+            - Added image memory support for conversations and documents
+      Improvements:
+        - type: Data & Infrastructure
+          changedInfo:
+            - Upgraded database for better stability and performance
+        - type: Scheduler
+          changedInfo:
+            - Rebuilt scheduler with Redis Streams and queue isolation
+            - Added task priority, auto-recovery, and quota-based scheduling
+        - type: Deployment & Engineering
+          changedInfo:
+            - Added lightweight deployment with quick and full modes
+      Bug Fixes:
+        - type: Memory Scheduling & Updates
+          changedInfo:
+            - Fixed legacy scheduling API to ensure correct memory isolation
+            - Fixed memory update logging to show new memories correctly
+
   - name: v1.1.3
     date: 2025-11-05
     changedInfo:
