@@ -101,6 +101,17 @@ const categoryClass: CategoryClass = {
   'Bug Fixes': 'text-[#FB923C]'
 }
 
+const allowedOpenSourceTypes = [
+  'feat',
+  'fix',
+  'docs',
+  'style',
+  'refactor',
+  'test',
+  'chore',
+  'ci'
+] as const
+
 const getCategoryIcon = (category: string) => {
   if (category.includes('feat')) {
     return 'i-heroicons-sparkles'
@@ -126,7 +137,19 @@ const highlightVersions = computed(() => {
   }))
 })
 
-const opensourceVersions = ref<Version[]>(releasesData.versions)
+const opensourceVersions = computed<Version[]>(() => {
+  const versions = releasesData.versions as Version[]
+
+  return versions
+    .map(version => ({
+      ...version,
+      changedInfo: version.changedInfo.filter(change =>
+        allowedOpenSourceTypes.includes(change.type as (typeof allowedOpenSourceTypes)[number])
+      )
+    }))
+    // 过滤掉没有符合类型的版本
+    .filter(version => version.changedInfo.length > 0)
+})
 
 function handleTabChange(val: string | number) {
   if (val === '2') {
