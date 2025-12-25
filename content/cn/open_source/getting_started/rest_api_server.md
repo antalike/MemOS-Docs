@@ -27,16 +27,24 @@ desc: MemOS 提供了一个使用 FastAPI 编写的 REST API 服务。用户可�
 #### 在根目录中创建一个 `.env` 文件并设置你的环境变量。完整模式参考 <a href="https://github.com/MemTensor/MemOS/blob/main/docker/.env.example">.env.example</a>。
 ##### .env 快速模式配置如下
 ```bash 
-# OpenAI API 密钥 (当 provider=openai 时必须)
+
+# 密钥  可以通过硅基流动申请。（https://cloud.siliconflow.com/me/account/ak）
+# 基础RUL 可以通过百炼申请。（https://bailian.console.aliyun.com/?spm=a2c4g.11186623.0.0.2f2165b08fRk4l&tab=api#/api）
+# OpenAI API 密钥 
 OPENAI_API_KEY=sk-xxx
-# OpenAI API 基础 URL
+# OpenAI API 基础 URL 
 OPENAI_API_BASE=http://xxx:3000/v1
 
-# 启用默认 cube 配置
-MOS_ENABLE_DEFAULT_CUBE_CONFIG=true
+# Memory Reader LLM 模型
+MEMRADER_MODEL=gpt-4o-mini
+# Memory Reader API 密钥 
+MEMRADER_API_KEY=sk-xxx
+# Memory Reader API 基础 URL
+MEMRADER_API_BASE=http://xxx:3000/v1
+
 # Embedder 模型名称
 MOS_EMBEDDER_MODEL=bge-m3
-# Embedder API 基础 URL
+# Embedder API 基础 URL 
 MOS_EMBEDDER_API_BASE=http://xxx:8081/v1
 # Embedder API 密钥
 MOS_EMBEDDER_API_KEY=EMPTY
@@ -44,8 +52,6 @@ MOS_EMBEDDER_API_KEY=EMPTY
 EMBEDDING_DIMENSION=1024
 # Reranker 后端 (http_bge | etc.)
 MOS_RERANKER_BACKEND=cosine_local
-# Reranker 服务 URL
-MOS_RERANKER_URL=localhost
 
 # Neo4j 连接 URI
 # 可选值: neo4j-community | neo4j | nebular | polardb
@@ -57,25 +63,18 @@ NEO4J_PASSWORD=12345678
 NEO4J_DB_NAME=neo4j
 MOS_NEO4J_SHARED_DB=false
 
-# Bocha 搜索 API 密钥
-BOCHA_API_KEY=sk-xxx
-
-# 从 .env.full 添加
-DEFAULT_USE_REDIS_QUEUE=false
-
-# Memory Reader LLM 模型
-MEMRADER_MODEL=gpt-4o-mini
-# Memory Reader API 密钥
-MEMRADER_API_KEY=sk-xxx
-# Memory Reader API 基础 URL
-MEMRADER_API_BASE=http://xxx:3000/v1
-
 # 启用聊天 API
 ENABLE_CHAT_API=true
+# 启用默认 cube 配置
+MOS_ENABLE_DEFAULT_CUBE_CONFIG=true
+# 是否使用 redis 的调度器
+DEFAULT_USE_REDIS_QUEUE=false
 
-# 聊天模型列表
+
+# 聊天模型列表 可以通过deepseek申请。(https://platform.deepseek.com/api_keys)
 CHAT_MODEL_LIST=[{"backend": "deepseek", "api_base": "http://xxx:3000/v1", "api_key": "sk-xxx", "model_name_or_path": "deepseek-r1", "support_models": ["deepseek-r1"]}]
 ```
+
 
 
 ##### 配置docker/requirement.txt中依赖包的版本等（可忽略）。完整版可参考 <a href="https://github.com/MemTensor/MemOS/blob/main/docker/requirements.txt">requirements.txt</a>。

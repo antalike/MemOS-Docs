@@ -27,10 +27,20 @@ desc: MemOS provides a REST API service written using FastAPI. Users can perform
 #### Create a `.env` file in the root directory and set your environment variables. Complete Mode Reference <a href="https://github.com/MemTensor/MemOS/blob/main/docker/.env.example">.env.example</a>.
 ##### .env The quick mode configuration is as follows
 ```bash
-# OpenAI API Key (required when provider=openai)
+# Key Can be applied for through silicon-based flow.（https://cloud.siliconflow.com/me/account/ak）
+# Base Url can apply through Bailian.（https://bailian.console.aliyun.com/?spm=a2c4g.11186623.0.0.2f2165b08fRk4l&tab=api#/api）
+# OpenAI API Key
 OPENAI_API_KEY=sk-xxx
 # OpenAI API Base URL
 OPENAI_API_BASE=http://xxx:3000/v1
+
+# Memory Reader LLM model
+MEMRADER_MODEL=gpt-4o-mini
+# Memory Reader API Key
+MEMRADER_API_KEY=sk-xxx
+# Memory Reader API Base URL
+MEMRADER_API_BASE=http://xxx:3000/v1
+
 # Embedder model name
 MOS_EMBEDDER_MODEL=bge-m3
 # Embedder API Base URL
@@ -41,8 +51,6 @@ MOS_EMBEDDER_API_KEY=EMPTY
 EMBEDDING_DIMENSION=1024
 # Reranker backend (http_bge | etc.)
 MOS_RERANKER_BACKEND=cosine_local
-# Reranker Service URL
-MOS_RERANKER_URL=localhsot
 
 # Neo4j Connection URI
 # neo4j-community | neo4j | nebular | polardb
@@ -54,23 +62,14 @@ NEO4J_PASSWORD=12345678
 NEO4J_DB_NAME=neo4j
 MOS_NEO4J_SHARED_DB=false
 
-# Bocha Search API Key
-BOCHA_API_KEY=sk-xxx
-
-# Added from .env.full
-DEFAULT_USE_REDIS_QUEUE=false
-
-# Memory Reader LLM model
-MEMRADER_MODEL=gpt-4o-mini
-# Memory Reader API Key
-MEMRADER_API_KEY=sk-xxx
-# Memory Reader API Base URL
-MEMRADER_API_BASE=http://xxx:3000/v1
-
 # Enable chat api
 ENABLE_CHAT_API=true
+# Enable default cube configuration
+MOS_ENABLE_DEFAULT_CUBE_CONFIG=true
+# use Redis scheduler
+DEFAULT_USE_REDIS_QUEUE=false
 
-# Chat Model List
+# Chat Model List can apply through Deepseek. (https://platform.deepseek.com/api_keys)
 CHAT_MODEL_LIST=[{"backend": "deepseek", "api_base": "http://xxx:3000/v1", "api_key": "sk-xxx", "model_name_or_path": "deepseek-r1", "support_models": ["deepseek-r1"]}]
 
 ```
