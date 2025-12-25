@@ -30,7 +30,7 @@ client = MemOSClient(api_key="YOUR_API_KEY")
 
 task_id = "40aae834-4248-4944-b2bb-a674f37a2fdb" # Replace with real Task ID
 
-res = client.get_status(task_id=task_id)
+res = client.get_task_status(task_id=task_id)
 print(f"result: {res}")
 ```
 ```bash [Curl]

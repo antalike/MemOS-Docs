@@ -22,7 +22,7 @@ res = requests.post(url=url, headers=headers, data=json.dumps(data))
 print(f"result: {res.json()}")
 ```
 ```python [Python (SDK)]
-# # 请确保已安装MemoS (pip install MemoryOS -U)
+# 请确保已安装MemoS (pip install MemoryOS -U)
 from memos.api.client import MemOSClient
 
 # 使用 API Key 初始化客户端

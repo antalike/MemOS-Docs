@@ -1,4 +1,41 @@
 versions:
+  - name: v2.0.0
+    date: 2025-12-24
+    changedInfo:
+      New Features:
+        - type: 知识库与记忆能力
+          changedInfo:
+            - 新增知识库功能，支持基于文档与 URL 构建可自我演进的长期记忆体系
+        - type: 反馈与记忆管理
+          changedInfo:
+            - 新增记忆反馈与修正能力，支持自然语言调整已有记忆
+            - 新增删除记忆接口，支持按 memory id 删除指定用户记忆
+            - MCP 新增记忆删除与反馈能力
+        - type: 对话与检索
+          changedInfo:
+            - 新增聊天接口，支持基于历史记忆的检索式回复
+            - 支持记忆过滤与自定义 tag / info 检索（云服务 & 开源项目）
+        - type: 多模态与工具记忆
+          changedInfo:
+            - 新增工具记忆支持，支持工具调用历史的经验抽取与检索
+            - 新增图片类消息记忆支持，支持对话与文档图片理解
+      Improvements:
+        - type: 数据与基础设施
+          changedInfo:
+            - 底层 DB 升级，提升稳定性、连接管理与数据操作性能
+        - type: 调度模块
+          changedInfo:
+            - 调度系统重构，引入 Redis Streams 与多级队列隔离机制
+            - 新增任务优先级、自动恢复与配额调度能力
+        - type: 部署与工程化
+          changedInfo:
+            - 新增轻量化部署模式，支持快速与完整两种部署方案
+      Bug Fixes:
+        - type: 记忆调度与更新任务
+          changedInfo:
+            - 修复旧版记忆调度接口兼容性问题，确保用户记忆隔离正确
+            - 修复记忆更新任务日志异常，确保新增记忆正常展示
+
   - name: v1.1.3
     date: 2025-11-05
     changedInfo:

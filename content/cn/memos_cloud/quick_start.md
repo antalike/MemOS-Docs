@@ -25,7 +25,6 @@ MemOS 提供了两个核心接口帮助你实现：
 
 ### 1.安装 SDK
 如果你选择 Python SDK，请确保已安装 Python 3.10+，然后执行：
-::
 
 ```
 pip install MemoryOS -U 
