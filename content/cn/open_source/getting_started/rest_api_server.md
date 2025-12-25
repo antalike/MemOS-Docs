@@ -63,16 +63,16 @@ NEO4J_PASSWORD=12345678
 NEO4J_DB_NAME=neo4j
 MOS_NEO4J_SHARED_DB=false
 
-# 启用聊天 API
-ENABLE_CHAT_API=true
+
 # 启用默认 cube 配置
 MOS_ENABLE_DEFAULT_CUBE_CONFIG=true
 # 是否使用 redis 的调度器
 DEFAULT_USE_REDIS_QUEUE=false
 
-
-# 聊天模型列表 可以通过deepseek申请。(https://platform.deepseek.com/api_keys)
-CHAT_MODEL_LIST=[{"backend": "deepseek", "api_base": "http://xxx:3000/v1", "api_key": "sk-xxx", "model_name_or_path": "deepseek-r1", "support_models": ["deepseek-r1"]}]
+# 启用聊天 API
+ENABLE_CHAT_API=true
+# 聊天模型列表 可以通过百炼申请.
+CHAT_MODEL_LIST=[{"backend": "qwen", "api_base": "https://xxx/v1", "api_key": "sk-xxx", "model_name_or_path": "qwen3-max-preview", "temperature": 0.7, "extra_body": {"enable_thinking": true} ,"support_models": ["qwen3-max-preview"]}]
 ```
 
 

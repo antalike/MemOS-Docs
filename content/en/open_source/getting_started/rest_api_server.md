@@ -62,15 +62,15 @@ NEO4J_PASSWORD=12345678
 NEO4J_DB_NAME=neo4j
 MOS_NEO4J_SHARED_DB=false
 
-# Enable chat api
-ENABLE_CHAT_API=true
 # Enable default cube configuration
 MOS_ENABLE_DEFAULT_CUBE_CONFIG=true
 # use Redis scheduler
 DEFAULT_USE_REDIS_QUEUE=false
 
-# Chat Model List can apply through Deepseek. (https://platform.deepseek.com/api_keys)
-CHAT_MODEL_LIST=[{"backend": "deepseek", "api_base": "http://xxx:3000/v1", "api_key": "sk-xxx", "model_name_or_path": "deepseek-r1", "support_models": ["deepseek-r1"]}]
+# Enable chat api
+ENABLE_CHAT_API=true
+# Chat Model List can apply through bailian. 
+CHAT_MODEL_LIST=[{"backend": "qwen", "api_base": "https://xxx/v1", "api_key": "sk-xxx", "model_name_or_path": "qwen3-max-preview", "temperature": 0.7, "extra_body": {"enable_thinking": true} ,"support_models": ["qwen3-max-preview"]}]
 
 ```
 
