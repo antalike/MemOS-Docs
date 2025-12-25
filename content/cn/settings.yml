@@ -74,6 +74,7 @@ nav:
         - "(ri:node-tree) OLLAMA": open_source/cookbook/chapter2/ollama.md
       - "(ri:search-2-line) 第三章 智能小说分析系统": open_source/cookbook/chapter3/overview.md
       - "(ri:graduation-cap-line) 第四章 使用 MemOS 构建生产级知识问答系统": open_source/cookbook/chapter4/overview.md
+      - "(entypo:chat) 第五章 使用Chat API进行记忆问答": content/cn/open_source/cookbook/chapter5/chat_api.md
 
     - "(ri:star-line) 最佳实践":
       - "(ri:speed-line) 性能调优": open_source/best_practice/performance_tuning.md
