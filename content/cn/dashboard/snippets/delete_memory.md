@@ -9,7 +9,7 @@ os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
 os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
 data = {
-  "user_ids": ["memos_user_001"],
+  "user_ids": ["memos_user_123"],
   "memory_ids": ["6b23b583-f4c4-4a8f-b345-58d0c48fea04"]  # 替换为真实的记忆 ID
 }
 headers = {
@@ -29,7 +29,7 @@ from memos.api.client import MemOSClient
 # 使用 API Key 初始化客户端
 client = MemOSClient(api_key="YOUR_API_KEY")
 
-user_ids = ["memos_user_001"]
+user_ids = ["memos_user_123"]
 memory_ids = ["6b23b583-f4c4-4a8f-b345-58d0c48fea04"] # 替换为真实的记忆 ID
 
 res = client.delete_memory(user_ids=user_ids, memory_ids=memory_ids)
@@ -41,7 +41,7 @@ curl --request POST \
   --header 'Authorization: Token YOUR_API_KEY' \
   --header 'Content-Type: application/json' \
   --data '{
-    "user_ids": ["memos_user_001"],
+    "user_ids": ["memos_user_123"],
     "memory_ids": ["6b23b583-f4c4-4a8f-b345-58d0c48fea04"]
   }'
 ```

@@ -173,7 +173,7 @@ function handleTabChange(val: string | number) {
 
       <LazyStarsBg />
 
-      <div aria-hidden="true" class="hidden lg:block absolute z-[-1] border-x border-default inset-0 mx-4 sm:mx-6 lg:mx-8" />
+      <!-- <div aria-hidden="true" class="hidden lg:block absolute z-[-1] border-x border-default inset-0 mx-4 sm:mx-6 lg:mx-8" /> -->
       <template #links>
         <UButton v-for="link of links" :key="link.label" v-bind="{ ...link, size: 'xl' }" />
       </template>

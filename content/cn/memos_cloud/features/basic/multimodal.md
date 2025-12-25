@@ -2,6 +2,9 @@
 title: 多模态消息
 desc: 添加消息时，将图片和文档集成到与MemOS的交互中。
 ---
+::warning
+**[本文是对【添加记忆-addMessage接口】里的如何添加多模态数据做展开介绍，可点此直接查看详细 API 文档](/api_docs/core/add_message)**
+::
 
 MemOS 不仅支持文本，还支持多模态数据，包括文档和图片。用户可以将文本、文档和图片无缝整合到与 MemOS 的交互中，使系统能够从多种媒体类型提取相关信息，丰富记忆内容，并增强记忆系统的能力。
 
@@ -13,6 +16,12 @@ MemOS 不仅支持文本，还支持多模态数据，包括文档和图片。�
 :::
 
 当用户上传文档或图片时，MemOS 会提取文本、视觉信息和其他相关细节，并处理为用户记忆。
+
+:::note
+**多模态消息与工具记忆**
+
+除了处理文档和图片内容外，MemOS 还支持处理工具调用信息。当您在消息中添加工具调用信息时，系统会将其处理为工具记忆，包括工具信息（Tool Schema）和轨迹记忆（Tool Trajectory Memory）。详见[工具调用](/memos_cloud/features/advanced/tool_calling)。
+:::
 
 ### 添加消息
 
@@ -26,7 +35,7 @@ os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
 os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
 data = {
-    "user_id": "MemOS_user_001",
+    "user_id": "memos_user_123",
     "conversation_id": "1211",
     "messages": [
         {
@@ -71,7 +80,7 @@ os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
 data = {
   "query": "帮我总结一下这张图",
-  "user_id": "MemOS_user_001",
+  "user_id": "memos_user_123",
   "conversation_id": "1214"
 }
 
@@ -174,7 +183,7 @@ os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
 os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
 data = {
-    "user_id": "MemOS_user_001",
+    "user_id": "memos_user_123",
     "conversation_id": "1211",
     "messages": [
         {
@@ -222,8 +231,9 @@ image_path = "path/to/your/image.jpg"
 with open(image_path, "rb") as image_file:
     base64_image = base64.b64encode(image_file.read()).decode("utf-8")
 
+
 data = {
-    "user_id": "MemOS_user_001",
+    "user_id": "memos_user_123",
     "conversation_id": "1211",
     "messages": [
         {
@@ -263,7 +273,7 @@ os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
 os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
 data = {
-    "user_id": "MemOS_user_001",
+    "user_id": "memos_user_123",
     "conversation_id": "1211",
     "messages": [
         {
@@ -314,7 +324,7 @@ def file_to_base64(file_path):
 base64_document = file_to_base64(document_path)
 
 data = {
-    "user_id": "MemOS_user_001",
+    "user_id": "memos_user_123",
     "conversation_id": "1211",
     "messages": [
         {
@@ -355,7 +365,7 @@ os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
 os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
 data = {
-    "user_id": "MemOS_user_001",
+    "user_id": "memos_user_123",
     "conversation_id": "1211",
     "messages": [
         {

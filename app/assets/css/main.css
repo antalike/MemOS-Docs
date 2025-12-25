@@ -6,7 +6,7 @@
 @theme static {
   --container-8xl: 90rem;
   --font-sans: 'Public Sans', sans-serif;
-  --color-primary: #1D4ED8;
+  --color-linear-primary: #1D4ED8;
   --color-primary-light: #01C6FA;
 }
 
@@ -16,6 +16,9 @@
   --ui-topbar-height: 66px;
   --ui-header-height: 136px;
   --ui-bg: #02020b;
+  --ui-bg-muted: #0e1219;
+  --ui-border-muted: #222a35;
+  --ui-primary: #5478DC;
 }
 
 header>div {
@@ -47,7 +50,24 @@ img[alt="MemOS Banner"] {
 }
 
 .scrollbar-hide::-webkit-scrollbar {
-  display: none; 
+  display: none;
+}
+
+html {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+html::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera*/
+}
+
+.request-display pre[role="tabpanel"],
+.request-display button[role="tab"] {
+  font-size: 12px !important;
+}
+.request-display button[role="tab"] {
+  cursor: pointer;
 }
 
 /* Color-mix() functions - Chrome 107 incompatible (Chrome 111+ support) */

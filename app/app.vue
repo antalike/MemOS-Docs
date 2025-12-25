@@ -9,20 +9,24 @@ const switchLocalePath = useSwitchLocalePath()
 const normalizedPath = computed(() => switchLocalePath(defaultLocale))
 const contentNavigation = useContentNavigation(locale)
 
+const normalizePath = (p: string) => p.replace(/\/$/, '')
+
+const getSegment = (p: string) => {
+  const normalized = normalizePath(p).replace(/^\/(cn|en)(\/|$)/, '/')
+  const parts = normalized.split('/').filter(Boolean)
+  return parts[0]
+}
+
+const currentSegment = computed(() => getSegment(route.path))
+
 const filteredNavigation = computed(() => {
   if (!contentNavigation.value) return []
 
   const nav = contentNavigation.value
   const path = route.path
 
-  if (path.includes('/dashboard/api')) {
+  if (normalizePath(path).includes('/dashboard/api')) {
     return []
-  }
-
-  const getSegment = (p: string) => {
-    const normalized = p.replace(/^\/(cn|en)(\/|$)/, '/')
-    const parts = normalized.split('/').filter(Boolean)
-    return parts[0]
   }
 
   const hasDescendantWithSegment = (item: ContentNavigationItem, segment: string): boolean => {
@@ -33,12 +37,34 @@ const filteredNavigation = computed(() => {
     return false
   }
 
-  const currentSegment = getSegment(path)
-  if (!currentSegment) return []
+  if (!currentSegment.value) return []
 
-  const activeNode = nav.find(item => hasDescendantWithSegment(item, currentSegment))
+  const activeNode = nav.find(item => hasDescendantWithSegment(item, currentSegment.value))
 
-  return activeNode ? activeNode.children || [] : []
+  if (!activeNode) return []
+
+  const mapNavigation = (items: ContentNavigationItem[], level = 0): ContentNavigationItem[] => {
+    return items.map((item) => {
+      const isOpen = level === 0 || hasActiveChild(item, route.path) || item.icon === 'i-ri-flag-line' || item.icon === 'i-ri-vip-diamond-line'
+      const isActive = item.path && normalizePath(item.path) === normalizePath(route.path)
+      return {
+        ...item,
+        active: isActive,
+        defaultOpen: isOpen,
+        children: item.children ? mapNavigation(item.children, level + 1) : undefined
+      } as ContentNavigationItem
+    })
+  }
+
+  const hasActiveChild = (item: ContentNavigationItem, currentPath: string): boolean => {
+    if (item.path && normalizePath(item.path) === normalizePath(currentPath)) return true
+    if (item.children) {
+      return item.children.some(child => hasActiveChild(child, currentPath))
+    }
+    return false
+  }
+
+  return mapNavigation(activeNode.children || [])
 })
 
 const { data: files } = useLazyAsyncData(`search`, () => queryCollectionSearchSections('docs'), {
@@ -83,17 +109,19 @@ useHead({
 })
 
 function showContentNavigation() {
-  return normalizedPath.value !== '/'
+  const path = normalizedPath.value
+  return path !== '/'
     && !isApiPage()
-    && !normalizedPath.value.includes('changelog')
-    && !normalizedPath.value.includes('/dashboard/api')
+    && !path.includes('changelog')
+    && !path.includes('/dashboard/api')
 }
 
 function isApiPage() {
-  return route.path.startsWith('/docs/api')
-    || route.path.startsWith('/cn/docs/api/')
-    || route.path.startsWith('/api-reference')
-    || route.path.startsWith('/cn/api-reference')
+  const path = normalizePath(route.path)
+  return path.startsWith('/docs/api')
+    || path.startsWith('/cn/docs/api')
+    || path.startsWith('/api-reference')
+    || path.startsWith('/cn/api-reference')
 }
 
 provide('navigation', filteredNavigation)
@@ -116,6 +144,8 @@ provide('navigation', filteredNavigation)
                 <!-- Use keep-alive to maintain menu state -->
                 <keep-alive>
                   <UContentNavigation
+                    v-if="filteredNavigation?.length"
+                    :key="currentSegment"
                     :navigation="filteredNavigation"
                     highlight
                     :ui="{

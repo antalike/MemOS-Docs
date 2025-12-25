@@ -46,7 +46,7 @@ function handleClick() {
       :name="leadingIcon"
     />
     <template v-if="type === 'ghost'">
-      <span class="bg-linear-270 from-15% from-primary to-118 to-primary-light bg-clip-text text-transparent">
+      <span class="bg-linear-270 from-15% from-linear-primary to-118 to-primary-light bg-clip-text text-transparent">
         <slot />
       </span>
     </template>

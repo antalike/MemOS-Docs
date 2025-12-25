@@ -175,6 +175,15 @@ const useOpenApi = (collectionName: keyof Collections = 'openapi', parentPath: s
     return null
   }
 
+  function getResponseContentTypes(path: string, method: HttpMethods, statusCode: string | number): string[] {
+    if (import.meta.server || oasInstanceLoaded.value) {
+      const oas = _getOasInstance()
+      if (oas)
+        return oas.getResponseContentTypes(path, method, statusCode)
+    }
+    return []
+  }
+
   function getResponseContentType(path: string, method: HttpMethods, statusCode: string | number): string {
     if (import.meta.server || oasInstanceLoaded.value) {
       const oas = _getOasInstance()
@@ -184,22 +193,25 @@ const useOpenApi = (collectionName: keyof Collections = 'openapi', parentPath: s
     return 'null'
   }
 
-  function getResponseAsJSONSchema(path: string, method: HttpMethods, statusCode: string | number): SchemaObject | null {
+  function getResponseAsJSONSchema(path: string, method: HttpMethods, statusCode: string | number, contentType?: string): SchemaObject | null {
     if (import.meta.server || oasInstanceLoaded.value) {
       const oas = _getOasInstance()
       if (oas)
-        return oas.getResponseAsJSONSchema(path, method, statusCode)
+        return oas.getResponseAsJSONSchema(path, method, statusCode, contentType)
     }
     return null
   }
 
-  function generateResponseExample(path: string, method: HttpMethods, statusCode: string | number): Record<string, any> {
+  function generateResponseExample(path: string, method: HttpMethods, statusCode: string | number, contentType?: string): Record<string, unknown> {
     if (import.meta.server || oasInstanceLoaded.value) {
       const oas = _getOasInstance()
       if (oas) {
-        const example = oas.generateResponseExample(path, method, statusCode)
-        const contentType = oas.getResponseContentType(path, method, statusCode)
-        return example?.[contentType] ?? {}
+        const examples = oas.generateResponseExample(path, method, statusCode)
+        if (contentType) {
+          return (examples?.[contentType] as Record<string, unknown>) ?? {}
+        }
+        const preferredType = oas.getResponseContentType(path, method, statusCode)
+        return (examples?.[preferredType] as Record<string, unknown>) ?? {}
       }
     }
     return {}
@@ -477,6 +489,7 @@ const useOpenApi = (collectionName: keyof Collections = 'openapi', parentPath: s
     getResponseStatusCodes,
     getResponseByStatusCode,
     getResponseContentType,
+    getResponseContentTypes,
     getResponseAsJSONSchema,
     generateResponseExample,
     generateSnippet

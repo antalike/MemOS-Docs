@@ -3,11 +3,16 @@ title: MCP 服务配置
 desc: MemOS 提供了通过 MCP 与云平台交互的方式，开发者可在不同的客户端（Claude、Cursor、Cline等）使用MemOS云平台服务。
 ---
 
-## 1. 什么是 MCP ？
+## 1. 服务简介
 
-MCP（Model Context Protocol，模型上下文协议）定义了应用程序和 AI 模型之间交换上下文信息的方式。这使得开发者能够以一致的方式将各种数据源、工具和功能连接到 AI 模型（一个中间协议层），就像 USB-C 让不同设备能够通过相同的接口连接一样。MCP 的目标是创建一个通用标准，使 AI 应用程序的开发和集成变得更加简单和统一。
+MemOS记忆管理MCP是一款强大的插件，它允许用户访问MemOS记忆的添加、搜索、删除、反馈等功能，能够存取对话内容，为用户提供高效的记忆管理服务，助力于提升用户与AI对话的一致性和个性化水平。
 
-## 2. 通过 MCP 与 MemOS 云平台交互
+## 2. 工具链接
+* [npm包](https://www.npmjs.com/package/@memtensor/memos-api-mcp)
+* [Github](https://github.com/MemTensor/memos-api-mcp)
+
+
+## 3. 通过 MCP 与 MemOS 云平台交互
 
 在客户端中填写如下配置：
 
@@ -20,7 +25,7 @@ MCP（Model Context Protocol，模型上下文协议）定义了应用程序和 
       "command": "npx",
       "args": [
         "-y",
-        "@memtensor/memos-api-mcp"
+        "@memtensor/memos-api-mcp@latest"
       ],
       "env": {
         "MEMOS_API_KEY": "mpg-xxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
@@ -44,7 +49,7 @@ MCP（Model Context Protocol，模型上下文协议）定义了应用程序和 
 
 - `MEMOS_CHANNEL`: 填写为"MODELSCOPE"即可。
 
-## 3. 在不同的客户端中使用 MemOS MCP
+## 4. 在不同的客户端中使用 MemOS MCP
 
 ### 在Claude Desktop中使用
 
@@ -134,7 +139,7 @@ Use retrieved memories **only if relevant**. If none are relevant, answer normal
 ```
 名称：MemOS记忆管理助手
 类型：本地(stdio)
-命令：npx -y @memtensor/memos-api-mcp
+命令：npx -y @memtensor/memos-api-mcp@latest
 环境变量：
 MEMOS_API_KEY=<YOUR-API-KEY>
 MEMOS_USER_ID=<YOUR-USER-ID>
@@ -156,11 +161,11 @@ MEMOS_USER_ID=<YOUR-USER-ID>
 ![在Chatbox中使用MemOS-效果示例](https://cdn.memtensor.com.cn/img/1763105677226_cygzzf_compressed.png)
 
 
-## 4. Q&A
+## 5. Q&A
 Q：有时会遇到智能体在应当使用工具的场景没有使用的情况？
 
 A：由于使用的底层模型不同，不同智能体对工具使用的熟练程度也存在差别，当出现智能体忘记使用工具的情况时可通过指令引导模型调用相应的工具，或尝试使用其他底层模型。
 
-## 5. 联系我们
+## 6. 联系我们
 
 ![image.png](https://cdn.memtensor.com.cn/img/1758685658684_nbhka4_compressed.png)

@@ -1,3 +1,4 @@
 ---
-title: 添加知识库文档
+title: Create Knowledge Base File
+openapi: "POST /add/knowledgebase-file"
 ---

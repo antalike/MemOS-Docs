@@ -31,7 +31,7 @@ async function generateHighlight() {
 
 <style lang="css" scoped>
 :deep(.shiki.material-theme-palenight) {
-  background-color: #1e2939 !important;
+  background-color: #0e1219 !important;
 }
 :deep(.shiki span.line) {
   display: inline-block !important;

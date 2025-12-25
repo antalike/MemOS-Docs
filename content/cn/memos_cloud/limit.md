@@ -6,7 +6,7 @@ desc: 注册登录即享有免费额度，便于快速体验和验证记忆功�
 
 ## 1. 额度说明
 
-![image.png](https://cdn.memtensor.com.cn/img/1764385061969_05ywpy_compressed.png)
+![image.png](https://cdn.memtensor.com.cn/img/1766481509513_5d4x8o_compressed.png)
 
 MemOS 云服务目前为所有开发者提供了从免费版到企业版的多种定价方案，满足不同规模团队的需求。目前，所有版本限时免费，欢迎前往[MemOS 官网-价格](https://memos.openmem.net/cn/pricing)，申请符合你需求的版本。
 立即行动，享受 MemOS 云服务带来的无限可能，助力你的项目快速成长！
@@ -25,8 +25,8 @@ MemOS 云服务目前为所有开发者提供了从免费版到企业版的多�
 |----------------|------------------|--------------|
 | addMessage     | 20,000 token     | -            |
 | searchMemory   | 20,000 token     | 事实记忆：25 条<br>偏好记忆：25 条<br>工具记忆：25 条 |
-| Chat           | 8,000 token      | 记忆检索：<br>- 事实记忆：25 条<br>- 偏好记忆：25 条<br>- 工具记忆：25 条 |
 
+文档上传相关功能目前统一限制为最多 500 页。如有更高阶或特殊需求，请联系项目组沟通。
 
 ::note
 **注意**

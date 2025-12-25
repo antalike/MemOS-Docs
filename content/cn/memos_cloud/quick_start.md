@@ -6,8 +6,8 @@ desc: 欢迎访问 MemOS 云平台，可参考本新手指南，快速接入�
 在使用大模型构建应用时，一个常见问题是：**如何让 AI 记住用户的长期偏好？**  
 MemOS 提供了两个核心接口帮助你实现：
 
-- `addMessage` —— 把原始对话交给我们，我们自动加工并存储记忆
-- `searchMemory` —— 在后续对话中召回事实记忆和偏好记忆，让 AI 回答更贴近用户需求
+- `addMessage` —— 把原始对话交给我们，我们自动加工并存储记忆[（点此查看详细 API 文档）](/api_docs/core/add_message)
+- `searchMemory` —— 在后续对话中召回记忆，让 AI 回答更贴近用户需求[（点此查看详细 API 文档）](/api_docs/core/search_memory)
 
 ![image.svg](https://cdn.memtensor.com.cn/img/1762434889291_h9co0h_compressed.png)
 
@@ -33,16 +33,22 @@ pip install MemoryOS -U
 
 ### 2.添加原始对话（addMessage）
 
+::note
 **会话 A：2025-06-10 发生**<br>
-你只需要把`原始的对话记录`给到MemOS，MemOS 会<code style="font-weight: bold;">自动抽象加工并保存为记忆</code>**。**
+
+你只需要把`原始的对话记录`给到MemOS，MemOS 会`自动抽象加工并保存为记忆`
+::
 
 ::code-snippet{name=add_message}
 ::
 
 ### 3.在会话中调用MemOS查询相关记忆（searchMemory）
 
+::note
 **会话 B：2025-9-28 发生**<br>
+
 用户在一个新的会话中，提出让AI推荐国庆旅游地点和酒店，MemOS 会自动召回【事实记忆：曾去过哪里】【偏好记忆：订酒店的偏好】供AI参考，从而推荐更加个性化的旅游计划
+::
 
 ::code-snippet{name=search_memory}
 ::
@@ -128,12 +134,12 @@ MemOS 提供了丰富的项目示例，根据您的具体项目可参考以下�
   - 通过 MemOS，用户的写作偏好、常用信息、上下文指令都能被记住
   - 下次写总结或邮件时无需反复强调，实现连贯又个性化的创作体验。
 
-- [MindDock 浏览器插件](usecase/frameworks/browser_extension)
+- [MindDock 浏览器插件](https://alidocs.dingtalk.com/i/p/e3ZxX84Z5KM6X7dRZxX8v66wA7xaBG7d?dontjump=true)
   - MemOS-MindDock 为用户打造统一的跨平台 AI 记忆层。
   - 它自动记录、整理并注入个人信息与偏好，让所有 AI 都能持续、稳定地“认识你”。
  
-- [Coze × MemOS 插件工具](usecase/frameworks/coze_plugin)
+- [Coze × MemOS 插件工具](/usecase/frameworks/coze_plugin)
   - 使用 Coze 平台上架的 MemOS 插件工具，在工作流中直接访问云服务接口，为您的 Agent 快速添加长期记忆功能。
     
-- [Claude MCP](usecase/frameworks/claude_mcp)
+- [Claude MCP](/usecase/frameworks/claude_mcp)
   - MemOS 提供了通过 MCP 与云平台交互的方式，在 Claude 客户端中直接访问云服务接口。

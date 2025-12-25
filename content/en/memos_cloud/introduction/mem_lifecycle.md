@@ -131,8 +131,4 @@ Suppose you are building an **online education assistant** with MemOS to help st
 
 ## 4. Next Steps
 
-Still have questions? Check out [FAQs](/overview/faq) to see if they can help.
-
-## 5. Contact Us
-
-<img src="https://cdn.memtensor.com.cn/img/1758685658684_nbhka4_compressed.png" alt="image" style="width:70%;">
+Still have questions? Check out [FAQs](/memos_cloud/faq) to see if they can help.

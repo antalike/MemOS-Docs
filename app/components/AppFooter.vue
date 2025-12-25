@@ -15,7 +15,7 @@ const columns = computed(() => [
       },
       {
         label: t('footer.memoryAssistant'),
-        to: 'https://alidocs.dingtalk.com/i/nodes/wva2dxOW4YreyQ6rI7ylgy6LVbkz3BRL',
+        to: 'https://alidocs.dingtalk.com/i/p/e3ZxX84Z5KM6X7dRZxX8v66wA7xaBG7d?dontjump=true',
         target: '_blank'
       },
       {
@@ -78,17 +78,17 @@ const columns = computed(() => [
 </script>
 
 <template>
-  <div class="w-full max-w-(--ui-max-container) mx-auto px-4 sm:px-0 lg:px-0 py-10 lg:py-20">
+  <div class="w-full max-w-(--ui-max-container) mx-auto px-4 sm:px-9 lg:px-0 py-10 lg:py-20">
     <UFooterColumns
       :columns="columns"
       :ui="{
         center: 'sm:gap-8 gap-6',
-        label: 'sm:text-xl text-base leading-7',
-        item: 'sm:mb-6 mb-3',
-        list: 'sm:mt-6 mt-3',
+        label: 'text-base leading-5.5',
+        item: 'mb-4',
+        list: 'mt-4',
         linkLabelExternalIcon: 'hidden',
         left: 'sm:mb-10 mb-6',
-        link: 'sm:text-base text-sm leading-5.5 text-[#94A3B8] hover:text-white/80! cursor-pointer'
+        link: 'text-sm lg:text-base leading-5.5 text-[#94A3B8] hover:text-white/80! cursor-pointer'
       }"
     >
       <template #left>
@@ -98,14 +98,14 @@ const columns = computed(() => [
               src="https://statics.memtensor.com.cn/logo/memtensor-w.png"
               class="sm:w-20 w-15"
             >
-            <p class="sm:mt-1.5 sm:text-[32px] text-[24px] sm:leading-[45px] font-semibold bg-linear-180 from-8% from-white to-100% to-white/60 bg-clip-text text-transparent">
+            <p class="sm:mt-1.5 text-[28px] leading-10 font-semibold bg-linear-180 from-8% from-white to-100% to-white/60 bg-clip-text text-transparent">
               {{ $t('footer.memtensor') }}
             </p>
           </div>
           <p class="text-copyright sm:text-base text-xs leading-5.5 sm:mt-6 mt-3">
             {{ $t('footer.icpFilingNumber') }}
           </p>
-          <p class="text-copyright sm:text-base text-xs leading-5.5 sm:mt-4 mt-1">
+          <p class="text-copyright sm:text-base text-xs leading-5.5 sm:mt-3 mt-1">
             {{ $t('footer.filingNumber') }}
           </p>
         </div>

@@ -1,3 +1,3 @@
 ---
-title: 浏览器插件
+title: Browser Extension
 ---

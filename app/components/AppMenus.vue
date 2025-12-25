@@ -49,12 +49,12 @@ function onChange(index: string | number) {
       root: 'gap-0',
       list: 'p-0 justify-center',
       indicator: 'h-0.5',
-      trigger: 'w-auto px-9 py-4.5 text-base leading-5.5 cursor-pointer'
+      trigger: 'w-auto px-6 py-4 text-sm lg:text-base leading-5.5 cursor-pointer'
     }"
     @update:model-value="onChange"
   >
     <template #default="{ item, index }">
-      <span :class="`${index === Number(active) ? 'bg-linear-270 from-15% from-primary to-118% to-primary-light bg-clip-text text-transparent' : 'text-slate-300'}`">
+      <span :class="`${index === Number(active) ? 'text-primary' : 'text-slate-300'}`">
         {{ item.label }}
       </span>
     </template>

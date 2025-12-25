@@ -3,11 +3,10 @@ title: REST API 服务
 desc: MemOS 提供了一个使用 FastAPI 编写的 REST API 服务。用户可以通过 REST 接口执行所有操作。
 ---
 
-![MemOS Architecture](https://statics.memtensor.com.cn/memos/openapi.png)
+![MemOS Architecture](https://cdn.memtensor.com.cn/img/memos_run_server_success_compressed.png)
 <div style="text-align: center; margin-top: 10px">MemOS REST API 服务支持的 API</div>  
 
 ### 功能特点
-以下是你的英文内容的中文翻译，专有名词保持不变：
 
 - 注册新用户：使用配置信息和默认的 cube 注册一个新用户。
 - 获取推荐查询：为指定用户获取推荐的查询语句。
@@ -19,49 +18,138 @@ desc: MemOS 提供了一个使用 FastAPI 编写的 REST API 服务。用户可�
 
 ## 本地运行
 
-### 使用 Docker Compose up
+
+
+### 配置环境变量
+
+#### 1、在根目录中创建一个 `.env` 文件并设置你的环境变量。完整模式参考 <a href="https://github.com/MemTensor/MemOS/blob/main/docker/.env.example">.env.example</a>。
+##### .env 快速模式配置如下
+```bash 
+# OpenAI API 密钥 (当 provider=openai 时必须)
+OPENAI_API_KEY=sk-xxx
+# OpenAI API 基础 URL
+OPENAI_API_BASE=http://xxx:3000/v1
+
+# 启用默认 cube 配置
+MOS_ENABLE_DEFAULT_CUBE_CONFIG=true
+# Embedder 模型名称
+MOS_EMBEDDER_MODEL=bge-m3
+# Embedder API 基础 URL
+MOS_EMBEDDER_API_BASE=http://xxx:8081/v1
+# Embedder API 密钥
+MOS_EMBEDDER_API_KEY=EMPTY
+# Embedding 向量维度
+EMBEDDING_DIMENSION=1024
+# Reranker 后端 (http_bge | etc.)
+MOS_RERANKER_BACKEND=cosine_local
+# Reranker 服务 URL
+MOS_RERANKER_URL=localhost
+
+# Neo4j 连接 URI
+# 可选值: neo4j-community | neo4j | nebular | polardb
+NEO4J_BACKEND=neo4j-community
+# 当 backend=neo4j* 时必须
+NEO4J_URI=bolt://localhost:7687
+NEO4J_USER=neo4j
+NEO4J_PASSWORD=12345678
+NEO4J_DB_NAME=neo4j
+MOS_NEO4J_SHARED_DB=false
+
+# Bocha 搜索 API 密钥
+BOCHA_API_KEY=sk-xxx
+
+# 从 .env.full 添加
+DEFAULT_USE_REDIS_QUEUE=false
+
+# Memory Reader LLM 模型
+MEMRADER_MODEL=gpt-4o-mini
+# Memory Reader API 密钥
+MEMRADER_API_KEY=sk-xxx
+# Memory Reader API 基础 URL
+MEMRADER_API_BASE=http://xxx:3000/v1
+
+# 聊天模型列表
+CHAT_MODEL_LIST=[{"backend": "deepseek", "api_base": "http://xxx:3000/v1", "api_key": "sk-xxx", "model_name_or_path": "deepseek-r1", "support_models": ["deepseek-r1"]}]
+```
+
+
+
+#### 2、配置docker/requirement.txt中依赖包的版本等（可忽略）。完整版可参考 <a href="https://github.com/MemTensor/MemOS/blob/main/docker/requirements.txt">requirements.txt</a>。
+
+### 启动docker 
+```bash
+ #查看docker状态
+ docker ps
+ #查看docker镜像 （可不用）
+ docker images
+
+```
+
+
+### 方式一：Dodcker 使用仓库依赖包镜像启动(推荐使用)
+::steps{level="4"}
+
+#### 参考上方配置环境变量，已经好配置.env文件
+
+#### 配置Dockerfile文件(cd docker)
+包含快速模式和完整模式，可区分使用精简包和全量包
+
+● 精简包：简化体量过大的 nvidia相关等依赖，对镜像实现轻量化，使本地部署更加轻量快速。
+
+url: registry.cn-shanghai.aliyuncs.com/memtensor/memos-base:v1.0
+
+● 全量包：将 MemOS 全部依赖包打为镜像，可体验完整功能，通过配置 Dockerfile可直接构建启动。
+
+url: registry.cn-shanghai.aliyuncs.com/memtensor/memos-full-base:v1.0.0
+
+```bash
+# 精简包 url
+FROM registry.cn-shanghai.aliyuncs.com/memtensor/memos-base:v1.0
+
+# 全量包 url
+# FROM registry.cn-shanghai.aliyuncs.com/memtensor/memos-full-base:v1.0.0
+
+WORKDIR /app
+
+ENV HF_ENDPOINT=https://hf-mirror.com
+
+ENV PYTHONPATH=/app/src
+
+COPY src/ ./src/
+
+EXPOSE 8000
+
+CMD ["uvicorn", "memos.api.server_api:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+
+```
+
+#### 使用docker compose up 构建并切动服务 ：
+```bash
+# 在docker目录下
+docker compose up
+```
+![MemOS buildComposeupSuccess](https://cdn.memtensor.com.cn/img/memos_build_composeup_success_jgdd8e_compressed.png)
+<div style="text-align: center; margin-top: 10px">示例图片，端口按 docker 自定义的配置</div>  
+
+
+
+
+#### 通过 [http://localhost:8000/docs](http://localhost:8000/docs) 访问 API。
+
+![MemOS Architecture](https://cdn.memtensor.com.cn/img/memos_run_server_success_compressed.png)
+
+
+#### 测试用例 (注册用户->添加用户记忆->查询用户记忆) 参考Docker Compose up测试用例
+
+::
+
+
+
+### 方式二：客户端install Docker Compose up
 ::steps{level="4"}
 开发环境的 Docker Compose up 已预配置了 qdrant、neo4j。
 运行服务器需要环境变量 `OPENAI_API_KEY`。
 
-#### 在根目录中创建一个 `.env` 文件并设置你的环境变量。例如：
-
-```bash
-# 用户key，用于初始化或默认请求用户
-OPENAI_API_KEY=your-openai-api-key  
-
-# OpenAI 接口地址，默认 https://api.openai.com/v1。如走代理或自建兼容服务，改这里。
-OPENAI_API_BASE=your-openai-ip
-
-# http_bge（HTTP 服务版 BGE 重排）或 cosine_local（本地余弦）。
-MOS_RERANKER_BACKEND=cosine_local
-
-# universal_api：使用 OpenAI 聊天与嵌入 ，
-# Ollama：使用本地 Ollama 嵌入
-MOS_EMBEDDER_BACKEND=universal_api
-
-# 嵌入模型
-MOS_EMBEDDER_MODEL=bge-m3
-
-# 接口地址（OpenAI 为 https://api.openai.com/v1；Azure 为你的 endpoint）
-MOS_EMBEDDER_API_BASE=your-openai-ip
-
-# 对应 provider 的 Key
-MOS_EMBEDDER_API_KEY=EMPTY
-
-# 向量维度
-EMBEDDING_DIMENSION=1024
-
-# 扩展
-# MOS_SESSION_ID: 会话 ID（用于 start_api.py 路线）
-# MOS_TOP_K: 检索/召回的候选上限（如 30、50）
-# MOS_MAX_TOKENS: LLM 生成最大 tokens
-# MOS_TOP_P / MOS_TOP_K（生成）: 生成采样参数（注意与检索的 top_k 含义不同）
-# MOS_CHAT_TEMPERATURE: 生成温度
-# MOS_MAX_TURNS_WINDOW: 对话窗口保留轮数
-# MOS_EMBEDDER_PROVIDER: openai 或 azure
-```
-#### 启动docker客户端
 
 #### 进入docker文件夹
 ```bash 
@@ -75,6 +163,10 @@ cd docker
 pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
 # 使用阿里云源安装依赖
 pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple/
+
+# command not found: pip  使用pip3
+
+
 
 ```
 
@@ -203,73 +295,54 @@ docker compose up
 
 #### 对服务器代码或库代码进行修改将自动重新加载服务器。
 
-::
-
-### 使用 Docker
-::steps{level="4"}
-#### 在根目录中创建一个 `.env` 文件并设置你的环境变量。例如：
-
-```bash
-OPENAI_API_KEY=your-openai-api-key  
-
-
-
-# 在docker 配置用于neo4j和qdrant
-QDRANT_HOST=host.docker.internal
-
-NEO4J_URI=bolt://host.docker.internal:7687
-
-```
-
-#### 本地构建 Docker 镜像：
-
-```bash
-docker build -t memos-api-server .  
-```
-
-#### 先在docker中启动 neo4j 和 qdrant
-
-#### 运行 Docker 容器：
-
-```bash
-docker run --env-file .env -p 8000:8000 memos-api-server
-```
-
-
-#### 通过 [http://localhost:8000/docs](http://localhost:8000/docs) 访问 API。
-
-
-#### 测试用例 (注册用户->添加用户记忆->查询用户记忆) 参考Docker Compose up测试用例
 
 ::
 
-### 不使用 Docker
+### 方式三：客户端install 使用 uv 命令
+
 ::steps{level="4"}
-#### 在根目录中创建一个 `.env` 文件并设置你的环境变量。例如：
+
+#### 安装依赖
 
 ```bash
-OPENAI_API_KEY=your-openai-api-key  
-
-OPENAI_API_BASE=your-openai-ip
-
-MOS_RERANKER_BACKEND=cosine_local
-
-MOS_EMBEDDER_BACKEND=universal_api
-
-MOS_EMBEDDER_MODEL=bge-m3
-
-MOS_EMBEDDER_API_BASE=your-openai-ip
-
-MOS_EMBEDDER_API_KEY=EMPTY
-
-EMBEDDING_DIMENSION=1024
+# pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
+# 使用阿里云源安装依赖
+pip3 install --no-cache-dir -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple/
 
 
-# 配置用于neo4j和qdrant
-QDRANT_HOST=host.docker.internal
-
-NEO4J_URI=bolt://host.docker.internal:7687
 ```
+
+#### 在终端中打开运行以下命令进行安装：
+
+```bash
+
+#  目前可能需要手动安装的包 这两个包需要找资源
+# neo4j.5.26.4.tar   qdrant.v1.15.3.tar
+docker load -i neo4j.5.26.4.tar
+docker load -i qdrant.v1.15.3.tar
+# 查看是否安装成功
+docker images
+# 查看是否跑起来了
+docker ps -a
+
+# 根目录
+ uvicorn memos.api.server_api:app --host 0.0.0.0 --port 8000 --workers 1
+
+#  若启动时出现ModuleNotFoundError: No module named 'memos'，是因为路径匹配有问题，请执行
+export PYTHONPATH=/you-file-absolute-path/MemOS/src
+
+```
+
+#### 访问 API
+
+启动完成后，通过 [http://localhost:8000/docs](http://localhost:8000/docs) 访问 API。
+
+
+::
+
+### 方式四：不使用 Docker
+::steps{level="4"}
+#### 参考上方配置环境变量，已经好配置.env文件
 
 #### 安装 Poetry 用于依赖管理：
 
@@ -352,24 +425,14 @@ uvicorn memos.api.product_api:app --host 0.0.0.0 --port 8000 --reload
 ::
 
 
-### 使用 pyCharm 启动
+### 方式五：使用 pyCharm 启动
 
-#### 运行 start_api
+#### 运行 server_api
 ```bash
 1、进入MemOS/docker/Dockerfile文件，修改运行配置
 # Start the docker
-CMD ["uvicorn", "memos.api.start_api:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+CMD ["uvicorn", "memos.api.server_api:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
 
-2、进入目录MemOS/src/memos/api 直接运行start_api.py
-
-```
-
-#### 运行 product_api
-```bash
-1、进入MemOS/docker/Dockerfile文件，修改运行配置
-# Start the docker
-CMD ["uvicorn", "memos.api.product_api:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
-
-2、进入目录MemOS/src/memos/api 直接运行product_api.py
+2、进入目录MemOS/src/memos/api 直接运行server_api.py
 
 ```

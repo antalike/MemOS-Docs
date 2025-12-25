@@ -2,10 +2,21 @@
 title: 知识库
 desc: 创建项目关联的知识库，检索记忆时结合用户记忆与知识库补充知识。
 ---
+::warning
+**[本文是对【MemOS知识库】功能做展开介绍，可点此直接查看详细 API 文档](/api_docs/knowledge/create_kb)**
+::
+
 
 ## 1. MemOS 知识库 vs 传统 RAG
 
+MemOS 知识库支持开发者将业务知识整合进智能应用的长期记忆体系。
+<br>
+系统以上传的文档为底层数据源，构建并维护独立的记忆层，支撑问答等自然语言交互应用。随着终端用户的持续使用，MemOS 会根据对话内容动态演化和更新记忆，从而推动知识库的自动迭代与自我进化。
+<br>
+<br>
 与传统 RAG 的静态存储不同，MemOS 让知识库成为“记忆”的一部分，有“记忆”的 AI 应用不仅能更准确地查询资料，还能更了解背景与懂用户。让我们来看两个真实的场景来对比两种解决方案：
+
+<br>
 
 **购物客服机器人**
 
@@ -41,6 +52,8 @@ DAY 10 用户询问：狗狗吃这款狗粮会拉稀，我想换一款狗粮。
 
 # ✅ 购物助手：你之前提到狗狗是 3 个月大的金毛，而且不能吃鸡肉口味，所以我已帮你排除了所有鸡肉口味的幼犬粮。你之前买过羊肉 + 三文鱼幼犬粮，如果现在出现拉稀，可以尝试更温和的 C（三文鱼幼犬低敏）。
 ```
+<br>
+<br>
 
 **企业知识库助手**
 
@@ -140,7 +153,7 @@ MemOS 云服务目前为所有开发者提供了从免费版到企业版的多�
 
 1.  支持上传的文档类型：PDF、DOCX、 DOC、 TXT
 
-2.  单文件大小上限：不超过 100 MB、200页
+2.  单文件大小上限：不超过 100 MB、500页
 
 3.  单次上传的文件数量上限：不超过20个
 
@@ -184,7 +197,7 @@ print(f"result: {res.json()}")
 "result": {
   "code": 0,
   "data": {
-    "id": "base3c88e38e-396c-4abb-aa00-1f0b66fe9794"
+    "id": "idxxxxx"  # 替换成上方创建的知识库ID
   },
   "message": "ok"
 }
@@ -204,7 +217,7 @@ os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
 os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
 data = {
-    "knowledgebase_id": "base3c88e38e-396c-4abb-aa00-1f0b66fe9794",
+    "knowledgebase_id": "idxxxxx",  # 替换成上方创建的知识库ID
     "file": [
         {"content": "https://cdn.memtensor.com.cn/file/软件采购报销制度.pdf"}
     ]
@@ -255,7 +268,7 @@ os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
 os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
 data = {
-    "user_id": "designer_001",
+    "user_id": "memos_user_123",
     "conversation_id": "0610",
     "messages": [
     {
@@ -301,10 +314,10 @@ os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
 os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
 data = {
-    "user_id": "designer_001",
+    "user_id": "memos_user_123",
     "conversation_id": "1211",
     "query": "帮我查一下软件采购报销额度。",
-    "knowledgebase_ids":["base3c88e38e-396c-4abb-aa00-1f0b66fe9794"]
+    "knowledgebase_ids":["idxxxxx"]  # 替换成上方创建的知识库ID
 }
 headers = {
   "Content-Type": "application/json",
@@ -366,7 +379,7 @@ print(json.dumps(json_res, indent=2, ensure_ascii=False))
 
 ### 反馈优化知识库
 
-在企业中，常会出现企业政策/知识已更新，而知识库更新不及时的问题。目前，MemOS 支持通过“**自然语言对话”**对知识库的记忆反馈，用于夸素更新知识库记忆，从而提高准确性与时效性。
+在企业中，常会出现企业政策/知识已更新，而知识库更新不及时的问题。目前，MemOS 支持通过**自然语言对话**对知识库的记忆反馈，用于快速更新知识库记忆，从而提高准确性与时效性。
 
 尝试一下，用最简单的交互方式驱动知识库始终保持最新。
 
@@ -387,10 +400,10 @@ os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
 os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
 data = {
-    "user_id": "finance_supervisor",
+    "user_id": "memos_user_123",
     "conversation_id": "1212",
     "feedback_content": "办公类软件的采购上限是600元，而不是800元。",
-    "allow_knowledgebase_ids":["base3c88e38e-396c-4abb-aa00-1f0b66fe9794"]
+    "allow_knowledgebase_ids":["idxxxxx"]  # 替换成上方创建的知识库ID
 }
 
 headers = {
@@ -421,10 +434,10 @@ os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
 os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
 data = {
-    "user_id": "user_001",
+    "user_id": "memos_user_123",
     "conversation_id": "1211",
     "query": "帮我查一下软件采购报销额度。",
-    "knowledgebase_ids":["base3c88e38e-396c-4abb-aa00-1f0b66fe9794"]
+    "knowledgebase_ids":["idxxxxx"]  # 替换成上方创建的知识库ID
 }
 headers = {
   "Content-Type": "application/json",

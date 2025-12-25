@@ -1,6 +1,6 @@
 <template>
   <div class="w-full xl:w-[28rem] relative max-h-[calc(100%-32px)]">
-    <div class="p-0.5 flex flex-col relative overflow-hidden rounded-2xl border border-gray-950/10 dark:border-white/10 my-0 dark:text-gray-50">
+    <div class="p-0.5 flex flex-col relative overflow-hidden rounded-2xl border border-muted my-0 dark:text-gray-50">
       <div class="flex items-center justify-between gap-2 relative px-2.5">
         <slot name="header" />
       </div>

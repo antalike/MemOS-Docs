@@ -157,7 +157,7 @@
                 "$ref": "#/components/schemas/ChatRequest"
               },
               "example": {
-                "user_id": "memos_user_2025-12-15-01",
+                "user_id": "memos_user_123",
                 "stream": false,
                 "query": "上海有哪些好玩的",
                 "model_name": "deepseek-r1",
@@ -196,6 +196,11 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ChatResponse"
+                }
+              },
+              "text/event-stream": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChatStreamResponse"
                 }
               }
             }
@@ -472,7 +477,7 @@
           "filter": {
             "type": "object",
             "title": "Filter",
-            "description": "过滤条件。可用字段包括：agent_id、app_id、create_time、update_time与info中的特定字段。支持逻辑运算符（AND，OR）和比较运算符（eq，时间还支持gte、lte、gt、lt）。对于info字段，支持过滤传入的business_type,biz_id,scene,custom_status。",
+            "description": "过滤条件。可用字段包括：\"agent_id\", \"app_id\", \"create_time\", \"update_time\"与\"info\"中的字段。支持逻辑运算符（and，or）和比较运算符（gte、lte、gt、lt）。对于\"info\"字段，支持过滤传入的\"business_type\", \"biz_id\", \"scene\"和其他自定义字段。",
             "example": "{\"and\": [{\"create_time\":{\"gte\":\"...\"}}]}"
           },
           "knowledgebase_ids": {
@@ -555,7 +560,7 @@
           "agent_id": {
             "type": "string",
             "title": "Agent ID",
-            "description": "对话内容所关联的 Agent 唯一标识符。"
+            "description": "对话内容所关联的Agent唯一标识符。"
           },
           "tags": {
             "type": "array",
@@ -623,6 +628,36 @@
           }
         },
         "title": "ChatResponse"
+      },
+      "ChatStreamResponse": {
+        "type": "object",
+        "properties": {
+          "event": {
+            "type": "string",
+            "description": "流式事件名称，当前默认为 message。",
+            "default": "message"
+          },
+          "data": {
+            "type": "object",
+            "description": "流式返回的数据内容。",
+            "properties": {
+              "type": {
+                "type": "string",
+                "description": "流式消息类型，用于标识当前数据的语义类别。<br>reasoning：推理内容<br>text：正常文本内容<br>end：流式结束标识",
+                "enum": [
+                  "reasoning",
+                  "text",
+                  "end"
+                ]
+              },
+              "data": {
+                "type": "string",
+                "description": "流式返回的文本内容。"
+              }
+            }
+          }
+        },
+        "title": "ChatStreamResponse"
       },
       "MessageInput": {
         "type": "object",
@@ -704,7 +739,6 @@
           "tool_call_id": {
               "type": "string",
               "description": "role为tool时，工具调用消息的唯一标识。"
-            }
           },
           "tool_calls": {
             "type": "array",
@@ -713,31 +747,32 @@
               "properties": {
                 "id": {
                   "type": "string",
-                  "description": "工具调用的唯一标识，用于关联本次工具调用。添加包含工具调用的 assistant 消息时必填。"
+                  "description": "工具调用的唯一标识，用于关联本次工具调用。tool_calls中必填。"
                 },
                 "type": {
                   "type": "string",
-                  "description": "工具调用类型。当前仅支持 function，tool_calls 中必填。",
+                  "description": "工具调用类型，当前仅支持 function。tool_calls中必填。",
                   "enum": ["function"]
                 },
                 "function": {
                   "type": "object",
-                  "description": "被调用的工具定义，tool_calls 中必填。",
+                  "description": "被调用的工具定义，tool_calls中必填。",
                   "properties": {
                     "name": {
                       "type": "string",
-                      "description": "工具（函数）名称，需与已注册的工具名一致，tool_calls 中必填。"
+                      "description": "工具（函数）名称，tool_calls中必填。"
                     },
                     "arguments": {
                       "type": "string",
-                      "description": "工具调用参数，需为 JSON 格式的字符串（而非原生 JSON 对象），tool_calls 中必填。"
+                      "description": "工具调用参数，需为 JSON 格式的字符串，tool_calls中必填。"
                     }
                   }
                 }
               }
             },
-            "description": "role 为 assistant时，工具调用信息列表，用于在触发工具调用时传递。"
-          },
+            "description": "role为assistant时，工具调用信息列表，用于在触发工具调用时传递。"
+          }
+        },
         "title": "MessageInput"
       },
       "AddMessageRequest": {
@@ -756,7 +791,7 @@
           "conversation_id": {
             "type": "string",
             "title": "Conversation ID",
-            "description": "添加的消息所关联的会话唯一标识符，相同 `conversation_id` 下的多轮消息会被识别为同一上下文。"
+            "description": "添加的消息所关联的会话唯一标识符，相同conversation_id下的多轮消息会被识别为同一上下文。"
           },
           "messages": {
             "type": "array",
@@ -768,13 +803,11 @@
           },
           "agent_id": {
             "type": "string",
-            "description": "添加的消息所关联的 Agent 唯一标识符，主要用于在检索记忆时查询某用户与该 Agent 的专属记忆。",
-            "default": ""
+            "description": "添加的消息所关联的 Agent 唯一标识符，主要用于在检索记忆时查询某用户与该Agent的专属记忆。"
           },
           "app_id": {
             "type": "string",
-            "description": "添加的消息所关联的应用唯一标识符，主要用于在检索记忆时查询某用户在该 App 下的专属记忆。",
-            "default": ""
+            "description": "添加的消息所关联的应用唯一标识符，主要用于在检索记忆时查询某用户在该App下的专属记忆。"
           },
           "tags": {
             "type": "array",
@@ -802,8 +835,7 @@
                 }
               ]
             },
-            "description": "自定义元信息字段，能够存储任意与添加信息相关的结构化数据，例如位置、来源、版本等，主要用于在检索时精确过滤或追踪来源。",
-            "default": null
+            "description": "自定义元信息字段，能够存储任意与添加信息相关的结构化数据，例如位置、来源、版本等，主要用于在检索时精确过滤或追踪来源。"
           },
           "allow_public": {
             "type": "boolean",
@@ -832,18 +864,23 @@
           "success": {
             "type": "boolean",
             "title": "Success",
-            "description": "是否添加成功。true 表示成功，false 表示失败。",
+            "description": "是否添加成功。true表示成功，false表示失败。",
             "example": true
           },
           "task_id": {
             "type": "string",
             "title": "Task ID",
-            "description": "记忆处理任务的唯一标识"
+            "description": "记忆处理任务的唯一标识。"
           },
           "status": {
             "type": "string",
-            "title": "Staus",
-            "description": "记忆处理任务当前的状态。可能的状态：`running`/`completed`/`failed`"
+            "title": "Status",
+            "enum": [
+              "running",
+              "completed",
+              "failed"
+            ],
+            "description": "记忆处理任务当前的状态。"
           }
         },
         "title": "OpenMemAddMessageResponse"
@@ -868,7 +905,7 @@
           "message": {
             "type": "string",
             "title": "Message",
-            "description": "接口提示信息，如 \"消息添加成功\"。",
+            "description": "接口提示信息。",
             "example": "ok"
           }
         },
@@ -991,7 +1028,20 @@
           "query": {
             "type": "string",
             "title": "Query",
-            "description": "要在记忆中查询的文本内容，单次查询文本的token上限为4k。"
+            "description": "要在记忆中查询的文本内容，单次查询文本的token上限为20k。"
+          },
+          "filter": {
+            "type": "object",
+            "title": "Filter",
+            "description": "过滤条件。可用字段包括：\"agent_id\", \"app_id\", \"create_time\", \"update_time\"以及\"info\"中的字段。支持逻辑运算符（and，or）和比较运算符（gte、lte、gt、lt）。对于\"info\"字段，支持过滤传入的\"business_type\", \"biz_id\", \"scene\"和其他自定义字段。",
+            "example": "{\"and\": [{\"create_time\":{\"gte\":\"...\"}}]}"
+          },
+          "knowledgebase_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "指定搜索的知识库范围，默认空"
           },
           "memory_limit_number": {
             "type": "integer",
@@ -1010,15 +1060,21 @@
             "type": "integer",
             "format": "int32",
             "title": "Preference Limit Number",
-            "description": "限定返回的偏好记忆条数，用于控制偏好记忆片段的长度，不传时使用系统默认值6，最大值为25。",
+            "description": "限定返回的偏好记忆条数，用于控制偏好记忆片段的长度，仅在 include_preference=true 时生效。不传时使用系统默认值6，最大值为25。",
             "default": 6
           },
-          "knowledgebase_ids": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "指定搜索的知识库范围，默认空"
+          "include_tool_memory": {
+            "type": "boolean",
+            "title": "Include Tool Memory",
+            "description": "是否启用工具记忆召回。开启后，系统会根据查询内容智能召回工具相关的记忆。不传时该功能默认关闭。",
+            "default": false
+          },
+          "tool_memory_limit_number": {
+            "type": "integer",
+            "format": "int32",
+            "title": "Tool Memroy Limit Number",
+            "description": "限定返回的工具记忆条数，用于控制召回的工具记忆个数,仅在 include_tool_memory=true 时生效。不传时使用系统默认值6，最大值为25。",
+            "default": 6
           }
         },
         "title": "SearchMemoryRequest"
@@ -1049,7 +1105,7 @@
               "UserMemory"
             ],
             "title": "Memory Type",
-            "description": "WorkingMemory：工作记忆，临时存储的短期信息。<br>LongTermMemory：长期记忆，持久保存的重要信息或事实。<br>UserMemory：用户记忆，与特定用户相关的个性化信息。",
+            "description": "事实记忆类型。<br>WorkingMemory：工作记忆，临时存储的短期信息。<br>LongTermMemory：长期记忆，持久保存的重要信息或事实。<br>UserMemory：用户记忆，与特定用户相关的个性化信息。",
             "example": "LongTermMemory"
           },
           "create_time": {
@@ -1118,7 +1174,7 @@
               "implicit_preference"
             ],
             "title": "Preference Type",
-            "description": "explicit_preference：显式偏好记忆。<br>implicit_preference：隐式偏好记忆。",
+            "description": "偏好记忆类型。<br>explicit_preference：显式偏好记忆。<br>implicit_preference：隐式偏好记忆。",
             "example": "explicit_preference"
           },
           "preference": {
@@ -1158,6 +1214,88 @@
         },
         "title": "PreferenceDetail"
       },
+      "ToolUsedStatus": {
+        "type": "object",
+        "properties": {
+          "used_tool": {
+            "type": "string",
+            "title": "Used Tool",
+            "description": "使用的工具名称。"
+          },
+          "experience": {
+            "type": "string",
+            "title": "Experience",
+            "description": "工具使用经验或协作建议。"
+          },
+          "error_type": {
+            "type": "string",
+            "title": "Error Type",
+            "description": "调用失败时的错误描述。"
+          },
+          "success_rate": {
+            "type": "string",
+            "title": "Success Rate",
+            "description": "本次工具轨迹的成功率。"
+          }
+        },
+        "title": "ToolUsedStatus"
+      },
+      "ToolMemoryDetail": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "ID",
+            "description": "工具记忆片段的唯一标识符。"
+          },
+          "tool_type": {
+            "type": "string",
+            "title": "Tool Type",
+            "description": "工具记忆类型。ToolTrajectoryMemory 表示工具轨迹记忆；ToolSchema 表示工具信息记忆。",
+            "enum": [
+              "ToolTrajectoryMemory",
+              "ToolSchema"
+            ]
+          },
+          "tool_value": {
+            "type": "string",
+            "title": "Tool Value",
+            "description": "工具记忆的具体内容。"
+          },
+          "tool_used_status": {
+            "type": "array",
+            "title": "Tool Used Status",
+            "description": "工具轨迹记忆列表，每条记录包含使用的工具及经验信息。",
+            "items": {
+              "$ref": "#/components/schemas/ToolUsedStatus"
+            }
+          },
+          "create_time": {
+            "type": "string",
+            "title": "Create Time",
+            "description": "工具记忆创建时间（ISO 8601 格式）。"
+          },
+          "conversation_id": {
+            "type": "string",
+            "title": "Conversation ID",
+            "description": "与该工具记忆关联的会话唯一标识符。"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "description": "工具记忆状态，当前为 activated。",
+            "enum": [
+              "activated"
+            ]
+          },
+          "update_time": {
+            "type": "string",
+            "title": "Update Time",
+            "description": "工具记忆最后一次更新的时间（ISO 8601 格式）。"
+          }
+        },
+        "title": "ToolMemoryDetail"
+      },
       "SearchMemoryResponseData": {
         "type": "object",
         "title": "SearchMemoryResponseData",
@@ -1176,6 +1314,14 @@
             "description": "返回的偏好记忆片段详情列表。",
             "items": {
               "$ref": "#/components/schemas/PreferenceDetail"
+            }
+          },
+          "tool_memory_detail_list": {
+            "type": "array",
+            "title": "Tool Memory Detail List",
+            "description": "返回的工具记忆片段详情列表。",
+            "items": {
+              "$ref": "#/components/schemas/ToolMemoryDetail"
             }
           },
           "preference_note": {
@@ -1223,7 +1369,7 @@
               "type": "string"
             },
             "title": "User IDs",
-            "description": "用户ID列表"
+            "description": "可以删除记忆的用户列表。"
           },
           "memory_ids": {
             "type": "array",
@@ -1231,7 +1377,7 @@
               "type": "string"
             },
             "title": "Memory IDs",
-            "description": "待删除的记忆ID列表"
+            "description": "删除的记忆所关联的唯一标识符。"
           }
         },
         "title": "DeleteMemoryRequest"
@@ -1276,37 +1422,37 @@
           "user_id": {
             "type": "string",
             "title": "User ID",
-            "description": "用户ID"
+            "description": "反馈内容所关联的用户唯一标识符。"
           },
           "conversation_id": {
             "type": "string",
             "title": "Conversation ID",
-            "description": "反馈内容所关联的会话唯一标识符"
+            "description": "反馈内容所关联的会话唯一标识符。"
           },
           "feedback_content": {
             "type": "string",
             "title": "Feedback Content",
-            "description": "反馈的具体内容"
+            "description": "反馈内容文本。"
           },
           "agent_id": {
             "type": "string",
             "title": "Agent ID",
-            "description": "反馈内容所关联的 Agent 唯一标识符"
+            "description": "反馈内容所关联的Agent唯一标识符，主要用于在检索记忆时查询某用户与该Agent的专属记忆。"
           },
           "app_id": {
             "type": "string",
             "title": "App ID",
-            "description": "反馈内容所关联的应用唯一标识符"
+            "description": "反馈内容所关联的应用唯一标识符，主要用于在检索记忆时查询某用户在该App下的专属记忆。"
           },
           "feedback_time": {
             "type": "string",
             "title": "Feedback Time",
-            "description": "反馈时间字符串"
+            "description": "反馈发生的时间，可传入结构化时间或自然语言时间描述。传入该参数能够让记忆携带时间信息。"
           },
           "allow_public": {
             "type": "boolean",
             "title": "Allow Public",
-            "description": "是否允许公开，默认 false",
+            "description": "反馈内容，产生的记忆，是否允许写入公共记忆库。开启后，生成的记忆可被项目下的其他用户检索。 ",
             "default": false
           },
           "allow_knowledgebase_ids": {
@@ -1315,7 +1461,7 @@
               "type": "string"
             },
             "title": "Allow Knowledgebase IDs",
-            "description": "允许被写入的知识库列表"
+            "description": "反馈内容产生的记忆，允许被写入的知识库列表。"
           }
         },
         "title": "AddFeedbackRequest"
@@ -1394,7 +1540,12 @@
               "status": {
                 "type": "string",
                 "title": "Status",
-                "description": "任务状态"
+                "enum": [
+                  "running",
+                  "completed",
+                  "failed"
+                ],
+                "description": "记忆处理任务当前的状态。"
               }
             }
           },
@@ -1441,20 +1592,10 @@
             "type": "object",
             "title": "Data",
             "properties": {
-              "success": {
-                "type": "boolean",
-                "title": "Success",
-                "description": "是否创建成功。true 表示成功，false 表示失败。"
-              },
-              "task_id": {
+              "id": {
                 "type": "string",
-                "title": "Task ID",
-                "description": "任务id"
-              },
-              "status": {
-                "type": "string",
-                "title": "Status",
-                "description": "任务状态"
+                "title": "KNOWLEDGEBASE ID",
+                "description": "创建成功后返回的知识库 ID"
               }
             }
           },
@@ -1475,7 +1616,7 @@
           "knowledgebase_id": {
             "type": "string",
             "title": "Knowledgebase ID",
-            "description": "知识库ID"
+            "description": "要移除的知识库ID"
           }
         },
         "title": "DeleteKnowledgebaseRequest"
@@ -1499,7 +1640,7 @@
               "success": {
                 "type": "boolean",
                 "title": "Success",
-                "description": "是否删除成功。true 表示成功，false 表示失败。"
+                "description": "是否移除成功。true 表示成功，false 表示失败。"
               }
             }
           },
@@ -1521,19 +1662,19 @@
           "knowledgebase_id": {
             "type": "string",
             "title": "Knowledgebase ID",
-            "description": "知识库ID"
+            "description": "目标知识库ID"
           },
           "file": {
             "type": "array",
             "title": "File",
-            "description": "上传文件列表",
+            "description": "上传文档列表",
             "items": {
               "type": "object",
               "properties": {
                 "content": {
                   "type": "string",
                   "title": "Content",
-                  "description": "单个文件信息"
+                  "description": "文档内容，支持 URL 或 Base64"
                 }
               }
             }
@@ -1560,22 +1701,27 @@
               "id": {
                 "type": "string",
                 "title": "ID",
-                "description": "文件ID"
+                "description": "文档ID"
               },
               "name": {
                 "type": "string",
                 "title": "Name",
-                "description": "文件名称"
+                "description": "文档名称"
               },
               "sizeMB": {
                 "type": "integer",
                 "title": "Size MB",
-                "description": "文件大小"
+                "description": "文档大小"
               },
               "status": {
                 "type": "string",
                 "title": "Status",
-                "description": "文件状态"
+                "description": "文档处理状态",
+                "enum":[
+                  "running",
+                  "completed",
+                  "failed"
+                ]
               }
             }
           },
@@ -1628,22 +1774,27 @@
                     "id": {
                       "type": "string",
                       "title": "ID",
-                      "description": "文件id"
+                      "description": "文档ID"
                     },
                     "name": {
                       "type": "string",
                       "title": "Name",
-                      "description": "文件名称"
+                      "description": "文档名称"
                     },
                     "size": {
                       "type": "string",
                       "title": "Size",
-                      "description": "文件大小"
+                      "description": "文档大小"
                     },
                     "status": {
                       "type": "string",
                       "title": "Status",
-                      "description": "文件状态"
+                      "description": "文档处理状态",
+                      "enum":[
+                        "running",
+                        "completed",
+                        "failed"
+                      ]
                     }
                   }
                 },
@@ -1671,7 +1822,7 @@
               "type": "string"
             },
             "title": "File IDs",
-            "description": "文件ID列表"
+            "description": "要删除的文档 ID 列表"
           }
         },
         "title": "DeleteFileRequest"

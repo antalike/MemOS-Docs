@@ -3,11 +3,16 @@ title: MCP Service Configuration
 desc: MemOS provides a way to interact with the cloud platform through MCP, allowing developers to use MemOS cloud platform services on different clients (Claude, Cursor, Cline, etc.).
 ---
 
-## 1. What is MCP?
+## 1. Service Overview
 
-MCP (Model Context Protocol) defines how applications and AI models exchange contextual information. This allows developers to connect various data sources, tools, and functionalities to the AI ​​model (an intermediate protocol layer) in a consistent manner, much like USB-C allows different devices to connect through the same interface. The goal of MCP is to create a universal standard that simplifies and unifies the development and integration of AI applications.
+MemOS Memory Management MCP is a powerful plugin that allows users to add, search, delete memories and submit feedback. It can store conversation content and provide efficient memory management services, helping improve the consistency and personalization of users’ AI conversations.
 
-## 2. Interacting with the MemOS Cloud Platform via MCP
+## 2. Tool Links
+
+- [npm package](https://www.npmjs.com/package/@memtensor/memos-api-mcp)
+- [GitHub](https://github.com/MemTensor/memos-api-mcp)
+
+## 3. Interacting with the MemOS Cloud Platform via MCP
 
 To configure MemOS MCP using JSON configuration: 
 
@@ -20,7 +25,7 @@ To configure MemOS MCP using JSON configuration:
       "command": "npx",
       "args": [
         "-y",
-        "@memtensor/memos-api-mcp"
+        "@memtensor/memos-api-mcp@latest"
       ],
       "env": {
         "MEMOS_API_KEY": "mpg-xxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
@@ -44,7 +49,7 @@ How to obtain environment variables:
 
 - `MEMOS_CHANNEL`: Fill in "MODELSCOPE" here.
 
-## 3. Using MemOS MCP in different clients
+## 4. Using MemOS MCP in different clients
 
 ### Using in Claude Desktop
 To use MemOS in Claude Desktop, click the avatar in the lower left corner -> "Settings" -> "Developer" -> "Edit Config", paste the configuration into the Claude_desktop_config.json file, and finally restart the client. You can use it in the chat when you observe that the memos-api-mcp service is in the running state.
@@ -134,7 +139,7 @@ To use MemOS in Chatbox, click "Settings" in the lower left corner -> "MCP" -> "
 ```
 Name: MemOS Memory Management
 Type: Local (stdio)
-Command: npx -y @memtensor/memos-api-mcp
+Command: npx -y @memtensor/memos-api-mcp@latest
 Environment Variables:
 MEMOS_API_KEY={{api_key applied for on the MemOS official website API Console}}
 MEMOS_USER_ID={{custom USER_ID}}
@@ -155,12 +160,12 @@ The following is an example of using MemOS in Chatbox, by which users can judge 
 ![Effect example of using MemOS in Chatbox](https://cdn.memtensor.com.cn/img/1763104980563_q3q7v2_compressed.png)
 
 
-## 4. Q&A
+## 5. Q&A
 Q: Why do agents sometimes fail to invoke tools when they should?
 
 A: Due to the different underlying models used, different agents have different proficiency in using tools. When the agent forgets to use the tool, you can guide the model to call the corresponding tool through instructions, or try to use other underlying models.
 
 
-## 5. Contact Us
+## 6. Contact Us
 
 ![image.png](https://cdn.memtensor.com.cn/img/1758685658684_nbhka4_compressed.png)
