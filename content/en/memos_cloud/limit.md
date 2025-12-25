@@ -6,7 +6,7 @@ desc: Register and log in to enjoy free quota, facilitating quick experience and
 
 ## 1. Quota
 
-![image.png](https://cdn.memtensor.com.cn/img/1764385130051_rrn42o_compressed.png)
+![image.png](https://cdn.memtensor.com.cn/img/额度限制_en_compressed.png)
 
 MemOS Cloud Services currently provides multiple pricing plans, from the free tier to the enterprise tier, to meet the needs of teams of different sizes. All plans are currently free for a limited time. Visit [MemOS Pricing page](https://memos.openmem.net/en/pricing) to apply for the plan that fits your needs.
 Take action now and use MemOS Cloud Services to support the growth of your projects.
