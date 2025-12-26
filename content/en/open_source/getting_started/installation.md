@@ -28,7 +28,7 @@ desc: "Complete installation guide for MemOS."
   ---
   icon: ri:database-2-line
   title: Install via Docker
-  to: /open_source/getting_started/installation#from-docker
+  to: /open_source/getting_started/rest_api_server#4、Start Docker 
   ---
   Ideal for quick deployment: one-click startup for services and dependencies.
   :::

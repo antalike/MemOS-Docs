@@ -27,7 +27,6 @@ git clone https://github.com/MemTensor/MemOS
 ```bash
 # 进入文件夹目录下
 cd MemOS
-
 ```
 
 #### 在根目录中创建一个 `.env` 文件并设置你的环境变量。
@@ -71,7 +70,6 @@ NEO4J_USER=neo4j
 NEO4J_PASSWORD=12345678
 NEO4J_DB_NAME=neo4j
 MOS_NEO4J_SHARED_DB=false
-
 
 # 启用默认 cube 配置
 MOS_ENABLE_DEFAULT_CUBE_CONFIG=true
@@ -217,7 +215,7 @@ CMD ["uvicorn", "memos.api.server_api:app", "--host", "0.0.0.0", "--port", "8000
 # 在docker目录下
 docker compose up
 ```
-![MemOS buildComposeupSuccess](https://cdn.memtensor.com.cn/img/memos_build_composeup_success_jgdd8e_compressed.png)
+![MemOS buildComposeupSuccess](https://cdn.memtensor.com.cn/img/memos_build_composeup_success_compressed.png)
 <div style="text-align: center; margin-top: 10px">示例图片，端口按 docker 自定义的配置</div>  
 
 #### 通过 [http://localhost:8000/docs](http://localhost:8000/docs) 访问 API。
@@ -225,7 +223,7 @@ docker compose up
 ![MemOS Architecture](https://cdn.memtensor.com.cn/img/memos_run_server_success_compressed.png)
 
 
-#### 测试用例 (注册用户->添加用户记忆->查询用户记忆) 参考Docker Compose up测试用例
+#### 测试用例 (添加用户记忆->查询用户记忆) 参考Docker Compose up测试用例
 
 ::
 
