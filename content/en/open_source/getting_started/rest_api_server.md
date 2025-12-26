@@ -17,12 +17,17 @@ desc: MemOS provides a REST API service written using FastAPI. Users can perform
 
 ## Run Locally
 
-### 1、Clone Repository
-#### fork MemOS repository code(https://github.com/MemTensor/MemOS) to your own repository
-
-#### Clone forked repository to local folder
+### 1、Local Download
+```bash
+# Download the code to the local folder
+git clone https://github.com/MemTensor/MemOS
+```
 
 ### 2、Configure Environment Variables
+```bash
+# Enter the folder directory
+cd MemOS
+```
 
 #### Create a `.env` file in the root directory and set your environment variables.
 ##### .env The quick mode configuration is as follows, Complete Mode Reference <a href="https://github.com/MemTensor/MemOS/blob/main/docker/.env.example">.env.example</a>.
@@ -37,7 +42,7 @@ OPENAI_API_BASE=http://xxx:3000/v1
 MOS_CHAT_MODEL=qwen3-max
 
 # Memory Reader LLM model
-MEMRADER_MODEL=gpt-4o-mini
+MEMRADER_MODEL=qwen3-max
 # Memory Reader API Key
 MEMRADER_API_KEY=sk-xxx
 # Memory Reader API Base URL
@@ -66,7 +71,6 @@ NEO4J_PASSWORD=12345678
 NEO4J_DB_NAME=neo4j
 MOS_NEO4J_SHARED_DB=false
 
-
 # Enable default cube configuration
 MOS_ENABLE_DEFAULT_CUBE_CONFIG=true
 # Whether to use Redis scheduler
@@ -79,14 +83,14 @@ CHAT_MODEL_LIST=[{"backend": "qwen", "api_base": "https://xxx/v1", "api_key": "s
 
 ```
 
-### 3、Custom Configuration(API_KEY ,BASE_URL )
+### 3、Taking Bailian as an example to customize configuration
 
 ```bash
 # You can apply through the Bailian platform
 # https://bailian.console.aliyun.com/?spm=a2c4g.11186623.0.0.2f2165b08fRk4l&tab=api#/api
 # After successful application, obtain API_KEY and BASE-URL. The example configuration is as follows
 
-# OpenAI API Key (Custom configuration required)
+# OpenAI API Key (Using the API_KEY of Bailian)
 OPENAI_API_KEY=you_bailian_api_key
 # OpenAI API Base URL
 OPENAI_API_BASE=https://dashscope.aliyuncs.com/compatible-mode/v1
@@ -95,7 +99,7 @@ MOS_CHAT_MODEL=qwen3-max
 
 # Memory Reader LLM model
 MEMRADER_MODEL=qwen3-max
-# Memory Reader API Key
+# Memory Reader API Key (Using the API_KEY of Bailian)
 MEMRADER_API_KEY=you_bailian_api_key
 # Memory Reader API Base URL
 MEMRADER_API_BASE=https://dashscope.aliyuncs.com/compatible-mode/v1
@@ -107,7 +111,7 @@ MOS_EMBEDDER_MODEL=text-embedding-v4
 MOS_EMBEDDER_BACKEND=universal_api
 # Embedder API Base URL
 MOS_EMBEDDER_API_BASE=https://dashscope.aliyuncs.com/compatible-mode/v1
-# Embedder API Key
+# Embedder API Key (Using the API_KEY of Bailian)
 MOS_EMBEDDER_API_KEY=you_bailian_api_key
 # Embedding vector dimension
 EMBEDDING_DIMENSION=1024
@@ -175,18 +179,19 @@ cd docker
 
 #### Configure Dockerfile(cd docker)
 
+  
 Contains quick mode and full mode, distinguishing between using simplified packages (x86 and arm) and full packages (x86 and arm)
-
+```bash
 ● Simplified package: Simplify dependencies related to Nvidia that are too large in size, achieve lightweight mirroring, and make local deployment lighter and faster.
-
-###### url: registry.cn-shanghai.aliyuncs.com/memtensor/memos-base:v1.0
-###### url: registry.cn-shanghai.aliyuncs.com/memtensor/memos-base-arm:v1.0
+url: registry.cn-shanghai.aliyuncs.com/memtensor/memos-base:v1.0
+url: registry.cn-shanghai.aliyuncs.com/memtensor/memos-base-arm:v1.0
 
 ● Full package: Convert all MemOS dependencies into images, Experience complete functionality. By configuring Dockerfiles, you can directly build and start the package.
+url: registry.cn-shanghai.aliyuncs.com/memtensor/memos-full-base:v1.0.0
+url: registry.cn-shanghai.aliyuncs.com/memtensor/memos-full-base-arm:v1.0.0
+```
 
-###### url: registry.cn-shanghai.aliyuncs.com/memtensor/memos-full-base:v1.0.0
-###### url: registry.cn-shanghai.aliyuncs.com/memtensor/memos-full-base-arm:v1.0.0
-
+#### Configure Dockerfile(cd docker)
 ```bash
 # The current example uses a simplified package url
 FROM registry.cn-shanghai.aliyuncs.com/memtensor/memos-base:v1.0
@@ -209,7 +214,7 @@ CMD ["uvicorn", "memos.api.server_api:app", "--host", "0.0.0.0", "--port", "8000
 # Enter docker directory
 docker compose up
 ```
-![MemOS buildComposeupSuccess](https://cdn.memtensor.com.cn/img/memos_build_composeup_success_jgdd8e_compressed.png)
+![MemOS buildComposeupSuccess](https://cdn.memtensor.com.cn/img/memos_build_composeup_success_compressed.png)
 <div style="text-align: center; margin-top: 10px">Example image, port as per docker custom configuration</div>  
 
 #### Access API via [http://localhost:8000/docs](http://localhost:8000/docs).
@@ -217,7 +222,7 @@ docker compose up
 ![MemOS Architecture](https://cdn.memtensor.com.cn/img/memos_run_server_success_compressed.png)
 
 
-#### Test cases (Register user->Add user memory->Query user memory) Refer to Docker Compose up test cases
+#### Test cases (Add user memory->Query user memory) Refer to Docker Compose up test cases
 
 ::
 
