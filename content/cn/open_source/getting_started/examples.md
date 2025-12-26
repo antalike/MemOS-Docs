@@ -9,7 +9,7 @@ desc: "恭喜你——你已经掌握了快速入门并构建了第一个可用�
   ---
   icon: ri:play-line
   title: 最简Pipeline 
-  to: /open_source/getting_started/examples#示例-1-最简Pipeline
+  to: /cn/open_source/getting_started/examples#示例-1最简pipeline
   ---
   最小的可用Pipeline  — 添加、搜索、更新并导出明文记忆。
   :::
@@ -18,7 +18,7 @@ desc: "恭喜你——你已经掌握了快速入门并构建了第一个可用�
   ---
   icon: ri:tree-line
   title: 仅 TreeTextMemory
-  to: /open_source/getting_started/examples#示例-2-仅-TreeTextMemory
+  to: /cn/open_source/getting_started/examples#示例-2仅-treetextmemory
   ---
   使用 Neo4j 支持的层级记忆，构建结构化、多跳知识图谱。
   :::
@@ -27,7 +27,7 @@ desc: "恭喜你——你已经掌握了快速入门并构建了第一个可用�
   ---
   icon: ri:database-2-line
   title: 仅 KVCacheMemory
-  to: /open_source/getting_started/examples#示例-3-仅 KVCacheMemory
+  to: /cn/open_source/getting_started/examples#示例-3仅-kvcachememory
   ---
   使用短期 KV cache加速会话，实现快速上下文注入。
   :::
@@ -36,7 +36,7 @@ desc: "恭喜你——你已经掌握了快速入门并构建了第一个可用�
   ---
   icon: hugeicons:share-07
   title: 混合 TreeText + KVCache
-  to: /open_source/getting_started/examples#示例-4-混合模式
+  to: /cn/open_source/getting_started/examples#示例-4混合模式
   ---
   在单一 MemCube 中结合可解释的基于图的明文记忆和快速 KV cache。
   :::
@@ -45,7 +45,7 @@ desc: "恭喜你——你已经掌握了快速入门并构建了第一个可用�
   ---
   icon: ri:calendar-check-line
   title: 多记忆调度
-  to: /open_source/getting_started/examples#示例-5-多记忆调度
+  to: /cn/open_source/getting_started/examples#示例-5多记忆调度
   ---
   为多用户、多会话智能体运行动态记忆调用。
   :::
