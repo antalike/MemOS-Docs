@@ -35,10 +35,10 @@ desc: "MemOS 完整安装指南。"
 
 ::
 
-<a id="from-source"></a>
+<span id="from-source"></span>
 ## 从源码安装
 
-<a id="from-pip"></a>
+<span id="from-pip"></span>
 ## 通过pip安装
 安装 MemOS 最简单的方法是使用 pip。
 
@@ -138,7 +138,6 @@ INFO:     Application startup complete.
 
 ::
 
-### 其他注意事项
 #### Ollama 支持
 要将 MemOS 与 [Ollama](https://ollama.com/) 一起使用，请先安装 Ollama CLI：
 
@@ -153,7 +152,7 @@ curl -fsSL https://ollama.com/install.sh | sh
 #### Neo4j 支持
 
 ::note
-**Neo4j Desktop 要求**<br>如果您计划使用 Neo4j 作为图记忆，请安装 Neo4j Desktop（社区版支持即将推出！）
+**Neo4j Desktop 要求**<br>如果您计划使用 Neo4j 作为图记忆，请安装 Neo4j Desktop
 ::
 
 #### 下载示例
@@ -164,5 +163,5 @@ curl -fsSL https://ollama.com/install.sh | sh
 memos download_examples
 ```
 
-<a id="from-docker"></a>
+<span id="from-docker"></span>
 ## 通过Docker安装
