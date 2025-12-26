@@ -104,7 +104,6 @@ search_rsp = search_memories(search_req).data
 print("\n\nsearch_rsp: \n\n", json.dumps(search_rsp, indent=2, ensure_ascii=False))
 ````
 
-:span{id="示例-2多信息源记忆的添加与检索"}
 ## 示例 2：多信息源记忆的添加与检索
 
 ### 何时使用：
@@ -271,7 +270,6 @@ search_rsp = search_memories(search_req).data
 print("\n\nsearch_rsp: \n\n", json.dumps(search_rsp, indent=2, ensure_ascii=False))
 ```
 
-:span{id="示例-3多cube添加和检索"}
 ## 示例 3：多Cube添加和检索
 
 ### 何时使用：
