@@ -52,7 +52,7 @@ touch .env
 ```
 
 2. .env 内容
-.env详细配置请见[env配置](open_source/getting_started/rest_api_server/#本地运行)
+.env详细配置请见[env配置](/open_source/getting_started/rest_api_server/#本地运行)
 
 ::note
 **请注意**<br>
