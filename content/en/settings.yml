@@ -111,7 +111,6 @@ nav:
       - "(ri:delete-bin-line) Delete Memory": api_docs/core/delete_memory.md
 
     - "(ri:chat-1-line) Messages":
-      - "(ri:feedback-line) Add Feedback": api_docs/message/add_feedback.md
       - "(ri:file-list-line) Get Message": api_docs/message/get_message.md
       - "(ri:task-line) Get Task Status": api_docs/message/get_status.md
 
@@ -124,6 +123,7 @@ nav:
       - "(ri:file-add-line) Create Knowledgebase File": api_docs/knowledge/add_kb_doc.md
       - "(ri:file-search-line) Get Knowledgebase File": api_docs/knowledge/get_kb_doc.md
       - "(ri:file-reduce-line) Delete Knowledgebase File": api_docs/knowledge/delete_kb_doc.md
+      - "(ri:feedback-line) Add Feedback": api_docs/message/add_feedback.md
 
     - "(ri:customer-service-line) Help & Support":
       - "(ri:error-warning-line) Error Codes": api_docs/help/error_codes.md
