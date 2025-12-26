@@ -113,11 +113,13 @@ conda activate memos
 pip install -U "MemoryOS[all]"
 ```
 
-安装完成后，可验证是否成功：
+#### 安装图数据库
+Memos的记忆底层是通过图数据库进行存储的，在开源项目中，推荐使用Neo4j运行您的第一个项目。社区同时支持Neo4j企业版/社区版与PolarDB。
 
-```bash
-python -c "import memos; print(memos.__version__)"
-```
+::note
+**PC开发者的最快选择：Neo4j Desktop**<br>如果您计划使用 Neo4j 作为图记忆，Neo4j Desktop可能是最方便的安装方式。
+::
+
 
 #### 创建 .env 配置文件
 MemOS 的 server_api 依赖环境变量启动，因此需要在启动目录下创建 .env 文件。
@@ -190,29 +192,11 @@ curl --location --request POST 'http://127.0.0.1:8000/product/search' \
 
 ::
 
-#### Ollama 支持
-要将 MemOS 与 [Ollama](https://ollama.com/) 一起使用，请先安装 Ollama CLI：
-
-```bash
-curl -fsSL https://ollama.com/install.sh | sh
-```
-
-#### Transformers 支持
-
-要使用基于 `transformers` 库的功能，请确保已安装 [PyTorch](https://pytorch.org/get-started/locally/)（建议使用 CUDA 版本以实现 GPU 加速）。
-
-#### Neo4j 支持
-
 ::note
-**Neo4j Desktop 要求**<br>如果您计划使用 Neo4j 作为图记忆，请安装 Neo4j Desktop
-::
-
-#### 下载示例
-
-要下载示例代码、数据和配置，请运行以下命令：
-
+**下载示例代码**<br>您还可以基于以下命令下载示例代码，从而了解每个memos内部模块的调用方式：
 ```bash
 memos download_examples
 ```
+::
 
 ## 通过Docker安装
