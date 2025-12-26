@@ -111,7 +111,6 @@ nav:
       - "(ri:delete-bin-line) 删除记忆": api_docs/core/delete_memory.md
 
     - "(ri:chat-1-line) 消息":
-      - "(ri:feedback-line) 添加反馈": api_docs/message/add_feedback.md
       - "(ri:file-list-line) 获取消息": api_docs/message/get_message.md
       - "(ri:task-line) 获取任务状态": api_docs/message/get_status.md
 
@@ -124,6 +123,7 @@ nav:
       - "(ri:file-add-line) 添加知识库文档": api_docs/knowledge/add_kb_doc.md
       - "(ri:file-search-line) 获取知识库文档": api_docs/knowledge/get_kb_doc.md
       - "(ri:file-reduce-line) 删除知识库文档": api_docs/knowledge/delete_kb_doc.md
+      - "(ri:feedback-line) 添加反馈": api_docs/message/add_feedback.md
 
     - "(ri:customer-service-line) 帮助与支持":
       - "(ri:error-warning-line) 错误码": api_docs/help/error_codes.md
