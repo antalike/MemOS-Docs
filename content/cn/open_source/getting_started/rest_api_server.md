@@ -39,16 +39,20 @@ cd MemOS
 OPENAI_API_KEY=sk-xxx
 # OpenAI API 基础 URL 
 OPENAI_API_BASE=http://xxx:3000/v1
+# 默认模型名称
+MOS_CHAT_MODEL=qwen3-max
 
 # Memory Reader LLM 模型
-MEMRADER_MODEL=gpt-4o-mini
+MEMRADER_MODEL=qwen3-max
 # Memory Reader API 密钥 
 MEMRADER_API_KEY=sk-xxx
 # Memory Reader API 基础 URL
 MEMRADER_API_BASE=http://xxx:3000/v1
 
 # Embedder 模型名称
-MOS_EMBEDDER_MODEL=bge-m3
+MOS_EMBEDDER_MODEL=text-embedding-v4
+# 配置embedding backend 两种选择 ollama | universal_api
+MOS_EMBEDDER_BACKEND=universal_api
 # Embedder API 基础 URL 
 MOS_EMBEDDER_API_BASE=http://xxx:8081/v1
 # Embedder API 密钥
@@ -77,28 +81,64 @@ DEFAULT_USE_REDIS_QUEUE=false
 # 启用聊天 API
 ENABLE_CHAT_API=true
 # 聊天模型列表 可以通过百炼申请. 模型可自选
-CHAT_MODEL_LIST=[{"backend": "qwen", "api_base": "https://xxx/v1", "api_key": "sk-xxx", "model_name_or_path": "qwen3-max", "temperature": 0.7, "extra_body": {"enable_thinking": true} ,"support_models": ["qwen3-max"]}]
+CHAT_MODEL_LIST=[{"backend": "qwen", "api_base": "https://xxx/v1", "api_key": "sk-xxx", "model_name_or_path": "qwen3-max", "extra_body": {"enable_thinking": true} ,"support_models": ["qwen3-max"]}]
 ```
 
-
-
-### 3、自定义配置(API_KEY ,BASE_URL )
+### 3、以百炼为例自定义配置
 
 ```bash
-#相关API_KEY
-OPENAI_API_KEY
-MEMRADER_API_KEY
-MOS_EMBEDDER_API_KEY
-CHAT_MODEL_LIST -- api_key
 # 可通过百炼平台申请
-https://bailian.console.aliyun.com/?spm=a2c4g.11186623.0.0.2f2165b08fRk4l&tab=api#/api
-#相关BASE_URL
-OPENAI_API_BASE
-MEMRADER_API_BASE
-MOS_EMBEDDER_API_BASE
-CHAT_MODEL_LIST -- api_base
-#可通过百炼平台申请
-https://bailian.console.aliyun.com/?spm=a2c4g.11186623.0.0.2f2165b08fRk4l&tab=api#/api
+# https://bailian.console.aliyun.com/?spm=a2c4g.11186623.0.0.2f2165b08fRk4l&tab=api#/api
+# 申请成功后，获取API_KEY和BASE_URL，示例配置如下
+
+# OpenAI API 密钥 (用百炼的API_KEY)
+OPENAI_API_KEY=you_bailian_api_key
+# OpenAI API 基础 URL 
+OPENAI_API_BASE=https://dashscope.aliyuncs.com/compatible-mode/v1
+# 默认模型名称
+MOS_CHAT_MODEL=qwen3-max
+
+# Memory Reader LLM 模型
+MEMRADER_MODEL=qwen3-max
+# Memory Reader API 密钥 (用百炼的API_KEY)
+MEMRADER_API_KEY=you_bailian_api_key
+# Memory Reader API 基础 URL
+MEMRADER_API_BASE=https://dashscope.aliyuncs.com/compatible-mode/v1
+
+# Embedder模型名称可以参考下面链接
+# https://bailian.console.aliyun.com/?spm=a2c4g.11186623.0.0.2f2165b08fRk4l&tab=api#/api/?type=model&url=2846066
+MOS_EMBEDDER_MODEL=text-embedding-v4
+# 配置embedding backend 两种选择 ollama | universal_api
+MOS_EMBEDDER_BACKEND=universal_api
+# Embedder API 基础 URL 
+MOS_EMBEDDER_API_BASE=https://dashscope.aliyuncs.com/compatible-mode/v1
+# Embedder API 密钥 (用百炼的API_KEY)
+MOS_EMBEDDER_API_KEY=you_bailian_api_key
+# Embedding 向量维度
+EMBEDDING_DIMENSION=1024
+# Reranker 后端 (http_bge | etc.)
+MOS_RERANKER_BACKEND=cosine_local
+
+# Neo4j 连接 URI
+# 可选值: neo4j-community | neo4j | nebular | polardb
+NEO4J_BACKEND=neo4j-community
+# 当 backend=neo4j* 时必须
+NEO4J_URI=bolt://localhost:7687
+NEO4J_USER=neo4j
+NEO4J_PASSWORD=12345678
+NEO4J_DB_NAME=neo4j
+MOS_NEO4J_SHARED_DB=false
+
+
+# 启用默认 cube 配置
+MOS_ENABLE_DEFAULT_CUBE_CONFIG=true
+# 是否使用 redis 的调度器
+DEFAULT_USE_REDIS_QUEUE=false
+
+# 启用聊天 API
+ENABLE_CHAT_API=true
+
+CHAT_MODEL_LIST=[{"backend": "qwen", "api_base": "https://dashscope.aliyuncs.com/compatible-mode/v1", "api_key": "you_bailian_api_key", "model_name_or_path": "qwen3-max-preview", "extra_body": {"enable_thinking": true} ,"support_models": ["qwen3-max-preview"]}]
 ```
 ![MemOS bailian](https://cdn.memtensor.com.cn/img/get_key_url_by_bailian_compressed.png)
 <div style="text-align: center; margin-top: 10px">百炼申请 API_KEY和 BASE_URL 示例</div>
@@ -111,22 +151,22 @@ https://bailian.console.aliyun.com/?spm=a2c4g.11186623.0.0.2f2165b08fRk4l&tab=ap
 
 ### 4、启动docker 
 ```bash
- #如果没有安装docker,请安装对应版本，下载地址如下：
+ # 如果没有安装docker,请安装对应版本，下载地址如下：
  https://www.docker.com/
 
-#可通过命令行登录docker，也可在docker客户端登录
-#命令行登录
+# 可通过命令行登录docker，也可在docker客户端登录
+# 命令行登录
 docker login --username=you-docker-username registry.cn-shanghai.aliyuncs.com
 # 成功后会提示输入密码，稍等片刻后出现success则成功登录
 
 # 客户端登录
 # 客户端直接通过用户密码登录，可以在客户端查看
 
- #安装完成后，查看docker状态
- docker ps
+# 安装完成后，查看docker状态
+docker ps
 
- #查看docker镜像 （可不用）
- docker images
+# 查看docker镜像 （可不用）
+docker images
 
 ```
 
@@ -155,7 +195,7 @@ url: registry.cn-shanghai.aliyuncs.com/memtensor/memos-full-base-arm:v1.0.0
 #### 配置Dockerfile文件
 
 ```bash
-# 当前案例使用精简包 url
+# 当前示例使用精简包 url
 FROM registry.cn-shanghai.aliyuncs.com/memtensor/memos-base-arm:v1.0
 
 WORKDIR /app
@@ -179,9 +219,6 @@ docker compose up
 ```
 ![MemOS buildComposeupSuccess](https://cdn.memtensor.com.cn/img/memos_build_composeup_success_jgdd8e_compressed.png)
 <div style="text-align: center; margin-top: 10px">示例图片，端口按 docker 自定义的配置</div>  
-
-
-
 
 #### 通过 [http://localhost:8000/docs](http://localhost:8000/docs) 访问 API。
 

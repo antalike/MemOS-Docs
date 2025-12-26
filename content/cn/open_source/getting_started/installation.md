@@ -52,7 +52,7 @@ touch .env
 ```
 
 2. .env 内容
-.env详细配置请见[env配置](open_source/getting_started/rest_api_server)
+.env详细配置请见[env配置](/open_source/getting_started/rest_api_server/#本地运行)
 
 ::note
 **请注意**<br>
@@ -67,7 +67,7 @@ uvicorn memos.api.server_api:app --host 0.0.0.0 --port 8000 --workers 1
 
 #### ADD Memory
 ```bash
-curl --location --request POST 'http://127.0.0.1:8001/product/add' \
+curl --location --request POST 'http://127.0.0.1:8000/product/add' \
 --header 'Content-Type: application/json' \
 --data-raw '{
 
@@ -82,7 +82,7 @@ curl --location --request POST 'http://127.0.0.1:8001/product/add' \
 
 #### Search Memory
 ```bash
-curl --location --request POST 'http://127.0.0.1:8001/product/search' \
+curl --location --request POST 'http://127.0.0.1:8000/product/search' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "query": "我喜欢吃什么",
