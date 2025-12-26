@@ -53,16 +53,24 @@ src/memos/
     api/           # API 定义
     chunkers/      # 文本分块工具
     configs/       # 配置模式
+    context/       # 日志上下文
     embedders/     # 嵌入模型
     graph_dbs/     # 图数据库后端 (例如，Neo4j)
     vec_dbs/       # 向量数据库后端 (例如，Qdrant)
     llms/          # LLM 连接器
+    mem_agent/     # 深度检索
     mem_chat/      # 记忆增强聊天逻辑
     mem_cube/      # MemCube 管理
+    mem_feedback   # 记忆反馈
     mem_os/        # MOS 编排
     mem_reader/    # 记忆读取器
+    mem_scheduler/ # 记忆调度模块
     memories/      # 记忆类型实现
+    multi_mem_cube/# 多视图cube
     parsers/       # 解析工具
+    reranker/      # 重排模块
+    templates/     # 提示词模板
+    types/         # 类型定义
 ```
 
 ::note
