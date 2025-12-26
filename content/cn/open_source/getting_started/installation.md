@@ -10,7 +10,7 @@ desc: "MemOS 完整安装指南。"
   ---
   icon: ri:play-line
   title: 从源码安装
-  to: #from-source
+  to: /open_source/getting_started/installation#from-source
   ---
   适合二次开发与贡献：可编辑安装、可跑测试、可本地调试。
   :::
@@ -19,7 +19,7 @@ desc: "MemOS 完整安装指南。"
   ---
   icon: ri:tree-line
   title: 通过pip安装
-  to: #from-pip
+  to: /open_source/getting_started/installation#from-pip
   ---
   最简单的安装方式：快速开始使用 MemOS。
   :::
@@ -28,7 +28,7 @@ desc: "MemOS 完整安装指南。"
   ---
   icon: ri:database-2-line
   title: 通过Docker安装
-  to: #from-docker
+  to: /open_source/getting_started/installation#from-docker
   ---
   适合快速部署：一键启动服务与依赖组件。
   :::
