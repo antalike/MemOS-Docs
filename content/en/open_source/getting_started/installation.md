@@ -67,7 +67,7 @@ uvicorn memos.api.server_api:app --host 0.0.0.0 --port 8000 --workers 1
 
 #### Add Memory
 ```bash
-curl --location --request POST 'http://127.0.0.1:8001/product/add' \
+curl --location --request POST 'http://127.0.0.1:8000/product/add' \
 --header 'Content-Type: application/json' \
 --data-raw '{
 
@@ -82,7 +82,7 @@ curl --location --request POST 'http://127.0.0.1:8001/product/add' \
 
 #### Search Memory
 ```bash
-curl --location --request POST 'http://127.0.0.1:8001/product/search' \
+curl --location --request POST 'http://127.0.0.1:8000/product/search' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "query": "What do I like to eat",
