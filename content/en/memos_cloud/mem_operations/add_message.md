@@ -135,7 +135,7 @@ def add_message(user_id, conversation_id, role, content):
 add_message("memos_user_123", "memos_conversation_123", "user","""I ran 5 kilometers this morning, and my knees are a bit sore""")
 
 # AI replies to the message
-add_message("memos_assistant_123", "memos_conversation_123", "assistant","""You ran 5 kilometers today and your knees are a bit sore, which means your joints and muscles are still adapting to the intensity. It is recommended to control the distance to about 3 kilometers tomorrow, focusing on full warm-up and relaxation. This can maintain the training rhythm while giving the knees time to recover.""")
+add_message("memos_user_123", "memos_conversation_123", "assistant","""You ran 5 kilometers today and your knees are a bit sore, which means your joints and muscles are still adapting to the intensity. It is recommended to control the distance to about 3 kilometers tomorrow, focusing on full warm-up and relaxation. This can maintain the training rhythm while giving the knees time to recover.""")
 
 ```
 
