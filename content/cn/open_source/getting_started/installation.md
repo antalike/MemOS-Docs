@@ -3,7 +3,39 @@ title: "安装指南"
 desc: "MemOS 完整安装指南。"
 ---
 
-## 基础安装
+
+::card-group
+
+  :::card
+  ---
+  icon: ri:play-line
+  title: 从源码安装
+  to: /open_source/getting_started/installation#from-source
+  ---
+  适合二次开发与贡献：可编辑安装、可跑测试、可本地调试。
+  :::
+
+  :::card
+  ---
+  icon: ri:tree-line
+  title: 通过pip安装
+  to: /open_source/getting_started/installation#via-pip
+  ---
+  最简单的安装方式：快速开始使用 MemOS。
+  :::
+
+  :::card
+  ---
+  icon: ri:database-2-line
+  title: 通过Docker安装
+  to: /open_source/getting_started/installation#via-docker
+  ---
+  适合快速部署：一键启动服务与依赖组件。
+  :::
+
+::
+
+## 从源码安装{#from-source}
 
 安装 MemOS 最简单的方法是使用 pip：
 
@@ -68,3 +100,8 @@ memos download_examples
 pip show MemoryOS
 python -c "import memos; print(memos.__version__)"
 ```
+
+
+## 通过pip安装 {#via-pip}
+
+## 通过Docker安装 {#via-docker}
