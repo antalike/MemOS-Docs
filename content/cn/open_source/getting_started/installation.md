@@ -119,28 +119,6 @@ pip install -U "MemoryOS[all]"
 python -c "import memos; print(memos.__version__)"
 ```
 
-
-::note
-**可选依赖**<br>
-
-MemOS 为不同功能提供了多个可选依赖组。您可以根据需要进行安装。
-
-| 功能       | 包名                      |
-| ---------- | ------------------------- |
-| 树形记忆   | `MemoryOS[tree-mem]`      |
-| 记忆读取器 | `MemoryOS[mem-reader]`    |
-| 记忆调度器 | `MemoryOS[mem-scheduler]` |
-
-安装命令示例：
-
-```bash
-pip install MemoryOS[tree-mem]
-pip install MemoryOS[tree-mem,mem-reader]
-pip install MemoryOS[mem-scheduler]
-pip install MemoryOS[tree-mem,mem-reader,mem-scheduler]
-```
-::
-
 #### 创建 .env 配置文件
 MemOS 的 server_api 依赖环境变量启动，因此需要在启动目录下创建 .env 文件。
 1. 新建 .env
@@ -167,7 +145,48 @@ INFO:     Uvicorn running on http://0.0.0.0:8000
 INFO:     Application startup complete.
 ```
 
-#### 验证服务是否正常
+#### 开始您的记忆操作吧
+添加记忆（调用方式和从源码部署是一致哒，这次我们试试**同步**方式来添加记忆）：
+```text
+curl --location --request POST 'http://127.0.0.1:8000/product/add' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "messages": [{
+    "role": "user",
+    "content": "我喜欢吃草莓"
+  }],
+    "user_id": "8736b16e-1d20-4163-980b-a5063c3facdc",
+    "writable_cube_ids":["b32d0977-435d-4828-a86f-4f47f8b55bca"],
+    "async_mode": "sync",
+    "mode": "fine"
+}'
+```
+
+::note
+**期望的输出**<br>
+```json
+{"code":200,"message":"Memory added successfully","data":[{"memory":"用户喜欢吃草莓。","memory_id":"d01a354e-e5f6-4e2a-bd89-c57ae,"memory_type":"UserMemory","cube_id":"b32d0977-435d-4828-a86f-4f47f8b55bca"}]}
+```
+::
+
+检索记忆（调用方式和从源码部署是一致哒）：
+```text
+curl --location --request POST 'http://127.0.0.1:8000/product/search' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "query": "我喜欢吃什么",
+     "user_id": "8736b16e-1d20-4163-980b-a5063c3facdc",
+    "readable_cube_ids": ["b32d0977-435d-4828-a86f-4f47f8b55bca"],
+    "top_k":20
+  }'
+```
+
+::note
+**期望的输出**<br>
+```json
+{"code":200,"message":"Search completed successfully","data":{"text_mem":[{"cube_id":"b32d0977-435d-4828-a86f-4f47f8b55bca","memories":[{"id":"f18cbe36-4cd9-456f-9b9f-6be89c35b2bf","memory":"用户喜欢吃草莓。","metadata":{"user_id":"8736b16e-1d20-4163-980b-a5dc","session_id":"default_session","status":"activated","type":"fact","key":"草莓喜好","confidence":0.99,"source":null,"tags":["饮喜好","草莓"],"visibility":null,"updated_at":"2025-12-26T20:35:08.178564000+00:00","info":null,"covered_history":null,"memory_typWorkingMemory","sources":[],"embedding":[],"created_at":"2025-12-26T20:35:08.177484000+00:00","usage":[],"background":"用户表达了好，表明他们喜欢这种水果，可能在饮食选择中倾向于包含草莓。","file_ids":[],"relativity":0.0,"ref_id":"[f18cbe36]","id":"f18cbe36-4memory":"用户喜欢吃草莓。"},"ref_id":"[f18cbe36]"}]}],"act_mem":[],"para_mem":[],"pref_mem":[{"cube_id":"b32d0977-435d-4828-a86f-4f47f8b55bca","memories":[]}],"pref_note":"","tool_mem":[{"cube_id":"b32d0977-435d-4828-a86f-4f47f8b55bca","memories":[]}],"pref_string":""}}
+```
+::
 
 ::
 
