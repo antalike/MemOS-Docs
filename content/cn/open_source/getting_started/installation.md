@@ -28,7 +28,7 @@ desc: "MemOS 完整安装指南。"
   ---
   icon: ri:database-2-line
   title: 通过Docker安装
-  to: /cn/open_source/getting_started/installation#通过Docker安装
+  to: /cn/open_source/getting_started/installation#通过docker安装
   ---
   适合快速部署：一键启动服务与依赖组件。
   :::
@@ -268,4 +268,4 @@ memos download_examples
 ::
 
 ## 通过Docker安装
-详细步骤请见[启动Docker](/cn/open_source/getting_started/rest_api_server/#4、启动docker)
+详细步骤请见[启动Docker](/cn/open_source/getting_started/rest_api_server/#_4启动docker)
