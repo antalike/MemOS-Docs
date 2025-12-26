@@ -52,7 +52,7 @@ touch .env
 ```
 
 2. .env 内容
-.env详细配置请见[env配置](open_source/getting_started/rest_api_server/#本地运行)
+.env详细配置请见[env配置](open_source/getting_started/rest_api_server)
 
 ::note
 **请注意**<br>
@@ -151,27 +151,7 @@ touch .env
 ```
 
 2. 示例 .env 内容
-```text
-# ========== 必需配置 ==========
-CHAT_MODEL_LIST='[
-  {
-    "name": "default",
-    "backend": "openai",
-    "config": {
-      "model": "gpt-4o-mini",
-      "api_key": "YOUR_API_KEY"
-    }
-  }
-]'
-
-# ========== 可选配置 ==========
-MEMOS_LOG_LEVEL=INFO
-```
-
-::note
-**请注意**<br>
-env注意事项
-::
+.env详细配置请见[env配置](open_source/getting_started/rest_api_server)
 
 有关详细的开发环境设置、工作流程指南和贡献最佳实践，请参阅我们的 [贡献指南](/open_source/contribution/overview)。
 
