@@ -24,14 +24,12 @@ desc: MemOS provides a REST API service written using FastAPI. Users can perform
 
 ### 2、Configure Environment Variables
 
-#### Create a `.env` file in the root directory and set your environment variables. Complete Mode Reference <a href="https://github.com/MemTensor/MemOS/blob/main/docker/.env.example">.env.example</a>.
+#### Create a `.env` file in the root directory and set your environment variables.
+##### .env The quick mode configuration is as follows, Complete Mode Reference <a href="https://github.com/MemTensor/MemOS/blob/main/docker/.env.example">.env.example</a>.
 
-##### API Key Can be applied for through ['APIKey'](https://cloud.siliconflow.com/me/account/ak)
-##### Base Url can apply through ['Bailian'](https://bailian.console.aliyun.com/?spm=a2c4g.11186623.0.0.2f2165b08fRk4l&tab=api#/api)
-##### .env The quick mode configuration is as follows
 ```bash
 
-# OpenAI API Key
+# OpenAI API Key (Custom configuration required)
 OPENAI_API_KEY=sk-xxx
 # OpenAI API Base URL
 OPENAI_API_BASE=http://xxx:3000/v1
@@ -48,14 +46,14 @@ MOS_EMBEDDER_MODEL=bge-m3
 # Embedder API Base URL
 MOS_EMBEDDER_API_BASE=http://xxx:8081/v1
 # Embedder API Key
-MOS_EMBEDDER_API_KEY=EMPTY
+MOS_EMBEDDER_API_KEY=xxx
 # Embedding vector dimension
 EMBEDDING_DIMENSION=1024
 # Reranker backend (http_bge | etc.)
 MOS_RERANKER_BACKEND=cosine_local
 
 # Neo4j Connection URI
-# neo4j-community | neo4j | nebular | polardb
+# Optional values: neo4j-community | neo4j | nebular | polardb
 NEO4J_BACKEND=neo4j-community
 # required when backend=neo4j*
 NEO4J_URI=bolt://localhost:7687
@@ -64,22 +62,46 @@ NEO4J_PASSWORD=12345678
 NEO4J_DB_NAME=neo4j
 MOS_NEO4J_SHARED_DB=false
 
+
 # Enable default cube configuration
 MOS_ENABLE_DEFAULT_CUBE_CONFIG=true
-# use Redis scheduler
+# Whether to use Redis scheduler
 DEFAULT_USE_REDIS_QUEUE=false
 
 # Enable chat api
 ENABLE_CHAT_API=true
-# Chat Model List can apply through bailian. 
-CHAT_MODEL_LIST=[{"backend": "qwen", "api_base": "https://xxx/v1", "api_key": "sk-xxx", "model_name_or_path": "qwen3-max-preview", "temperature": 0.7, "extra_body": {"enable_thinking": true} ,"support_models": ["qwen3-max-preview"]}]
+# Chat Model List can apply through Bailian. Models are selectable.
+CHAT_MODEL_LIST=[{"backend": "qwen", "api_base": "https://xxx/v1", "api_key": "sk-xxx", "model_name_or_path": "qwen3-max", "temperature": 0.7, "extra_body": {"enable_thinking": true} ,"support_models": ["qwen3-max"]}]
 
 ```
+
+### 3、Custom Configuration(API_KEY ,BASE_URL )
+
+```bash
+#Related API_KEY
+OPENAI_API_KEY
+MEMRADER_API_KEY
+MOS_EMBEDDER_API_KEY
+CHAT_MODEL_LIST -- api_key
+# You can apply through the Bailian platform
+https://bailian.console.aliyun.com/?spm=a2c4g.11186623.0.0.2f2165b08fRk4l&tab=api#/api
+#Related BASE_URL
+OPENAI_API_BASE
+MEMRADER_API_BASE
+MOS_EMBEDDER_API_BASE
+CHAT_MODEL_LIST -- api_base
+#You can apply through the Bailian platform
+https://bailian.console.aliyun.com/?spm=a2c4g.11186623.0.0.2f2165b08fRk4l&tab=api#/api
+```
+![MemOS bailian](https://cdn.memtensor.com.cn/img/get_key_url_by_bailian_compressed.png)
+<div style="text-align: center; margin-top: 10px">Bailian application API_KEY and BASE_URL example</div>
+
+
 
 ##### Configure dependency versions in docker/requirement.txt （negligible）, Complete Mode Reference <a href="https://github.com/MemTensor/MemOS/blob/main/docker/requirements.txt">requirements.txt</a>.
 
 
-### 3、Start Docker 
+### 4、Start Docker 
 ```bash
  # Check docker status
  docker ps
@@ -193,20 +215,7 @@ docker compose up
 
 #### Example process
 
-#####  (Register user -> Query user memory (stop if none) -> Add user memory -> Query user memory)
-
-##### Register User http://localhost:8000/product/users/register (POST)
-```bash
-# Response
-{
-    "code": 200,
-    "message": "User registered successfully",
-    "data": {
-        "user_id": "8736b16e-1d20-4163-980b-a5063c3facdc",
-        "mem_cube_id": "b32d0977-435d-4828-a86f-4f47f8b55bca"
-    }
-}
-```
+#####  (Query user memory (stop if none) -> Add user memory -> Query user memory)
 
 ##### Add User Memory http://localhost:8000/product/add (POST)
 ```bash
@@ -305,7 +314,7 @@ docker compose up
 
 ::
 
-### Method 3：Client Install with uv
+### Method 3：Client Install using CLI commands
 
 ::steps{level="4"}
 
