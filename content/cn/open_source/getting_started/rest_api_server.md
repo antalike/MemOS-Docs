@@ -17,6 +17,7 @@ desc: MemOS 提供了一个使用 FastAPI 编写的 REST API 服务。用户可�
 
 ## 本地运行
 
+<<<<<<< HEAD
 ### 1、本地下载
 ```bash
 # 将代码下载到本地文件夹下 
@@ -36,6 +37,23 @@ cd MemOS
 ```bash 
 
 # OpenAI API 密钥 (需自定义配置)
+=======
+### 1、克隆仓库
+#### fork MemOS 仓库代码(https://github.com/MemTensor/MemOS) 到自己的仓库
+
+#### 克隆 fork 后的仓库到本地文件夹下
+
+### 2、配置环境变量
+
+#### 在根目录中创建一个 `.env` 文件并设置你的环境变量。完整模式参考 <a href="https://github.com/MemTensor/MemOS/blob/main/docker/.env.example">.env.example</a>。
+##### API KEY  可以通过硅基流动申请 ['APIKey'](https://cloud.siliconflow.com/me/account/ak)
+##### API BASE 可以通过百炼申请 ['百炼'](https://bailian.console.aliyun.com/?spm=a2c4g.11186623.0.0.2f2165b08fRk4l&tab=api#/api)
+
+##### .env 快速模式配置如下
+```bash 
+
+# OpenAI API 密钥 
+>>>>>>> 553b77e810f346ba3647d5e7061a630d072d9f8f
 OPENAI_API_KEY=sk-xxx
 # OpenAI API 基础 URL 
 OPENAI_API_BASE=http://xxx:3000/v1
@@ -76,14 +94,26 @@ DEFAULT_USE_REDIS_QUEUE=false
 
 # 启用聊天 API
 ENABLE_CHAT_API=true
+<<<<<<< HEAD
 # 聊天模型列表 可以通过百炼申请. 模型可自选
 CHAT_MODEL_LIST=[{"backend": "qwen", "api_base": "https://xxx/v1", "api_key": "sk-xxx", "model_name_or_path": "qwen3-max", "temperature": 0.7, "extra_body": {"enable_thinking": true} ,"support_models": ["qwen3-max"]}]
+=======
+# 聊天模型列表 可以通过百炼申请.
+CHAT_MODEL_LIST=[{"backend": "qwen", "api_base": "https://xxx/v1", "api_key": "sk-xxx", "model_name_or_path": "qwen3-max-preview", "temperature": 0.7, "extra_body": {"enable_thinking": true} ,"support_models": ["qwen3-max-preview"]}]
+>>>>>>> 553b77e810f346ba3647d5e7061a630d072d9f8f
 ```
 
 
 
+<<<<<<< HEAD
 ### 3、自定义配置(API_KEY ,BASE_URL )
 
+=======
+##### 配置docker/requirement.txt中依赖包的版本等（可忽略）。完整版可参考 <a href="https://github.com/MemTensor/MemOS/blob/main/docker/requirements.txt">requirements.txt</a>。
+
+
+### 3、启动docker 
+>>>>>>> 553b77e810f346ba3647d5e7061a630d072d9f8f
 ```bash
 #相关API_KEY
 OPENAI_API_KEY
@@ -139,11 +169,27 @@ docker login --username=you-docker-username registry.cn-shanghai.aliyuncs.com
 cd docker
 ```
 
+<<<<<<< HEAD
 #### 镜像包使用确认
 包含快速模式和完整模式，可区分使用精简包（区分arm和x86）和全量包（区分arm和x86）
+=======
+#### 配置Dockerfile文件(cd docker)
+包含快速模式和完整模式，可区分使用精简包（区分arm和x86）和全量包（区分arm和x86）
+
+● 精简包：简化体量过大的 nvidia相关等依赖，对镜像实现轻量化，使本地部署更加轻量快速。
+
+##### url: registry.cn-shanghai.aliyuncs.com/memtensor/memos-base:v1.0
+##### url: registry.cn-shanghai.aliyuncs.com/memtensor/memos-base-arm:v1.0
+
+● 全量包：将 MemOS 全部依赖包打为镜像，可体验完整功能，通过配置 Dockerfile可直接构建启动。
+
+##### url: registry.cn-shanghai.aliyuncs.com/memtensor/memos-full-base:v1.0.0
+##### url: registry.cn-shanghai.aliyuncs.com/memtensor/memos-full-base-arm:v1.0.0
+>>>>>>> 553b77e810f346ba3647d5e7061a630d072d9f8f
 
 ```bash
 
+<<<<<<< HEAD
 ● 精简包：简化体量过大的 nvidia相关等依赖，对镜像实现轻量化，使本地部署更加轻量快速。
 url: registry.cn-shanghai.aliyuncs.com/memtensor/memos-base:v1.0
 url: registry.cn-shanghai.aliyuncs.com/memtensor/memos-base-arm:v1.0
@@ -158,6 +204,8 @@ url: registry.cn-shanghai.aliyuncs.com/memtensor/memos-full-base-arm:v1.0.0
 # 当前案例使用精简包 url
 FROM registry.cn-shanghai.aliyuncs.com/memtensor/memos-base-arm:v1.0
 
+=======
+>>>>>>> 553b77e810f346ba3647d5e7061a630d072d9f8f
 WORKDIR /app
 
 ENV HF_ENDPOINT=https://hf-mirror.com

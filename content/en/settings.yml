@@ -74,6 +74,7 @@ nav:
         - "(ri:node-tree) OLLAMA": open_source/cookbook/chapter2/ollama.md
       - "(ri:search-2-line) Chapter 3: Intelligent Novel Analysis System": open_source/cookbook/chapter3/overview.md
       - "(ri:graduation-cap-line) Chapter 4: Using MemOS to Build a Production-Grade Knowledge Q&A System": open_source/cookbook/chapter4/overview.md
+      - "(ri:aed-electrodes-line) Chapter 5 Using Chat API to Q&A": open_source/cookbook/chapter5/chat_api.md
 
     - "(ri:star-line) Best Practice":
       - "(ri:speed-line) Performance Tuning": open_source/best_practice/performance_tuning.md
@@ -110,7 +111,6 @@ nav:
       - "(ri:delete-bin-line) Delete Memory": api_docs/core/delete_memory.md
 
     - "(ri:chat-1-line) Messages":
-      - "(ri:feedback-line) Add Feedback": api_docs/message/add_feedback.md
       - "(ri:file-list-line) Get Message": api_docs/message/get_message.md
       - "(ri:task-line) Get Task Status": api_docs/message/get_status.md
 
@@ -123,6 +123,7 @@ nav:
       - "(ri:file-add-line) Create Knowledgebase File": api_docs/knowledge/add_kb_doc.md
       - "(ri:file-search-line) Get Knowledgebase File": api_docs/knowledge/get_kb_doc.md
       - "(ri:file-reduce-line) Delete Knowledgebase File": api_docs/knowledge/delete_kb_doc.md
+      - "(ri:feedback-line) Add Feedback": api_docs/message/add_feedback.md
 
     - "(ri:customer-service-line) Help & Support":
       - "(ri:error-warning-line) Error Codes": api_docs/help/error_codes.md

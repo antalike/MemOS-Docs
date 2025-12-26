@@ -23,6 +23,7 @@ desc: MemOS provides a REST API service written using FastAPI. Users can perform
 #### Clone forked repository to local folder
 
 ### 2、Configure Environment Variables
+<<<<<<< HEAD
 
 #### Create a `.env` file in the root directory and set your environment variables.
 ##### .env The quick mode configuration is as follows, Complete Mode Reference <a href="https://github.com/MemTensor/MemOS/blob/main/docker/.env.example">.env.example</a>.
@@ -102,6 +103,65 @@ https://bailian.console.aliyun.com/?spm=a2c4g.11186623.0.0.2f2165b08fRk4l&tab=ap
 
 
 ### 4、Start Docker 
+=======
+
+#### Create a `.env` file in the root directory and set your environment variables. Complete Mode Reference <a href="https://github.com/MemTensor/MemOS/blob/main/docker/.env.example">.env.example</a>.
+
+##### API Key Can be applied for through ['APIKey'](https://cloud.siliconflow.com/me/account/ak)
+##### Base Url can apply through ['Bailian'](https://bailian.console.aliyun.com/?spm=a2c4g.11186623.0.0.2f2165b08fRk4l&tab=api#/api)
+##### .env The quick mode configuration is as follows
+```bash
+
+# OpenAI API Key
+OPENAI_API_KEY=sk-xxx
+# OpenAI API Base URL
+OPENAI_API_BASE=http://xxx:3000/v1
+
+# Memory Reader LLM model
+MEMRADER_MODEL=gpt-4o-mini
+# Memory Reader API Key
+MEMRADER_API_KEY=sk-xxx
+# Memory Reader API Base URL
+MEMRADER_API_BASE=http://xxx:3000/v1
+
+# Embedder model name
+MOS_EMBEDDER_MODEL=bge-m3
+# Embedder API Base URL
+MOS_EMBEDDER_API_BASE=http://xxx:8081/v1
+# Embedder API Key
+MOS_EMBEDDER_API_KEY=EMPTY
+# Embedding vector dimension
+EMBEDDING_DIMENSION=1024
+# Reranker backend (http_bge | etc.)
+MOS_RERANKER_BACKEND=cosine_local
+
+# Neo4j Connection URI
+# neo4j-community | neo4j | nebular | polardb
+NEO4J_BACKEND=neo4j-community
+# required when backend=neo4j*
+NEO4J_URI=bolt://localhost:7687
+NEO4J_USER=neo4j
+NEO4J_PASSWORD=12345678
+NEO4J_DB_NAME=neo4j
+MOS_NEO4J_SHARED_DB=false
+
+# Enable default cube configuration
+MOS_ENABLE_DEFAULT_CUBE_CONFIG=true
+# use Redis scheduler
+DEFAULT_USE_REDIS_QUEUE=false
+
+# Enable chat api
+ENABLE_CHAT_API=true
+# Chat Model List can apply through bailian. 
+CHAT_MODEL_LIST=[{"backend": "qwen", "api_base": "https://xxx/v1", "api_key": "sk-xxx", "model_name_or_path": "qwen3-max-preview", "temperature": 0.7, "extra_body": {"enable_thinking": true} ,"support_models": ["qwen3-max-preview"]}]
+
+```
+
+##### Configure dependency versions in docker/requirement.txt （negligible）, Complete Mode Reference <a href="https://github.com/MemTensor/MemOS/blob/main/docker/requirements.txt">requirements.txt</a>.
+
+
+### 3、Start Docker 
+>>>>>>> 553b77e810f346ba3647d5e7061a630d072d9f8f
 ```bash
  # Check docker status
  docker ps
