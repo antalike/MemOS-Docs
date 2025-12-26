@@ -32,7 +32,7 @@ When handling large-scale memories, you need precise control over the scope of m
     
 ## 2. How It Works  
 1. **Precise Filtering**: Based on the filtering conditions you set, the system performs strict filtering on the user's memory and precisely retains the candidate memory entries that meet the constraints.  
-2. **Retrieval and Recall**: Within the filtered candidate memories, [memory search](/memos_cloud/features/mem_operations/search_memory) is performed to recall the memory fragments most relevant to the user's query.
+2. **Retrieval and Recall**: Within the filtered candidate memories, [memory search](/memos_cloud/mem_operations/search_memory) is performed to recall the memory fragments most relevant to the user's query.
 
 
 ## 3. Filter Structure Description
