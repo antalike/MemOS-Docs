@@ -52,7 +52,7 @@ desc: "恭喜你——你已经掌握了快速入门并构建了第一个可用�
 
 ::
 
-## 示例 1：最简Pipeline 
+## 示例 1：最简Pipeline {#example-1-minimal-pipeline}
 
 ### 何时使用：
 - 你想要最小的可用示例。
@@ -98,7 +98,7 @@ mos.dump("tmp/my_mem_cube")
 mos.load("tmp/my_mem_cube")
 ````
 
-## 示例 2：仅 TreeTextMemory
+## 示例 2：仅 TreeTextMemory {#example-2-treetextmemory-only}
 
 ### 何时使用：
 
@@ -160,7 +160,7 @@ my_tree_textual_memory.dump("tmp/my_tree_textual_memory")
 my_tree_textual_memory.drop()
 ```
 
-## 示例 3：仅 KVCacheMemory
+## 示例 3：仅 KVCacheMemory {#example-3-kvcachememory-only}
 
 ### 何时使用：
 
@@ -235,7 +235,7 @@ kv_mem.load("tmp/kv_mem")
 print("Loaded caches:", kv_mem.get_all())
 ```
 
-## 示例 4：混合模式
+## 示例 4：混合模式 {#example-4-hybrid}
 
 ### 何时使用：
 - 你希望同时拥有长期可解释记忆与短期快速上下文。
@@ -302,7 +302,7 @@ while True:
 print("📢 [System] MemChat has stopped.")
 ````
 
-## 示例 5：多记忆调度
+## 示例 5：多记忆调度 {#example-5-multi-memory-scheduling}
 
 ### 何时使用：
 
