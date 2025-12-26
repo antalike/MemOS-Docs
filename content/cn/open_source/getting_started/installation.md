@@ -37,15 +37,36 @@ desc: "MemOS 完整安装指南。"
 
 ## 从源码安装
 
-安装 MemOS 最简单的方法是使用 pip：
+## 通过pip安装
+安装 MemOS 最简单的方法是使用 pip。
+
+::steps{level="4"}
+
+#### 创建并激活 Conda 环境（推荐）
+
+为避免依赖冲突，强烈建议使用独立的 Conda 环境。
 
 ```bash
-pip install MemoryOS -U
+conda create -n memos python=3.11
+conda activate memos
 ```
 
-有关详细的开发环境设置、工作流程指南和贡献最佳实践，请参阅我们的 [贡献指南](/open_source/contribution/overview)。
+#### 从 PyPI 安装 MemOS
+安装 MemOS 及其全部可选组件：
 
-## 可选依赖
+```bash
+pip install -U "MemoryOS[all]"
+```
+
+安装完成后，可验证是否成功：
+
+```bash
+python -c "import memos; print(memos.__version__)"
+```
+
+
+::note
+**可选依赖**<br>
 
 MemOS 为不同功能提供了多个可选依赖组。您可以根据需要进行安装。
 
@@ -63,45 +84,80 @@ pip install MemoryOS[tree-mem,mem-reader]
 pip install MemoryOS[mem-scheduler]
 pip install MemoryOS[tree-mem,mem-reader,mem-scheduler]
 ```
+::
 
-## 外部依赖
+#### 创建 .env 配置文件
+MemOS 的 server_api 依赖环境变量启动，因此需要在启动目录下创建 .env 文件。
+1. 新建 .env
+```bash
+touch .env
+```
 
-### Ollama 支持
+2. 示例 .env 内容
+```text
+# ========== 必需配置 ==========
+CHAT_MODEL_LIST='[
+  {
+    "name": "default",
+    "backend": "openai",
+    "config": {
+      "model": "gpt-4o-mini",
+      "api_key": "YOUR_API_KEY"
+    }
+  }
+]'
 
+# ========== 可选配置 ==========
+MEMOS_LOG_LEVEL=INFO
+```
+
+::note
+**请注意**<br>
+env注意事项
+::
+
+有关详细的开发环境设置、工作流程指南和贡献最佳实践，请参阅我们的 [贡献指南](/open_source/contribution/overview)。
+
+#### 启动 MemOS Server
+MemOS 不会自动加载 .env 文件，请使用 python-dotenv 方式启动。
+```bash
+python -m dotenv run -- \
+  uvicorn memos.api.server_api:app \
+  --host 0.0.0.0 \
+  --port 8000
+```
+启动成功后，你将看到类似输出：
+```text
+INFO:     Uvicorn running on http://0.0.0.0:8000
+INFO:     Application startup complete.
+```
+
+#### 验证服务是否正常
+
+### 其他注意事项
+#### Ollama 支持
 要将 MemOS 与 [Ollama](https://ollama.com/) 一起使用，请先安装 Ollama CLI：
 
 ```bash
 curl -fsSL https://ollama.com/install.sh | sh
 ```
 
-### Transformers 支持
+#### Transformers 支持
 
 要使用基于 `transformers` 库的功能，请确保已安装 [PyTorch](https://pytorch.org/get-started/locally/)（建议使用 CUDA 版本以实现 GPU 加速）。
 
-### Neo4j 支持
+#### Neo4j 支持
 
 ::note
 **Neo4j Desktop 要求**<br>如果您计划使用 Neo4j 作为图记忆，请安装 Neo4j Desktop（社区版支持即将推出！）
 ::
 
-### 下载示例
+#### 下载示例
 
 要下载示例代码、数据和配置，请运行以下命令：
 
 ```bash
 memos download_examples
 ```
-
-## 验证安装
-
-要验证您的安装，请运行：
-
-```bash
-pip show MemoryOS
-python -c "import memos; print(memos.__version__)"
-```
-
-
-## 通过pip安装
 
 ## 通过Docker安装
