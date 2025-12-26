@@ -8,55 +8,31 @@ desc: MemOS provides a REST API service written using FastAPI. Users can perform
 
 ### Features
 
-- Register new user: Register a new user using configuration information and default cube.
-- Get recommended queries: Get recommended query statements for a specific user.
-- Get all user memories: Get all memory content for a specific user.
 - Add new memory: Create a new memory for a specific user.
 - Search memories: Search for memory content for a specific user.
+- Get all user memories: Get all memory content for a specific user.
+- Memory feedback: Feedback memory content for a specific user.
 - Chat with MemOS: Chat with MemOS, returning SSE streaming response.
 
 
 ## Run Locally
 
+### 1、Clone Repository
+#### fork MemOS repository code(https://github.com/MemTensor/MemOS) to your own repository
 
+#### Clone forked repository to local folder
 
-### Configure Environment Variables
+### 2、Configure Environment Variables
 
-#### 1. Create a `.env` file in the root directory and set your environment variables. Complete Mode Reference <a href="https://github.com/MemTensor/MemOS/blob/main/docker/.env.example">.env.example</a>.
-##### .env The quick mode configuration is as follows
+#### Create a `.env` file in the root directory and set your environment variables.
+##### .env The quick mode configuration is as follows, Complete Mode Reference <a href="https://github.com/MemTensor/MemOS/blob/main/docker/.env.example">.env.example</a>.
+
 ```bash
-# OpenAI API Key (required when provider=openai)
+
+# OpenAI API Key (Custom configuration required)
 OPENAI_API_KEY=sk-xxx
 # OpenAI API Base URL
 OPENAI_API_BASE=http://xxx:3000/v1
-# Embedder model name
-MOS_EMBEDDER_MODEL=bge-m3
-# Embedder API Base URL
-MOS_EMBEDDER_API_BASE=http://xxx:8081/v1
-# Embedder API Key
-MOS_EMBEDDER_API_KEY=EMPTY
-# Embedding vector dimension
-EMBEDDING_DIMENSION=1024
-# Reranker backend (http_bge | etc.)
-MOS_RERANKER_BACKEND=cosine_local
-# Reranker Service URL
-MOS_RERANKER_URL=localhsot
-
-# Neo4j Connection URI
-# neo4j-community | neo4j | nebular | polardb
-NEO4J_BACKEND=neo4j-community
-# required when backend=neo4j*
-NEO4J_URI=bolt://localhost:7687
-NEO4J_USER=neo4j
-NEO4J_PASSWORD=12345678
-NEO4J_DB_NAME=neo4j
-MOS_NEO4J_SHARED_DB=false
-
-# Bocha Search API Key
-BOCHA_API_KEY=sk-xxx
-
-# Added from .env.full
-DEFAULT_USE_REDIS_QUEUE=false
 
 # Memory Reader LLM model
 MEMRADER_MODEL=gpt-4o-mini
@@ -65,15 +41,67 @@ MEMRADER_API_KEY=sk-xxx
 # Memory Reader API Base URL
 MEMRADER_API_BASE=http://xxx:3000/v1
 
-# Chat Model List
-CHAT_MODEL_LIST=[{"backend": "deepseek", "api_base": "http://xxx:3000/v1", "api_key": "sk-xxx", "model_name_or_path": "deepseek-r1", "support_models": ["deepseek-r1"]}]
+# Embedder model name
+MOS_EMBEDDER_MODEL=bge-m3
+# Embedder API Base URL
+MOS_EMBEDDER_API_BASE=http://xxx:8081/v1
+# Embedder API Key
+MOS_EMBEDDER_API_KEY=xxx
+# Embedding vector dimension
+EMBEDDING_DIMENSION=1024
+# Reranker backend (http_bge | etc.)
+MOS_RERANKER_BACKEND=cosine_local
+
+# Neo4j Connection URI
+# Optional values: neo4j-community | neo4j | nebular | polardb
+NEO4J_BACKEND=neo4j-community
+# required when backend=neo4j*
+NEO4J_URI=bolt://localhost:7687
+NEO4J_USER=neo4j
+NEO4J_PASSWORD=12345678
+NEO4J_DB_NAME=neo4j
+MOS_NEO4J_SHARED_DB=false
+
+
+# Enable default cube configuration
+MOS_ENABLE_DEFAULT_CUBE_CONFIG=true
+# Whether to use Redis scheduler
+DEFAULT_USE_REDIS_QUEUE=false
+
+# Enable chat api
+ENABLE_CHAT_API=true
+# Chat Model List can apply through Bailian. Models are selectable.
+CHAT_MODEL_LIST=[{"backend": "qwen", "api_base": "https://xxx/v1", "api_key": "sk-xxx", "model_name_or_path": "qwen3-max", "temperature": 0.7, "extra_body": {"enable_thinking": true} ,"support_models": ["qwen3-max"]}]
 
 ```
 
-#### 2. Configure dependency versions in docker/requirement.txt （negligible）, Complete Mode Reference <a href="https://github.com/MemTensor/MemOS/blob/main/docker/requirements.txt">requirements.txt</a>.
+### 3、Custom Configuration(API_KEY ,BASE_URL )
+
+```bash
+#Related API_KEY
+OPENAI_API_KEY
+MEMRADER_API_KEY
+MOS_EMBEDDER_API_KEY
+CHAT_MODEL_LIST -- api_key
+# You can apply through the Bailian platform
+https://bailian.console.aliyun.com/?spm=a2c4g.11186623.0.0.2f2165b08fRk4l&tab=api#/api
+#Related BASE_URL
+OPENAI_API_BASE
+MEMRADER_API_BASE
+MOS_EMBEDDER_API_BASE
+CHAT_MODEL_LIST -- api_base
+#You can apply through the Bailian platform
+https://bailian.console.aliyun.com/?spm=a2c4g.11186623.0.0.2f2165b08fRk4l&tab=api#/api
+```
+![MemOS bailian](https://cdn.memtensor.com.cn/img/get_key_url_by_bailian_compressed.png)
+<div style="text-align: center; margin-top: 10px">Bailian application API_KEY and BASE_URL example</div>
 
 
-### Start Docker 
+
+##### Configure dependency versions in docker/requirement.txt （negligible）, Complete Mode Reference <a href="https://github.com/MemTensor/MemOS/blob/main/docker/requirements.txt">requirements.txt</a>.
+
+
+### 4、Start Docker 
 ```bash
  # Check docker status
  docker ps
@@ -90,15 +118,17 @@ CHAT_MODEL_LIST=[{"backend": "deepseek", "api_base": "http://xxx:3000/v1", "api_
 
 #### Configure Dockerfile(cd docker)
 
-Contains quick mode and full mode, distinguishing between using simplified packages and full packages
+Contains quick mode and full mode, distinguishing between using simplified packages (x86 and arm) and full packages (x86 and arm)
 
 ● Simplified package: Simplify dependencies related to Nvidia that are too large in size, achieve lightweight mirroring, and make local deployment lighter and faster.
 
-url: registry.cn-shanghai.aliyuncs.com/memtensor/memos-base:v1.0
+###### url: registry.cn-shanghai.aliyuncs.com/memtensor/memos-base:v1.0
+###### url: registry.cn-shanghai.aliyuncs.com/memtensor/memos-base-arm:v1.0
 
 ● Full package: Convert all MemOS dependencies into images, Experience complete functionality. By configuring Dockerfiles, you can directly build and start the package.
 
-url: registry.cn-shanghai.aliyuncs.com/memtensor/memos-full-base:v1.0.0
+###### url: registry.cn-shanghai.aliyuncs.com/memtensor/memos-full-base:v1.0.0
+###### url: registry.cn-shanghai.aliyuncs.com/memtensor/memos-full-base-arm:v1.0.0
 
 ```bash
 # Lean package url
@@ -185,20 +215,7 @@ docker compose up
 
 #### Example process
 
-#####  (Register user -> Query user memory (stop if none) -> Add user memory -> Query user memory)
-
-##### Register User http://localhost:8000/product/users/register (POST)
-```bash
-# Response
-{
-    "code": 200,
-    "message": "User registered successfully",
-    "data": {
-        "user_id": "8736b16e-1d20-4163-980b-a5063c3facdc",
-        "mem_cube_id": "b32d0977-435d-4828-a86f-4f47f8b55bca"
-    }
-}
-```
+#####  (Query user memory (stop if none) -> Add user memory -> Query user memory)
 
 ##### Add User Memory http://localhost:8000/product/add (POST)
 ```bash
@@ -297,7 +314,7 @@ docker compose up
 
 ::
 
-### Method 3：Client Install with uv
+### Method 3：Client Install using CLI commands
 
 ::steps{level="4"}
 
