@@ -18,7 +18,7 @@ desc: "恭喜你——你已经掌握了快速入门并构建了第一个可用�
   ---
   icon: ri:tree-line
   title: 多信息源的添加与检索
-  to: /cn/open_source/getting_started/examples#example-2-multi-modal
+  to: /cn/open_source/getting_started/examples#示例-2多信息源记忆的添加与检索
   ---
   添加文本、图片、文件、工具调用的多信息源messages到记忆，并能够检索它们。
   :::
@@ -27,7 +27,7 @@ desc: "恭喜你——你已经掌握了快速入门并构建了第一个可用�
   ---
   icon: ri:apps-line
   title: 多Cube添加和检索
-  to: /open_source/getting_started/examples#example-3-multi-cube
+  to: /cn/open_source/getting_started/examples#示例-3多cube添加和检索
   ---
   添加不同记忆到不同的Cube，在检索时同时召回它们。
   :::
