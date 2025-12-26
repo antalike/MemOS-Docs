@@ -167,7 +167,18 @@ curl --location --request POST 'http://127.0.0.1:8000/product/add' \
 ::note
 **期望的输出**<br>
 ```json
-{"code":200,"message":"Memory added successfully","data":[{"memory":"用户喜欢吃草莓。","memory_id":"d01a354e-e5f6-4e2a-bd89-c57ae,"memory_type":"UserMemory","cube_id":"b32d0977-435d-4828-a86f-4f47f8b55bca"}]}
+{
+  "code": 200,
+  "message": "Memory added successfully",
+  "data": [
+    {
+      "memory": "用户喜欢吃草莓。",
+      "memory_id": "d01a354e-e5f6-4e2a-bd89-c57ae",
+      "memory_type": "UserMemory",
+      "cube_id": "b32d0977-435d-4828-a86f-4f47f8b55bca"
+    }
+  ]
+}
 ```
 ::
 
@@ -186,14 +197,71 @@ curl --location --request POST 'http://127.0.0.1:8000/product/search' \
 ::note
 **期望的输出**<br>
 ```json
-{"code":200,"message":"Search completed successfully","data":{"text_mem":[{"cube_id":"b32d0977-435d-4828-a86f-4f47f8b55bca","memories":[{"id":"f18cbe36-4cd9-456f-9b9f-6be89c35b2bf","memory":"用户喜欢吃草莓。","metadata":{"user_id":"8736b16e-1d20-4163-980b-a5dc","session_id":"default_session","status":"activated","type":"fact","key":"草莓喜好","confidence":0.99,"source":null,"tags":["饮喜好","草莓"],"visibility":null,"updated_at":"2025-12-26T20:35:08.178564000+00:00","info":null,"covered_history":null,"memory_typWorkingMemory","sources":[],"embedding":[],"created_at":"2025-12-26T20:35:08.177484000+00:00","usage":[],"background":"用户表达了好，表明他们喜欢这种水果，可能在饮食选择中倾向于包含草莓。","file_ids":[],"relativity":0.0,"ref_id":"[f18cbe36]","id":"f18cbe36-4memory":"用户喜欢吃草莓。"},"ref_id":"[f18cbe36]"}]}],"act_mem":[],"para_mem":[],"pref_mem":[{"cube_id":"b32d0977-435d-4828-a86f-4f47f8b55bca","memories":[]}],"pref_note":"","tool_mem":[{"cube_id":"b32d0977-435d-4828-a86f-4f47f8b55bca","memories":[]}],"pref_string":""}}
+{
+  "code": 200,
+  "message": "Search completed successfully",
+  "data": {
+    "text_mem": [
+      {
+        "cube_id": "b32d0977-435d-4828-a86f-4f47f8b55bca",
+        "memories": [
+          {
+            "id": "f18cbe36-4cd9-456f-9b9f-6be89c35b2bf",
+            "memory": "用户喜欢吃草莓。",
+            "metadata": {
+              "user_id": "8736b16e-1d20-4163-980b-a5dc",
+              "session_id": "default_session",
+              "status": "activated",
+              "type": "fact",
+              "key": "草莓喜好",
+              "confidence": 0.99,
+              "source": null,
+              "tags": ["饮喜好", "草莓"],
+              "visibility": null,
+              "updated_at": "2025-12-26T20:35:08.178564000+00:00",
+              "info": null,
+              "covered_history": null,
+              "memory_type": "WorkingMemory",
+              "sources": [],
+              "embedding": [],
+              "created_at": "2025-12-26T20:35:08.177484000+00:00",
+              "usage": [],
+              "background": "用户表达了好，表明他们喜欢这种水果，可能在饮食选择中倾向于包含草莓。",
+              "file_ids": [],
+              "relativity": 0.0,
+              "ref_id": "[f18cbe36]"
+            },
+            "ref_id": "[f18cbe36]"
+          }
+        ]
+      }
+    ],
+    "act_mem": [],
+    "para_mem": [],
+    "pref_mem": [
+      {
+        "cube_id": "b32d0977-435d-4828-a86f-4f47f8b55bca",
+        "memories": []
+      }
+    ],
+    "pref_note": "",
+    "tool_mem": [
+      {
+        "cube_id": "b32d0977-435d-4828-a86f-4f47f8b55bca",
+        "memories": []
+      }
+    ],
+    "pref_string": ""
+  }
+}
 ```
 ::
 
 ::
 
 ::note
-**下载示例代码**<br>您还可以基于以下命令下载示例代码，从而了解每个memos内部模块的调用方式：
+**下载示例代码**<br>恭喜您🎉已完成从pip安装MemOS，并跑通最小验证用例！您还可以基于以下命令下载示例代码，从而了解每个memos
+内部模块的调用方式：
 ```bash
 memos download_examples
 ```
