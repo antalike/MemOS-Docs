@@ -3,19 +3,37 @@ title: 工具调用
 desc: 添加工具调用信息，将工具调用的决策、执行结果及其使用轨迹统一纳入 MemOS 记忆。
 ---
 
+::warning 
+注意
+<br>
+<br>
+
+**[需要先在addMessage的时候传入工具记忆（点此查看详细 API 文档）](/api_docs/core/add_message)**
+<br>
+
+**[才能在searchMemory的时候搜索到工具记忆（点此查看详细 API 文档）](/api_docs/core/search_memory)**
+<br>
+<br>
+
+**本文聚焦于功能说明，详细接口字段及限制请点击上方文字链接查看**
+
+::
+
 ## 1. 何时使用
 
 当您的 Agent 需要通过工具（function / tool）获取外部信息，并希望这些「工具调用的上下文与结果」能够被 MemOS 一并理解、关联和沉淀为可检索记忆时，适合使用这种消息结构。
 
 ## 2. 工作原理
 
-1. 添加工具调用信息：
+Step1：添加工具调用信息
 
 `assistant` 消息： `tool_calls` 描述模型决定调用某个工具的行为及其参数。
 
 `tool` 消息：携带真实的工具返回结果，并通过 `tool_call_id` 与对应的 `tool_calls` 精确关联。
 
-2. MemOS 处理工具相关记忆：
+<br>
+
+Step2：MemOS 处理工具相关记忆
 
 *  **工具信息（Tool Schema）**：MemOS 支持对工具信息的结构化管理与动态更新，统一不同工具的描述方式，使模型能够高效地进行工具检索、理解与发现，而无需在提示词中硬编码工具细节。
 
@@ -41,10 +59,36 @@ os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
 os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
 # 带 tool_call 的消息序列
+tool_schema = [{
+    "name": "get_weather",
+    "description": "Get current weather information for a given location",
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "location": {
+                "type": "string",
+                "description": "City name, e.g. Beijing"
+            }
+        },
+        "required": [
+            "location"
+        ]
+    }
+}]
+
 data = {
-    "user_id": "demo-user-id",
+    "user_id": "memos_user_123",
     "conversation_id": "demo-conv-id",
     "messages": [
+        {
+            "role": "system",
+            "content": f"""You are an assistant that can call tools.
+When a user's request can be fulfilled by a tool, you MUST call the appropriate tool.
+<tool_schema>
+{json.dumps(tool_schema, indent=2, ensure_ascii=False)}
+</tool_schema>
+"""
+        },
         {"role": "user", "content": "What's the weather like in Beijing right now?"},
         {
             "role": "assistant",
@@ -96,12 +140,12 @@ import os
 import requests
 import json
 
-os.environ["MEMOS_API_KEY"] = "mpg-HfYkf/zcqsmrq00/e5/IjW1VI+4Q6UQDVpgXohBt"
+os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
 os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
 
 data = {
-    "user_id": "demo-user-id",
+    "user_id": "memos_user_123",
     "conversation_id": "0928",
     "query": "北京适合穿什么衣服",
     "memory_limit_number": 10,
@@ -126,6 +170,16 @@ print(json.dumps(res.json(), indent=2, ensure_ascii=False))
 
 ```python
 "tool_memory_detail_list": [
+   {
+    "id": "7ec50fd8-19ec-42a2-a7c7-ce3cebdb70cf",
+    "tool_type": "ToolSchemaMemory",
+    "tool_value": {"name": "get_weather", "description": "Get current weather information for a given location", "parameters": {"type": "object", "properties": {"location": {"type": "string", "description": "City name, e.g. Beijing"}}, "required": ["location"]}},
+    "create_time": 1766494806624,
+    "conversation_id": "demo-conv-id",
+    "status": "activated",
+    "update_time": 1766494806625,
+    "relativity": 0.44700349055540967
+  },
   {
     "id": "56215e5d-6827-429d-a862-068ea5935e8e",
     "tool_type": "ToolTrajectoryMemory",

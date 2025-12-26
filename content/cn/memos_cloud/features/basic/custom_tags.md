@@ -2,6 +2,21 @@
 title: 自定义标签
 desc: 添加消息时按照你的业务需求使用标签。
 ---
+::warning 
+注意
+<br>
+<br>
+
+**[需要先在addMessage的时候传入tag list（点此查看详细 API 文档）](/api_docs/core/add_message)**
+<br>
+
+**[才能在searchMemory的时候使用标签进行过滤（点此查看详细 API 文档）](/api_docs/core/search_memory)**
+<br>
+<br>
+
+**本文聚焦于功能说明，详细接口字段及限制请点击上方文字链接查看**
+
+::
 
 MemOS 会为每条记忆自动生成标签，但这些标签可能与您业务中所使用的标签不完全一致。您可以在添加消息时传入自定义标签列表，MemOS 将基于您提供的标签含义，对记忆内容自动应用相关标签。
 
@@ -43,7 +58,7 @@ os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
 os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
 data = {
-    "user_id": "memos_user_001",
+    "user_id": "memos_user_123",
     "conversation_id": "1210",
     "messages": [
         {"role": "user","content": "今天天气如何？"},
@@ -76,7 +91,7 @@ os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
 os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
 data = {
-    "user_id": "001",
+    "user_id": "memos_user_123",
     "query": "上海 天气"
 }
 headers = {

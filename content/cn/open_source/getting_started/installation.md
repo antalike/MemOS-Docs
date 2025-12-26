@@ -37,6 +37,61 @@ desc: "MemOS 完整安装指南。"
 
 :span{id="from-source"}
 ## 从源码安装
+```bash
+git clone https://github.com/MemTensor/MemOS.git
+cd MemOS
+pip install . -e
+```
+
+#### 创建 .env 配置文件
+MemOS 的 server_api 依赖环境变量启动，因此需要在启动目录下创建 .env 文件。
+1. 新建 .env
+```bash
+cd MemOS
+touch .env
+```
+
+2. .env 内容
+.env详细配置请见[env配置](open_source/getting_started/rest_api_server/#本地运行)
+
+::note
+**请注意**<br>
+.env 文件配置需要放在MemOS 项目根目录下
+::
+
+#### 启动 MemOS Server。
+```bash
+cd MemOS
+uvicorn memos.api.server_api:app --host 0.0.0.0 --port 8000 --workers 1
+```
+
+#### ADD Memory
+```bash
+curl --location --request POST 'http://127.0.0.1:8001/product/add' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+
+    "messages": [{
+    "role": "user",
+    "content": "我喜欢吃草莓"
+  }],
+    "user_id": "8736b16e-1d20-4163-980b-a5063c3facdc",
+    "writable_cube_ids":["b32d0977-435d-4828-a86f-4f47f8b55bca"]
+}'
+```
+
+#### Search Memory
+```bash
+curl --location --request POST 'http://127.0.0.1:8001/product/search' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "query": "我喜欢吃什么",
+     "user_id": "8736b16e-1d20-4163-980b-a5063c3facdc",
+    "readable_cube_ids": ["b32d0977-435d-4828-a86f-4f47f8b55bca"],
+    "top_k":20
+  }'
+```
+
 
 :span{id="from-pip"}
 ## 通过pip安装

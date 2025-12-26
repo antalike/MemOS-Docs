@@ -37,7 +37,7 @@ export default defineAppConfig({
   toc: {
     bottom: {
       title: 'community.title',
-      edit: 'https://github.com/MemTensor/MemOS-Docs/edit/dev/content',
+      edit: 'https://github.com/MemTensor/MemOS-Docs/edit/v2/content',
       links: [{
         icon: 'i-lucide-star',
         label: 'community.stars',

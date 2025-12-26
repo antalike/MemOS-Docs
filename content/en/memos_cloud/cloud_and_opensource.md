@@ -33,7 +33,7 @@ MemOS provides two "Memory" solutions for AI applications. You can choose:
 
 ### Choose MemOS Cloud Platform
 
-*   **Rapid Implementation**: Enable your AI application with built-in memory in just a few hours. Focus on business logic and feature implementation without spending time maintaining complex storage and memory management systems.
+*   **Rapid Implementation**: Enable your AI application with built-in memory in just a few minutes. Focus on business logic and feature implementation without spending time maintaining complex storage and memory management systems.
 
 *   **Zero-Cost Verification**: Provides ample free trial quotas to help you verify solution feasibility and product effects at the lowest cost.
 
