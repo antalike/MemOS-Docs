@@ -10,7 +10,7 @@ desc: "MemOS 完整安装指南。"
   ---
   icon: ri:play-line
   title: 从源码安装
-  to: /open_source/getting_started/installation#from-source
+  to: /cn/open_source/getting_started/installation#从源码安装
   ---
   适合二次开发与贡献：可编辑安装、可跑测试、可本地调试。
   :::
@@ -19,7 +19,7 @@ desc: "MemOS 完整安装指南。"
   ---
   icon: ri:tree-line
   title: 通过pip安装
-  to: /open_source/getting_started/installation#from-pip
+  to: /cn/open_source/getting_started/installation#通过pip安装
   ---
   最简单的安装方式：快速开始使用 MemOS。
   :::
@@ -28,14 +28,13 @@ desc: "MemOS 完整安装指南。"
   ---
   icon: ri:database-2-line
   title: 通过Docker安装
-  to: /open_source/getting_started/installation#from-docker
+  to: /cn/open_source/getting_started/installation#通过Docker安装
   ---
   适合快速部署：一键启动服务与依赖组件。
   :::
 
 ::
 
-:span{id="from-source"}
 ## 从源码安装
 ```bash
 git clone https://github.com/MemTensor/MemOS.git
@@ -93,7 +92,6 @@ curl --location --request POST 'http://127.0.0.1:8000/product/search' \
 ```
 
 
-:span{id="from-pip"}
 ## 通过pip安装
 安装 MemOS 最简单的方法是使用 pip。
 
@@ -198,5 +196,4 @@ curl -fsSL https://ollama.com/install.sh | sh
 memos download_examples
 ```
 
-:span{id="from-docker"}
 ## 通过Docker安装
