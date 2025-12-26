@@ -42,7 +42,9 @@ MEMRADER_API_KEY=sk-xxx
 MEMRADER_API_BASE=http://xxx:3000/v1
 
 # Embedder model name
-MOS_EMBEDDER_MODEL=bge-m3
+MOS_EMBEDDER_MODEL=text-embedding-v4
+# set default embedding backend default: ollama | universal_api
+MOS_EMBEDDER_BACKEND=universal_api
 # Embedder API Base URL
 MOS_EMBEDDER_API_BASE=http://xxx:8081/v1
 # Embedder API Key
@@ -71,27 +73,64 @@ DEFAULT_USE_REDIS_QUEUE=false
 # Enable chat api
 ENABLE_CHAT_API=true
 # Chat Model List can apply through Bailian. Models are selectable.
-CHAT_MODEL_LIST=[{"backend": "qwen", "api_base": "https://xxx/v1", "api_key": "sk-xxx", "model_name_or_path": "qwen3-max", "temperature": 0.7, "extra_body": {"enable_thinking": true} ,"support_models": ["qwen3-max"]}]
+CHAT_MODEL_LIST=[{"backend": "qwen", "api_base": "https://xxx/v1", "api_key": "sk-xxx", "model_name_or_path": "qwen3-max", "extra_body": {"enable_thinking": true} ,"support_models": ["qwen3-max"]}]
 
 ```
 
 ### 3、Custom Configuration(API_KEY ,BASE_URL )
 
 ```bash
-#Related API_KEY
-OPENAI_API_KEY
-MEMRADER_API_KEY
-MOS_EMBEDDER_API_KEY
-CHAT_MODEL_LIST -- api_key
 # You can apply through the Bailian platform
-https://bailian.console.aliyun.com/?spm=a2c4g.11186623.0.0.2f2165b08fRk4l&tab=api#/api
-#Related BASE_URL
-OPENAI_API_BASE
-MEMRADER_API_BASE
-MOS_EMBEDDER_API_BASE
-CHAT_MODEL_LIST -- api_base
-#You can apply through the Bailian platform
-https://bailian.console.aliyun.com/?spm=a2c4g.11186623.0.0.2f2165b08fRk4l&tab=api#/api
+# https://bailian.console.aliyun.com/?spm=a2c4g.11186623.0.0.2f2165b08fRk4l&tab=api#/api
+# After successful application, obtain API_KEY and BASE-URL. The example configuration is as follows
+
+# OpenAI API Key (Custom configuration required)
+OPENAI_API_KEY=you_bailian_api_key
+# OpenAI API Base URL
+OPENAI_API_BASE=https://dashscope.aliyuncs.com/compatible-mode/v1
+
+# Memory Reader LLM model
+MEMRADER_MODEL=qwen3-max
+# Memory Reader API Key
+MEMRADER_API_KEY=you_bailian_api_key
+# Memory Reader API Base URL
+MEMRADER_API_BASE=https://dashscope.aliyuncs.com/compatible-mode/v1
+
+# Embedder The model name can refer to the following link
+# https://bailian.console.aliyun.com/?spm=a2c4g.11186623.0.0.2f2165b08fRk4l&tab=api#/api/?type=model&url=2846066
+MOS_EMBEDDER_MODEL=text-embedding-v4
+# set default embedding backend default: ollama | universal_api
+MOS_EMBEDDER_BACKEND=universal_api
+# Embedder API Base URL
+MOS_EMBEDDER_API_BASE=https://dashscope.aliyuncs.com/compatible-mode/v1
+# Embedder API Key
+MOS_EMBEDDER_API_KEY=you_bailian_api_key
+# Embedding vector dimension
+EMBEDDING_DIMENSION=1024
+# Reranker backend (http_bge | etc.)
+MOS_RERANKER_BACKEND=cosine_local
+
+# Neo4j Connection URI
+# Optional values: neo4j-community | neo4j | nebular | polardb
+NEO4J_BACKEND=neo4j-community
+# required when backend=neo4j*
+NEO4J_URI=bolt://localhost:7687
+NEO4J_USER=neo4j
+NEO4J_PASSWORD=12345678
+NEO4J_DB_NAME=neo4j
+MOS_NEO4J_SHARED_DB=false
+
+
+# Enable default cube configuration
+MOS_ENABLE_DEFAULT_CUBE_CONFIG=true
+# Whether to use Redis scheduler
+DEFAULT_USE_REDIS_QUEUE=false
+
+# Enable chat api
+ENABLE_CHAT_API=true
+
+CHAT_MODEL_LIST=[{"backend": "qwen", "api_base": "https://dashscope.aliyuncs.com/compatible-mode/v1", "api_key": "you_bailian_api_key", "model_name_or_path": "qwen3-max-preview", "extra_body": {"enable_thinking": true} ,"support_models": ["qwen3-max-preview"]}]
+
 ```
 ![MemOS bailian](https://cdn.memtensor.com.cn/img/get_key_url_by_bailian_compressed.png)
 <div style="text-align: center; margin-top: 10px">Bailian application API_KEY and BASE_URL example</div>
@@ -103,16 +142,30 @@ https://bailian.console.aliyun.com/?spm=a2c4g.11186623.0.0.2f2165b08fRk4l&tab=ap
 
 ### 4、Start Docker 
 ```bash
- # Check docker status
- docker ps
- # Check docker images (optional)
- docker images
+ # If Docker is not installed, please install the corresponding version. The download link is as follows:
+ https://www.docker.com/
+
+# You can log in to Docker through the command line or from the Docker client
+# Command line login
+docker login --username=you-docker-username registry.cn-shanghai.aliyuncs.com
+# After success, you will be prompted to enter your password. Wait for a moment and if success appears, you will successfully log in
+
+# Client login
+# The client can log in directly through the user password and view it on the client
+# Check docker status
+docker ps
+# Check docker images (optional)
+docker images
 
 ```
 
 
 ### Method 1： Docker use repository dependency package image/start (Recommended use)
 ::steps{level="4"}
+```bash
+# Enter the Docker directory
+cd docker
+```
 
 #### Reference configuration environment variables above, .env file should be configured
 
@@ -131,11 +184,8 @@ Contains quick mode and full mode, distinguishing between using simplified packa
 ###### url: registry.cn-shanghai.aliyuncs.com/memtensor/memos-full-base-arm:v1.0.0
 
 ```bash
-# Lean package url
+# The current example uses a simplified package url
 FROM registry.cn-shanghai.aliyuncs.com/memtensor/memos-base:v1.0
-# Full package url
-# FROM registry.cn-shanghai.aliyuncs.com/memtensor/memos-full-base:v1.0.0
-
 
 WORKDIR /app
 
@@ -157,11 +207,6 @@ docker compose up
 ```
 ![MemOS buildComposeupSuccess](https://cdn.memtensor.com.cn/img/memos_build_composeup_success_jgdd8e_compressed.png)
 <div style="text-align: center; margin-top: 10px">Example image, port as per docker custom configuration</div>  
-
-
-
-
-
 
 #### Access API via [http://localhost:8000/docs](http://localhost:8000/docs).
 
