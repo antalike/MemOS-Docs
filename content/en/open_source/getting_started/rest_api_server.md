@@ -33,6 +33,8 @@ desc: MemOS provides a REST API service written using FastAPI. Users can perform
 OPENAI_API_KEY=sk-xxx
 # OpenAI API Base URL
 OPENAI_API_BASE=http://xxx:3000/v1
+# Default model name
+MOS_CHAT_MODEL=qwen3-max
 
 # Memory Reader LLM model
 MEMRADER_MODEL=gpt-4o-mini
@@ -88,6 +90,8 @@ CHAT_MODEL_LIST=[{"backend": "qwen", "api_base": "https://xxx/v1", "api_key": "s
 OPENAI_API_KEY=you_bailian_api_key
 # OpenAI API Base URL
 OPENAI_API_BASE=https://dashscope.aliyuncs.com/compatible-mode/v1
+# Default model name
+MOS_CHAT_MODEL=qwen3-max
 
 # Memory Reader LLM model
 MEMRADER_MODEL=qwen3-max

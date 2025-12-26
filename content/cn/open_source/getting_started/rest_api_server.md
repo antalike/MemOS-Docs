@@ -39,6 +39,8 @@ cd MemOS
 OPENAI_API_KEY=sk-xxx
 # OpenAI API 基础 URL 
 OPENAI_API_BASE=http://xxx:3000/v1
+# 默认模型名称
+MOS_CHAT_MODEL=qwen3-max
 
 # Memory Reader LLM 模型
 MEMRADER_MODEL=qwen3-max
@@ -93,6 +95,8 @@ CHAT_MODEL_LIST=[{"backend": "qwen", "api_base": "https://xxx/v1", "api_key": "s
 OPENAI_API_KEY=you_bailian_api_key
 # OpenAI API 基础 URL 
 OPENAI_API_BASE=https://dashscope.aliyuncs.com/compatible-mode/v1
+# 默认模型名称
+MOS_CHAT_MODEL=qwen3-max
 
 # Memory Reader LLM 模型
 MEMRADER_MODEL=qwen3-max
