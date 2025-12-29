@@ -71,8 +71,6 @@ NEO4J_PASSWORD=12345678
 NEO4J_DB_NAME=neo4j
 MOS_NEO4J_SHARED_DB=false
 
-# Enable default cube configuration
-MOS_ENABLE_DEFAULT_CUBE_CONFIG=true
 # Whether to use Redis scheduler
 DEFAULT_USE_REDIS_QUEUE=false
 
@@ -128,9 +126,6 @@ NEO4J_PASSWORD=12345678
 NEO4J_DB_NAME=neo4j
 MOS_NEO4J_SHARED_DB=false
 
-
-# Enable default cube configuration
-MOS_ENABLE_DEFAULT_CUBE_CONFIG=true
 # Whether to use Redis scheduler
 DEFAULT_USE_REDIS_QUEUE=false
 
