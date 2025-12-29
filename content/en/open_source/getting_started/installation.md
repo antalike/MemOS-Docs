@@ -129,7 +129,13 @@ curl --location --request POST 'http://127.0.0.1:8000/product/search' \
                       "embedding": [],
                       "created_at": "2025-09-18T08:23:44.625511000+00:00",
                       "usage": [
-                          "{\"time\": \"2025-09-18T08:24:17.759748\", \"info\": {\"user_id\": \"de8215e3-3beb-4afc-9b64-ae594d62f1ea\", \"session_id\": \"root_session\"}}"
+                          "{
+                          "time": "2025-09-18T08:24:17.759748", 
+                          "info": {
+                            "user_id": "de8215e3-3beb-4afc-9b64-ae594d62f1ea", 
+                            "session_id": "root_session"
+                            }
+                          }"
                       ],
                       "background": "User expressed a preference for strawberries, indicating a tendency in dietary preferences.",
                       "relativity": 0.6349761312470591,
@@ -298,7 +304,6 @@ touch .env
 ```
 
 #### 2. .env Contents
-For detailed .env configuration, please refer to [env configuration](/open_source/getting_started/rest_api_server/#local-deployment)
 
 Here is a quick .env configuration example:
 ```bash 
@@ -340,8 +345,6 @@ NEO4J_PASSWORD=12345678
 NEO4J_DB_NAME=neo4j
 MOS_NEO4J_SHARED_DB=false
 
-# Enable default cube configuration
-MOS_ENABLE_DEFAULT_CUBE_CONFIG=true
 # Whether to use redis scheduler
 DEFAULT_USE_REDIS_QUEUE=false
 
@@ -394,9 +397,6 @@ NEO4J_PASSWORD=12345678
 NEO4J_DB_NAME=neo4j
 MOS_NEO4J_SHARED_DB=false
 
-
-# Enable default cube configuration
-MOS_ENABLE_DEFAULT_CUBE_CONFIG=true
 # Whether to use redis scheduler
 DEFAULT_USE_REDIS_QUEUE=false
 
@@ -457,13 +457,9 @@ CMD ["uvicorn", "memos.api.server_api:app", "--host", "0.0.0.0", "--port", "8000
  # If Docker is not installed, please install the corresponding version. Download address:
  https://www.docker.com/
 
-# You can log in to docker via command line or docker client
-# Command line login
-docker login --username=you-docker-username registry.cn-shanghai.aliyuncs.com
-# After success, you will be prompted to enter the password. Wait a moment and "Success" will appear if logged in successfully.
-
-# Client login
-# Client logs in directly with username and password, viewable in the client
+#After installation, Docker can be started through the client or through the command line
+#Command line start
+sudo systemctl start docker
 
 # After installation, check docker status
 docker ps
@@ -488,4 +484,73 @@ docker compose up
 #### Access the API at [http://localhost:8000/docs](http://localhost:8000/docs).
 
 ![MemOS Architecture](https://cdn.memtensor.com.cn/img/memos_run_server_success_compressed.png)
+
+#### Search Memory
+```bash
+curl --location --request POST 'http://127.0.0.1:8000/product/search' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "query": "What do I like to eat",
+     "user_id": "8736b16e-1d20-4163-980b-a5063c3facdc",
+    "readable_cube_ids": ["b32d0977-435d-4828-a86f-4f47f8b55bca"],
+    "top_k":20
+  }'
+
+# response
+{
+    "code": 200,
+    "message": "Search completed successfully",
+    "data": {
+        "text_mem": [
+          {
+            "cube_id": "7231eda8-6c57-4f6e-97ce-98b699eebb98",
+            "memories": [
+              {
+                  "id": "2f40be8f-736c-4a5f-aada-9489037769e0",
+                  "memory": "[user opinion] User likes strawberries.",
+                  "metadata": {
+                      "user_id": "de8215e3-3beb-4afc-9b64-ae594d62f1ea",
+                      "session_id": "root_session",
+                      "status": "activated",
+                      "type": "fact",
+                      "key": "User's preference for strawberries",
+                      "confidence": 0.99,
+                      "source": null,
+                      "tags": [
+                          "preference",
+                          "strawberries"
+                      ],
+                      "visibility": null,
+                      "updated_at": "2025-09-18T08:23:44.625479000+00:00",
+                      "memory_type": "UserMemory",
+                      "sources": [],
+                      "embedding": [],
+                      "created_at": "2025-09-18T08:23:44.625511000+00:00",
+                      "usage": [
+                          "{
+                          "time": "2025-09-18T08:24:17.759748", 
+                          "info": {
+                            "user_id": "de8215e3-3beb-4afc-9b64-ae594d62f1ea", 
+                            "session_id": "root_session"
+                            }
+                          }"
+                      ],
+                      "background": "User expressed a preference for strawberries, indicating a tendency in dietary preferences.",
+                      "relativity": 0.6349761312470591,
+                      "vector_sync": "success",
+                      "ref_id": "[2f40be8f]",
+                      "id": "2f40be8f-736c-4a5f-aada-9489037769e0",
+                      "memory": "[user opinion] User likes strawberries."
+                  },
+                  "ref_id": "[2f40be8f]"
+              },
+              ...
+            }
+          }
+        ],
+        "act_mem": [],
+        "para_mem": []
+    }
+}
+```
 

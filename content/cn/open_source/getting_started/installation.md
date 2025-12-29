@@ -127,7 +127,13 @@ curl --location --request POST 'http://127.0.0.1:8000/product/search' \
                       "embedding": [],
                       "created_at": "2025-09-18T08:23:44.625511000+00:00",
                       "usage": [
-                          "{\"time\": \"2025-09-18T08:24:17.759748\", \"info\": {\"user_id\": \"de8215e3-3beb-4afc-9b64-ae594d62f1ea\", \"session_id\": \"root_session\"}}"
+                          "{
+                            "time": "2025-09-18T08:24:17.759748", 
+                            "info": {
+                              "user_id": "de8215e3-3beb-4afc-9b64-ae594d62f1ea", 
+                              "session_id": "root_session"
+                            }
+                          }"
                       ],
                       "background": "用户表达了对草莓的喜好，显示出他们在饮食偏好上的倾向。",
                       "relativity": 0.6349761312470591,
@@ -345,7 +351,6 @@ touch .env
 ```
 
 #### 2. .env 内容
-.env详细配置请见[env配置](/open_source/getting_started/rest_api_server/#本地运行)
 
 .env 快速配置如下
 ```bash 
@@ -387,8 +392,6 @@ NEO4J_PASSWORD=12345678
 NEO4J_DB_NAME=neo4j
 MOS_NEO4J_SHARED_DB=false
 
-# 启用默认 cube 配置
-MOS_ENABLE_DEFAULT_CUBE_CONFIG=true
 # 是否使用 redis 的调度器
 DEFAULT_USE_REDIS_QUEUE=false
 
@@ -441,9 +444,6 @@ NEO4J_PASSWORD=12345678
 NEO4J_DB_NAME=neo4j
 MOS_NEO4J_SHARED_DB=false
 
-
-# 启用默认 cube 配置
-MOS_ENABLE_DEFAULT_CUBE_CONFIG=true
 # 是否使用 redis 的调度器
 DEFAULT_USE_REDIS_QUEUE=false
 
@@ -504,13 +504,9 @@ CMD ["uvicorn", "memos.api.server_api:app", "--host", "0.0.0.0", "--port", "8000
  # 如果没有安装docker,请安装对应版本，下载地址如下：
  https://www.docker.com/
 
-# 可通过命令行登录docker，也可在docker客户端登录
-# 命令行登录
-docker login --username=you-docker-username registry.cn-shanghai.aliyuncs.com
-# 成功后会提示输入密码，稍等片刻后出现success则成功登录
-
-# 客户端登录
-# 客户端直接通过用户密码登录，可以在客户端查看
+ # 安装完成之后，可通过客户端启动docker，或者通过命令行启动docker
+ # 通过命令行启动docker
+ sudo systemctl start docker
 
 # 安装完成后，查看docker状态
 docker ps
@@ -535,4 +531,95 @@ docker compose up
 #### 通过 [http://localhost:8000/docs](http://localhost:8000/docs) 访问 API。
 
 ![MemOS Architecture](https://cdn.memtensor.com.cn/img/memos_run_server_success_compressed.png)
+
+#### ADD Memory
+```bash
+curl --location --request POST 'http://127.0.0.1:8000/product/add' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+
+    "messages": [{
+    "role": "user",
+    "content": "我喜欢吃草莓"
+  }],
+    "user_id": "8736b16e-1d20-4163-980b-a5063c3facdc",
+    "writable_cube_ids":["b32d0977-435d-4828-a86f-4f47f8b55bca"]
+}'
+
+# 响应
+{
+    "code": 200,
+    "message": "Memory created successfully",
+    "data": null
+}
+```
+
+#### Search Memory
+```bash
+curl --location --request POST 'http://127.0.0.1:8000/product/search' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "query": "我喜欢吃什么",
+     "user_id": "8736b16e-1d20-4163-980b-a5063c3facdc",
+    "readable_cube_ids": ["b32d0977-435d-4828-a86f-4f47f8b55bca"],
+    "top_k":20
+  }'
+# 响应
+{
+    "code": 200,
+    "message": "Search completed successfully",
+    "data": {
+        "text_mem": [
+          {
+            "cube_id": "7231eda8-6c57-4f6e-97ce-98b699eebb98",
+            "memories": [
+              {
+                  "id": "2f40be8f-736c-4a5f-aada-9489037769e0",
+                  "memory": "[user观点]用户喜欢草莓。",
+                  "metadata": {
+                      "user_id": "de8215e3-3beb-4afc-9b64-ae594d62f1ea",
+                      "session_id": "root_session",
+                      "status": "activated",
+                      "type": "fact",
+                      "key": "用户对草莓的喜好",
+                      "confidence": 0.99,
+                      "source": null,
+                      "tags": [
+                          "喜好",
+                          "草莓"
+                      ],
+                      "visibility": null,
+                      "updated_at": "2025-09-18T08:23:44.625479000+00:00",
+                      "memory_type": "UserMemory",
+                      "sources": [],
+                      "embedding": [],
+                      "created_at": "2025-09-18T08:23:44.625511000+00:00",
+                      "usage": [
+                          "{
+                            "time": "2025-09-18T08:24:17.759748", 
+                            "info": {
+                              "user_id": "de8215e3-3beb-4afc-9b64-ae594d62f1ea",
+                              "session_id": "root_session"
+                            }
+                          }"
+                      ],
+                      "background": "用户表达了对草莓的喜好，显示出他们在饮食偏好上的倾向。",
+                      "relativity": 0.6349761312470591,
+                      "vector_sync": "success",
+                      "ref_id": "[2f40be8f]",
+                      "id": "2f40be8f-736c-4a5f-aada-9489037769e0",
+                      "memory": "[user观点]用户喜欢草莓。"
+                  },
+                  "ref_id": "[2f40be8f]"
+              },
+              ...
+            }
+          }
+        ],
+        "act_mem": [],
+        "para_mem": []
+    }
+}
+```
+
 
