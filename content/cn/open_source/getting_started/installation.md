@@ -509,13 +509,9 @@ CMD ["uvicorn", "memos.api.server_api:app", "--host", "0.0.0.0", "--port", "8000
  # 如果没有安装docker,请安装对应版本，下载地址如下：
  https://www.docker.com/
 
-# 可通过命令行登录docker，也可在docker客户端登录
-# 命令行登录
-docker login --username=you-docker-username registry.cn-shanghai.aliyuncs.com
-# 成功后会提示输入密码，稍等片刻后出现success则成功登录
-
-# 客户端登录
-# 客户端直接通过用户密码登录，可以在客户端查看
+ # 安装完成之后，可通过客户端启动docker，或者通过命令行启动docker
+ # 通过命令行启动docker
+ sudo systemctl start docker
 
 # 安装完成后，查看docker状态
 docker ps

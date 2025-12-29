@@ -462,13 +462,9 @@ CMD ["uvicorn", "memos.api.server_api:app", "--host", "0.0.0.0", "--port", "8000
  # If Docker is not installed, please install the corresponding version. Download address:
  https://www.docker.com/
 
-# You can log in to docker via command line or docker client
-# Command line login
-docker login --username=you-docker-username registry.cn-shanghai.aliyuncs.com
-# After success, you will be prompted to enter the password. Wait a moment and "Success" will appear if logged in successfully.
-
-# Client login
-# Client logs in directly with username and password, viewable in the client
+#After installation, Docker can be started through the client or through the command line
+#Command line start
+sudo systemctl start docker
 
 # After installation, check docker status
 docker ps

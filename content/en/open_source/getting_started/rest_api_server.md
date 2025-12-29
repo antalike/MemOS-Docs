@@ -153,13 +153,10 @@ CHAT_MODEL_LIST=[{"backend": "qwen", "api_base": "https://dashscope.aliyuncs.com
  # If Docker is not installed, please install the corresponding version. The download link is as follows:
  https://www.docker.com/
 
-# You can log in to Docker through the command line or from the Docker client
-# Command line login
-docker login --username=you-docker-username registry.cn-shanghai.aliyuncs.com
-# After success, you will be prompted to enter your password. Wait for a moment and if success appears, you will successfully log in
+ #After installation, Docker can be started through the client or through the command line
+ #Command line start
+ sudo systemctl start docker
 
-# Client login
-# The client can log in directly through the user password and view it on the client
 # Check docker status
 docker ps
 # Check docker images (optional)
