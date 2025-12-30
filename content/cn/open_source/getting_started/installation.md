@@ -374,8 +374,7 @@ Memos的记忆底层是通过图数据库进行存储的，在开源项目中，
 
 #### 启动 MemOS Server。
 ```bash
-# 回到项目根目录下
-cd MemOS
+# 项目根目录下
 uvicorn memos.api.server_api:app --host 0.0.0.0 --port 8000 --workers 1
 ```
 

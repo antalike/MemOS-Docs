@@ -352,8 +352,7 @@ Additionally, you need to set **NEO4J_BACKEND=neo4j** in .env file
 
 #### Start MemOS Server
 ```bash
-# back to project root directory
-cd MemOS
+# project root directory
 uvicorn memos.api.server_api:app --host 0.0.0.0 --port 8000 --workers 1
 ```
 
