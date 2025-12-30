@@ -335,25 +335,20 @@ The .env file must be placed in the MemOS project root directory.
 
 #### Install Dependencies
 ```bash
-# In the docker directory
-cd docker
 # Execute the installation command
-pip3 install --no-cache-dir -r requirements.txt
+pip install -e .
+pip install --no-cache-dir -r /docker/requirements.txt
 # Configure PYTHONPATH to the absolute directory of the current project file src
 export PYTHONPATH=/******/MemOS/src
 ```
 
+#### Neo4j Support
+
 ::note
-**Please Note**<br>
-Please ensure that docker is started and neo4j and qdrant images are installed
+**Neo4j Desktop Requirement**<br>If you plan to use Neo4j for graph memory, please install Neo4j Desktop.<br>
+Additionally, you need to set **NEO4J_BACKEND=neo4j** in .env file
 ::
-```bash
-# Download tar and load through docker command
-docker load -i neo4j.5.26.4.tar
-docker load -i qdrant.v1.15.3.tar
-# Check if installation is successful
-docker images
-```
+
 
 #### Start MemOS Server
 ```bash

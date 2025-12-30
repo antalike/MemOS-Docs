@@ -356,24 +356,21 @@ touch .env
 
 #### 安装依赖
 ```bash
-# 在docker目录下
-cd docker
 # 执行安装命令
-pip3 install --no-cache-dir -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple/
+pip install -e .
+pip install --no-cache-dir -r /docker/requirements.txt -i https://mirrors.aliyun.com/pypi/simple/
 # 配置PYTHONPATH 当前项目文件的绝对目录下的 src
 export PYTHONPATH=/******/MemOS/src
 ```
+
+#### 安装图数据库
+Memos的记忆底层是通过图数据库进行存储的，在开源项目中，推荐使用Neo4j运行您的第一个项目。社区同时支持Neo4j企业版/社区版与PolarDB。
+
 ::note
-**请注意**<br>
-请确保 启动了 docker，并且安装了 neo4j 和 qdrant 镜像
+**PC开发者的最快选择：Neo4j Desktop**<br>如果您计划使用 Neo4j 作为图记忆，Neo4j Desktop可能是最方便的安装方式。<br>
+另外，您需要在 .env 文件中设置 **NEO4J_BACKEND=neo4j**
 ::
-```bash
-# 可下载tar之后通过docker命令加载
-docker load -i neo4j.5.26.4.tar
-docker load -i qdrant.v1.15.3.tar
-# 查看是否安装成功
-docker images
-```
+
 
 #### 启动 MemOS Server。
 ```bash
