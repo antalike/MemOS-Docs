@@ -324,7 +324,13 @@ docker compose up
                       "embedding": [],
                       "created_at": "2025-09-18T08:23:44.625511000+00:00",
                       "usage": [
-                          "{\"time\": \"2025-09-18T08:24:17.759748\", \"info\": {\"user_id\": \"de8215e3-3beb-4afc-9b64-ae594d62f1ea\", \"session_id\": \"root_session\"}}"
+                          "{
+                            "time": "2025-09-18T08:24:17.759748", 
+                            "info": {
+                              "user_id": "de8215e3-3beb-4afc-9b64-ae594d62f1ea",
+                              "session_id": "root_session"
+                            }
+                          }"
                       ],
                       "background": "用户表达了对草莓的喜好，显示出他们在饮食偏好上的倾向。",
                       "relativity": 0.6349761312470591,

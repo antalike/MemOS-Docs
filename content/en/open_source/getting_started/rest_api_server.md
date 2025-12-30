@@ -327,7 +327,13 @@ docker compose up
                       "embedding": [],
                       "created_at": "2025-09-18T08:23:44.625511000+00:00",
                       "usage": [
-                          "{\"time\": \"2025-09-18T08:24:17.759748\", \"info\": {\"user_id\": \"de8215e3-3beb-4afc-9b64-ae594d62f1ea\", \"session_id\": \"root_session\"}}"
+                          "{
+                            "time": "2025-09-18T08:24:17.759748", 
+                            "info": {
+                              "user_id": "de8215e3-3beb-4afc-9b64-ae594d62f1ea",
+                              "session_id": "root_session"
+                            }
+                          }"
                       ],
                       "background": "The user expressed a preference for strawberries, indicating their inclination towards dietary preferences.",
                       "relativity": 0.6349761312470591,
