@@ -369,9 +369,9 @@ docker compose up
 #### Install dependencies
 
 ```bash
-# pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
+# pip install --upgrade pip && pip install --no-cache-dir -r ./docker/requirements.txt
 # Install dependencies using Aliyun source
-pip install --no-cache-dir -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple/
+pip install --no-cache-dir -r ./docker/requirements.txt -i https://mirrors.aliyun.com/pypi/simple/
 
 
 ```

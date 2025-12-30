@@ -358,7 +358,7 @@ touch .env
 ```bash
 # 执行安装命令
 pip install -e .
-pip install --no-cache-dir -r /docker/requirements.txt -i https://mirrors.aliyun.com/pypi/simple/
+pip install --no-cache-dir -r ./docker/requirements.txt -i https://mirrors.aliyun.com/pypi/simple/
 # 配置PYTHONPATH 当前项目文件的绝对目录下的 src
 export PYTHONPATH=/******/MemOS/src
 ```

@@ -337,7 +337,7 @@ The .env file must be placed in the MemOS project root directory.
 ```bash
 # Execute the installation command
 pip install -e .
-pip install --no-cache-dir -r /docker/requirements.txt
+pip install --no-cache-dir -r ./docker/requirements.txt
 # Configure PYTHONPATH to the absolute directory of the current project file src
 export PYTHONPATH=/******/MemOS/src
 ```
