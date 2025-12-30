@@ -237,11 +237,7 @@ cd docker
 
 pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
 # Install dependencies using Aliyun source
-pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple/
-
-# command not found: pip  use pip3
-
-
+# pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple/
 
 ```
 
@@ -375,7 +371,7 @@ docker compose up
 ```bash
 # pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
 # Install dependencies using Aliyun source
-pip3 install --no-cache-dir -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple/
+pip install --no-cache-dir -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple/
 
 
 ```

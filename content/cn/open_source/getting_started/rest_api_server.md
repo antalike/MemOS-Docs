@@ -372,7 +372,7 @@ docker compose up
 ```bash
 # pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
 # 使用阿里云源安装依赖
-pip3 install --no-cache-dir -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple/
+pip install --no-cache-dir -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple/
 
 
 ```
