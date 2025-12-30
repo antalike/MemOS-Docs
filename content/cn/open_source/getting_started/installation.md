@@ -358,7 +358,7 @@ touch .env
 ```bash
 # 执行安装命令
 pip install -e .
-pip install --no-cache-dir -r /docker/requirements.txt -i https://mirrors.aliyun.com/pypi/simple/
+pip install --no-cache-dir -r ./docker/requirements.txt -i https://mirrors.aliyun.com/pypi/simple/
 # 配置PYTHONPATH 当前项目文件的绝对目录下的 src
 export PYTHONPATH=/******/MemOS/src
 ```
@@ -374,8 +374,7 @@ Memos的记忆底层是通过图数据库进行存储的，在开源项目中，
 
 #### 启动 MemOS Server。
 ```bash
-# 回到项目根目录下
-cd MemOS
+# 项目根目录下
 uvicorn memos.api.server_api:app --host 0.0.0.0 --port 8000 --workers 1
 ```
 
