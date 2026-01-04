@@ -1,4 +1,9 @@
 <script setup lang="ts">
+defineProps<{
+  label?: string
+  noCollapse?: boolean
+}>()
+
 const isExpanded = ref<boolean>(false)
 
 function onToggle() {
@@ -7,7 +12,13 @@ function onToggle() {
 </script>
 
 <template>
-  <div class="border-1 border-[#ffffff1a] rounded-xl">
+  <div v-if="noCollapse">
+    <slot />
+  </div>
+  <div
+    v-else
+    class="border-1 border-gray-800 rounded-xl"
+  >
     <div
       class="text-sm flex flex-row items-center gap-2 content-center w-full cursor-pointer text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-200 py-3 px-3.5 hover:bg-gray-50/50 dark:hover:bg-white/5 rounded-t-xl list-none [&::-webkit-details-marker]:hidden"
       @click="onToggle"
@@ -17,7 +28,7 @@ function onToggle() {
         class="ease-linear"
         :class="isExpanded ? '' : 'rotate-270'"
       />
-      <span>{{ isExpanded ? $t('api.hideChildAttrs') : $t('api.showChildAttrs') }}</span>
+      <span>{{ label ? label : (isExpanded ? $t('api.hideChildAttrs') : $t('api.showChildAttrs')) }}</span>
     </div>
     <div
       v-show="isExpanded"

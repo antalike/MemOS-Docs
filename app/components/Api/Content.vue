@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import type { FlatPathProps } from '~/utils/oas'
+
 const props = withDefaults(defineProps<{
-  apiData: any
+  apiData: FlatPathProps
   showRequestCode?: boolean
   showSurround?: boolean
 }>(), {
@@ -70,12 +72,11 @@ onUnmounted(() => {
         <h1 class="inline-block text-2xl sm:text-3xl text-gray-900 tracking-tight dark:text-gray-200 font-semibold">
           {{ apiData?.summary }}
         </h1>
-        <div class="mt-2 text-lg">
-          <p
-            class="text-gray-400 text-base"
-            v-html="apiData?.description"
-          />
-        </div>
+        <ApiMarkdownRenderer
+          v-if="apiData?.description"
+          :value="apiData?.description"
+          class="api-markdown__title mt-2 text-lg"
+        />
       </header>
       <ApiPath
         :path="apiData?.path"
@@ -150,9 +151,3 @@ onUnmounted(() => {
     />
   </div>
 </template>
-
-<style lang="css" scoped>
-:deep(.shiki) {
-  max-height: 420px;
-}
-</style>

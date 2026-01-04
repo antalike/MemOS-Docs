@@ -6,21 +6,15 @@ const props = defineProps<{
 
 const collectionName = inject<CollectionName>('collectionName')
 const {
-  getResponseStatusCodes,
   getResponseContentTypes,
   generateResponseExample
 } = useOpenApi(collectionName)
 
-const currentCode = ref<string | number>('200')
-const statusCodes = computed(() => {
-  return getResponseStatusCodes(props.path, props.method)
-})
-
-const currentContentType = ref<string>('')
-
-const contentTypes = computed(() => {
-  return getResponseContentTypes(props.path, props.method, currentCode.value)
-})
+const {
+  currentCode,
+  currentContentType,
+  statusCodes
+} = useApiResponse(toRef(props, 'path'), toRef(props, 'method'))
 
 const responseOptions = computed(() => {
   const options: { code: string, contentType: string, label: string }[] = []
@@ -46,12 +40,6 @@ const responseOptions = computed(() => {
   return options
 })
 
-watch(contentTypes, (newTypes) => {
-  if (newTypes.length > 0 && (!currentContentType.value || !newTypes.includes(currentContentType.value))) {
-    currentContentType.value = newTypes[0]!
-  }
-}, { immediate: true })
-
 const exampleObjects = computed(() => {
   const example = generateResponseExample(props.path, props.method, currentCode.value, currentContentType.value)
   return JSON.stringify(example, null, 2) ?? ''
@@ -62,19 +50,10 @@ function handleClick(code: string | number, type: string) {
   currentContentType.value = type
 }
 
-const isCopy = ref<boolean>(false)
-let timer: ReturnType<typeof setTimeout>
+const { isCopy, handleCopy: copy } = useCopy()
 
-onUnmounted(() => {
-  clearTimeout(timer)
-})
-
-async function handleCopy() {
-  navigator.clipboard.writeText(exampleObjects.value)
-  isCopy.value = true
-  timer = setTimeout(() => {
-    isCopy.value = false
-  }, 2000)
+function handleCopy() {
+  copy(exampleObjects.value)
 }
 </script>
 

@@ -1,25 +1,61 @@
-import type { Collections } from '@nuxt/content'
+import type { OpenAPIV3, OpenAPIV3_1 } from 'openapi-types'
 
+export type ReferenceObject = OpenAPIV3.ReferenceObject | OpenAPIV3_1.ReferenceObject
+export type SchemaObject = OpenAPIV3.SchemaObject | OpenAPIV3_1.SchemaObject
+
+export type HttpMethods = 'get' | 'post' | 'put' | 'delete' | 'patch' | 'head' | 'options' | 'trace'
 export type MethodType = 'post' | 'get' | 'delete' | 'put'
 
-// Parameter information
-export interface ParametersProp {
+export type OASDocument = OpenAPIV3_1.Document | OpenAPIV3.Document
+export type OperationObject = OpenAPIV3_1.OperationObject | OpenAPIV3.OperationObject
+export type ParameterObject = OpenAPIV3_1.ParameterObject | OpenAPIV3.ParameterObject
+export type RequestBodyObject = OpenAPIV3_1.RequestBodyObject | OpenAPIV3.RequestBodyObject
+export type ResponseObject = OpenAPIV3_1.ResponseObject | OpenAPIV3.ResponseObject
+export type SecurityRequirementObject = OpenAPIV3_1.SecurityRequirementObject | OpenAPIV3.SecurityRequirementObject
+export type SecuritySchemeObject = OpenAPIV3_1.SecuritySchemeObject | OpenAPIV3.SecuritySchemeObject
+export type MediaTypeObject = OpenAPIV3_1.MediaTypeObject | OpenAPIV3.MediaTypeObject
+export type ServerObject = OpenAPIV3_1.ServerObject | OpenAPIV3.ServerObject
+export type ServerVariableObject = OpenAPIV3_1.ServerVariableObject | OpenAPIV3.ServerVariableObject
+
+/**
+ * Code generation language options
+ */
+export type LangType = 'curl' | 'python-sdk' | 'python-http'
+
+/**
+ * Server variable definition
+ */
+export type ServerVariable = Record<
+  string,
+  { default?: number | string }[] | Record<string, never> | number | string | { default?: number | string }
+>
+
+/**
+ * Security requirement properties with scheme details
+ */
+export interface SecurityProps {
   name: string
-  in: 'path' | 'query'
-  required: boolean
-  schema: Record<string, string>
+  type: string
+  scheme?: SecuritySchemeObject
+  requirements: string[]
 }
 
+/**
+ * Property details for schema display
+ */
 export interface PropertyProps {
   type?: string
   anyOf?: { type: string }[]
   title: string
   description: string
   example?: string
-  default?: string
-  properties? : Record<string, unknown>
+  default?: unknown
+  properties?: Record<string, unknown>
 }
 
+/**
+ * Schema structure for UI display
+ */
 export interface SchemaProps {
   properties: Record<string, PropertyProps>
   required?: string[]
@@ -27,57 +63,69 @@ export interface SchemaProps {
   type: string
 }
 
-export interface ContentProps {
-  [contentType: string]: {
-    schema?: {
-      $ref?: string
+/**
+ * Map complex types to simple display strings
+ * @param t Type string from schema
+ * @returns Simplified type string
+ */
+export function mapSimpleType(t?: string): string {
+  if (!t) return 'any'
+  if (t === 'integer') return 'integer'
+  if (t === 'null') return 'null'
+  if (t === 'array') return 'any[]'
+  return t
+}
+
+/**
+ * Normalize type definition from schema to readable string
+ * @param s Schema object or reference
+ * @param ignoreTitle Whether to ignore the title property in schema
+ * @returns Normalized type string
+ */
+export function normalizeTypeFromSchema(s: SchemaObject | ReferenceObject | undefined | unknown, ignoreTitle: boolean = false): string {
+  if (!s) return 'any'
+  const schema = s as SchemaObject
+
+  const resolveWithTitle = (typeStr: string) => {
+    if (!ignoreTitle && schema.title && typeStr === 'object') {
+      return `${schema.title} · ${typeStr}`
     }
+    return typeStr
   }
-}
 
-// Request body information
-export interface RequestProps {
-  required: boolean
-  content: ContentProps
-}
-
-// Response information
-export interface ResponseProps {
-  [key: string]: {
-    description: string
-    content: ContentProps
+  // Handle anyOf
+  if (Array.isArray(schema.anyOf)) {
+    const combined = schema.anyOf.map((t: unknown) => normalizeTypeFromSchema(t, false)).join(' | ')
+    return resolveWithTitle(combined)
   }
+  // Handle oneOf
+  if (Array.isArray(schema.oneOf)) {
+    const combined = schema.oneOf.map((t: unknown) => normalizeTypeFromSchema(t, false)).join(' | ')
+    return resolveWithTitle(combined)
+  }
+  // Handle array
+  if (schema.type === 'array') {
+    const item = schema.items || {}
+    let itemType = normalizeTypeFromSchema(item, false)
+    if (itemType.includes('|')) {
+      itemType = `(${itemType})`
+    }
+    return resolveWithTitle(`${itemType}[]`)
+  }
+  // Handle primitives / object
+  if (schema.properties) return resolveWithTitle('object')
+
+  if (schema.enum && schema.enum.length) {
+    const type = schema.type ? mapSimpleType(schema.type as string) : 'any'
+    return resolveWithTitle(`enum<${type}>`)
+  }
+
+  if (schema.type) return resolveWithTitle(mapSimpleType(schema.type as string))
+
+  return resolveWithTitle('any')
 }
 
-// OpenAPI path information
-export interface PathProps {
-  description: string
-  operationId: string
-  parameters?: ParametersProp[]
-  requestBody?: RequestProps
-  responses: Record<string, ResponseProps>
-  summary: string
-}
-
-export interface PathsProps {
-  [key: string]: PathProps
-}
-
-// Flattened path
-export interface FlatPathProps extends PathProps {
-  method: MethodType
-  apiUrl: string
-  routePath: string
-}
-
-export type NavLink = {
-  title: string
-  path?: string
-  method?: 'get' | 'post' | 'put' | 'delete'
-  children?: NavLink[]
-}
-
-// Response component types
+// Response component types helpers
 export interface ArrayItemType {
   $ref?: string
   anyOf?: VariantDescriptor[]
@@ -100,86 +148,11 @@ export type VariantDescriptor = {
   [key: string]: unknown
 }
 
-export interface SchemaItem {
+export type SchemaItem = {
   type?: string
-  title?: string
   description?: string
   default?: unknown
-  example?: unknown
+  enum?: unknown[]
   items?: ArrayItemType
-  $ref?: string
   [key: string]: unknown
-}
-
-export interface ResponseSchema {
-  description?: string
-  required?: string[]
-  properties?: Record<string, SchemaItem>
-}
-
-export interface FlatResponse {
-  statusCode: string
-  description?: string
-  contentType?: string
-  data?: ResponseSchema
-}
-
-export type CollectionName = keyof Collections
-
-export interface OpenApiProps {
-  components?: {
-    schemas?: Record<string, SchemaProps>
-    securitySchemes?: Record<string, SecurityProps>
-  }
-  paths?: Record<string, PathsProps>
-  meta: {
-    body: {
-      security: any[]
-      servers: any[]
-    }
-  }
-}
-
-export type ResponseEnvelope = {
-  description?: string
-  content?: ContentProps
-}
-
-// Flatten OpenAPI paths
-export interface OasRoutePath {
-  path: string
-  method: HttpMethods
-  routePath: string
-  [key: string]: unknown
-}
-
-export interface OasRequestBody {
-  contentType?: string
-  body: MediaTypeObject | null
-}
-
-export function flattenOasPaths(
-  oas: SimpleOAS,
-  parentPath?: string,
-  collectionName?: keyof Collections
-): OasRoutePath[] {
-  const paths = oas.getPaths()
-  const results: OasRoutePath[] = []
-
-  Object.entries(paths).forEach(([path, methods]) => {
-    Object.entries(methods).forEach(([method, operation]) => {
-      const separator = collectionName === 'openapi' ? ' ' : '_'
-      let routePath = collectionName === 'openapi' ? operation.summary : operation.operationId
-
-      routePath = routePath.split(separator).map(s => s.toLowerCase()).join('-')
-      results.push({
-        path,
-        method,
-        routePath: `/${parentPath}/${routePath}`,
-        ...operation
-      })
-    })
-  })
-
-  return results
 }

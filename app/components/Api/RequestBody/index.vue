@@ -24,8 +24,23 @@ const requestBody = computed(() => {
         </div>
       </template>
     </ApiSectionHeader>
-    <div class="border-gray-100 dark:border-gray-800 border-b last:border-b-0">
-      <ApiRequestBodyList v-bind="requestBody.body?.schema" />
+    <div
+      class="border-gray-100 dark:border-gray-800 border-b last:border-b-0 mt-4"
+    >
+      <div
+        v-if="requestBody.description"
+        class="space-y-4 whitespace-normal prose prose-sm prose-gray dark:prose-invert overflow-wrap-anywhere [&_*]:overflow-wrap-anywhere"
+      >
+        <ApiMarkdownRenderer
+          v-if="requestBody.description"
+          class="text-sm"
+          :value="requestBody.description"
+        />
+      </div>
+      <ApiPropertyList
+        v-bind="(requestBody.body as any)?.schema"
+        :enable-any-of-select="true"
+      />
     </div>
   </div>
 </template>

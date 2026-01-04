@@ -1,7 +1,8 @@
 import type { Collections } from '@nuxt/content'
 import type { RouteLocation } from 'vue-router'
-import SimpleOAS, { type HttpMethods } from '~/utils/oas'
-import { flattenOasPaths } from '~/utils/openapi'
+import SimpleOAS, { flattenOasPaths } from '~/utils/oas'
+import type { CollectionName, NavLink, OasRequestBody, OasRoutePath, OpenApiProps } from '~/utils/oas'
+import type { HttpMethods, LangType, ParameterObject, SchemaObject, SchemaProps, SecurityProps } from '~/utils/openapi'
 
 function prettifyGroupTitle(key: string) {
   const base = key.replace(/^\//, '')
@@ -104,12 +105,14 @@ const useOpenApi = (collectionName: keyof Collections = 'openapi', parentPath: s
       doc = data.value?.[0]
     }
 
-    const oas = new SimpleOAS(doc)
+    if (!doc) return
+
+    const oas = new SimpleOAS(doc as unknown as OASDocument)
     await oas.dereference()
     _setOasInstance(oas)
 
     openapi.value = (doc as unknown as OpenApiProps) ?? null
-    schemas.value = openapi.value?.components?.schemas ?? {}
+    schemas.value = (openapi.value?.components?.schemas ?? {}) as unknown as Record<string, SchemaProps>
 
     server.value = oas.url()
     paths.value = flattenOasPaths(oas, parentPath, collectionName as unknown as CollectionName)
@@ -150,8 +153,9 @@ const useOpenApi = (collectionName: keyof Collections = 'openapi', parentPath: s
       const oas = _getOasInstance()
       if (oas) {
         const body = oas.getRequestBody(path, method)
+        const description = oas.getRequestBodyDescription(path, method) || ''
         const contentType = oas.getContentType(path, method)
-        return { contentType, body }
+        return { contentType, body, description }
       }
     }
     return null

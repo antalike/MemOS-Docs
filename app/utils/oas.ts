@@ -1,42 +1,99 @@
-import type { OpenAPIV3, OpenAPIV3_1 } from 'openapi-types'
+import type { Collections } from '@nuxt/content'
+import type {
+  HttpMethods,
+  MediaTypeObject,
+  OASDocument,
+  OperationObject,
+  ParameterObject,
+  ReferenceObject,
+  RequestBodyObject,
+  ResponseObject,
+  SchemaObject,
+  SecurityProps,
+  SecurityRequirementObject,
+  SecuritySchemeObject
+} from './openapi'
 
-// Basic type definitions
-export type HttpMethods = 'get' | 'post' | 'put' | 'delete' | 'patch' | 'head' | 'options' | 'trace'
-
-export type OASDocument = OpenAPIV3_1.Document | OpenAPIV3.Document
-export type OperationObject = OpenAPIV3_1.OperationObject | OpenAPIV3.OperationObject
-export type ParameterObject = OpenAPIV3_1.ParameterObject | OpenAPIV3.ParameterObject
-export type RequestBodyObject = OpenAPIV3_1.RequestBodyObject | OpenAPIV3.RequestBodyObject
-export type ResponseObject = OpenAPIV3_1.ResponseObject | OpenAPIV3.ResponseObject
-export type SchemaObject = OpenAPIV3_1.SchemaObject | OpenAPIV3.SchemaObject
-export type ReferenceObject = OpenAPIV3_1.ReferenceObject | OpenAPIV3.ReferenceObject
-export type SecurityRequirementObject = OpenAPIV3_1.SecurityRequirementObject | OpenAPIV3.SecurityRequirementObject
-export type SecuritySchemeObject = OpenAPIV3_1.SecuritySchemeObject | OpenAPIV3.SecuritySchemeObject
-export type MediaTypeObject = OpenAPIV3_1.MediaTypeObject | OpenAPIV3.MediaTypeObject
-
-// Code snippet generation related types and functions
-export type LangType = 'curl' | 'python-sdk' | 'python-http'
-
-// Server related type definitions
-export type ServerObject = OpenAPIV3_1.ServerObject | OpenAPIV3.ServerObject
-export type ServerVariableObject = OpenAPIV3_1.ServerVariableObject | OpenAPIV3.ServerVariableObject
-export type ServerVariable = Record<
-  string,
-  { default?: number | string }[] | Record<string, never> | number | string | { default?: number | string }
->
-
-export interface SecurityProps {
+export interface ParametersProp {
   name: string
-  type: string
-  scheme?: SecuritySchemeObject
-  requirements: string[]
+  in: 'path' | 'query'
+  required: boolean
+  schema: Record<string, string>
 }
 
-// Utility functions
+export interface ContentProps {
+  [contentType: string]: {
+    schema?: {
+      $ref?: string
+    }
+  }
+}
+
+export interface RequestProps {
+  required: boolean
+  content: ContentProps
+}
+
+export interface ResponseProps {
+  [key: string]: {
+    description: string
+    content: ContentProps
+  }
+}
+
+export interface PathProps {
+  description: string
+  operationId: string
+  parameters?: ParametersProp[]
+  requestBody?: RequestProps
+  responses: Record<string, ResponseProps>
+  summary: string
+}
+
+export interface PathsProps {
+  [key: string]: PathProps
+}
+
+export interface FlatPathProps extends PathProps {
+  method: MethodType
+  path: string
+  routePath: string
+}
+
+export type NavLink = {
+  title: string
+  path?: string
+  method?: 'get' | 'post' | 'put' | 'delete'
+  children?: NavLink[]
+}
+
+export interface OasRequestBody {
+  contentType: string
+  body: RequestBodyObject | MediaTypeObject | undefined | null
+  description: string
+}
+
+// Aliases
+export type OpenApiProps = OASDocument
+export type OasRoutePath = FlatPathProps
+export type CollectionName = keyof Collections
+export type MethodType = 'get' | 'post' | 'put' | 'delete'
+
+/**
+ * Check if an object is a reference object ($ref)
+ * @param obj Object to check
+ * @returns True if object has $ref property
+ */
 function isRef(obj: unknown): obj is { $ref: string } {
   return obj !== null && typeof obj === 'object' && '$ref' in obj
 }
 
+/**
+ * Resolve a JSON pointer reference within the OAS document
+ * @param ref Reference string (e.g., "#/components/schemas/User")
+ * @param api OAS document root
+ * @returns Resolved object or null if not found
+ */
 function resolveRef(ref: string, api: OASDocument): unknown {
   const parts = ref.replace('#/', '').split('/')
   let result: unknown = api
@@ -47,7 +104,12 @@ function resolveRef(ref: string, api: OASDocument): unknown {
   return result
 }
 
-// MIME type matching utility functions
+/**
+ * Check if a media type matches any of the provided types
+ * @param types List of types to check against
+ * @param mediaType Media type to check
+ * @returns True if match found
+ */
 function matchesMimeType(types: string[], mediaType: string): boolean {
   return types.some(type => mediaType.indexOf(type) > -1)
 }
@@ -62,12 +124,17 @@ const mimeTypeMatchers = {
   }
 }
 
+/**
+ * Check if a MIME type is JSON-compatible
+ * @param mimeType MIME type string
+ * @returns True if JSON compatible
+ */
 function matchesJsonMimeType(mimeType: string): boolean {
   return mimeTypeMatchers.json(mimeType)
 }
 
 /**
- * Get the preferred content type
+ * Get the preferred content type from a list
  * @param contentTypes List of available content types
  * @param preferJson Whether to prefer JSON type
  * @returns The preferred content type
@@ -95,11 +162,21 @@ function getPreferredContentType(contentTypes: string[], preferJson: boolean = t
   return contentTypes[0] || 'application/json'
 }
 
-// Polymorphism detection and handling utility functions
+/**
+ * Check if a schema uses polymorphism (oneOf, anyOf, allOf)
+ * @param schema Schema object
+ * @returns True if polymorphic
+ */
 function usesPolymorphism(schema: SchemaObject): boolean {
   return !!(schema.oneOf || schema.anyOf || schema.allOf)
 }
 
+/**
+ * Resolve polymorphic schema into a list of schemas
+ * @param schema Polymorphic schema
+ * @param api OAS document for reference resolution
+ * @returns List of resolved schemas
+ */
 function resolvePolymorphicSchema(schema: SchemaObject, api: OASDocument): SchemaObject[] {
   const schemas: SchemaObject[] = []
 
@@ -163,6 +240,12 @@ function resolvePolymorphicSchema(schema: SchemaObject, api: OASDocument): Schem
   return schemas
 }
 
+/**
+ * Generate a sample value from a polymorphic schema
+ * @param schema Polymorphic schema
+ * @param api OAS document
+ * @returns Sample value
+ */
 function generateSampleFromPolymorphicSchema(schema: SchemaObject, api: OASDocument): unknown {
   if (!usesPolymorphism(schema)) {
     return generateSampleFromSchema(schema, api)
@@ -176,6 +259,12 @@ function generateSampleFromPolymorphicSchema(schema: SchemaObject, api: OASDocum
   return generateSampleFromSchema(resolvedSchemas[0] || schema, api)
 }
 
+/**
+ * Generate a sample value from a schema
+ * @param schema Schema object
+ * @param api OAS document
+ * @returns Sample value
+ */
 function generateSampleFromSchema(schema: SchemaObject, api: OASDocument): unknown {
   if (!schema) return null
 
@@ -234,7 +323,11 @@ function generateSampleFromSchema(schema: SchemaObject, api: OASDocument): unkno
   }
 }
 
-// Server URL utility functions
+/**
+ * Ensure URL has a protocol
+ * @param url URL string
+ * @returns URL with protocol
+ */
 function ensureProtocol(url: string): string {
   // Add protocol to urls starting with // e.g. //example.com
   if (url.match(/^\/\//)) {
@@ -286,7 +379,47 @@ function normalizedUrl(api: OASDocument, selected: number): string {
   return url ? ensureProtocol(url) : ''
 }
 
-// Simplified OAS class
+/**
+ * Flatten paths from OAS document into a list of route items
+ * @param oas SimpleOAS instance
+ * @param parentPath Parent path
+ * @param _collectionName Collection name (unused)
+ * @returns List of flat path properties
+ */
+export function flattenOasPaths(oas: SimpleOAS, parentPath: string, _collectionName: string): FlatPathProps[] {
+  const paths = oas.getPaths()
+  const flatPaths: FlatPathProps[] = []
+
+  Object.keys(paths).forEach((path) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const pathItem = paths[path] as Record<string, any>
+    const methods: MethodType[] = ['get', 'post', 'put', 'delete']
+
+    methods.forEach((method) => {
+      if (pathItem[method]) {
+        const operation = pathItem[method]
+        const suffix = `${method}${path}`.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+        const routePath = parentPath ? `/${parentPath}/${suffix}`.replace(/\/+/g, '/') : suffix
+
+        flatPaths.push({
+          ...operation,
+          method,
+          path,
+          routePath: routePath,
+          description: operation.description || '',
+          operationId: operation.operationId || '',
+          summary: operation.summary || '',
+          responses: operation.responses || {}
+        } as FlatPathProps)
+      }
+    })
+  })
+  return flatPaths
+}
+
+/**
+ * Simplified wrapper for OpenAPI Document interaction
+ */
 export class SimpleOAS {
   private api: OASDocument
   private dereferenced: boolean = false
@@ -317,7 +450,24 @@ export class SimpleOAS {
     if (obj && typeof obj === 'object') {
       if (isRef(obj)) {
         const resolved = resolveRef(obj.$ref, this.api)
-        return resolved ? this.dereferenceObject(resolved) : obj
+        if (resolved) {
+          const dereferencedResolved = this.dereferenceObject(resolved)
+
+          // If resolved object is object and not array, merge other properties from current object
+          // This supports overriding properties in $ref (OpenAPI 3.1+ style)
+          if (dereferencedResolved && typeof dereferencedResolved === 'object' && !Array.isArray(dereferencedResolved)) {
+            const { $ref, ...rest } = obj as Record<string, unknown>
+            if (Object.keys(rest).length > 0) {
+              const dereferencedRest: Record<string, unknown> = {}
+              for (const [key, value] of Object.entries(rest)) {
+                dereferencedRest[key] = this.dereferenceObject(value)
+              }
+              return { ...dereferencedResolved, ...dereferencedRest }
+            }
+          }
+          return dereferencedResolved
+        }
+        return obj
       }
 
       const result: Record<string, unknown> = {}
@@ -425,7 +575,22 @@ export class SimpleOAS {
   }
 
   /**
-   * Get request body
+   * Get request body description
+   */
+  getRequestBodyDescription(path: string, method: HttpMethods): string | undefined {
+    const operation = this.getOperation(path, method)
+    const requestBody = operation?.requestBody as RequestBodyObject | undefined
+
+    if (requestBody?.description) return requestBody.description
+
+    // Fallback to schema description
+    const mediaObj = this.getRequestBody(path, method)
+    const schema = mediaObj?.schema as SchemaObject | undefined
+    return schema?.description
+  }
+
+  /**
+   * Get request body content
    */
   getRequestBody(path: string, method: HttpMethods, mediaType?: string): MediaTypeObject | null {
     const operation = this.getOperation(path, method)
@@ -469,7 +634,7 @@ export class SimpleOAS {
   /**
    * Get request body example
    */
-  getRequestBodyExample(path: string, method: HttpMethods, mediaType?: string): Record<string, unknown> {
+  getRequestBodyExample(path: string, method: HttpMethods, mediaType?: string): Record<string, unknown> | null {
     const operation = this.getOperation(path, method)
     if (!operation?.requestBody) return null
 
@@ -497,16 +662,18 @@ export class SimpleOAS {
         const firstExampleKey = Object.keys(mediaObj.examples)[0]
         if (firstExampleKey) {
           const exampleObj = mediaObj.examples[firstExampleKey]
-          if (exampleObj && typeof exampleObj === 'object' && 'value' in exampleObj) {
-            return exampleObj.value
+          if (exampleObj) {
+            if (typeof exampleObj === 'object' && 'value' in exampleObj) {
+              return exampleObj.value as Record<string, unknown>
+            }
+            return exampleObj as Record<string, unknown>
           }
-          return exampleObj
         }
       }
 
       // Generate example from schema if available
       if (mediaObj.schema) {
-        return generateSampleFromSchema(mediaObj.schema as SchemaObject, this.api)
+        return generateSampleFromSchema(mediaObj.schema as SchemaObject, this.api) as Record<string, unknown>
       }
 
       return null

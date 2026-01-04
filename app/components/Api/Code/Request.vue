@@ -50,19 +50,11 @@ const snippets = computed<Record<string, string>>(() => {
 })
 
 const codeText = computed(() => snippets.value[codeLang.value] || '')
-const isCopy = ref<boolean>(false)
-let timer: ReturnType<typeof setTimeout>
 
-onUnmounted(() => {
-  clearTimeout(timer)
-})
+const { isCopy, handleCopy: copy } = useCopy()
 
-async function handleCopy() {
-  navigator.clipboard.writeText(codeText.value || '')
-  isCopy.value = true
-  timer = setTimeout(() => {
-    isCopy.value = false
-  }, 2000)
+function handleCopy() {
+  copy(codeText.value || '')
 }
 </script>
 
