@@ -5,6 +5,7 @@ defineProps<{
   }
   required?: string[] | undefined
   parentProp?: string | undefined
+  enableAnyOfSelect?: boolean
 }>()
 </script>
 
@@ -14,11 +15,12 @@ defineProps<{
       v-for="(param, prop) in properties"
       :key="prop"
     >
-      <ApiRequestBodyParam
+      <ApiPropertyParam
         :schema="param"
         :prop="prop"
         :required="required"
         :parent-prop="parentProp"
+        :enable-any-of-select="enableAnyOfSelect"
       />
     </template>
   </div>

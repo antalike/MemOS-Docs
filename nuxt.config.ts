@@ -31,20 +31,7 @@ const config: NuxtConfig = {
     '@nuxt/image',
     '@nuxt/ui-pro',
     '@nuxt/content',
-    [
-      'nuxt-openapi-docs-module',
-      {
-        folder: './content',
-        name: 'Api Docs',
-        list: true,
-        prefix: '/api',
-        files: function () {
-          return {
-            'api.json': 'API Proxy'
-          }
-        }
-      }
-    ],
+    '@nuxtjs/mdc',
     '@nuxtjs/i18n'
   ],
 
@@ -83,7 +70,10 @@ const config: NuxtConfig = {
   vite: {
     plugins: [
       yaml()
-    ]
+    ],
+    optimizeDeps: {
+      include: ['debug']
+    }
   },
 
   ssr: true,

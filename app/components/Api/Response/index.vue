@@ -6,29 +6,16 @@ const props = defineProps<{
 
 const collectionName = inject<CollectionName>('collectionName')
 const {
-  getResponseStatusCodes,
   getResponseByStatusCode,
-  getResponseContentTypes,
   getResponseAsJSONSchema
 } = useOpenApi(collectionName)
 
-const statusCodes = computed(() => {
-  return getResponseStatusCodes(props.path, props.method)
-})
-
-const currentCode = ref<string>('200')
-const currentContentType = ref<string>('')
-
-const contentTypes = computed(() => {
-  if (!currentCode.value) return []
-  return getResponseContentTypes(props.path, props.method, currentCode.value)
-})
-
-watch(contentTypes, (newTypes) => {
-  if (newTypes.length > 0 && (!currentContentType.value || !newTypes.includes(currentContentType.value))) {
-    currentContentType.value = newTypes[0]!
-  }
-}, { immediate: true })
+const {
+  statusCodes,
+  currentCode,
+  currentContentType,
+  contentTypes
+} = useApiResponse(toRef(props, 'path'), toRef(props, 'method'))
 
 const selectedResponse = computed(() => {
   if (!currentCode.value) return null
@@ -70,69 +57,23 @@ const selectedSchema = computed(() => {
           </div>
         </template>
       </ApiSectionHeader>
-      <div
-        v-if="selectedResponse"
-        class="text-sm prose prose-gray dark:prose-invert mb-2"
-      >
-        <p
-          v-if="selectedResponse.description"
-          class="whitespace-pre-line text-gray-400"
-        >
-          {{ selectedResponse.description }}
-        </p>
-      </div>
+      <ApiMarkdownRenderer
+        v-if="selectedResponse?.description"
+        :key="currentCode"
+        class="text-sm mb-2"
+        :value="selectedResponse.description"
+      />
     </div>
     <div v-if="selectedSchema">
-      <div
+      <ApiMarkdownRenderer
         v-if="selectedSchema?.description"
-        class="pt-6 pb-4"
-      >
-        <p class="whitespace-pre-line text-gray-400 text-sm">
-          {{ selectedSchema?.description }}
-        </p>
-      </div>
+        :value="selectedSchema?.description"
+      />
       <template v-if="selectedSchema.properties">
-        <template
-          v-for="(item, prop) in selectedSchema.properties"
-          :key="prop"
-        >
-          <div class="border-gray-100 dark:border-gray-800 border-b last:border-b-0">
-            <div class="py-6">
-              <ApiParameterLine
-                :name="prop"
-                :required="selectedSchema?.required?.includes(prop)"
-                :default-value="item.default"
-                :schema="item"
-              />
-              <div class="mt-4">
-                <p
-                  v-if="item.description"
-                  class="whitespace-pre-line text-gray-400 text-sm"
-                  v-html="item.description"
-                />
-                <ApiResponseSubItem
-                  v-if="item.properties"
-                  :item="item"
-                />
-                <ApiResponseSubItem
-                  v-else-if="item.items"
-                  :item="item.items"
-                />
-                <template v-else>
-                  <div
-                    v-if="item.example !== undefined && item.example !== null"
-                    class="flex mt-6 gap-1.5 text-sm text-gray-400"
-                  >
-                    <span>Example: </span>
-                    <span class="flex items-center px-2 py-0.5 rounded-md bg-gray-100/50 dark:bg-white/5 text-gray-600 dark:text-gray-200 font-medium text-sm break-all">
-                      {{ typeof item.example === 'string' ? `"${item.example}"` : item.example }}
-                    </span>
-                  </div>
-                </template>
-              </div>
-            </div>
-          </div>
-        </template>
+        <ApiPropertyList
+          :properties="selectedSchema.properties as any"
+          :required="selectedSchema.required"
+        />
       </template>
     </div>
   </div>

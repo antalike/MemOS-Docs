@@ -15,7 +15,7 @@ const description = computed(
     <div class="border-1 border-[#ffffff1a] rounded-2xl bg-background-light p-6">
       <div class="flex items-start gap-4">
         <div
-          class="flex items-center justify-center h-10 w-10 rounded-xl bg-gray-100/50 dark:bg-white/5 text-gray-700 dark:text-gray-200"
+          class="flex items-center justify-center h-10 w-10 rounded-xl bg-gray-100/50 10 text-gray-700 dark:text-gray-200"
         >
           <UIcon
             name="i-lucide-search-x"
@@ -26,9 +26,10 @@ const description = computed(
           <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
             {{ heading }}
           </h2>
-          <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-            {{ description }}
-          </p>
+          <ApiParameterDescription
+            :description="description"
+            class="mt-1 text-gray-500 dark:text-gray-400"
+          />
         </div>
       </div>
     </div>
