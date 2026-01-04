@@ -477,7 +477,7 @@
           "filter": {
             "type": "object",
             "title": "Filter",
-            "description": "过滤条件。可用字段包括：\"agent_id\", \"app_id\", \"create_time\", \"update_time\"与\"info\"中的字段。支持逻辑运算符（and，or）和比较运算符（gte、lte、gt、lt）。对于\"info\"字段，支持过滤传入的\"business_type\", \"biz_id\", \"scene\"和其他自定义字段。",
+            "description": "记忆过滤的条件，用于在检索记忆前精确限定记忆范围。可用字段包括：\"agent_id\", \"app_id\", \"create_time\", \"update_time\"与\"info\"中的字段。支持逻辑运算符（and，or）和比较运算符（gte、lte、gt、lt）。对于\"info\"字段，支持过滤传入的\"business_type\", \"biz_id\", \"scene\"和其他自定义字段。",
             "example": "{\"and\": [{\"create_time\":{\"gte\":\"...\"}}]}"
           },
           "knowledgebase_ids": {
@@ -1033,7 +1033,7 @@
           "filter": {
             "type": "object",
             "title": "Filter",
-            "description": "过滤条件。可用字段包括：\"agent_id\", \"app_id\", \"create_time\", \"update_time\"以及\"info\"中的字段。支持逻辑运算符（and，or）和比较运算符（gte、lte、gt、lt）。对于\"info\"字段，支持过滤传入的\"business_type\", \"biz_id\", \"scene\"和其他自定义字段。",
+            "description": "记忆过滤的条件，用于在检索记忆前精确限定记忆范围。可用字段包括：\"agent_id\", \"app_id\", \"create_time\", \"update_time\"以及\"info\"中的字段。支持逻辑运算符（and，or）和比较运算符（gte、lte、gt、lt）。对于\"info\"字段，支持过滤传入的\"business_type\", \"biz_id\", \"scene\"和其他自定义字段。",
             "example": "{\"and\": [{\"create_time\":{\"gte\":\"...\"}}]}"
           },
           "knowledgebase_ids": {
