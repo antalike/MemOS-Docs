@@ -65,7 +65,7 @@ function jsonFromSchema(schema: SchemaLike | undefined, seen = new Set<SchemaLik
   if (t === 'boolean') return '<boolean>'
   if (t === 'null') return null
   if (t === 'string') return '<string>'
-  if (s.enum && s.enum.length) return s.enum[0]
+  if (s.enum && s.enum.length) return s.enum[0]!
   // default to string
   return typeof s.title === 'string' ? s.title : '<any>'
 }
@@ -78,12 +78,10 @@ function handleClick(index: number) {
   active.value = index
 }
 
-async function handleCopy() {
-  try {
-    await navigator.clipboard.writeText(plainJsonStrings.value[active.value] || '')
-  } catch {
-    // ignore
-  }
+const { isCopy, handleCopy: copy } = useCopy()
+
+function handleCopy() {
+  copy(plainJsonStrings.value[active.value] || '')
 }
 </script>
 
@@ -113,8 +111,8 @@ async function handleCopy() {
           @click="handleCopy"
         >
           <UIcon
-            name="i-lucide-copy"
-            class="text-gray-400"
+            :name="isCopy ? 'i-lucide-circle-check' : 'i-lucide-copy'"
+            :class="isCopy ? 'text-primary' : 'text-gray-400'"
           />
         </button>
       </div>

@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import type { ContentNavigationItem } from '@nuxt/content'
-import type { FlatPathProps } from '~/utils/openapi'
+import type { FlatPathProps } from '~/utils/oas'
 
 const route = useRoute()
 const { toc } = useAppConfig()
-const navigation = inject<Ref<ContentNavigationItem[]>>('navigation')
+const navigation = inject<Ref<ContentNavigationItem[]>>('navigation', ref([]))
 
 const { t, locale } = useI18n()
 const config = useRuntimeConfig()

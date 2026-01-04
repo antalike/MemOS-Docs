@@ -19,6 +19,7 @@ const navigation = computed(() => [
 
 <template>
   <ApiPage
+    :key="apiData?.path"
     api-name="openapi"
     :data="apiData"
     :navigation="navigation"

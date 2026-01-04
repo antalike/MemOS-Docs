@@ -1,71 +1,61 @@
 <script setup lang="ts">
+import { normalizeTypeFromSchema, type SchemaObject } from '~/utils/openapi'
+
 const props = defineProps<{
   name: string
-  parentName?: string | undefined
+  parentName?: string
   required?: boolean
   defaultValue?: unknown
   schema?: SchemaObject
+  enableAnyOfSelect?: boolean
 }>()
 
-function mapSimpleType(t?: string): string {
-  if (!t) return 'any'
-  if (t === 'integer') return 'number'
-  if (t === 'null') return 'null'
-  if (t === 'array') return 'any[]'
-  return t
-}
+const computedType = computed(() => normalizeTypeFromSchema(props.schema, false))
 
-function normalizeTypeFromSchema(s: any): string {
-  if (!s) return 'any'
-
-  // anyOf
-  if (Array.isArray(s.anyOf)) {
-    return s.anyOf.map((t: any) => normalizeTypeFromSchema(t)).join(' | ')
+const anyOfOptions = computed(() => {
+  if (props.schema?.anyOf && Array.isArray(props.schema.anyOf)) {
+    return props.schema.anyOf.map((t: unknown, i: number) => ({
+      label: normalizeTypeFromSchema(t, false),
+      value: i
+    }))
   }
-  // oneOf
-  if (Array.isArray(s.oneOf)) {
-    return s.oneOf.map((t: any) => normalizeTypeFromSchema(t)).join(' | ')
-  }
-  // array
-  if (s.type === 'array') {
-    // best-effort derive item type
-    const item = s.items || {}
-    const base = mapSimpleType(item.type as string)
-    return `${base.replace('[]', '')}[]`
-  }
-  // primitives / object
-  if (s.properties) return 'object'
-  if (s.type) return mapSimpleType(s.type as string)
-  return 'any'
-}
-
-const computedType = computed(() => {
-  return normalizeTypeFromSchema(props.schema)
+  return []
 })
 
-function extractRefName(s: any): string | undefined {
-  if (!s) return undefined
-  const pickRef = (node: any): string | undefined => {
-    if (node.items && node.items.type === 'object') return node.items.title
-    return undefined
-  }
-  if (Array.isArray(s.anyOf)) {
-    for (const opt of s.anyOf) {
-      const r = pickRef(opt)
-      if (r) return r
-    }
-  }
-  if (Array.isArray(s.oneOf)) {
-    for (const opt of s.oneOf) {
-      const r = pickRef(opt)
-      if (r) return r
-    }
-  }
-  if (s.items) return pickRef(s)
-  return undefined
-}
+const selectedAnyOf = ref<number>(0)
+const emit = defineEmits<{
+  (e: 'select', index: number): void
+}>()
 
-const refLabel = computed(() => extractRefName(props.schema))
+watch(selectedAnyOf, (val) => {
+  emit('select', val)
+})
+
+watch(anyOfOptions, (newVal) => {
+  if (newVal && newVal.length > 0) {
+    selectedAnyOf.value = 0
+  }
+}, { immediate: true })
+
+const hasComplexTypes = computed(() => {
+  if (!props.schema?.anyOf) return false
+
+  const meaningfulOptions = props.schema.anyOf.filter((t: unknown) => {
+    const s = t as SchemaObject
+    return s.type !== 'null'
+  })
+
+  // If we only have 1 or fewer meaningful options, we don't need a select
+  if (meaningfulOptions.length <= 1) return false
+
+  return props.schema.anyOf.some((t: unknown) => {
+    const s = t as SchemaObject
+    if (s.properties) return true
+    if (s.type === 'object' || s.type === 'array') return true
+    if ('items' in s) return true
+    return false
+  })
+})
 </script>
 
 <template>
@@ -80,23 +70,37 @@ const refLabel = computed(() => extractRefName(props.schema))
       </div>
       <div class="inline items-center gap-2 text-xs font-medium [&_div]:inline [&_div]:mr-2 [&_div]:leading-5">
         <div
-          v-if="computedType"
-          class="flex items-center px-2 py-0.5 rounded-md bg-gray-100/50 dark:bg-white/5 text-gray-600 dark:text-gray-200 font-medium break-all"
+          v-if="enableAnyOfSelect && hasComplexTypes && anyOfOptions.length > 0"
+          class="flex items-center rounded-md bg-gray-100/50 dark:bg-white/10 text-gray-600 dark:text-gray-200 font-medium break-all"
         >
-          <template v-if="refLabel">
-            <span class="font-semibold">{{ refLabel }}</span>
-            <span class="mx-1">·</span>
-            <span>{{ computedType }}</span>
-          </template>
-          <template v-else>
-            {{ computedType }}
-          </template>
+          <USelect
+            v-model="selectedAnyOf"
+            :items="anyOfOptions"
+            variant="none"
+            size="xs"
+            color="neutral"
+            class="min-w-[200px] max-w-96"
+            :ui="{
+              base: 'text-inherit font-medium py-1.5 pl-2 pr-8',
+              color: {
+                neutral: {
+                  none: 'bg-transparent focus:ring-0'
+                }
+              }
+            }"
+          />
+        </div>
+        <div
+          v-else-if="computedType"
+          class="flex items-center px-2 py-0.5 rounded-md bg-gray-100/50 dark:bg-white/10 text-gray-600 dark:text-gray-200 font-medium break-all"
+        >
+          {{ computedType }}
         </div>
         <div
           v-if="defaultValue !== undefined"
-          class="flex items-center px-2 py-0.5 rounded-md bg-gray-100/50 dark:bg-white/5 text-gray-600 dark:text-gray-200 font-medium break-all"
+          class="flex items-center px-2 py-0.5 rounded-md bg-gray-100/50 dark:bg-white/10 text-gray-600 dark:text-gray-200 font-medium break-all"
         >
-          <span class="text-gray-400 dark:text-[#707473]">default: </span>
+          <span class="text-gray-500">default: </span>
           <span>{{ defaultValue }}</span>
         </div>
         <div
