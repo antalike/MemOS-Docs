@@ -148,6 +148,7 @@ You must strictly execute the following **"Four-Step Verdict"**. If a memory fai
 #Original Query
 I want to travel during the National Day holiday. Please recommend a city I haven’t been to and a hotel brand I haven’t stayed at.
 
+```
 
 ## 3. Next Steps
 
