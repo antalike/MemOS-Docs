@@ -1671,11 +1671,16 @@
             "items": {
               "type": "object",
               "properties": {
+                "name": {
+                  "type": "string",
+                  "title": "Name",
+                  "description": "上传的文档名称"
+                },
                 "content": {
                   "type": "string",
                   "title": "Content",
                   "description": "文档内容，支持 URL 或 Base64"
-                }
+                },
               }
             }
           }
