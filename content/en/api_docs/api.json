@@ -1027,7 +1027,7 @@
             "items": {
               "type": "string"
             },
-            "description": "Specified scope of knowledgebases for retrieval. Default is empty."
+            "description": "This field is used to restrict the scope of knowledge bases that can be accessed in a single search. It is empty by default and can be used for implementing frontend permission control."
           },
           "memory_limit_number": {
             "type": "integer",
