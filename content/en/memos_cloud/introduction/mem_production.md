@@ -2,6 +2,13 @@
 title: Memory Production
 desc: The Memory Production module transforms raw messages or events into storable and retrievable memory units, serving as the starting point of the entire MemOS workflow.
 ---
+::warning
+**[Go directly to API Docs](/api_docs/core/add_message)**
+<br>
+<br>
+
+**This article focuses on functional explanation. For detailed interface fields and limits, please click the link above.**
+::
 
 ## 1. Capability Introduction: Why Process Raw Messages into Memory
 
