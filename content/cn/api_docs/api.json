@@ -1680,7 +1680,7 @@
                   "type": "string",
                   "title": "Content",
                   "description": "文档内容，支持 URL 或 Base64"
-                },
+                }
               }
             }
           }
