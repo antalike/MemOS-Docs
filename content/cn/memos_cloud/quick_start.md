@@ -23,14 +23,14 @@ MemOS 提供了两个核心接口帮助你实现：
 
 ## 2.代码配置
 
-### 1.安装 SDK
+### 2.1 安装 SDK
 如果你选择 Python SDK，请确保已安装 Python 3.10+，然后执行：
 
 ```
 pip install MemoryOS -U 
 ```
 
-### 2.添加原始对话（addMessage）
+### 2.2 添加原始对话（addMessage）
 
 ::note
 **会话 A：2025-06-10 发生**<br>
@@ -41,7 +41,7 @@ pip install MemoryOS -U
 ::code-snippet{name=add_message}
 ::
 
-### 3.在会话中调用MemOS查询相关记忆（searchMemory）
+### 2.3 在会话中调用MemOS查询相关记忆（searchMemory）
 
 ::note
 **会话 B：2025-9-28 发生**<br>
@@ -85,7 +85,7 @@ pip install MemoryOS -U
 }
 ```
 
-### 4.记忆拼装到Prompt示例
+### 2.4 记忆拼装到Prompt示例
 
 ::note
 **记忆拼装**<br>
