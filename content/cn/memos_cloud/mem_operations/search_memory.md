@@ -106,7 +106,7 @@ memory_detail_list [
 &nbsp;请注意，`user_id`为必填项，当前每次检索记忆必须指定单个用户。
 ::
 
-## 5.记忆拼装到Prompt示例
+## 5. 记忆拼装到Prompt示例
 
 ::note
 **记忆拼装**<br>
