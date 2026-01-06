@@ -23,14 +23,14 @@ MemOS provides two core interfaces to help you achieve this:
 
 ## 2. Code Configuration
 
-### 1. Install SDK
+### 2.1 Install SDK
 If you choose Python SDK, please ensure Python 3.10+ is installed, then execute:
 
 ```
 pip install MemoryOS -U 
 ```
 
-### 2. Add Original Conversation (addMessage)
+### 2.2 Add Original Conversation (addMessage)
 
 ::note
 **Session A: Occurred on 2025-06-10**<br>
@@ -41,7 +41,7 @@ You only need to provide the `original conversation records` to MemOS, and MemOS
 ::code-snippet{name=add_message}
 ::
 
-### 3. Call MemOS to Search Relevant Memories in Session (searchMemory)
+### 2.3 Call MemOS to Search Relevant Memories in Session (searchMemory)
 
 ::note
 **Session B: Occurred on 2025-09-28**<br>
@@ -85,7 +85,7 @@ In a new session, the user asks the AI to recommend travel destinations and hote
 }
 ```
 
-### 4. Example of Assembling Memories into a Prompt
+### 2.4 Example of Assembling Memories into a Prompt
 
 ::note
 **Memory Assembly**<br>
