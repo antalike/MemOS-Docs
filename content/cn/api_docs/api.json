@@ -1461,7 +1461,7 @@
                 "status": {
                   "type": "string",
                   "description": "事实记忆状态，当前仅返回激活状态。",
-                  "enum":"activated"
+                  "enum":["activated"]
                 },
                 "confidence": {
                   "type": "number",
@@ -1539,7 +1539,7 @@
                 "status": {
                   "type": "string",
                   "description": "偏好记忆状态，当前仅返回激活状态。",
-                  "enum":"activated"
+                  "enum":["activated"]
                 },
                 "update_time": {
                   "type": "string",
