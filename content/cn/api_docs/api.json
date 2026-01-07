@@ -538,7 +538,7 @@
           "model_name": {
             "type": "string",
             "enum": [
-              "Qwen3-32B",
+              "qwen3-32B",
               "deepseek-r1",
               "qwen2.5-72B-Instruct"
             ],
