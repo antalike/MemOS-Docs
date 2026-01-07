@@ -17,13 +17,9 @@ By deleting memories, you can quickly remove memories upon user request or clear
 
 ## 2. Key Parameters
 
-*   **User List (user\_ids)**: Used to specify the scope of users for the deletion operation, supporting multiple user identifiers.
-
 *   **Memory IDs (memory\_ids)**: Each memory stored in MemOS corresponds to a unique identifier. It supports passing a list of IDs for precise deletion of specified memories.
 
 ## 3. Working Principle
-
-*   **Specify Users**: First, specify the list of users whose memories need to be deleted to limit the scope of the deletion operation.
 
 *   **Delete Memory**: Delete the memory content matching the specified users based on the provided memory IDs.
 
@@ -39,7 +35,6 @@ os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
 os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 
 data = {
-    "user_ids": ["memos_user_123"],
     "memory_ids":["4a50618f-797d-4c3b-b914-94d7d1246c8d"]  # Replace with real memory IDs
   }
 headers = {
