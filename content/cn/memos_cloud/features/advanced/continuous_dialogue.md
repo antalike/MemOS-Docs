@@ -123,7 +123,7 @@ print(f"result: {res.json()}")
 
 | 功能             | 字段           | 说明 & 可选值                                                |
 | ---------------- | -------------- | ------------------------------------------------------------ |
-| 选定模型         | model\_name    | 当前 MemOS 提供了三种可以指定回答的模型，您可以在[控制台 - 模型列表](https://memos-dashboard.openmem.net/models/)查阅详细的模型介绍。可选的模型名称：<br>* qwen2.5-72B-Instruct（默认）<br>* qwen3-32B<br>* deepseek-r1 |
+| 选定模型         | model\_name    | 当前 MemOS 提供了三种可以指定回答的模型，您可以在[控制台 - 模型列表](https://memos-dashboard.openmem.net/models/)查阅详细的模型介绍。可选的模型名称：<br>* qwen2.5-72b-instruct（默认）<br>* qwen3-32b<br>* deepseek-r1 |
 | 自定义系统提示词 | system\_prompt | 支持开发者自定义系统提示词。默认 MemOS 自带的指令。          |
 | 流式/非流式回答  | stream         | MemOS 提供流式和非流式两种回答方式，您可以根据自己的需求选择任意一种回答方式。<br>在调用接口时传入`stream=true 或者 false`即可。默认的输出方式为：非流式输出。 |
 | 关键参数         | temperature    | 控制模型生成内容的随机性。值越低，回答越稳定、越接近固定答案；值越高，回答越发散、多样。<br>可选值范围：0-2，默认的温度值：0.7 |
