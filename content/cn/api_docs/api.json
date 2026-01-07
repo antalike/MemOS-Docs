@@ -1500,13 +1500,6 @@
             "description": "偏好记忆列表。",
             "items": {
               "type": "object",
-              "required": [
-                "id",
-                "preference_type",
-                "preference",
-                "create_time",
-                "status"
-              ],
               "properties": {
                 "id": {
                   "type": "string",
