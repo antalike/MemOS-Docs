@@ -108,6 +108,7 @@ nav:
     - "(ri:edit-box-line) 核心操作":
       - "(ri:message-3-line) 添加消息": api_docs/core/add_message.md
       - "(ri:search-2-line) 检索记忆": api_docs/core/search_memory.md
+      - "(ri:file-list-line) 获取记忆": api_docs/core/get_memory.md
       - "(ri:delete-bin-line) 删除记忆": api_docs/core/delete_memory.md
 
     - "(ri:chat-1-line) 消息":
