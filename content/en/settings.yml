@@ -108,6 +108,7 @@ nav:
     - "(ri:edit-box-line) Core Operations":
       - "(ri:message-3-line) Add Message": api_docs/core/add_message.md
       - "(ri:search-2-line) Search Memory": api_docs/core/search_memory.md
+      - "(ri:file-list-line) Get Memory": api_docs/message/get_memory.md
       - "(ri:delete-bin-line) Delete Memory": api_docs/core/delete_memory.md
 
     - "(ri:chat-1-line) Messages":
