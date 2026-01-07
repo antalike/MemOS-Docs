@@ -15,7 +15,7 @@ The Chat interface provided by MemOS supports end-to-end conversation message in
 
 ## 2. How It Works
 
-# ![chat_interface_process.png](https://cdn.memtensor.com.cn/img/1765973438090_tskx7x_compressed.png)
+# ![chat_interface_process.png](https://cdn.memtensor.com.cn/img/1767784468613_46u5xe_compressed.png)
 
 The figure above illustrates the complete interaction process between the end user, your AI application, and MemOS:
 
