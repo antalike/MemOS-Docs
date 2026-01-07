@@ -526,7 +526,7 @@
             ],
             "title": "Model Name",
             "description": "Specifies the concrete conversation model.",
-            "default": "qwen2.5-72B-Instruct"
+            "default": "qwen2.5-72b-instruct"
           },
           "system_prompt": {
             "type": "string",
