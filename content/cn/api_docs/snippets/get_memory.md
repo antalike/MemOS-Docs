@@ -30,7 +30,7 @@ client = MemOSClient(api_key="YOUR_API_KEY")
 
 user_id = "memos_user_123"
 
-res = client.get_message(user_id=user_id)
+res = client.get_memory(user_id=user_id)
 print(f"result: {res}")
 ```
 ```bash [Curl]
