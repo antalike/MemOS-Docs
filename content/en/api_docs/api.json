@@ -520,9 +520,9 @@
           "model_name": {
             "type": "string",
             "enum": [
-              "Qwen3-32B",
+              "qwen3-32b",
               "deepseek-r1",
-              "qwen2.5-72B-Instruct"
+              "qwen2.5-72b-instruct"
             ],
             "title": "Model Name",
             "description": "Specifies the concrete conversation model.",
