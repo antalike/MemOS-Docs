@@ -30,7 +30,7 @@ client = MemOSClient(api_key="YOUR_API_KEY")
 
 memory_ids = ["6b23b583-f4c4-4a8f-b345-58d0c48fea04"] # 替换为真实的记忆 ID
 
-res = client.delete_memory(user_ids=user_ids, memory_ids=memory_ids)
+res = client.delete_memory(memory_ids=memory_ids)
 print(f"result: {res}")
 ```
 ```bash [Curl]
