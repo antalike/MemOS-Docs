@@ -1459,8 +1459,7 @@
                   "items": {
                     "type": "string"
                   },
-                  "description": "Tag list for classification or retrieval.",
-                  "example":"[\"person\",\"event\"]"
+                  "description": "Tag list for classification or retrieval.e.g.["person","event"]."
                 },
                 "update_time": {
                   "type": "string",
