@@ -1895,10 +1895,15 @@
             "items": {
               "type": "object",
               "properties": {
+                "name": {
+                  "type": "string",
+                  "title": "Name",
+                  "description": "File name."
+                },
                 "content": {
                   "type": "string",
                   "title": "Content",
-                  "description": "Document content, supports URL or Base64"
+                  "description": "The file content input supports URL or Base64 encoding, and the supported document types include PDF, DOCX, DOC, and TXT."
                 }
               }
             }
