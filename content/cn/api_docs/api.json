@@ -1070,7 +1070,7 @@
             "items": {
               "type": "string"
             },
-            "description": "该字段用于限制当次搜索可访问的知识库范围，默认为空，您可以用于在前台权限控制的开发"
+            "description": "该字段用于限制当次搜索可访问的知识库范围，默认为空（即不检索任何知识库）。"
           },
           "memory_limit_number": {
             "type": "integer",
