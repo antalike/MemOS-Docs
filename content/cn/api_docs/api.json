@@ -1601,14 +1601,6 @@
           "memory_ids"
         ],
         "properties": {
-          "user_ids": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "title": "User IDs",
-            "description": "可以删除记忆的用户列表。"
-          },
           "memory_ids": {
             "type": "array",
             "items": {
