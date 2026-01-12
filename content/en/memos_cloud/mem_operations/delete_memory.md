@@ -15,7 +15,7 @@ desc: Delete memories from MemOS, supporting batch deletion of memories for mult
 
 * **Memory ID List (memory\_ids[])**: This parameter accepts a list of memory IDs and is used to delete one or more specific memories.
 
-::: note
+:::note
 **How to get memory ID**  
 When retrieving memories via `search/memory` or `get/memory`, each memory item in the returned result contains a unique `id` field, which serves as the unique identifier for that memory.  <br>
 If a memory is found to be expired or does not meet expectations, you can directly take this `id` and pass it as the `memory_ids[]` parameter when calling the `delete/memory` API to delete the corresponding memory entry.
