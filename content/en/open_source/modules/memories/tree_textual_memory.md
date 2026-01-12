@@ -8,6 +8,25 @@ Let’s build your first **graph-based, tree-structured memory** in MemOS!
 
 [Neo4j](/open_source/modules/memories/neo4j_graph_db) is the current backend, with support for additional graph stores planned in the future.
 
+## Table of Contents
+
+- [What You’ll Learn](#what-youll-learn)
+- [Core Concepts and Workflow](#core-concepts-and-workflow)
+    - [Memory Structure](#memory-structure)
+    - [Metadata Fields](#metadata-fields-treenodetextualmemorymetadata)
+    - [Core Workflow](#core-workflow)
+- [API Reference](#api-reference)
+- [Hands-on: From 0 to 1](#hands-on-from-0-to-1)
+    - [Create TreeTextMemory Config](#create-treetextmemory-config)
+    - [Initialize TreeTextMemory](#initialize-treetextmemory)
+    - [Extract Structured Memories](#extract-structured-memories)
+    - [Search Memories](#search-memories)
+    - [Retrieve Memories from the Internet (Optional)](#retrieve-memories-from-the-internet-optional)
+    - [Replace Working Memory](#replace-working-memory)
+    - [Backup & Restore](#backup--restore)
+    - [Full Code Example](#full-code-example)
+- [Why Choose TreeTextMemory](#why-choose-treetextmemory)
+- [What’s Next](#whats-next)
 
 ## What You’ll Learn
 
@@ -17,7 +36,7 @@ By the end of this guide, you will:
 - Link memories into **hierarchies** and semantic graphs.
 - Search them using **vector similarity + graph traversal**.
 
-## How It Works
+## Core Concepts and Workflow
 
 ### Memory Structure
 
@@ -51,7 +70,7 @@ Every node in your `TreeTextMemory` is a `TextualMemoryItem`:
 multi-hop reasoning.
 ::
 
-### Core Steps
+### Core Workflow
 
 When you run this example, your workflow will:
 
@@ -71,7 +90,7 @@ When you run this example, your workflow will:
 **Hint**<br>Graph links help retrieve context that pure vector search might miss!
 ::
 
-## API Summary (`TreeTextMemory`)
+## API Reference
 
 ### Initialization
 
@@ -97,7 +116,7 @@ TreeTextMemory(config: TreeTextMemoryConfig)
 | `load(dir)`                 | Load graph from saved JSON file                       |
 | `drop(keep_last_n)`         | Backup graph & drop database, keeping N backups       |
 
-## File Storage
+### File Storage
 
 When calling `dump(dir)`, the system writes to:
 
@@ -109,7 +128,7 @@ This file contains a JSON structure with `nodes` and `edges`. It can be reloaded
 
 ---
 
-## Your First TreeTextMemory — Step by Step
+## Hands-on: From 0 to 1
 
 ::steps{}
 
@@ -244,7 +263,7 @@ tree_memory.load("tmp/tree_memories")
 ::
 
 
-### Whole Code
+### Full Code Example
 
 This combines all the steps above into one end-to-end example — copy & run!
 
@@ -313,7 +332,7 @@ my_tree_textual_memory.dump("tmp/my_tree_textual_memory")
 my_tree_textual_memory.drop()
 ```
 
-## What Makes TreeTextMemory Different?
+## Why Choose TreeTextMemory
 
 - **Structured Hierarchy:** Organize memories like a mind map — nodes can
 have parents, children, and cross-links.
@@ -328,7 +347,7 @@ have parents, children, and cross-links.
 manually or auto-merge similar nodes!
 ::
 
-## What’s Next?
+## What’s Next
 
 - **Know more about [Neo4j](/open_source/modules/memories/neo4j_graph_db):** TreeTextMemory is powered by a graph database backend.
   Understanding how Neo4j handles nodes, edges, and traversal will help you design more efficient memory hierarchies, multi-hop reasoning, and context linking strategies.
