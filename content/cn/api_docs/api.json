@@ -1607,7 +1607,7 @@
               "type": "string"
             },
             "title": "Memory IDs",
-            "description": "删除的记忆所关联的唯一标识符。"
+            "description": "需要删除的记忆 ID 列表。每个 ID 均来自 search/memory 或 get/memory 接口返回的 id 字段。"
           }
         },
         "title": "DeleteMemoryRequest"
