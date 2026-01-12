@@ -1593,7 +1593,7 @@
               "type": "string"
             },
             "title": "Memory IDs",
-            "description": "Unique identifiers of the memories to be deleted."
+            "description": "IDs of the memories to be deleted, obtained from the `id` field returned by the `search/memory` or `get/memory` API."
           }
         },
         "title": "DeleteMemoryRequest"
