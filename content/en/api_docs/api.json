@@ -1587,14 +1587,6 @@
           "memory_ids"
         ],
         "properties": {
-          "user_ids": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "title": "User IDs",
-            "description": "List of users whose memories can be deleted."
-          },
           "memory_ids": {
             "type": "array",
             "items": {
