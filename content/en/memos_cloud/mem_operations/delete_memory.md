@@ -11,19 +11,22 @@ desc: Delete memories from MemOS, supporting batch deletion of memories for mult
 **This article focuses on functional explanation. For detailed interface fields and limits, please click the link above.**
 ::
 
-## 1. How to Delete Memories
+## 1. Key Parameters
 
-By deleting memories, you can quickly remove memories upon user request or clear incorrect memories. MemOS supports deleting specific memories and also supports batch deletion of memories for multiple users simultaneously.
+* **Memory ID List (memory\_ids[])**: This parameter accepts a list of memory IDs and is used to delete one or more specific memories.
 
-## 2. Key Parameters
+::: note
+**How to get memory ID**  
+When retrieving memories via `search/memory` or `get/memory`, each memory item in the returned result contains a unique `id` field, which serves as the unique identifier for that memory.  <br>
+If a memory is found to be expired or does not meet expectations, you can directly take this `id` and pass it as the `memory_ids[]` parameter when calling the `delete/memory` API to delete the corresponding memory entry.
+:::
 
-*   **Memory IDs (memory\_ids)**: Each memory stored in MemOS corresponds to a unique identifier. It supports passing a list of IDs for precise deletion of specified memories.
 
-## 3. Working Principle
+## 2. Working Principle
 
 *   **Delete Memory**: Delete the memory content matching the specified users based on the provided memory IDs.
 
-## 4. Quick Start
+## 3. Quick Start
 
 ```python
 import os
