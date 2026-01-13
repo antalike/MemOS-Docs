@@ -8,8 +8,27 @@ title: "TreeTextMemory: 分层结构的明文记忆"
 
 当前使用[Neo4j](/open_source/modules/memories/neo4j_graph_db)作为后端，未来计划支持更多图数据库。
 
+## 目录
 
-## 你将学习到:
+- [你将学到什么](#你将学到什么)
+- [核心概念与工作流程](#核心概念与工作流程)
+    - [记忆结构](#记忆结构)
+    - [元数据字段](#元数据字段-treenodetextualmemorymetadata)
+    - [核心工作流](#核心工作流)
+- [API 参考](#api-参考)
+- [动手实践：从 0 到 1](#动手实践从-0-到-1)
+    - [创建 TreeTextMemory 配置](#创建-treetextmemory-配置)
+    - [初始化 TreeTextMemory](#初始化-treetextmemory)
+    - [抽取结构化记忆](#抽取结构化记忆)
+    - [搜索记忆](#搜索记忆)
+    - [从互联网检索记忆（可选）](#从互联网检索记忆可选)
+    - [替换工作记忆](#替换工作记忆)
+    - [备份与恢复](#备份与恢复)
+    - [完整代码示例](#完整代码示例)
+- [为什么选择 TreeTextMemory](#为什么选择-treetextmemory)
+- [下一步](#下一步)
+
+## 你将学到什么
 
 在本指南的最后，你会:
 - 从原始文本或对话中提取结构化记忆
@@ -17,7 +36,7 @@ title: "TreeTextMemory: 分层结构的明文记忆"
 - 将记忆链接成**层次结构**和语义图
 - 使用**向量相似度+图遍历**进行搜索
 
-## 如何工作
+## 核心概念与工作流程
 
 ### 记忆结构
 
@@ -50,7 +69,7 @@ title: "TreeTextMemory: 分层结构的明文记忆"
   使用有意义的标签和背景——它们有助于组织你的图进行多跳推理。
 ::
 
-### 核心步骤
+### 核心工作流
 
 当您运行此示例时，您的工作流将:
 
@@ -70,7 +89,7 @@ title: "TreeTextMemory: 分层结构的明文记忆"
 **提示**<br>图链接有助于检索纯向量搜索可能遗漏的上下文!
 ::
 
-## API总结(`TreeTextMemory`)
+## API 参考
 
 ### 初始化
 
@@ -96,7 +115,7 @@ TreeTextMemory(config: TreeTextMemoryConfig)
 | `load(dir)`                 | 从保存的JSON文件加载图                     |
 | `drop(keep_last_n)`         | 备份图和删除数据库，保留N个备份       |
 
-## 文件存储
+### 文件存储
 
 当调用 `dump(dir)`, 系统写到:
 
@@ -108,7 +127,7 @@ TreeTextMemory(config: TreeTextMemoryConfig)
 
 ---
 
-## 您的第一个TreeTextMemory - 一步一步进行
+## 动手实践：从 0 到 1
 
 ::steps{}
 
@@ -243,7 +262,7 @@ tree_memory.load("tmp/tree_memories")
 ::
 
 
-### 完整代码
+### 完整代码示例
 
 该示例整合了上述所有步骤，提供一个端到端的完整流程 —— 复制即可运行！
 
@@ -312,7 +331,7 @@ my_tree_textual_memory.dump("tmp/my_tree_textual_memory")
 my_tree_textual_memory.drop()
 ```
 
-## 是什么让TreeTextMemory不同?
+## 为什么选择 TreeTextMemory
 
 - **结构层次:** 像思维导图一样组织记忆——节点可以有父母、孩子和交叉链接。
 - **图风格的链接:** 超越纯粹的层次结构-建立多跳推理链。
@@ -323,7 +342,7 @@ my_tree_textual_memory.drop()
 **尝试一下**<br>从文档或web内容中添加记忆节点。手动链接它们或自动合并类似的节点！
 ::
 
-## 下一步是什么?
+## 下一步
 
 - **了解更多[Neo4j](/open_source/modules/memories/neo4j_graph_db):** treeTextMemory由图数据库后端提供支持。了解Neo4j如何处理节点、边和遍历将帮助您设计更有效的记忆层次结构、多跳推理和上下文链接策略。
 - **添加 [Activation Memory](/open_source/modules/memories/kv_cache_memory):** 使用运行时KV-cache来测试会话状态。
