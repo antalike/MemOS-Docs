@@ -89,5 +89,8 @@ export default {
     response: 'Response',
     showChildAttrs: 'Show child attributes',
     hideChildAttrs: 'Hide child attributes'
+  },
+  assistant: {
+    title: 'Assistant'
   }
 }

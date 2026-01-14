@@ -89,5 +89,8 @@ export default {
     response: '响应体',
     showChildAttrs: '展示属性',
     hideChildAttrs: '隐藏属性'
+  },
+  assistant: {
+    title: '助手'
   }
 }
