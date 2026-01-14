@@ -36,7 +36,7 @@ title: Error Codes
 | 50004 | Memory service is temporarily unavailable | Retry memory write/fetch operations later |
 | 50005 | Search service is temporarily unavailable | Retry memory search operations later |
 | **Knowledge Base & Operations** | | |
-| 50103 | File count exceeds limit | Check KB file count (limit is 20) |
+| 50103 | File count exceeds limit | The number of files for a single upload should not exceed 20 |
 | 50104 | Single file size exceeds limit | Ensure single file does not exceed 100MB |
 | 50105 | Total file size exceeds limit | Ensure total upload size does not exceed 300MB |
 | 50107 | Invalid file format | Check and change file format |
