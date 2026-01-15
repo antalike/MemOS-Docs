@@ -1,15 +1,15 @@
 ---
-title: 10min 搭建一个知识库问答助手
-desc: 基于 MemOS 的长期记忆能力，让知识库助手不仅能检索文档，更能在理解用户背景和偏好的基础上，提供精准、个性化的专业解答。
+title: 构建记忆增强型的知识库问答助手
+desc: 融合长期记忆与知识库，告别 “千人一面” 的检索结果，基于用户背景与偏好提供个性化、精准化解答，让知识库成为懂你的专属顾问。
 ---
 
-# 概述
+## 1. 概述
 
 在 AI 应用开发中,构建一个能够理解上下文、记住历史交互的问答助手一直是核心需求。传统的大语言模型虽然强大,但缺乏长期记忆能力,每次对话都像"失忆"一样重新开始。RAG(检索增强生成)虽然能检索相关知识,但无法真正"记住"用户的偏好和历史交互。
 
 MemOS提供了一个完整的记忆操作系统生态, 让 AI 应用具备真正的长期记忆能力。基于MemOS的知识库，结合提示词向AI大模型提供上下文信息，从而获得更精准和个性化的反馈。这种体验显著优于直接在互联网上与通用大模型对话
 
-## MemOS记忆层 vs RAG:核心区别
+### 1.1 MemOS记忆层 vs RAG:核心区别
 
 传统 RAG(检索增强生成)方案的核心问题在于:**它是无状态的**。每次查询都是独立的,系统只能基于语义相似度检索知识库中的静态信息,但无法记住"你是谁"、"你之前说过什么"、"你的偏好是什么"。这就像一个失忆的图书管理员,每次都要重新问你的需求,无法根据你的阅读历史提供个性化建议。
 
@@ -22,7 +22,7 @@ MemOS 记忆层的核心价值在于:**让 AI 应用拥有长期记忆能力*
 | **上下文管理** | 上下文割裂 - 多轮对话中的关联信息难以有效管理 | 智能关联 - 基于语义理解建立记忆之间的关联关系 |
 | **知识更新** | 知识更新困难 - 新增知识需要重新构建向量索引 | 实时更新 - 支持记忆的增量更新和优先级管理 |
 
-## 真实场景对比: 企业知识库助手
+### 1.2 真实场景对比: 企业知识库助手
 
 让我们通过1个真实的业务场景,直观感受 RAG 和 MemOS 的核心差异:
 
@@ -32,7 +32,7 @@ DAY 1 助手提供了 Intel 版本的安装步骤。
 DAY 20 员工询问:内网代理打不开了,我该重新装哪个版本?
 ```
 
-### RAG 方案的问题
+#### RAG 方案的问题
 
 ```python
 # 根据用户发言检索"内网代理""打不开"相关内容,但无法召回"用户的设备型号"
@@ -46,7 +46,7 @@ DAY 20 员工询问:内网代理打不开了,我该重新装哪个版本?
 ❌ 知识库助手:请尝试重新下载安装最新的Mac M1/M2(ARM)版本或Windows的内网代理客户端。以下是安装步骤:...
 ```
 
-### MemOS方案的优势
+#### MemOS方案的优势
 
 ```python
 # 根据员工问题检索"内网代理""打不开"相关记忆,自动识别该员工的设备型号
@@ -58,7 +58,7 @@ DAY 20 员工询问:内网代理打不开了,我该重新装哪个版本?
 ✅ 知识库助手:你使用的是 Intel 芯片的 MacBook Pro,建议重新安装 Intel 版本 的内网代理客户端。以下是 Intel 版的下载链接和安装步骤:...
 ```
 
-## 为什么使用MemOS？
+### 1.3 为什么使用MemOS？
 
 通过上述真实场景,我们可以清晰看到 MemOS 相比传统 RAG 的三大核心优势:
 
@@ -87,27 +87,27 @@ DAY 20 员工询问:内网代理打不开了,我该重新装哪个版本?
 
 在此基础上，MemOS 2.0 提供的知识库以及多模态的能力，支持开发者将业务文档接入MemOS，结合开源大模型，可以快速搭建一个懂用户的问答助手
 
-# 搭建教程
+## 2 搭建教程
 
-## 2.1 知识库准备(5min)
+### 2.1 知识库准备(5min)
 
-### 创建知识库
+#### 创建知识库
 
 通过[控制台](https://memos-dashboard.openmem.net/cn/knowledgeBase/)或API创建知识库， 本文是基于[MemOS的官方文档](https://github.com/MemTensor/MemOS-Docs)、记忆张量过去宣发的文章以及发布说明进行了知识库的分类，便于后续更新和管理，在此示例中，您可以只创建1个知识库，并上传部分文档用于测试
 
 ![image.png](https://cdn.memtensor.com.cn/img/1768481403940_o97qz4_compressed.png)
 
-### 上传文档
+#### 上传文档
 
 进入知识库，上传文档，要注意文档的要求，MemOS-Docs都是MD格式，可基于AI一键转换为TXT格式，再进行上传，上传时需关注文档要求，剩下的**存储，解析，分段，生成记忆**全部交给MemOS，你只需静静等待文档处理完毕，直到状态显示**「可用」**
 
 ![image.png](https://cdn.memtensor.com.cn/img/1768481436752_31pl0b_compressed.png)
 
-## 2.2 运行代码(5min)
+### 2.2 运行代码(5min)
 
 以下代码示例基于python运行环境进行展示
 
-### 2.2.1 拷贝完整运行代码
+#### 2.2.1 拷贝完整运行代码
 
 ```python
 import os
@@ -120,8 +120,6 @@ from datetime import datetime
 os.environ["MEMOS_API_KEY"] = "mpg-xxx" 
 # 替换为你自己的API_KEY
 os.environ["OPENAI_API_KEY"] = "sk-xxx" 
-# 【如果有】替换为你自己的BASE_URL
-os.environ["OPEN_API_BASE_URL"] = "http://xxx.xxx"
 os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 # 替换为你自己的知识库ID，以下ID仅为示例，并非真实知识库ID
 os.environ["KNOWLEDGE_BASE_IDS"] = json.dumps([
@@ -130,7 +128,7 @@ os.environ["KNOWLEDGE_BASE_IDS"] = json.dumps([
   "base1db3a7ea-6ecc-4925-881a-e87800da8d2e"
 ])
 
-openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"), base_url=os.getenv("OPEN_API_BASE_URL"))
+openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 class KnowledgeBaseAssistant:
     
@@ -339,15 +337,15 @@ if __name__ == "__main__":
 
 ```
 
-### 2.2.2 初始化运行环境
+#### 2.2.2 初始化运行环境
 
 ```python
 pip install OpenAI && pip install datetime
 ```
 
-### 2.2.3 替换代码中的环境变量
+#### 2.2.3 替换代码中的环境变量
 
-#### 获取秘钥(API\_KEY)
+##### 获取秘钥(API\_KEY)
 
 登录控制台[https://memos-dashboard.openmem.net/cn/apikeys/](https://memos-dashboard.openmem.net/cn/apikeys/)，复制秘钥
 
@@ -357,18 +355,16 @@ pip install OpenAI && pip install datetime
 os.environ["MEMOS_API_KEY"] = "mpg-xx" 
 ```
 
-#### 大模型Client
+##### 大模型Client
 
 ```python
 # 替换为你自己的API_KEY
 os.environ["OPENAI_API_KEY"] = "sk-xx" 
-# 【如果有】替换为你自己的BASE_URL
-os.environ["OPEN_API_BASE_URL"] = "http://xxx.xxx"
 
-openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"), os.getenv("OPEN_API_BASE_URL"))
+openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 ```
 
-#### 获取知识库ID
+##### 获取知识库ID
 
 针对刚才上传的知识库，复制ID，并保存
 
@@ -381,7 +377,7 @@ os.environ["KNOWLEDGE_BASE_IDS"] = json.dumps([
 ])
 ```
 
-### 2.3.2 代码说明
+### 2.3 代码说明
 
 1.  在环境变量中设置你的自己的MemOS API秘钥、OpenAI的秘钥、知识库ID
     

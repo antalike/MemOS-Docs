@@ -131,6 +131,7 @@ nav:
 
   - "(ri:projector-line) Use Cases":
     - "(ri:lightbulb-line) Best Practice":
+      - "(ri:customer-service-2-line) Knowledge Q&A Assistant": usecase/knowledge_qa_assistant.md
       - "(ri:money-dollar-circle-line) Financial Assistant": usecase/financial_assistant.md
       - "(ri:edit-line) Writing Assistant": usecase/writting_assistant.md
       - "(ri:heart-line) Life Assistant": usecase/home_assistant.md
