@@ -62,9 +62,18 @@ graph = GraphStoreFactory.from_config(config)
 # Step 3: Add memory
 graph.add_node(
     id="node-001",
-    content="Today I learned about retrieval-augmented generation.",
+    memory="Today I learned about retrieval-augmented generation.",
     metadata={"type": "WorkingMemory", "tags": ["RAG", "AI"], "timestamp": "2025-06-05"}
 )
+
+# Step 4: Search memory
+graph.get_node(id='node-001')
+or graph.search_by_embedding()
+See neo4j_example.example_complex_shared_db_search_filter for full method docs
+
+# Step 5: Delete memory
+db.delete_node(id='node-001')
+See neo4j_example.example_complex_shared_db_delete_memory for full method docs
 ````
 
 ## Pluggable Design

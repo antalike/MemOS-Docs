@@ -61,7 +61,7 @@ nav:
         - "(ri:file-text-line) 通用明文记忆": open_source/modules/memories/general_textual_memory.md
         - "(ri:tree-line) 树形明文记忆": open_source/modules/memories/tree_textual_memory.md
         - "(ri:database-line) Neo4j 图数据库": open_source/modules/memories/neo4j_graph_db.md
-        - "(ri:database-line) Nebula 图数据库": open_source/modules/memories/nebula_graph_db.md
+#        - "(ri:database-line) Nebula 图数据库": open_source/modules/memories/nebula_graph_db.md
       - "(ri:cpu-line) 参数记忆": open_source/modules/memories/parametric_memory.md
 
     - "(ri:history-line) 场景案例":

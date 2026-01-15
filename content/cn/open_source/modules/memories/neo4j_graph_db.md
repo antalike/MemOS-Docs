@@ -59,9 +59,18 @@ graph = GraphStoreFactory.from_config(config)
 # 步骤3：增加记忆
 graph.add_node(
     id="node-001",
-    content="Today I learned about retrieval-augmented generation.",
+    memory="Today I learned about retrieval-augmented generation.",
     metadata={"type": "WorkingMemory", "tags": ["RAG", "AI"], "timestamp": "2025-06-05"}
 )
+
+# 步骤4：查询记忆
+graph.get_node(id='node-001')通过id查询；
+或者graph.search_by_embedding()查询出来；
+参见函数neo4j_example.example_complex_shared_db_search_filter获取完整的方法文档
+
+# 步骤5：删除记忆
+db.delete_node(id='node-001')
+参见函数neo4j_example.example_complex_shared_db_delete_memory获取完整的方法文档
 ````
 
 ## 可插拔的设计
