@@ -24,13 +24,14 @@ MemCube
 ```
 
 All memory modules are accessible via the MemCube interface:
+
 - `mem_cube.text_mem`
 - `mem_cube.act_mem`
 - `mem_cube.para_mem`
 
 ## View Architecture
 
-Starting from MemOS 1.0, runtime operations (add/search) should go through the **View architecture**:
+Starting from MemOS 2.0, runtime operations (add/search) should go through the **View architecture**:
 
 ### SingleCubeView
 
@@ -77,39 +78,40 @@ results = composite.search_memories(search_request)
 
 ### API Request Fields
 
-| Field | Description |
-|-------|-------------|
-| `writable_cube_ids` | Target cubes for add operations |
-| `readable_cube_ids` | Target cubes for search operations |
-| `async_mode` | `"async"` (scheduler enabled) or `"sync"` (scheduler disabled) |
+| Field                 | Description                                                        |
+| --------------------- | ------------------------------------------------------------------ |
+| `writable_cube_ids` | Target cubes for add operations                                    |
+| `readable_cube_ids` | Target cubes for search operations                                 |
+| `async_mode`        | `"async"` (scheduler enabled) or `"sync"` (scheduler disabled) |
 
 ## API Summary (`GeneralMemCube`)
 
 ### Initialization
+
 ```python
 from memos.mem_cube.general import GeneralMemCube
 mem_cube = GeneralMemCube(config)
 ```
 
 ### Static Data Operations
-| Method         | Description                                      |
-| --------------| ------------------------------------------------ |
-| `init_from_dir(dir)` | Load a MemCube from a local directory            |
-| `init_from_remote_repo(repo, base_url)` | Load a MemCube from remote repo (e.g., Hugging Face)   |
-| `load(dir)`   | Load all memories from a directory into existing instance                |
-| `dump(dir)`   | Save all memories to a directory for persistence                  |
+
+| Method                                    | Description                                               |
+| ----------------------------------------- | --------------------------------------------------------- |
+| `init_from_dir(dir)`                    | Load a MemCube from a local directory                     |
+| `init_from_remote_repo(repo, base_url)` | Load a MemCube from remote repo (e.g., Hugging Face)      |
+| `load(dir)`                             | Load all memories from a directory into existing instance |
+| `dump(dir)`                             | Save all memories to a directory for persistence          |
 
 ## File Storage
 
 A MemCube directory contains:
+
 - `config.json` (MemCube configuration)
 - `textual_memory.json` (textual memory)
 - `activation_memory.pickle` (activation memory)
 - `parametric_memory.adapter` (parametric memory)
 
 ## Example Usage
-
-> **Note**: The following examples use **Neo4j** as the graph database backend. To run these examples, ensure your `.env` configuration sets `NEO4J_BACKEND=neo4j`.
 
 ### Export Example (dump_cube.py)
 
@@ -275,6 +277,7 @@ print(general.text_mem.get_all())
 ### Complete Examples
 
 See examples in the code repository:
+
 - `MemOS/examples/mem_cube/dump_cube.py` - Export MemCube data (add + export)
 - `MemOS/examples/mem_cube/load_cube.py` - Import MemCube data and perform semantic search (import + search)
 

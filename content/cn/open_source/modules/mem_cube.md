@@ -24,13 +24,14 @@ MemCube
 ```
 
 所有记忆模块都可通过 MemCube 接口访问：
+
 - `mem_cube.text_mem`
 - `mem_cube.act_mem`
 - `mem_cube.para_mem`
 
 ## View 架构
 
-从 MemOS 1.0 开始，运行时操作（add/search）应通过 **View 架构**：
+从 MemOS 2.0 开始，运行时操作（add/search）应通过 **View 架构**：
 
 ### SingleCubeView
 
@@ -77,39 +78,40 @@ results = composite.search_memories(search_request)
 
 ### API 请求字段
 
-| 字段 | 描述 |
-|------|------|
-| `writable_cube_ids` | add 操作的目标 cube |
-| `readable_cube_ids` | search 操作的目标 cube |
-| `async_mode` | `"async"`（scheduler 启用时）或 `"sync"`（scheduler 禁用时）|
+| 字段                  | 描述                                                             |
+| --------------------- | ---------------------------------------------------------------- |
+| `writable_cube_ids` | add 操作的目标 cube                                              |
+| `readable_cube_ids` | search 操作的目标 cube                                           |
+| `async_mode`        | `"async"`（scheduler 启用时）或 `"sync"`（scheduler 禁用时） |
 
 ## API 总结 (`GeneralMemCube`)
 
 ### 初始化
+
 ```python
 from memos.mem_cube.general import GeneralMemCube
 mem_cube = GeneralMemCube(config)
 ```
 
 ### 静态数据操作
-| 方法         | 描述                                      |
-| --------------| ------------------------------------------------ |
-| `init_from_dir(dir)` | 从本地目录加载 MemCube            |
-| `init_from_remote_repo(repo, base_url)` | 从远程仓库加载 MemCube（如 Hugging Face）   |
-| `load(dir)`   | 从目录加载所有记忆到现有实例                |
-| `dump(dir)`   | 将所有记忆保存到目录以持久化                  |
+
+| 方法                                      | 描述                                      |
+| ----------------------------------------- | ----------------------------------------- |
+| `init_from_dir(dir)`                    | 从本地目录加载 MemCube                    |
+| `init_from_remote_repo(repo, base_url)` | 从远程仓库加载 MemCube（如 Hugging Face） |
+| `load(dir)`                             | 从目录加载所有记忆到现有实例              |
+| `dump(dir)`                             | 将所有记忆保存到目录以持久化              |
 
 ## 文件存储
 
 MemCube 目录包含：
+
 - `config.json` (MemCube 配置)
 - `textual_memory.json` (明文记忆)
 - `activation_memory.pickle` (激活记忆)
 - `parametric_memory.adapter` (参数化记忆)
 
 ## 使用示例
-
-> **说明**：以下示例使用 **Neo4j** 作为图数据库后端。如需运行示例，请确保您的 `.env` 配置中设置 `NEO4J_BACKEND=neo4j`。
 
 ### 导出示例 (dump_cube.py)
 
@@ -275,6 +277,7 @@ print(general.text_mem.get_all())
 ### 完整示例
 
 参见代码仓库中的示例：
+
 - `MemOS/examples/mem_cube/dump_cube.py` - 导出 MemCube 数据（add + export）
 - `MemOS/examples/mem_cube/load_cube.py` - 导入 MemCube 数据并进行语义搜索（import + search）
 
