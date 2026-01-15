@@ -64,7 +64,7 @@ title: "TreeTextMemory: 分层结构的明文记忆"
 | `background`    | `str`                                                 | 附加上下文                        |
 
 
-::注意
+::note
 **最佳实践**<br>
   使用有意义的标签和背景——它们有助于组织你的图进行多跳推理。
 ::
@@ -85,7 +85,7 @@ title: "TreeTextMemory: 分层结构的明文记忆"
 4. **搜索:** 通过向量相似度查询，然后通过图跳数展开结果.
 
 
-::注意
+::note
 **提示**<br>图链接有助于检索纯向量搜索可能遗漏的上下文!
 ::
 
@@ -117,7 +117,7 @@ TreeTextMemory(config: TreeTextMemoryConfig)
 
 ### 文件存储
 
-当调用 `dump(dir)`, 系统写到:
+当调用 `dump(dir)`, MemOS将树形明文记忆导出为JSON文件:
 
 ```
 <dir>/<config.memory_filename>
@@ -133,7 +133,7 @@ TreeTextMemory(config: TreeTextMemoryConfig)
 
 ### 创建 TreeTextMemory 配置
 定义:
-- 你的嵌入（创建向量）,
+- 你的embedding模型（例如，nomic-embed-text:latest）,
 - 你的图数据库后端(Neo4j),
 - 记忆抽取器（基于LLM）（可选）.
 

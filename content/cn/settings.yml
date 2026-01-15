@@ -59,6 +59,7 @@ nav:
       - "(ri:database-2-line) KV cache 记忆": open_source/modules/memories/kv_cache_memory.md
       - "(ri:book-2-line) 明文记忆":
         - "(ri:file-text-line) 通用明文记忆": open_source/modules/memories/general_textual_memory.md
+        - "(ri:user-heart-line) 偏好明文记忆": open_source/modules/memories/preference_textual_memory.md
         - "(ri:tree-line) 树形明文记忆": open_source/modules/memories/tree_textual_memory.md
         - "(ri:database-line) Neo4j 图数据库": open_source/modules/memories/neo4j_graph_db.md
         - "(ri:database-line) Nebula 图数据库": open_source/modules/memories/nebula_graph_db.md
