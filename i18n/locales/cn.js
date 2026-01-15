@@ -33,6 +33,7 @@ export default {
     memosCloud: 'MemOS Cloud',
     memoryAssistant: '个人记忆助手',
     mcpService: 'MCP服务',
+    playground: 'Playground',
     githubProject: 'Github项目',
     apiDocs: '开发者文档',
     blog: '博客',
@@ -42,8 +43,11 @@ export default {
     openmem: 'OpenMem社区',
     community: '加入社群',
     joinUs: '岗位招聘',
+    contactUs: '联系我们',
     icpFilingNumber: '沪ICP备2025129722号-3',
-    filingNumber: '沪公网安备 33010002000070号'
+    filingNumber: '沪公网安备 33010002000070号',
+    officialAccount: 'Memtensor 公众号',
+    wechatGroup: '微信交流群'
   },
   homepage: {
     title: '别让你的 AI 再忘来忘去，用 MemOS',
