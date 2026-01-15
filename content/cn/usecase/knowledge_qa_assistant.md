@@ -1,4 +1,7 @@
-![image.png](https://alidocs.oss-cn-zhangjiakou.aliyuncs.com/res/Mp7ld7bK3aP9pOBQ/img/9665a58f-52ab-43ea-8088-1ce4c6657b9c.png)
+---
+title: 构建懂用户的知识库问答助手
+desc: 基于 MemOS 的长期记忆能力，让知识库助手不仅能检索文档，更能在理解用户背景和偏好的基础上，提供精准、个性化的专业解答。
+---
 
 # 概述
 
@@ -155,9 +158,10 @@ class KnowledgeBaseAssistant:
         return [], []
 
       memory_detail_list_raw = res.json().get('data').get('memory_detail_list', [])
+      # 过滤掉相关性小于0.5的记忆
       memory_detail_list = [
           x for x in memory_detail_list_raw 
-          if x.get('relativity', 0) >= 0.67
+          if x.get('relativity', 0) >= 0.5
       ]
       preference_detail_list = res.json().get('data').get('preference_detail_list')
 
@@ -285,6 +289,8 @@ class KnowledgeBaseAssistant:
         response = self.openai_client.chat.completions.create(
             model="gpt-4o",
             messages=messages
+            temperature=0.3,
+            top_p=0.9
         )
         answer = response.choices[0].message.content
 
