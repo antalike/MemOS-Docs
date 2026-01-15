@@ -32,7 +32,7 @@ nav:
       - "(ri:vip-diamond-line) 高级功能":
         - "(ri:book-read-line) 知识库": memos_cloud/features/advanced/knowledge_base.md
         - "(ri:tools-line) 工具调用": memos_cloud/features/advanced/tool_calling.md
-        # - "(ri:chat-history-line) 持续对话": memos_cloud/features/advanced/continuous_dialogue.md
+        - "(ri:chat-history-line) 持续对话": memos_cloud/features/advanced/continuous_dialogue.md
 
   - "(ri:github-line) 开源项目":
     - "(ri:rocket-line) 快速入门":
@@ -108,14 +108,15 @@ nav:
     - "(ri:edit-box-line) 核心操作":
       - "(ri:message-3-line) 添加消息": api_docs/core/add_message.md
       - "(ri:search-2-line) 检索记忆": api_docs/core/search_memory.md
+      - "(ri:file-list-line) 获取记忆": api_docs/core/get_memory.md
       - "(ri:delete-bin-line) 删除记忆": api_docs/core/delete_memory.md
 
     - "(ri:chat-1-line) 消息":
       - "(ri:file-list-line) 获取消息": api_docs/message/get_message.md
       - "(ri:task-line) 获取任务状态": api_docs/message/get_status.md
 
-    # - "(ri:chat-smile-2-line) 对话":
-    #   - "(ri:chat-4-line) 对话": api_docs/chat/chat.md
+    - "(ri:chat-smile-2-line) 对话":
+      - "(ri:chat-4-line) 对话": api_docs/chat/chat.md
 
     - "(ri:book-read-line) 知识库":
       - "(ri:add-box-line) 创建知识库": api_docs/knowledge/create_kb.md

@@ -33,6 +33,7 @@ export default {
     memosCloud: 'MemOS Cloud',
     memoryAssistant: 'Mind Dock',
     mcpService: 'MCP',
+    playground: 'Playground',
     githubProject: 'Github',
     apiDocs: 'Docs',
     blog: 'Blog',
@@ -40,10 +41,13 @@ export default {
     aboutUs: 'About Us',
     memtensor: 'Memtensor',
     openmem: 'OpenMem',
-    comminity: 'Join the community',
+    community: 'Join the community',
     joinUs: 'Job openings',
+    contactUs: 'Contact us',
     icpFilingNumber: 'ICP License No. 2025129722-3',
-    filingNumber: 'Public Security Filing No. 33010002000070'
+    filingNumber: 'Public Security Filing No. 33010002000070',
+    officialAccount: 'Memtensor official account',
+    wechatGroup: 'WeChat group'
   },
   homepage: {
     title: 'Don\'t let your AI forget again, Empower it with MemOS!',

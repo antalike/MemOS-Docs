@@ -32,7 +32,7 @@ nav:
       - "(ri:vip-diamond-line) Advanced Features":
         - "(ri:book-read-line) Knowledge Base": memos_cloud/features/advanced/knowledge_base.md
         - "(ri:tools-line) Tool Calling": memos_cloud/features/advanced/tool_calling.md
-        # - "(ri:chat-history-line) Continuous Dialogue": memos_cloud/features/advanced/continuous_dialogue.md
+        - "(ri:chat-history-line) Continuous Dialogue": memos_cloud/features/advanced/continuous_dialogue.md
 
   - "(ri:github-line) Open Source":
     - "(ri:rocket-line) Getting Started":
@@ -108,14 +108,15 @@ nav:
     - "(ri:edit-box-line) Core Operations":
       - "(ri:message-3-line) Add Message": api_docs/core/add_message.md
       - "(ri:search-2-line) Search Memory": api_docs/core/search_memory.md
+      - "(ri:file-list-line) Get Memory": api_docs/core/get_memory.md
       - "(ri:delete-bin-line) Delete Memory": api_docs/core/delete_memory.md
 
     - "(ri:chat-1-line) Messages":
       - "(ri:file-list-line) Get Message": api_docs/message/get_message.md
       - "(ri:task-line) Get Task Status": api_docs/message/get_status.md
 
-    # - "(ri:chat-smile-2-line) Chat":
-    #   - "(ri:chat-4-line) Chat": api_docs/chat/chat.md
+    - "(ri:chat-smile-2-line) Chat":
+      - "(ri:chat-4-line) Chat": api_docs/chat/chat.md
 
     - "(ri:book-read-line) Knowledge Base":
       - "(ri:add-box-line) Create Knowledgebase": api_docs/knowledge/create_kb.md
