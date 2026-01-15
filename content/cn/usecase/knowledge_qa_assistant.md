@@ -93,15 +93,15 @@ DAY 20 员工询问:内网代理打不开了,我该重新装哪个版本?
 
 ### 创建知识库
 
-通过[控制台](https://memos-dashboard.openmem.net/cn/knowledgeBase/)或API创建知识库， 本文是基于[MemOS的官方文档](https://github.com/MemTensor/MemOS-Docs)、记忆张量过去宣发的文章以及发布说明进行了知识库的分类，便于后续更新和管理，在此示例中，您可以只创建1个知识库，并上传部分文档用于测试，以下提供一些示例文档用于测试
+通过[控制台](https://memos-dashboard.openmem.net/cn/knowledgeBase/)或API创建知识库， 本文是基于[MemOS的官方文档](https://github.com/MemTensor/MemOS-Docs)、记忆张量过去宣发的文章以及发布说明进行了知识库的分类，便于后续更新和管理，在此示例中，您可以只创建1个知识库，并上传部分文档用于测试
 
-![image.png](https://alidocs.oss-cn-zhangjiakou.aliyuncs.com/res/Mp7ld7bK3aP9pOBQ/img/ce8f3d1d-345b-47cd-9c8c-4d285192028c.png)
+![image.png](https://cdn.memtensor.com.cn/img/1768481403940_o97qz4_compressed.png)
 
 ### 上传文档
 
 进入知识库，上传文档，要注意文档的要求，MemOS-Docs都是MD格式，可基于AI一键转换为TXT格式，再进行上传，上传时需关注文档要求，剩下的**存储，解析，分段，生成记忆**全部交给MemOS，你只需静静等待文档处理完毕，直到状态显示**「可用」**
 
-![image.png](https://alidocs.oss-cn-zhangjiakou.aliyuncs.com/res/Mp7ld7bK3aP9pOBQ/img/ec20de86-d367-497f-88f1-3645956453f5.png)
+![image.png](https://cdn.memtensor.com.cn/img/1768481436752_31pl0b_compressed.png)
 
 ## 2.2 运行代码(5min)
 
@@ -354,7 +354,7 @@ pip install OpenAI && pip install datetime
 
 登录控制台[https://memos-dashboard.openmem.net/cn/apikeys/](https://memos-dashboard.openmem.net/cn/apikeys/)，复制秘钥
 
-![image.png](https://alidocs.oss-cn-zhangjiakou.aliyuncs.com/res/Mp7ld7bK3aP9pOBQ/img/4417d5d9-8521-4664-b2bc-1466ff7f003a.png)
+![image.png](https://cdn.memtensor.com.cn/img/1768481468406_q51iqx_compressed.png)
 
 ```python
 os.environ["MEMOS_API_KEY"] = "mpg-xx" 
@@ -375,7 +375,7 @@ openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"), os.getenv("OPEN_API_
 
 针对刚才上传的知识库，复制ID，并保存
 
-![image.png](https://alidocs.oss-cn-zhangjiakou.aliyuncs.com/res/Mp7ld7bK3aP9pOBQ/img/49e07f18-9e34-47d6-aa14-823c2f8a71d3.png)
+![image.png](https://cdn.memtensor.com.cn/img/1768481493435_bkwqlu_compressed.png)
 
 ```python
 # 替换为你自己的知识库ID，以下ID仅为示例，并非真实知识库ID
