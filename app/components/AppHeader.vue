@@ -17,7 +17,7 @@ const localizedMenus = computed(() => {
     { label: t('header.menus.openSource'), to: '/open_source/getting_started/installation' },
     { label: t('header.menus.mcpAgent'), to: '/mcp_agent/mcp/guide' },
     { label: t('header.menus.apiDocs'), to: '/api_docs/start/overview' },
-    { label: t('header.menus.samples'), to: '/usecase/financial_assistant' },
+    { label: t('header.menus.samples'), to: '/usecase/knowledge_qa_assistant' },
     { label: t('header.menus.changelog'), to: '/changelog' }
   ]
   return menus.map(m => ({ ...m, to: localePath(m.to) }))
