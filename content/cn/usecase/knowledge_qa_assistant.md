@@ -309,10 +309,7 @@ user_id = "memos_knowledge_base_user_123"
 
 def demo_questions():
     return [
-      '介绍下MemOS云平台',
-      'MemOS的MCP如何使用',
-      'MemOS的MindDock如何使用',
-      '给我addMessage的接口文档'
+      '你是谁'
     ]
 
 def main():
