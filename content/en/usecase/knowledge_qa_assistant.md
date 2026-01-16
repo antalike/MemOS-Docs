@@ -121,8 +121,6 @@ from datetime import datetime
 os.environ["MEMOS_API_KEY"] = "mpg-xxx"
 # Replace with your OpenAI API key
 os.environ["OPENAI_API_KEY"] = "sk-xxx"
-# [Optional] Replace with your BASE_URL
-os.environ["OPEN_API_BASE_URL"] = "http://xxx.xxx"
 os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
 # Replace with your own knowledge base IDs (these are examples only)
 os.environ["KNOWLEDGE_BASE_IDS"] = json.dumps([
@@ -131,7 +129,7 @@ os.environ["KNOWLEDGE_BASE_IDS"] = json.dumps([
   "base1db3a7ea-6ecc-4925-881a-e87800da8d2e"
 ])
 
-openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"), base_url=os.getenv("OPEN_API_BASE_URL"))
+openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 class KnowledgeBaseAssistant:
 
