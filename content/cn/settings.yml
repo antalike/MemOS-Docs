@@ -3,6 +3,7 @@ nav:
   # The frontend will render these as actual icons.
   # You can find available icons at https://icones.js.org/
   - "(ri:cloud-line) MemOS Cloud":
+    - "(ri:beer-line) 概览副本": memos_cloud/overview_copy.md
     - "(ri:book-line) 开始使用":
       - "(ri:eye-line) 概览": memos_cloud/overview.md
       - "(ri:rocket-line) 快速开始": memos_cloud/quick_start.md
