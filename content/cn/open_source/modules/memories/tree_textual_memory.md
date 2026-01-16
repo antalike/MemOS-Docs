@@ -156,6 +156,8 @@ tree_memory = TreeTextMemory(config)
 
 使用记忆抽取器将对话、文件或文档解析为多个`TextualMemoryItem`.
 
+#### 使用 SimpleStructMemReader（基础）
+
 ```python
 from memos.mem_reader.simple_struct import SimpleStructMemReader
 
@@ -170,6 +172,159 @@ memories = reader.get_memory(scene_data, type="chat", info={"user_id": "1234"})
 for m_list in memories:
     tree_memory.add(m_list)
 ```
+
+#### 使用 MultiModalStructMemReader（高级）
+
+`MultiModalStructMemReader` 支持处理多模态内容（文本、图片、URL、文件等），能够智能路由到不同的解析器：
+
+```python
+from memos.configs.mem_reader import MultiModalStructMemReaderConfig
+from memos.mem_reader.multi_modal_struct import MultiModalStructMemReader
+
+# 创建 MultiModal Reader 配置
+multimodal_config = MultiModalStructMemReaderConfig(
+    llm={
+        "backend": "openai",
+        "config": {
+            "model_name_or_path": "gpt-4o-mini",
+            "api_key": "your-api-key"
+        }
+    },
+    embedder={
+        "backend": "openai",
+        "config": {
+            "model_name_or_path": "text-embedding-3-small",
+            "api_key": "your-api-key"
+        }
+    },
+    chunker={
+        "backend": "text_splitter",
+        "config": {
+            "chunk_size": 1000,
+            "chunk_overlap": 200
+        }
+    },
+    extractor_llm={
+        "backend": "openai",
+        "config": {
+            "model_name_or_path": "gpt-4o-mini",
+            "api_key": "your-api-key"
+        }
+    },
+    # 可选：指定哪些域名直接返回 Markdown
+    direct_markdown_hostnames=["github.com", "docs.python.org"]
+)
+
+# 初始化 MultiModal Reader
+multimodal_reader = MultiModalStructMemReader(multimodal_config)
+
+# ========================================
+# 示例 1: 处理包含图片的对话
+# ========================================
+scene_with_image = [[
+    {
+        "role": "user",
+        "content": [
+            {"type": "text", "text": "这是我家的花园"},
+            {"type": "image_url", "image_url": {"url": "https://example.com/garden.jpg"}}
+        ]
+    },
+    {
+        "role": "assistant",
+        "content": "你的花园很漂亮！"
+    }
+]]
+
+memories = multimodal_reader.get_memory(
+    scene_with_image,
+    type="chat",
+    info={"user_id": "1234", "session_id": "session_001"}
+)
+for m_list in memories:
+    tree_memory.add(m_list)
+print(f"✓ 已添加 {len(memories)} 条多模态记忆")
+
+# ========================================
+# 示例 2: 处理网页 URL
+# ========================================
+scene_with_url = [[
+    {
+        "role": "user",
+        "content": "请分析这篇文章: https://example.com/article.html"
+    },
+    {
+        "role": "assistant",
+        "content": "我会帮你分析这篇文章"
+    }
+]]
+
+url_memories = multimodal_reader.get_memory(
+    scene_with_url,
+    type="chat",
+    info={"user_id": "1234", "session_id": "session_002"}
+)
+for m_list in url_memories:
+    tree_memory.add(m_list)
+print(f"✓ 已从 URL 提取并添加 {len(url_memories)} 条记忆")
+
+# ========================================
+# 示例 3: 处理本地文件
+# ========================================
+# 支持的文件类型: PDF, DOCX, TXT, Markdown, HTML 等
+file_paths = [
+    "./documents/report.pdf",
+    "./documents/notes.md",
+    "./documents/data.txt"
+]
+
+file_memories = multimodal_reader.get_memory(
+    file_paths,
+    type="doc",
+    info={"user_id": "1234", "session_id": "session_003"}
+)
+for m_list in file_memories:
+    tree_memory.add(m_list)
+print(f"✓ 已从文件提取并添加 {len(file_memories)} 条记忆")
+
+# ========================================
+# 示例 4: 混合模式（文本 + 图片 + URL）
+# ========================================
+mixed_scene = [[
+    {
+        "role": "user",
+        "content": [
+            {"type": "text", "text": "这是我的项目文档:"},
+            {"type": "text", "text": "https://github.com/user/project/README.md"},
+            {"type": "image_url", "image_url": {"url": "https://example.com/diagram.png"}}
+        ]
+    }
+]]
+
+mixed_memories = multimodal_reader.get_memory(
+    mixed_scene,
+    type="chat",
+    info={"user_id": "1234", "session_id": "session_004"}
+)
+for m_list in mixed_memories:
+    tree_memory.add(m_list)
+print(f"✓ 已从混合内容提取并添加 {len(mixed_memories)} 条记忆")
+```
+
+::alert{type="info"}
+**MultiModal Reader 优势**<br>
+- **智能路由**：自动识别内容类型（图片/URL/文件）并选择合适的解析器<br>
+- **格式支持**：支持 PDF、DOCX、Markdown、HTML、图片等多种格式<br>
+- **URL 解析**：自动提取网页内容（包括 GitHub、文档站点等）<br>
+- **大文件处理**：自动分块处理超大文件，避免 token 超限<br>
+- **上下文保持**：使用滑动窗口保持分块间的上下文连续性
+::
+
+::注意
+**配置提示**<br>
+- 使用 `direct_markdown_hostnames` 参数可以指定哪些域名直接返回 Markdown 格式<br>
+- 支持 `mode="fast"` 和 `mode="fine"` 两种提取模式，fine 模式提取更详细<br>
+- 查看完整示例: `/examples/mem_reader/multimodal_struct_reader.py`
+::
 
 ### 搜索记忆
 

@@ -97,6 +97,18 @@ m.dump("tmp/mem")
 m.load("tmp/mem")
 ```
 
+::alert{type="info"}
+**扩展：互联网检索**<br>
+GeneralTextMemory 可以与互联网检索结合使用，从网页提取内容并添加到记忆库。<br>
+查看示例：[从互联网检索记忆](./tree_textual_memory#从互联网检索记忆可选)
+::
+
+::alert{type="info"}
+**进阶：使用 MultiModal Reader**<br>
+如果需要处理图片、URL、文件等多模态内容，可以使用 `MultiModalStructMemReader`。<br>
+查看完整示例：[使用 MultiModalStructMemReader](./tree_textual_memory#使用-multimodalstructmemreader高级)
+::
+
 ## 开发者注意事项
 
 * 使用Qdrant（或兼容）向量DB进行快速相似度搜索
