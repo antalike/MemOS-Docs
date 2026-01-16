@@ -5,6 +5,7 @@ on:
     paths:
       - 'content/cn/**.md'
       - 'content/cn/settings.yml'
+      - 'scripts/auto-translate.mjs'
   workflow_dispatch:
 
 permissions:
@@ -29,17 +30,17 @@ jobs:
           node-version: 20
 
       - name: Install Script Dependencies
-        run: npm install node-fetch js-yaml --no-save
+        run: npm install node-fetch js-yaml unified remark-parse remark-stringify remark-frontmatter --no-save
 
       - name: Run Auto Translate Script
         env:
-          OPENAI_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
-          OPENAI_API_BASE: 'https://api.deepseek.com'
-          OPENAI_MODEL: 'deepseek-chat'
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_API_BASE: ${{ secrets.OPENAI_API_BASE }}
+          OPENAI_MODEL: ${{ secrets.OPENAI_MODEL }}
         run: node scripts/auto-translate.mjs --target=en
 
       - name: Commit and Push Changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "chore(i18n): auto translate content [skip ci]"
+          commit_message: "chore(i18n): auto translate content for commit ${{ github.sha }} [skip ci]"
           file_pattern: 'content/**'

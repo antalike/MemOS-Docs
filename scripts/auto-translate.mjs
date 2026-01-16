@@ -3,6 +3,10 @@ import path from 'path'
 import { execSync } from 'child_process'
 import fetch from 'node-fetch'
 import yaml from 'js-yaml'
+import { unified } from 'unified'
+import remarkParse from 'remark-parse'
+import remarkStringify from 'remark-stringify'
+import remarkFrontmatter from 'remark-frontmatter'
 
 // --- Configuration ---
 const TARGET_LANGS = ['en'] // Add 'fr' etc. here to support more languages
@@ -26,12 +30,26 @@ function exec(command) {
 
 /**
  * Get list of changed files in content/cn
+ * If scripts/auto-translate.mjs changed, return ALL content files
  */
 function getChangedFiles() {
   try {
-    // Include .md and settings.yml
     const output = exec('git diff --name-only HEAD^ HEAD')
-    return output.split('\n').filter(line =>
+    const changedFiles = output.split('\n').filter(Boolean)
+
+    // If script itself changed, likely a config change (e.g. new language added).
+    // Process ALL content files to ensure new language is generated.
+    if (changedFiles.includes('scripts/auto-translate.mjs')) {
+      console.log('⚡️ Script changed, scanning all content files...')
+      const allFiles = exec('git ls-files content/cn').split('\n')
+      return allFiles.filter(line =>
+        line.startsWith(SOURCE_DIR)
+        && (line.endsWith('.md') || line.endsWith('settings.yml'))
+      )
+    }
+
+    // Otherwise only process changed content files
+    return changedFiles.filter(line =>
       line.startsWith(SOURCE_DIR)
       && (line.endsWith('.md') || line.endsWith('settings.yml'))
     )
@@ -52,40 +70,72 @@ function getGitContent(revision, filePath) {
   }
 }
 
-// --- Markdown Logic ---
+// --- Remark AST Logic ---
 
-function parseSections(markdown) {
-  if (!markdown) return []
-  const lines = markdown.split('\n')
+const processor = unified()
+  .use(remarkParse)
+  .use(remarkStringify, { bullet: '-', fenc: '`' }) // normalize output style
+  .use(remarkFrontmatter, ['yaml'])
+
+/**
+ * Split AST tree into logical sections based on Headings
+ * Returns array of { type: 'heading'|'frontmatter'|'root', nodes: [], hash: string }
+ */
+function splitByHeaders(tree) {
   const sections = []
-  let currentSection = { header: '_ROOT_', content: [] }
-  for (const line of lines) {
-    if (/^#{1,6}\s/.test(line)) {
-      if (currentSection.content.length > 0) {
-        sections.push({
-          header: currentSection.header,
-          text: currentSection.content.join('\n')
-        })
+  let currentSection = { type: 'root', nodes: [] }
+
+  for (const node of tree.children) {
+    if (node.type === 'yaml') {
+      // Frontmatter is its own section
+      if (currentSection.nodes.length > 0) {
+        sections.push(currentSection)
       }
-      currentSection = { header: line.trim(), content: [line] }
+      sections.push({ type: 'frontmatter', nodes: [node] })
+      currentSection = { type: 'root', nodes: [] }
+    } else if (node.type === 'heading') {
+      // Start new section
+      if (currentSection.nodes.length > 0) {
+        sections.push(currentSection)
+      }
+      // Heading level determines hierarchy? For simplicity, flatten all headers as section starters.
+      // But maybe include the heading IN the section.
+      currentSection = { type: 'heading', depth: node.depth, nodes: [node] }
     } else {
-      currentSection.content.push(line)
+      currentSection.nodes.push(node)
     }
   }
-  if (currentSection.content.length > 0) {
-    sections.push({
-      header: currentSection.header,
-      text: currentSection.content.join('\n')
-    })
+
+  if (currentSection.nodes.length > 0) {
+    sections.push(currentSection)
   }
+
+  // Generate hashes/text for comparison
+  // We use the stringified markdown of the section as the "hash" for comparison.
+  // This handles formatting normalization (e.g. extra spaces are ignored if AST is same).
+  sections.forEach((section) => {
+    const sectionTree = { type: 'root', children: section.nodes }
+    section.text = processor.stringify(sectionTree).trim()
+
+    // Extract header text for mapping if available
+    if (section.type === 'heading') {
+      // Stringify just the heading text content?
+      // Let's use the full text of the heading line as key?
+      // Or just the plain text of heading?
+      // Simple: use the first line of section.text
+      section.headerText = section.text.split('\n')[0]
+    } else if (section.type === 'frontmatter') {
+      section.headerText = '---FRONTMATTER---'
+    } else {
+      section.headerText = '---PREAMBLE---'
+    }
+  })
+
   return sections
 }
 
 // --- YAML Logic (Settings.yml) ---
-
-/**
- * Extracts header comments from YAML source
- */
+// ... (Keep existing YAML logic unchanged) ...
 function getYamlHeaderComments(source) {
   if (!source) return ''
   const lines = source.split('\n')
@@ -94,26 +144,14 @@ function getYamlHeaderComments(source) {
     if (line.trim().startsWith('#')) {
       comments.push(line)
     } else if (line.trim() === '') {
-      continue // skip empty lines between comments
+      continue
     } else {
-      break // stop at first non-comment code
+      break
     }
   }
   return comments.join('\n') + (comments.length > 0 ? '\n' : '')
 }
 
-/**
- * Recursively process settings.yml structure
- *
- * Strategy:
- * 1. Traverse NewCN structure.
- * 2. For each key in Object:
- *    - Check if Key is "Translation Target" (contains Chinese or pattern).
- *    - Check if Key existed in OldCN.
- *    - If Unchanged & Exists in OldEN -> Use OldEN Key.
- *    - Else -> Mark for Translation.
- * 3. Return a new structure with placeholders or old keys, and a list of segments to translate.
- */
 function processSettingsNode(newNode, oldNode, oldEnNode, collector) {
   if (Array.isArray(newNode)) {
     return newNode.map((item, index) => {
@@ -125,80 +163,36 @@ function processSettingsNode(newNode, oldNode, oldEnNode, collector) {
     const result = {}
     for (const key of Object.keys(newNode)) {
       const value = newNode[key]
-
-      // Determine if Key needs translation
-      // For settings.yml, keys like "(ri:xxx) Some Text" need translation of "Some Text"
-      // We assume simple check: if it contains Chinese characters?
-      // Or just always translate if it looks like a text key?
-      // Let's assume all keys in settings.yml nav are texts.
-
       let finalKey = key
-
-      // Try to find this key in OldCN
-      // In a list of maps, usually order matters.
-      // If we are processing a map, we look for the exact key in OldCN.
-
       const keyExistedInOldCN = oldNode && typeof oldNode === 'object' && key in oldNode
 
       if (keyExistedInOldCN) {
-        // Key didn't change (it's the same key in CN).
-        // Check if we have a translation for it in OldEN.
-        // But wait, OldEN keys are ALREADY translated.
-        // We need to find the "corresponding" key in OldEN.
-        // How? By index?
-        // In settings.yml, it's usually a list of single-key objects: - "Key": Value
-        // So we are inside one of those objects.
-        // If we are traversing parallelly by index (which we do for Arrays), then oldEnNode is the map `{ "EnKey": Value }`.
-
         if (oldEnNode && typeof oldEnNode === 'object') {
-          // Find the single key in oldEnNode
           const enKeys = Object.keys(oldEnNode)
           if (enKeys.length > 0) {
-            // Assume the first key corresponds to our key (since it's usually single-key map in nav)
-            // Or if multiple keys, it's hard to map. But nav is usually `- Label: Children`.
-            const enKey = enKeys[0]
-            // Reuse existing translation
-            finalKey = enKey
+            finalKey = enKeys[0]
           } else {
-            // OldEN is empty? Translate.
-            collector.push({ type: 'key', text: key, context: result }) // context is result obj, we will update key later? No, keys are immutable.
-            // We can use a placeholder and replace later?
-            // Better: Store a reference to the 'result' object and the 'original key', and replace it after translation.
             collector.push({ targetObj: result, originalKey: key, isKey: true })
           }
         } else {
-          // No OldEN, translate
           collector.push({ targetObj: result, originalKey: key, isKey: true })
         }
       } else {
-        // New Key or Changed Key (if we consider it changed).
-        // Actually if key changed, it's a New Key effectively.
         collector.push({ targetObj: result, originalKey: key, isKey: true })
       }
 
-      // Process Value (Recursive)
-      // Value can be string (path) or list/object.
-      // If string (path), we usually don't translate paths.
-      // But we should check if value is structure.
-
       const childOldNode = keyExistedInOldCN ? oldNode[key] : undefined
-      // For OldEN, we need the EnKey we resolved.
       const childOldEnNode = (oldEnNode && typeof oldEnNode === 'object' && finalKey in oldEnNode) ? oldEnNode[finalKey] : undefined
-
       result[finalKey] = processSettingsNode(value, childOldNode, childOldEnNode, collector)
-
-      // If we marked key for translation, 'finalKey' is currently the Chinese Key.
-      // We will swap it later.
     }
     return result
   } else {
-    // Primitive value (String, Number, etc.)
-    // In settings.yml, values are paths (strings). We DON'T translate them.
     return newNode
   }
 }
 
 // --- Translation Service ---
+
 async function translateBatch(segments, targetLang) {
   if (segments.length === 0) return []
 
@@ -256,21 +250,33 @@ async function translateBatch(segments, targetLang) {
 // --- Main Processors ---
 
 async function processMarkdownFile(filePath) {
-  // ... (Previous MD logic) ...
-  const newCN = fs.readFileSync(filePath, 'utf-8')
-  const oldCN = getGitContent('HEAD^', filePath)
-  const newSections = parseSections(newCN)
-  const oldSections = parseSections(oldCN)
-  const oldSectionsMap = new Map(oldSections.map(s => [s.header, s.text]))
+  console.log(`\n📄 Processing Markdown: ${filePath}`)
+  const newCNRaw = fs.readFileSync(filePath, 'utf-8')
+  const oldCNRaw = getGitContent('HEAD^', filePath)
+
+  // Parse AST
+  const newTree = processor.parse(newCNRaw)
+  const oldTree = oldCNRaw ? processor.parse(oldCNRaw) : { children: [] }
+
+  const newSections = splitByHeaders(newTree)
+  const oldSections = splitByHeaders(oldTree)
+
+  // Map old sections by Header Text (or Preamble/Frontmatter)
+  // Note: If multiple headers have same text, this map will overwrite.
+  // For better accuracy, we could use index + header match, but simple map is usually enough for docs.
+  const oldSectionsMap = new Map()
+  oldSections.forEach(s => oldSectionsMap.set(s.headerText, s.text))
 
   for (const lang of TARGET_LANGS) {
     const targetPath = filePath.replace(SOURCE_DIR, `content/${lang}`)
-    let oldEN = null
+    let oldENRaw = null
     let oldESectionsMap = new Map()
+
     if (fs.existsSync(targetPath)) {
-      oldEN = fs.readFileSync(targetPath, 'utf-8')
-      const oldESections = parseSections(oldEN)
-      oldESectionsMap = new Map(oldESections.map(s => [s.header, s.text]))
+      oldENRaw = fs.readFileSync(targetPath, 'utf-8')
+      const oldETree = processor.parse(oldENRaw)
+      const oldESections = splitByHeaders(oldETree)
+      oldESections.forEach(s => oldESectionsMap.set(s.headerText, s.text))
     }
 
     const segmentsToTranslate = []
@@ -279,9 +285,14 @@ async function processMarkdownFile(filePath) {
 
     for (let i = 0; i < newSections.length; i++) {
       const section = newSections[i]
-      const oldText = oldSectionsMap.get(section.header)
-      const enText = oldESectionsMap.get(section.header)
+      const oldText = oldSectionsMap.get(section.headerText)
+      const enText = oldESectionsMap.get(section.headerText)
+
+      // AST-based comparison:
+      // processor.stringify() normalizes the output.
+      // So extra newlines/spaces in raw file won't affect equality if AST is same.
       const isUnchanged = oldText && section.text === oldText
+
       if (isUnchanged && enText) {
         finalSections[i] = enText
       } else {
@@ -302,7 +313,10 @@ async function processMarkdownFile(filePath) {
 
     const targetDir = path.dirname(targetPath)
     if (!fs.existsSync(targetDir)) fs.mkdirSync(targetDir, { recursive: true })
-    fs.writeFileSync(targetPath, finalSections.join('\n'), 'utf-8')
+
+    // Join sections with double newline to ensure separation
+    const finalContent = finalSections.join('\n\n')
+    fs.writeFileSync(targetPath, finalContent, 'utf-8')
     console.log(`    ✅ Updated: ${targetPath}`)
   }
 }
@@ -312,11 +326,8 @@ async function processYamlFile(filePath) {
   const newCNRaw = fs.readFileSync(filePath, 'utf-8')
   const oldCNRaw = getGitContent('HEAD^', filePath)
 
-  // Parse
   const newCN = yaml.load(newCNRaw)
   const oldCN = oldCNRaw ? yaml.load(oldCNRaw) : null
-
-  // Header comments
   const headerComments = getYamlHeaderComments(newCNRaw)
 
   for (const lang of TARGET_LANGS) {
@@ -327,7 +338,6 @@ async function processYamlFile(filePath) {
     }
 
     const collector = []
-    // Build new structure with translation markers
     const finalObj = processSettingsNode(newCN, oldCN, oldEN, collector)
 
     if (collector.length > 0) {
@@ -335,10 +345,8 @@ async function processYamlFile(filePath) {
       const textsToTranslate = collector.map(item => item.originalKey)
       const translatedTexts = await translateBatch(textsToTranslate, lang)
 
-      // Apply translations
       collector.forEach((item, idx) => {
         const transKey = translatedTexts[idx]
-        // Swap key in targetObj
         const val = item.targetObj[item.originalKey]
         delete item.targetObj[item.originalKey]
         item.targetObj[transKey] = val
@@ -347,7 +355,6 @@ async function processYamlFile(filePath) {
       console.log(`    ✨ No changes for [${lang}]`)
     }
 
-    // Write
     const targetDir = path.dirname(targetPath)
     if (!fs.existsSync(targetDir)) fs.mkdirSync(targetDir, { recursive: true })
 
