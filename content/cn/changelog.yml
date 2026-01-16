@@ -1,4 +1,62 @@
 versions:
+  - name: v2.0.2
+    date: 2026-01-15
+    changedInfo:
+      New Features:
+        - type: 发布「知识库问答助手」搭建教程
+          changedInfo:
+            - 官方文档更新「基于及知识库开发问答助手」的最佳实践，手把手教你搭建“MemOS 知识库助手”。
+      Improvements:
+        - type: 知识库文档召回
+          changedInfo:
+            - 进一步提升检索记忆接口对知识库文档内容细节的召回能力，优化针对文档内容的回答效果。
+        - type: 工具记忆机制
+          changedInfo:
+            - 增加针对调用轨迹的程序性经验，提升工具记忆的辅助效果；
+            - 对工具 schema 信息压缩，避免重复添加 ToolSchemaMemory。
+        - type: 事实记忆合并和归档机制
+          changedInfo:
+            - 在事实记忆处理过程中增加了合并与归档机制，优化了记忆重复写入、重复召回的问题，同时保证不影响抽取完整性。
+        - type: 获取记忆接口
+          changedInfo:
+            - 支持返回工具记忆；
+            - 支持返回特定筛选条件下的记忆，用于调试、展示等场景。
+      Bug Fixes:
+        - type: 获取记忆接口
+          changedInfo:
+            - 修复了获取记忆接口在入参为 include_preference=False 时的调用错误。
+        
+  - name: v2.0.1
+    date: 2026-01-08
+    changedInfo:
+      New Features:
+        - type: 获取记忆接口上线
+          changedInfo:
+            - 获取记忆接口上线，支持全量获取用户记忆。
+        - type: 对话功能上线云服务
+          changedInfo:
+            - 对话功能上线云服务，一键开始“记忆持久”的对话。
+        - type: Playground更新
+          changedInfo:
+            - Playground 记忆管理页支持记忆删除，支持用户手动管理删除不再需要的过期记忆。
+      Improvements:
+        - type: 删除记忆接口
+          changedInfo:
+            - 删除记忆接口优化，支持删除所有类型的记忆，包括用户记忆、知识库记忆等。
+        - type: 偏好记忆
+          changedInfo:
+            - feedback接口增加对偏好记忆的反馈处理操作
+        - type: 记忆检索优化
+          changedInfo:
+            - search接口支持可选的去重参数，支持语义相似去重以提升检索结果多样性。
+      Bug Fixes:
+        - type: kv cache问题修复
+          changedInfo:
+            - 解决kv cache代码在新版memos中因兼容性问题报错的问题
+        - type: 调度模块问题修复
+          changedInfo:
+            - 修复调度启用local模式时因为缺少redis配置而报错的问题
+
   - name: v2.0.0
     date: 2025-12-24
     changedInfo:
