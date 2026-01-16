@@ -310,7 +310,7 @@ class KnowledgeBaseAssistant:
         # 4. Use OpenAI to generate an answer
         response = self.openai_client.chat.completions.create(
             model="gpt-4o",
-            messages=messages
+            messages=messages,
             temperature=0.3,
             top_p=0.9
         )
@@ -401,6 +401,13 @@ os.environ["KNOWLEDGE_BASE_IDS"] = json.dumps([
   "based540fb25-ddf1-4456-935b-41d901518e04"
 ])
 ```
+
+##### Execute the code
+```python
+python knowledge_qa_assistant.py
+```
+
+![image.png](https://cdn.memtensor.com.cn/img/1768533833272_krke26_compressed.jpeg)
 
 ### 2.3 Code walkthrough
 
