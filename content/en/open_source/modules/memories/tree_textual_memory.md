@@ -172,6 +172,159 @@ for m_list in memories:
     tree_memory.add(m_list)
 ```
 
+#### Using MultiModalStructMemReader (Advanced)
+
+`MultiModalStructMemReader` supports processing multimodal content (text, images, URLs, files, etc.) and intelligently routes to different parsers:
+
+```python
+from memos.configs.mem_reader import MultiModalStructMemReaderConfig
+from memos.mem_reader.multi_modal_struct import MultiModalStructMemReader
+
+# Create MultiModal Reader configuration
+multimodal_config = MultiModalStructMemReaderConfig(
+    llm={
+        "backend": "openai",
+        "config": {
+            "model_name_or_path": "gpt-4o-mini",
+            "api_key": "your-api-key"
+        }
+    },
+    embedder={
+        "backend": "openai",
+        "config": {
+            "model_name_or_path": "text-embedding-3-small",
+            "api_key": "your-api-key"
+        }
+    },
+    chunker={
+        "backend": "text_splitter",
+        "config": {
+            "chunk_size": 1000,
+            "chunk_overlap": 200
+        }
+    },
+    extractor_llm={
+        "backend": "openai",
+        "config": {
+            "model_name_or_path": "gpt-4o-mini",
+            "api_key": "your-api-key"
+        }
+    },
+    # Optional: specify which domains should return Markdown directly
+    direct_markdown_hostnames=["github.com", "docs.python.org"]
+)
+
+# Initialize MultiModal Reader
+multimodal_reader = MultiModalStructMemReader(multimodal_config)
+
+# ========================================
+# Example 1: Process conversations with images
+# ========================================
+scene_with_image = [[
+    {
+        "role": "user",
+        "content": [
+            {"type": "text", "text": "This is my garden"},
+            {"type": "image_url", "image_url": {"url": "https://example.com/garden.jpg"}}
+        ]
+    },
+    {
+        "role": "assistant",
+        "content": "Your garden looks beautiful!"
+    }
+]]
+
+memories = multimodal_reader.get_memory(
+    scene_with_image,
+    type="chat",
+    info={"user_id": "1234", "session_id": "session_001"}
+)
+for m_list in memories:
+    tree_memory.add(m_list)
+print(f"✓ Added {len(memories)} multimodal memories")
+
+# ========================================
+# Example 2: Process web URLs
+# ========================================
+scene_with_url = [[
+    {
+        "role": "user",
+        "content": "Please analyze this article: https://example.com/article.html"
+    },
+    {
+        "role": "assistant",
+        "content": "I'll help you analyze this article"
+    }
+]]
+
+url_memories = multimodal_reader.get_memory(
+    scene_with_url,
+    type="chat",
+    info={"user_id": "1234", "session_id": "session_002"}
+)
+for m_list in url_memories:
+    tree_memory.add(m_list)
+print(f"✓ Extracted and added {len(url_memories)} memories from URL")
+
+# ========================================
+# Example 3: Process local files
+# ========================================
+# Supported file types: PDF, DOCX, TXT, Markdown, HTML, etc.
+file_paths = [
+    "./documents/report.pdf",
+    "./documents/notes.md",
+    "./documents/data.txt"
+]
+
+file_memories = multimodal_reader.get_memory(
+    file_paths,
+    type="doc",
+    info={"user_id": "1234", "session_id": "session_003"}
+)
+for m_list in file_memories:
+    tree_memory.add(m_list)
+print(f"✓ Extracted and added {len(file_memories)} memories from files")
+
+# ========================================
+# Example 4: Mixed mode (text + images + URLs)
+# ========================================
+mixed_scene = [[
+    {
+        "role": "user",
+        "content": [
+            {"type": "text", "text": "Here's my project documentation:"},
+            {"type": "text", "text": "https://github.com/user/project/README.md"},
+            {"type": "image_url", "image_url": {"url": "https://example.com/diagram.png"}}
+        ]
+    }
+]]
+
+mixed_memories = multimodal_reader.get_memory(
+    mixed_scene,
+    type="chat",
+    info={"user_id": "1234", "session_id": "session_004"}
+)
+for m_list in mixed_memories:
+    tree_memory.add(m_list)
+print(f"✓ Extracted and added {len(mixed_memories)} memories from mixed content")
+```
+
+::alert{type="info"}
+**MultiModal Reader Advantages**<br>
+- **Smart Routing**: Automatically identifies content type (image/URL/file) and selects appropriate parser<br>
+- **Format Support**: Supports PDF, DOCX, Markdown, HTML, images, and more<br>
+- **URL Parsing**: Automatically extracts web content (including GitHub, documentation sites, etc.)<br>
+- **Large File Handling**: Automatically chunks oversized files to avoid token limits<br>
+- **Context Preservation**: Uses sliding window to maintain context continuity between chunks
+::
+
+::alert{type="tip"}
+**Configuration Tips**<br>
+- Use the `direct_markdown_hostnames` parameter to specify which domains should return Markdown format<br>
+- Supports both `mode="fast"` and `mode="fine"` extraction modes; fine mode extracts more details<br>
+- See complete examples: `/examples/mem_reader/multimodal_struct_reader.py`
+::
+
 ### Search Memories
 
 Try a vector + graph search:

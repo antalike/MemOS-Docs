@@ -97,6 +97,18 @@ m.dump("tmp/mem")
 m.load("tmp/mem")
 ```
 
+::alert{type="info"}
+**Extension: Internet Retrieval**<br>
+GeneralTextMemory can be combined with Internet Retrieval to extract content from web pages and add to memory.<br>
+View example: [Retrieve Memories from the Internet](./tree_textual_memory#retrieve-memories-from-the-internet-optional)
+::
+
+::alert{type="info"}
+**Advanced: Using MultiModal Reader**<br>
+For processing images, URLs, or files within conversations, see the comprehensive MultiModal Reader examples.<br>
+View documentation: [Using MultiModalStructMemReader](./tree_textual_memory#using-multimodalstructmemreader-advanced)
+::
+
 ## Developer Notes
 
 * Uses Qdrant (or compatible) vector DB for fast similarity search
