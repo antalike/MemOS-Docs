@@ -1,0 +1,45 @@
+name: Auto Translate
+
+on:
+  push:
+    paths:
+      - 'content/cn/**.md'
+      - 'content/cn/settings.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  translate:
+    runs-on: ubuntu-latest
+    if: github.repository == 'org/repo' || true # Remove 'true' restriction in real usage if needed, mostly for safety.
+    # Note: 'true' is added here to ensure it runs on forks if they have secrets configured. 
+    # Usually forks don't have secrets, so it will fail gracefully or skip.
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Script Dependencies
+        run: npm install node-fetch js-yaml --no-save
+
+      - name: Run Auto Translate Script
+        env:
+          OPENAI_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          OPENAI_API_BASE: 'https://api.deepseek.com'
+          OPENAI_MODEL: 'deepseek-chat'
+        run: node scripts/auto-translate.mjs --target=en
+
+      - name: Commit and Push Changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore(i18n): auto translate content [skip ci]"
+          file_pattern: 'content/**'
