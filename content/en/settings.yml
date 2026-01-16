@@ -59,6 +59,7 @@ nav:
       - "(ri:database-2-line) KV Cache Memory": open_source/modules/memories/kv_cache_memory.md
       - "(ri:book-2-line) Plaintext Memory":
         - "(ri:file-text-line) General Textual Memory": open_source/modules/memories/general_textual_memory.md
+        - "(ri:user-heart-line) Preference Textual Memory": open_source/modules/memories/preference_textual_memory.md
         - "(ri:tree-line) Tree Textual Memory": open_source/modules/memories/tree_textual_memory.md
         - "(ri:database-line) Neo4j Graph Database": open_source/modules/memories/neo4j_graph_db.md
         - "(ri:database-line) Nebula Graph Database": open_source/modules/memories/nebula_graph_db.md
