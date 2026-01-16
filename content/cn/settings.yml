@@ -49,6 +49,7 @@ nav:
       - "(ri:team-line) 用户管理": open_source/modules/mos/users.md
       - "(ri:settings-3-line) 用户配置": open_source/modules/mos/users_configurations.md
       - "(ri:checkbox-multiple-blank-line) 记忆立方": open_source/modules/mem_cube.md
+      - "(ri:feedback-line) 记忆修正": open_source/modules/mem_feedback.md
       - "(ri:book-open-line) 记忆读取": open_source/modules/mem_reader.md
       - "(ri:calendar-line) 记忆调度": open_source/modules/mem_scheduler.md
 
