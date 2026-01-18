@@ -37,7 +37,6 @@ nav:
   - "(ri:github-line) 开源项目":
     - "(ri:rocket-line) 快速入门":
       - "(ri:install-line) 安装指南": open_source/getting_started/installation.md
-      - "(ri:play-line) 快速启动": open_source/getting_started/quick_start.md
       - "(ri:bookmark-line) 创建你的第一个记忆": open_source/getting_started/your_first_memory.md
       - "(ri:lightbulb-line) 核心概念": open_source/home/core_concepts.md
       - "(ri:building-2-line) 架构设计": open_source/home/architecture.md
@@ -46,14 +45,12 @@ nav:
 
     - "(ri:cpu-line) MemOS":
       - "(ri:eye-line) 概览": open_source/modules/mos/overview.md
-      - "(ri:book-open-line) 简化版本": open_source/modules/mos/memos_neo.md
-      - "(ri:tools-line) MCP服务": open_source/modules/mos/memos_mcp.md
-      - "(ri:team-line) 用户管理": open_source/modules/mos/users.md
-      - "(ri:settings-3-line) 用户配置": open_source/modules/mos/users_configurations.md
       - "(ri:checkbox-multiple-blank-line) 记忆立方": open_source/modules/mem_cube.md
+      - "(ri:feedback-line) 记忆修正": open_source/modules/mem_feedback.md
       - "(ri:book-open-line) 记忆读取": open_source/modules/mem_reader.md
       - "(ri:calendar-line) 记忆调度": open_source/modules/mem_scheduler.md
-      - "(ri:robot-2-line) 大模型与Embedding调用": open_source/modules/model_backend.md
+      - "(ri:calendar-line) 使用记忆进行聊天": open_source/modules/mem_chat.md
+
 
     - "(ri:brain-line) 记忆系统":
       - "(ri:database-2-line) 概览": open_source/modules/memories/overview.md
