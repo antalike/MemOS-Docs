@@ -10,7 +10,7 @@ This guide will help you configure MemOS MCP services on platforms like Coze Spa
 MemOS provides two MCP deployment methods. Choose according to your needs:
 
 ::tabs
-== Cloud MCP (Recommended)
+:::Cloud MCP (Recommended)
 
 ### Using MemOS Cloud Service
 
@@ -30,8 +30,9 @@ Main steps:
 1. Register an account at [MemOS API Console](https://memos-dashboard.openmem.net/en/apikeys/) and obtain API Key
 2. Configure `@memtensor/memos-api-mcp` service in MCP client
 3. Set environment variables (`MEMOS_API_KEY`, `MEMOS_USER_ID`, `MEMOS_CHANNEL`)
+:::
 
-== Self-Hosted MCP
+:::Self-Hosted MCP
 
 ### Deploy MCP Service Yourself
 
@@ -49,6 +50,8 @@ If you need private deployment or customization, you can deploy MCP service on y
 - HTTPS domain (for platforms like Coze)
 
 Continue reading below for detailed deployment steps.
+:::
+
 ::
 
 ---
@@ -76,7 +79,7 @@ MemOS Core Service
 - **MCP Server**: Exposes MCP protocol via HTTP transport, calls Server API to complete operations
 - **HTTPS Reverse Proxy**: Platforms like Coze require HTTPS secure connections
 
-::steps{}
+::steps{level="3"}
 
 ### Step 1: Start Server API
 
@@ -90,7 +93,10 @@ python src/memos/api/server_api.py --port 8001
 Verify if Server API is running properly:
 
 ```bash
-curlStep 1: Open Coze Space and Configure Tools
+curl http://localhost:8001/docs
+```
+
+Step 1: Open Coze Space and Configure Tools
 
 1. Open Coze Space and navigate to the tool configuration page
 
@@ -219,7 +225,7 @@ Connected to MCP server
 
 After service deployment, configure MCP connection in Coze Space.
 
-::steps{}
+::steps{level="3"}
 
 ### Open Coze Space and Configure Tools
 
@@ -236,8 +242,9 @@ Add custom tools in the tool configuration page:
 ###Direct REST API Integration (Advanced)
 
 For scenarios requiring more flexible integration, you can directly use Server API's REST interface.
+::
 
-::steps{}
+::steps{level="3"}
 
 ### Step 1: Start Server API
 
@@ -395,7 +402,5 @@ After building the simplest intelligent agent, you can perform memory operation 
 2. Add the published memory plugin
 3. Configure workflow
 4. Test memory storage and retrieval functions
-
-::
 
 Through the above configuration, you can successfully integrate MemOS memory functionality in Coze Space, providing powerful memory capabilities for your intelligent agents. 
