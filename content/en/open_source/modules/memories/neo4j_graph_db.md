@@ -68,17 +68,35 @@ graph.add_node(
 
 ### Interface: `BaseGraphDB`
 
-All implementations must implement:
+````
+Function Introduction:
+1. Node Operations:
+   Insert: add_node (Adds a single node)
+           add_nodes_batch (Adds multiple nodes in batch)
+   Query: get_node (Retrieves a single node)
+          get_nodes (Retrieves multiple nodes)
+          get_memory_count (Retrieves the count of nodes)
+          node_not_exist (Checks if a node exists)
+          search_by_embedding (Vector search supports adding filter conditions for filtering. For usage of the filter, refer to the function neo4j_example.example_complex_shared_db_search_filter for the complete method documentation.)
+   Update: update_node (Updates a single node)
+   Delete: delete_node (Deletes a single node)
+           clear(deletes all associated nodes by the user_name attribute.)
+           See neo4j_example.example_complex_shared_db_delete_memory for full method docs
 
-* `add_node`, `update_node`, `delete_node`
-* `add_edge`, `delete_edge`, `edge_exists`
-* `get_node`, `get_path`, `get_subgraph`, `get_context_chain`
-* `search_by_embedding`, `get_by_metadata`
-* `deduplicate_nodes`, `detect_conflicts`, `merge_nodes`
-* `clear`, `export_graph`, `import_graph`
+2. Edge Operations:
+   Insert: add_edge (Adds a triple/relation as a memory element)
+   Query: get_edges (Retrieves multiple relations/edges)
+          edge_exists (Checks if a relation/edge exists)
+          get_children_with_embeddings (Retrieves a list of child nodes for the PARENT relation type)
+          get_subgraph (Queries multi-hop nodes/retrieves a subgraph)
+   Delete: delete_edge (Deletes a relation/edge)
+
+3. Import/Export Operations:
+   import_graph (Imports an entire graph from a serialized dictionary. Parameters: A dictionary containing all nodes and edges to load, format: {'nodes': [], 'edges': []})
+   export_graph (Exports all graph nodes and edges in a structured format, with pagination support)
 
 See src/memos/graph_dbs/base.py for full method docs.
-
+````
 ### Current Backend:
 
 | Backend | Status | File       |
@@ -119,8 +137,8 @@ New backend identifier: `neo4j-community`
 Usage is similar to standard Neo4j, but disables Enterprise-only features:
 
 - ❌ No support for `auto_create` databases
-- ❌ No native vector indexes (uses external engines like Qdrant)
-- ✅ Enforces `user_name` logic-based isolation
+- ❌ No native vector indexes (External vector library must be used, currently only Qdrant is supported)
+- ✅ Enforces `user_name` logic-based isolation(Community version or username belong to the same business and do not require strong isolation)
 
 Example configuration:
 

@@ -37,7 +37,6 @@ nav:
   - "(ri:github-line) Open Source":
     - "(ri:rocket-line) Getting Started":
       - "(ri:install-line) Installation": open_source/getting_started/installation.md
-      - "(ri:play-line) Quick Start": open_source/getting_started/quick_start.md
       - "(ri:bookmark-line) Your First Memory": open_source/getting_started/your_first_memory.md
       - "(ri:lightbulb-line) Core Concepts": open_source/home/core_concepts.md
       - "(ri:building-2-line) Architecture": open_source/home/architecture.md
@@ -51,6 +50,7 @@ nav:
       - "(ri:team-line) Users": open_source/modules/mos/users.md
       - "(ri:settings-3-line) Users Configurations": open_source/modules/mos/users_configurations.md
       - "(ri:checkbox-multiple-blank-line) MemCube": open_source/modules/mem_cube.md
+      - "(ri:feedback-line) MemFeedback": open_source/modules/mem_feedback.md
       - "(ri:book-open-line) MemReader": open_source/modules/mem_reader.md
       - "(ri:calendar-line) MemScheduler": open_source/modules/mem_scheduler.md
       - "(ri:robot-2-line) LLMs and Embeddings": open_source/modules/model_backend.md
