@@ -260,20 +260,6 @@ for i, mem in enumerate(memories[:2], 1):  # 显示前2条
     print(f"  [{i}] {mem.get('memory', 'N/A')[:60]}...")
 ```
 
-### 远程加载 (GeneralMemCube)
-
-从 Hugging Face 等远程仓库加载静态数据：
-
-```python
-from memos.mem_cube.general import GeneralMemCube
-
-general = GeneralMemCube.init_from_remote_repo(
-    "Ki-Seki/mem_cube_2",
-    base_url="https://huggingface.co/datasets"
-)
-print(general.text_mem.get_all())
-```
-
 ### 完整示例
 
 参见代码仓库中的示例：
