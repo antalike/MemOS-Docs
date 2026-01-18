@@ -1,165 +1,141 @@
 ---
 title: MemOS MCP Integration Guide
-description: Configure MemOS MCP services on platforms like Coze to achieve seamless integration between intelligent agents and memory systems
+description: Configure MemOS MCP service on platforms like Coze to seamlessly integrate agents with the memory system
 ---
 
-This guide will help you configure MemOS MCP services on platforms like Coze Space, enabling seamless integration between intelligent agents and memory systems.
+This guide helps you configure MemOS MCP service in platforms like Coze Space, enabling seamless integration between your agent and the memory system.
 
-## Choose MCP Deployment Method
+## Choose an MCP Deployment Method
 
-MemOS provides two MCP deployment methods. Choose according to your needs:
+MemOS provides two MCP deployment options. Choose based on your needs:
 
-::tabs
-:::Cloud MCP (Recommended)
+### Use MemOS Cloud Service (Recommended)
 
-### Using MemOS Cloud Service
-
-If you want quick access without deploying your own server, we recommend using the official MemOS cloud service.
+If you want to connect quickly without deploying your own server, MemOS official cloud service is recommended.
 
 **Advantages:**
-- ✅ Ready to use, no deployment needed
-- ✅ High availability guarantee
+- ✅ Out of the box, no deployment required
+- ✅ High availability guarantees
 - ✅ Automatic scaling and maintenance
-- ✅ Support for multiple clients (Claude, Cursor, Cline, etc.)
+- ✅ Supports multiple clients (Claude, Cursor, Cline, etc.)
 
-**Configuration:**
+**How to configure:**
 
-Please visit [MemOS Cloud MCP Configuration Guide](https://memos-docs.openmem.net/en/mcp_agent/mcp/guide) for detailed configuration instructions.
+Visit [MemOS Cloud MCP Configuration Guide](https://memos-docs.openmem.net/cn/mcp_agent/mcp/guide) for detailed instructions.
 
 Main steps:
-1. Register an account at [MemOS API Console](https://memos-dashboard.openmem.net/en/apikeys/) and obtain API Key
-2. Configure `@memtensor/memos-api-mcp` service in MCP client
+1. Register and get an API Key in [MemOS API Console](https://memos-dashboard.openmem.net/cn/apikeys/)
+2. Configure `@memtensor/memos-api-mcp` service in your MCP client
 3. Set environment variables (`MEMOS_API_KEY`, `MEMOS_USER_ID`, `MEMOS_CHANNEL`)
-:::
-
-:::Self-Hosted MCP
 
 ### Deploy MCP Service Yourself
 
-If you need private deployment or customization, you can deploy MCP service on your own server.
+If you need a private deployment or custom requirements, you can deploy MCP service on your own server.
 
 **Advantages:**
 - ✅ Fully private data
-- ✅ Customizable configuration
-- ✅ Complete service control
-- ✅ Suitable for enterprise internal use
+- ✅ Configurable and customizable
+- ✅ Full control of the service
+- ✅ Suitable for internal enterprise use
 
 **Prerequisites:**
 - Python 3.9+
-- Neo4j database (or other supported graph databases)
-- HTTPS domain (for platforms like Coze)
+- Neo4j database (or another supported graph database)
+- HTTPS domain (required by platforms like Coze)
 
-Continue reading below for detailed deployment steps.
-:::
-
-::
+Continue reading for detailed deployment steps.
 
 ---
 
 ## Self-Hosted MCP Service Configuration
 
-The following content is for users who need to deploy MCP service themselves.
+The content below applies to users who deploy MCP service themselves.
 
-## Architecture Overview
+## Architecture
 
 Self-hosted MCP service uses the following architecture:
 
 ```
-Client (Coze/Claude etc.) 
+Client (Coze/Claude, etc.)
     ↓ [HTTPS]
-MCP Server (Port 8002)
-    ↓ [HTTP Call]
-Server API (Port 8001)
+MCP Server (port 8002)
+    ↓ [HTTP calls]
+Server API (port 8001)
     ↓
 MemOS Core Service
 ```
 
-**Component Description:**
-- **Server API**: Provides REST API interface (`/product/*`), handles memory CRUD operations
-- **MCP Server**: Exposes MCP protocol via HTTP transport, calls Server API to complete operations
-- **HTTPS Reverse Proxy**: Platforms like Coze require HTTPS secure connections
+**Component overview:**
+- **Server API**: provides REST APIs (`/product/*`) to handle memory CRUD
+- **MCP Server**: exposes the MCP protocol over HTTP and calls Server API to complete operations
+- **HTTPS reverse proxy**: platforms like Coze require HTTPS secure connections
 
 ::steps{level="3"}
 
 ### Step 1: Start Server API
 
-Server API is the backend of MCP service, providing actual memory management functions.
+Server API is the backend for MCP service and provides actual memory management capabilities.
 
 ```bash
 cd /path/to/MemOS
 python src/memos/api/server_api.py --port 8001
 ```
 
-Verify if Server API is running properly:
+Verify whether Server API is running:
 
 ```bash
 curl http://localhost:8001/docs
 ```
 
-Step 1: Open Coze Space and Configure Tools
-
-1. Open Coze Space and navigate to the tool configuration page
-
-![Coze Space Configuration Page](https://statics.memtensor.com.cn/memos/coze_space_1.png)
-
-### Step 2: Add Custom MCP Tools
-
-Add custom tools in the tool configuration page:
-
-![Add Custom Tools](https://statics.memtensor.com.cn/memos/coze_space_2.png)
-
-### Step 3: Configure MCP Connection URL
-
-Configure MCP connection URL using your configured HTTPS address:
-
-```
-https://your-domain.com/mcp
-```
-
-![Configure MCP Tools](https://statics.memtensor.com.cn/memos/coze_space_3.png)
-
-Available MCP tools:
-- **add_memory**: Add new memory
-- **search_memories**: Search existing memories
-- **chat**: Memory-based conversation
+If it returns the API documentation page, startup succeeded.
 
 ::note
-**Test Connection**<br>
-After configuration, test MCP connection in Coze to ensure all tools can be called successfully.
+**Configuration file**<br>
+Server API loads configuration automatically. Ensure Neo4j and other dependencies are configured correctly. You can refer to `examples/data/config/tree_config_shared_database.json` as an example configuration.
 ::
 
-::
+### Step 2: Start MCP HTTP Service
 
----─────────────────────────────────────────────────╮
+Start MCP service in another terminal:
+
+```bash
+cd /path/to/MemOS
+python examples/mem_mcp/simple_fastmcp_serve.py --transport http --port 8002
+```
+
+After MCP service starts, it will show information similar to:
+
+```
+╭──────────────────────────────────────────────────╮
 │       MemOS MCP via Server API                   │
 │       Transport:   HTTP                          │
 │       Server URL:  http://localhost:8002/mcp     │
 ╰──────────────────────────────────────────────────╯
 ```
 
-**Environment Variable Configuration (Optional):**
+**Environment variable configuration (optional):**
 
-Configure Server API address via `.env` file or environment variables:
+You can configure the Server API address via a `.env` file or environment variables:
 
 ```bash
 export MEMOS_API_BASE_URL="http://localhost:8001/product"
 ```
 
 ::note
-**Tool List**<br>
+**Tool list**<br>
 MCP service provides the following tools:
-- `add_memory`: Add memory
-- `search_memories`: Search memories
-- `chat`: Chat with memory system
+- `add_memory`: add memory
+- `search_memories`: search memories
+- `chat`: chat with the memory system
 
-For complete tool list, refer to `examples/mem_mcp/simple_fastmcp_serve.py`
+For the full tool list, see `examples/mem_mcp/simple_fastmcp_serve.py`
 ::
 
-### Step 3: Configure HTTPS Reverse Proxy
+### Step 3: Configure an HTTPS Reverse Proxy
 
-Platforms like Coze require HTTPS connections. You need to configure HTTPS reverse proxy (like Nginx) to forward traffic to MCP service.
+Platforms like Coze require HTTPS. You need to set up an HTTPS reverse proxy (e.g., Nginx) to forward traffic to MCP service.
 
-**Nginx Configuration Example:**
+**Nginx configuration example:**
 
 ```nginx
 server {
@@ -187,20 +163,20 @@ server {
 ```
 
 ::warning
-**HTTPS Certificate**<br>
-Ensure you use a valid SSL certificate. Self-signed certificates may not be accepted by platforms like Coze. You can get free certificates from Let's Encrypt.
+**HTTPS certificate**<br>
+Make sure you use a valid SSL certificate. Self-signed certificates may not be accepted by platforms like Coze. You can use Let's Encrypt to obtain a free certificate.
 ::
 
 ### Step 4: Test MCP Service
 
-Use client test script to verify the service:
+Use the client test script to verify the service:
 
 ```bash
 cd /path/to/MemOS
 python examples/mem_mcp/simple_fastmcp_client.py
 ```
 
-Successful output example:
+Example success output:
 
 ```
 Working FastMCP Client
@@ -211,7 +187,7 @@ Connected to MCP server
     Result: Memory added successfully
   
   2. Searching memories...
-    Result: [search results]
+    Result: [search result]
   
   3. Chatting...
     Result: [AI response]
@@ -223,26 +199,45 @@ Connected to MCP server
 
 ## Configure MCP in Coze Space
 
-After service deployment, configure MCP connection in Coze Space.
+After the service is deployed, configure the MCP connection in Coze Space.
 
 ::steps{level="3"}
 
-### Open Coze Space and Configure Tools
+### Step 1: Open Coze Space and go to the tool configuration page
 
-1. Open Coze Space and navigate to the tool configuration page
+![Coze Space configuration page](https://statics.memtensor.com.cn/memos/coze_space_1.png)
 
-![Coze Space Configuration Page](https://statics.memtensor.com.cn/memos/coze_space_1.png)
+### Step 2: Add a custom MCP tool
 
-### Add Custom Tools
+Add a custom tool on the tool configuration page:
 
-Add custom tools in the tool configuration page:
+![Add a custom tool](https://statics.memtensor.com.cn/memos/coze_space_2.png)
 
-![Add Custom Tools](https://statics.memtensor.com.cn/memos/coze_space_2.png)
+### Step 3: Configure the MCP endpoint URL
 
-###Direct REST API Integration (Advanced)
+Configure the MCP endpoint URL with your HTTPS address:
 
-For scenarios requiring more flexible integration, you can directly use Server API's REST interface.
+```
+https://your-domain.com/mcp
+```
+
+Available MCP tools:
+- **add_memory**: add a new memory
+- **search_memories**: search existing memories  
+- **chat**: memory-based chat
+
+::note
+**Test connection**<br>
+After configuration, test whether MCP connection works in Coze. Ensure each tool can be called successfully.
 ::
+
+::
+
+---
+
+## Use REST API Directly (Advanced)
+
+For scenarios that require more flexible integration, you can call Server API’s REST endpoints directly.
 
 ::steps{level="3"}
 
@@ -253,32 +248,39 @@ cd /path/to/MemOS
 python src/memos/api/server_api.py --port 8001
 ```
 
-### Step 2: Configure Custom Tools in Coze IDE
+**Port notes**
+- Server API runs on port 8001 by default
+- Provides `/product/*` REST API endpoints
 
-1. Select "IDE Plugin" creation method in Coze
+### Step 2: Configure custom tools in Coze IDE
+
+1. In Coze, choose the "IDE plugin" creation method
 2. Configure requests to your deployed Server API service
 
-![Coze IDE Plugin Configuration](https://statics.memtensor.com.cn/memos/coze_tools_1.png)
+![Coze IDE plugin configuration](https://statics.memtensor.com.cn/memos/coze_tools_1.png)
 
-### Step 3: Implement add_memory Tool
+### Step 3: Implement the add_memory tool
 
-![Configure add_memory Operation](https://statics.memtensor.com.cn/memos/coze_tools_2.png)
+![Configure add_memory operation](https://statics.memtensor.com.cn/memos/coze_tools_2.png)
 
-**Code Example:**
+**Code example:** configure and publish the `add_memory` operation in the IDE:
 
-```python
+![Configure add_memory operation](https://statics.memtensor.com.cn/memos/coze_tools_2.png)
+
+Full code is as follows:
+
+```python 
 import json
 import requests
 from runtime import Args
 from typings.add_memory.add_memory import Input, Output
 
-def handler(args: Args[Input]) -> Output:
-    """Add memory to MemOS"""
+def handler(args: Args[Input])->Output:
     memory_content = args.input.memory_content
     user_id = args.input.user_id
     cube_id = args.input.cube_id
     
-    # Call Server API's add interface
+    # Call Server API add endpoint
     url = "https://your-domain.com:8001/product/add"
     payload = json.dumps({
         "user_id": user_id,
@@ -295,24 +297,28 @@ def handler(args: Args[Input]) -> Output:
     return response.json()
 ```
 
-**Other Tool Implementations:**
+**Other tool implementations:**
 
-Similarly implement search and chat tools:
+Similarly, implement the search and chat tools:
 
 ```python
-# Search Tool
+# Search tool
 def search_handler(args: Args[Input]) -> Output:
     url = "https://your-domain.com:8001/product/search"
-    payload = json.dumps({
+    payload = json.dumps{
         "user_id": args.input.user_id,
         "query": args.input.query,
-        "readable_cube_ids": args.input.cube_ids,
-        "top_k": args.input.top_k or 5
     })
-    response = requests.post(url, json=payload, timeout=30)
+    headers = {
+        'Content-Type': 'application/json'
+    }
+    
+    response = requests.post(url, headers=headers, data=payload, timeout=30)
+    response.raise_for_status()
+    
     return response.json()
 
-# Chat Tool
+# Chat tool
 def chat_handler(args: Args[Input]) -> Output:
     url = "https://your-domain.com:8001/product/chat/complete"
     payload = json.dumps({
@@ -323,30 +329,20 @@ def chat_handler(args: Args[Input]) -> Output:
     return response.json()
 ```
 
-::note
-**Server API Parameter Description**<br>
-- **messages**: Memory content, supports string or standard message format array
-- **writable_cube_ids**: List of writable cube IDs for multi-tenant scenarios
-- **readable_cube_ids**: List of readable cube IDs for searching
-- **top_k**: Maximum number of search results to return
+### Step 4: Publish and test tools
 
-For complete API documentation, refer to detailed examples in `examples/api/server_router_api.py`.
-::
+After publishing, you can view the plugin under "My Resources":
 
-### Step 4: Publish and Test Tools
+![Published plugin resource](https://statics.memtensor.com.cn/memos/coze_tools_3.png)
 
-After publishing, you can view the plugin in "My Resources":
+### Step 5: Integrate into agent workflow
 
-![Published Plugin Resources](https://statics.memtensor.com.cn/memos/coze_tools_3.png)
+Add the plugin into the agent workflow:
 
-### Step 5: Integrate into Agent Workflow
-
-Add the plugin to your agent workflow:
-
-1. Create a new agent or edit an existing one
+1. Create a new agent or edit an existing agent
 2. Add the published MemOS plugin to the tool list
 3. Configure the workflow to call memory tools
-4. Test memory storage and retrieval functions
+4. Test memory write and retrieval functions
 
 ::
 
@@ -357,50 +353,69 @@ Add the plugin to your agent workflow:
 ### Q1: MCP service cannot connect to Server API
 
 **Solution:**
-- Check if Server API is running properly: `curl http://localhost:8001/docs`
-- Verify environment variable `MEMOS_API_BASE_URL` is configured correctly
-- Check MCP service logs to confirm the call address
+- Check whether Server API is running: `curl http://localhost:8001/docs`
+- Check whether environment variable `MEMOS_API_BASE_URL` is configured correctly
+- Check MCP service logs and confirm the call address
 
 ### Q2: Coze cannot connect to MCP service
 
 **Solution:**
-- Ensure HTTPS connection is used
-- Check if SSL certificate is valid
+- Make sure you use HTTPS
+- Check whether the SSL certificate is valid
 - Test reverse proxy configuration: `curl https://your-domain.com/mcp`
 - Check firewall and security group settings
 
 ### Q3: Neo4j connection failed
 
 **Solution:**
-- Ensure Neo4j service is running properly
-- Check connection information in configuration file (uri, user, password)
-- Refer to `examples/data/config/tree_config_shared_database.json` for configuration examples
+- Ensure Neo4j service is running
+- Check connection info in the configuration file (uri, user, password)
+- Refer to `examples/data/config/tree_config_shared_database.json` as an example configuration
 
-### Q4: How to view complete API examples?
+### Q4: How to see complete API examples?
 
-**Reference Files:**
-- MCP Server: `examples/mem_mcp/simple_fastmcp_serve.py`
-- MCP Client: `examples/mem_mcp/simple_fastmcp_client.py`
-- API Testing: `examples/api/server_router_api.py`
+**Reference files:**
+- MCP server: `examples/mem_mcp/simple_fastmcp_serve.py`
+- MCP client: `examples/mem_mcp/simple_fastmcp_client.py`
+- API tests: `examples/api/server_router_api.py`
 
 ---
 
 ## Summary
 
-Through this guide, you can:
-- ✅ Choose the appropriate MCP deployment method (cloud service or self-hosted)
+With this guide, you can:
+- ✅ Choose a suitable MCP deployment option (cloud or self-hosted)
 - ✅ Complete the full MCP service deployment process
-- ✅ Integrate MemOS memory functionality in platforms like Coze
-- ✅ Direct integration using REST API
+- ✅ Integrate MemOS memory features into platforms like Coze
+- ✅ Integrate directly via REST API
 
-Whichever method you choose, MemOS can provide powerful memory management
-### Build Agent and Test
+No matter which option you choose, MemOS can provide your agent with powerful memory managementders=headers, data=payload)
+    return json.loads(response.text)
 
-After building the simplest intelligent agent, you can perform memory operation tests:
+::note
+**API parameter notes**
+- Use the standard Server API parameter format
+- `messages`: replaces the previous `memory_content`, supports string or message array
+- `writable_cube_ids`: replaces the previous `mem_cube_id`, supports multiple cubes
+- Server API runs on port 8001, and the path is `/product/add`
+- Ensure it matches MemOS Server API interface. You can refer to the example in `examples/api/server_router_api.py`
+**IDE configuration**<br>In the IDE, you can customize tool parameters, return value formats, etc., ensuring consistency with MemOS API. Use this method to implement the search endpoint and user registration endpoint, then click Publish.
+::
 
-1. Create a new intelligent agent
+### Publish and Use the Plugin
+
+After publishing, you can view the plugin under "My Resources" and integrate it into the agent workflow as a plugin:
+
+![Published plugin resource](https://statics.memtensor.com.cn/memos/coze_tools_3.png)
+
+### Build an Agent and Test
+
+After building the simplest agent, you can test memory operations:
+
+1. Create a new agent
 2. Add the published memory plugin
-3. Configure workflow
-4. Test memory storage and retrieval functions
+3. Configure the workflow
+4. Test memory write and retrieval functions
 
-Through the above configuration, you can successfully integrate MemOS memory functionality in Coze Space, providing powerful memory capabilities for your intelligent agents. 
+With the above configuration, you can successfully integrate MemOS memory features in Coze Space and provide powerful memory capabilities for your agent.
+

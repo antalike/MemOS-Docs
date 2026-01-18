@@ -9,11 +9,7 @@ description: 在Coze等平台配置MemOS的MCP服务，实现智能体与记忆�
 
 MemOS提供两种MCP部署方式，您可以根据实际需求选择：
 
-::tabs
-
-:::云服务MCP（推荐）
-
-### 使用MemOS云服务
+### 使用MemOS云服务（推荐）
 
 如果您希望快速接入，无需自己部署服务器，推荐使用MemOS官方云服务。
 
@@ -31,9 +27,6 @@ MemOS提供两种MCP部署方式，您可以根据实际需求选择：
 1. 在 [MemOS API控制台](https://memos-dashboard.openmem.net/cn/apikeys/) 注册账号并获取API Key
 2. 在MCP客户端中配置 `@memtensor/memos-api-mcp` 服务
 3. 设置环境变量（`MEMOS_API_KEY`、`MEMOS_USER_ID`、`MEMOS_CHANNEL`）
-:::
-
-:::自部署MCP
 
 ### 自己部署MCP服务
 
@@ -51,9 +44,6 @@ MemOS提供两种MCP部署方式，您可以根据实际需求选择：
 - HTTPS域名（用于Coze等平台）
 
 继续阅读下方内容了解详细部署步骤。
-:::
-
-::
 
 ---
 
@@ -271,7 +261,7 @@ python src/memos/api/server_api.py --port 8001
 
 ![配置add_memory操作](https://statics.memtensor.com.cn/memos/coze_tools_2.png)
 
-**代码示例：**IDE中配置`add_memory`操作并发布：
+**代码示例：** IDE中配置`add_memory`操作并发布：
 
 ![配置add_memory操作](https://statics.memtensor.com.cn/memos/coze_tools_2.png)
 详细代码如下
@@ -398,7 +388,6 @@ def chat_handler(args: Args[Input]) -> Output:
 
 无论选择哪种方式，MemOS都能为您的智能体提供强大的记忆管理ders=headers, data=payload)
     return json.loads(response.text)
-````
 
 ::note
 **API参数说明**
