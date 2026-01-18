@@ -52,7 +52,7 @@ GeneralTextMemory(config: GeneralTextMemoryConfig)
 
 ## 文件存储
 
-当调用 `dump(dir)`, 系统写到:
+当调用 `dump(dir)`, 系统会将记忆保存到：
 
 ```
 <dir>/<config.memory_filename>
@@ -63,6 +63,7 @@ GeneralTextMemory(config: GeneralTextMemoryConfig)
 ## 示例用法
 
 ```python
+import os
 from memos.configs.memory import MemoryConfigFactory
 from memos.memories.factory import MemoryFactory
 
@@ -82,6 +83,18 @@ memories = m.extract([
     {"role": "assistant", "content": "Great! Tomatoes are delicious."},
 ])
 m.add(memories)
+
+# Add a manually created memory item
+memory_id = "xxx"
+m.add(
+  [
+        {
+            "id": memory_id,
+            "memory": "User is Chinese.",
+            ...
+        }
+    ]  
+)
 
 # Search
 results = m.search("Tell me more about the user", top_k=2)

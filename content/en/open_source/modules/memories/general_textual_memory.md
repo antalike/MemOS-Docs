@@ -52,7 +52,7 @@ GeneralTextMemory(config: GeneralTextMemoryConfig)
 
 ## File Storage
 
-When calling `dump(dir)`, the system writes to:
+When calling `dump(dir)`, the system stores the memories to:
 
 ```
 <dir>/<config.memory_filename>
@@ -63,6 +63,7 @@ This file contains a JSON list of all memory items, which can be reloaded using 
 ## Example Usage
 
 ```python
+import os
 from memos.configs.memory import MemoryConfigFactory
 from memos.memories.factory import MemoryFactory
 

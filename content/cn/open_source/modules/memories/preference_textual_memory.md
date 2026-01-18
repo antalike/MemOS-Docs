@@ -29,7 +29,7 @@ desc: "`PreferenceTextMemory` 是MemOS中用于存储和管理用户偏好的明
 
 ::alert{type="info"}
 **适用场景**<br>
-当你需要构建能够"记住"用户喜好并据此提供个性化服务的系统时，PreferenceTextMemory 是最佳选择。
+当你需要构建能够"记住"用户喜好并据此提供个性化服务的系统时，`PreferenceTextMemory` 是最佳选择。
 ::
 
 ## 核心概念与工作流程
@@ -54,7 +54,7 @@ desc: "`PreferenceTextMemory` 是MemOS中用于存储和管理用户偏好的明
 
 ::alert{type="success"}
 **智能提取**<br>
-PreferenceTextMemory 使用 LLM 自动从对话中同时提取显式和隐式偏好，无需手动标注！
+`PreferenceTextMemory` 使用 LLM 自动从对话中同时提取显式和隐式偏好，无需手动标注！
 ::
 
 ### 元数据字段 （`PreferenceTextualMemoryMetadata`）

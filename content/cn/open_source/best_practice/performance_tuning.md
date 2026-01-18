@@ -18,7 +18,7 @@ slow_embedder = {
         "model_name_or_path": "nomic-ai/nomic-embed-text-v1.5"
     }
 }
-````
+```
 
 ## 推理速度优化
 
