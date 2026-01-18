@@ -504,7 +504,7 @@ if memory_count > 800:
 ::list{icon="ph:arrow-right-duotone"}
 - **升级到向量搜索**：学习 [GeneralTextMemory](/open_source/modules/memories/general_textual_memory) 的语义检索能力
 - **探索图结构**：了解 [TreeTextMemory](/open_source/modules/memories/tree_textual_memory) 的关系推理功能
-- **集成到应用**：查看 [完整 API 文档](/api-reference/configure-memos) 构建生产级应用
+- **集成到应用**：查看 [完整 API 文档](/api-reference/search-memories) 构建生产级应用
 - **运行示例代码**：浏览 `/examples/` 目录获取更多实战案例
 - **了解图数据库**：如果需要高级功能，可以学习 [Neo4j](/open_source/modules/memories/neo4j_graph_db) 或 [PolarDB](/open_source/modules/memories/polardb_graph_db)
 ::

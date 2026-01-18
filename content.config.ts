@@ -28,7 +28,8 @@ export default defineContentConfig({
   collections: {
     docs: defineCollection({
       source: {
-        include: '**'
+        include: '**',
+        exclude: ['**/*.json']
       },
       type: 'page',
       schema

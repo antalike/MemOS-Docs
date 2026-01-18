@@ -504,7 +504,7 @@ Congratulations! You've mastered the core usage of NaiveTextMemory. Next, you ca
 ::list{icon="ph:arrow-right-duotone"}
 - **Upgrade to Vector Search**: Learn about [GeneralTextMemory](/open_source/modules/memories/general_textual_memory)'s semantic retrieval capabilities
 - **Explore Graph Structure**: Understand [TreeTextMemory](/open_source/modules/memories/tree_textual_memory)'s relationship reasoning features
-- **Integrate into Applications**: Check [Complete API Documentation](/api-reference/configure-memos) to build production-grade applications
+- **Integrate into Applications**: Check [Complete API Documentation](/api-reference/search-memories) to build production-grade applications
 - **Run Example Code**: Browse the `/examples/` directory for more practical cases
 - **Learn Graph Databases**: If you need advanced features, learn about [Neo4j](/open_source/modules/memories/neo4j_graph_db) or [PolarDB](/open_source/modules/memories/polardb_graph_db)
 ::
