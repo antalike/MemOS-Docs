@@ -312,10 +312,10 @@ def handler(args: Args[Input])->Output:
 # Search工具
 def search_handler(args: Args[Input]) -> Output:
     url = "https://your-domain.com:8001/product/search"
-    payload = {
+    payload = json.dumps{
         "user_id": args.input.user_id,
         "query": args.input.query,
-    }
+    })
     headers = {
         'Content-Type': 'application/json'
     }
@@ -328,10 +328,10 @@ def search_handler(args: Args[Input]) -> Output:
 # Chat工具
 def chat_handler(args: Args[Input]) -> Output:
     url = "https://your-domain.com:8001/product/chat/complete"
-    payload = {
+    payload = json.dumps({
         "user_id": args.input.user_id,
         "query": args.input.query
-    }
+    })
     response = requests.post(url, json=payload, timeout=30)
     return response.json()
 ```

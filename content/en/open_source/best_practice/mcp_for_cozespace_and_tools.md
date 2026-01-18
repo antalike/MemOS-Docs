@@ -303,22 +303,22 @@ Similarly implement search and chat tools:
 # Search Tool
 def search_handler(args: Args[Input]) -> Output:
     url = "https://your-domain.com:8001/product/search"
-    payload = {
+    payload = json.dumps({
         "user_id": args.input.user_id,
         "query": args.input.query,
         "readable_cube_ids": args.input.cube_ids,
         "top_k": args.input.top_k or 5
-    }
+    })
     response = requests.post(url, json=payload, timeout=30)
     return response.json()
 
 # Chat Tool
 def chat_handler(args: Args[Input]) -> Output:
     url = "https://your-domain.com:8001/product/chat/complete"
-    payload = {
+    payload = json.dumps({
         "user_id": args.input.user_id,
         "query": args.input.query
-    }
+    })
     response = requests.post(url, json=payload, timeout=30)
     return response.json()
 ```
