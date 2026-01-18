@@ -357,7 +357,7 @@ Add the plugin to your agent workflow:
 ### Q1: MCP service cannot connect to Server API
 
 **Solution:**
-- Check if Server API is running properly: `curl http://localhost:8001/product/docs`
+- Check if Server API is running properly: `curl http://localhost:8001/docs`
 - Verify environment variable `MEMOS_API_BASE_URL` is configured correctly
 - Check MCP service logs to confirm the call address
 

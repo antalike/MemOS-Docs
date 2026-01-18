@@ -360,7 +360,7 @@ def chat_handler(args: Args[Input]) -> Output:
 ### Q1: MCP服务无法连接到Server API
 
 **解决方案：**
-- 检查Server API是否正常运行：`curl http://localhost:8001/product/docs`
+- 检查Server API是否正常运行：`curl http://localhost:8001/docs`
 - 检查环境变量`MEMOS_API_BASE_URL`配置是否正确
 - 查看MCP服务日志，确认调用地址
 
