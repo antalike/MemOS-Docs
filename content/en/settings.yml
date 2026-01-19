@@ -45,15 +45,12 @@ nav:
 
     - "(ri:cpu-line) MOS":
       - "(ri:eye-line) Overview": open_source/modules/mos/overview.md
-      - "(ri:book-open-line) MemOS NEO": open_source/modules/mos/memos_neo.md
-      - "(ri:tools-line) MemOS MCP": open_source/modules/mos/memos_mcp.md
-      - "(ri:team-line) Users": open_source/modules/mos/users.md
-      - "(ri:settings-3-line) Users Configurations": open_source/modules/mos/users_configurations.md
       - "(ri:checkbox-multiple-blank-line) MemCube": open_source/modules/mem_cube.md
-      - "(ri:feedback-line) MemFeedback": open_source/modules/mem_feedback.md
       - "(ri:book-open-line) MemReader": open_source/modules/mem_reader.md
       - "(ri:calendar-line) MemScheduler": open_source/modules/mem_scheduler.md
-      - "(ri:robot-2-line) LLMs and Embeddings": open_source/modules/model_backend.md
+      - "(ri:calendar-line) MemChat": open_source/modules/mem_chat.md
+      - "(ri:feedback-line) MemFeedback": open_source/modules/mem_feedback.md
+
 
     - "(ri:brain-line) Memories":
       - "(ri:database-2-line) Overview": open_source/modules/memories/index.md
