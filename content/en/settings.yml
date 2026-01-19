@@ -1,16 +1,17 @@
 nav:
   - (ri:cloud-line) MemOS Cloud:
       - (ri:beer-line) Overview Copy: memos_cloud/overview_copy.md
+      - (ri:rocket-line) Quick Start Copy: memos_cloud/quick_start_copy.md
       - (ri:book-line) Getting Started:
           - (ri:eye-line) Overview: memos_cloud/overview.md
           - (ri:rocket-line) Quick Start: memos_cloud/quick_start.md
           - (ri:home-line) Core Concepts:
               - (ri:add-line) Memory Production: memos_cloud/introduction/mem_production.md
               - (ri:calendar-line) Memory Scheduling: memos_cloud/introduction/mem_schedule.md
-              - (ri:search-line) Memory Recall: memos_cloud/introduction/mem_recall.md
+              - (ri:search-line) Memory Retrieval: memos_cloud/introduction/mem_recall.md
               - (ri:refresh-line) Memory Lifecycle Management: memos_cloud/introduction/mem_lifecycle.md
               - (ri:cpu-line) Algorithm Principles Overview: memos_cloud/introduction/algorithm.md
-          - (ri:dashboard-line) Cloud Platform & Open Source Solutions: memos_cloud/cloud_and_opensource.md
+          - (ri:dashboard-line) Cloud Platform and Open Source Solutions: memos_cloud/cloud_and_opensource.md
           - (ri:shield-line) Quotas and Limits: memos_cloud/limit.md
       - (ri:question-line) Support and Troubleshooting:
           - (ri:question-line) FAQs: memos_cloud/faq.md
@@ -21,7 +22,7 @@ nav:
       - (ri:function-line) Feature Introduction:
           - (ri:flag-line) Basic Features:
               - (ri:filter-3-line) Memory Filter: memos_cloud/features/basic/filters.md
-              - (ri:timer-flash-line) Async Mode: memos_cloud/features/basic/async_mode.md
+              - (ri:timer-flash-line) Asynchronous Mode: memos_cloud/features/basic/async_mode.md
               - (ri:image-add-line) Multimodal Messages: memos_cloud/features/basic/multimodal.md
               - (ri:price-tag-3-line) Custom Tags: memos_cloud/features/basic/custom_tags.md
           - (ri:vip-diamond-line) Advanced Features:
