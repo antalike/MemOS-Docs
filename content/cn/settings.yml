@@ -46,10 +46,10 @@ nav:
     - "(ri:cpu-line) MemOS":
       - "(ri:eye-line) 概览": open_source/modules/mos/overview.md
       - "(ri:checkbox-multiple-blank-line) 记忆立方": open_source/modules/mem_cube.md
-      - "(ri:feedback-line) 记忆修正": open_source/modules/mem_feedback.md
       - "(ri:book-open-line) 记忆读取": open_source/modules/mem_reader.md
       - "(ri:calendar-line) 记忆调度": open_source/modules/mem_scheduler.md
       - "(ri:calendar-line) 使用记忆进行聊天": open_source/modules/mem_chat.md
+      - "(ri:feedback-line) 记忆修正": open_source/modules/mem_feedback.md
 
 
     - "(ri:brain-line) 记忆系统":
