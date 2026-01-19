@@ -90,7 +90,7 @@ const processor = unified()
  * Split AST tree into minimal independent blocks (Paragraphs, Headings, Lists, etc.)
  * Flatten the tree structure into a linear list of "translate units".
  */
-function splitIntoBlocks(tree) {
+function splitIntoBlocks(tree, rawContent) {
   const blocks = []
 
   // Helper to process nodes recursively or flatly
@@ -99,17 +99,23 @@ function splitIntoBlocks(tree) {
   // we treat the outer container (Blockquote) as the unit to preserve context.
 
   for (const node of tree.children) {
-    // Generate normalized text for this block
+    // Generate normalized text for this block (for Hashing)
     // This handles the "standardization" for comparison purposes.
-    // Note: We create a temporary root to stringify just this node.
     const tempRoot = { type: 'root', children: [node] }
     const normalizedText = processor.stringify(tempRoot).trim()
+
+    // Get Raw Text (for Output/Translation) to preserve original formatting
+    let rawText = normalizedText // Fallback
+    if (rawContent && node.position) {
+      rawText = rawContent.slice(node.position.start.offset, node.position.end.offset)
+    }
 
     // We store the original AST node for potential re-stringification if needed,
     // and the normalized text for hashing/comparison.
     blocks.push({
       type: node.type,
-      text: normalizedText,
+      text: rawText, // Used for output/translation input
+      normalized: normalizedText, // Used for hashing
       hash: getHash(normalizedText)
     })
   }
@@ -265,8 +271,8 @@ async function processMarkdownFile(filePath) {
   const newTree = processor.parse(newCNRaw)
   const oldTree = oldCNRaw ? processor.parse(oldCNRaw) : { children: [] }
 
-  const newBlocks = splitIntoBlocks(newTree)
-  const oldBlocks = splitIntoBlocks(oldTree)
+  const newBlocks = splitIntoBlocks(newTree, newCNRaw)
+  const oldBlocks = splitIntoBlocks(oldTree, oldCNRaw)
 
   // --- Build Block Map (OldCN -> OldEN) ---
   // We need to map OldCN blocks to OldEN blocks to enable reuse.
@@ -286,7 +292,7 @@ async function processMarkdownFile(filePath) {
     if (fs.existsSync(targetPath)) {
       const oldENRaw = fs.readFileSync(targetPath, 'utf-8')
       const oldENTree = processor.parse(oldENRaw)
-      const oldENBlocks = splitIntoBlocks(oldENTree)
+      const oldENBlocks = splitIntoBlocks(oldENTree, oldENRaw)
 
       // Populate Map
       // Assumption: OldCN and OldEN structures are roughly aligned.
