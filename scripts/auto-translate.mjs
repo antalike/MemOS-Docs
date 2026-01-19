@@ -118,7 +118,7 @@ function splitIntoBlocks(tree) {
 }
 
 // --- YAML Logic (Settings.yml) ---
-// ... (Keep existing YAML logic unchanged) ...
+
 function getYamlHeaderComments(source) {
   if (!source) return ''
   const lines = source.split('\n')
@@ -135,42 +135,66 @@ function getYamlHeaderComments(source) {
   return comments.join('\n') + (comments.length > 0 ? '\n' : '')
 }
 
-function processSettingsNode(newNode, oldNode, oldEnNode, collector) {
-  if (Array.isArray(newNode)) {
-    return newNode.map((item, index) => {
-      const oldItem = Array.isArray(oldNode) ? oldNode[index] : undefined
-      const oldEnItem = Array.isArray(oldEnNode) ? oldEnNode[index] : undefined
-      return processSettingsNode(item, oldItem, oldEnItem, collector)
-    })
-  } else if (typeof newNode === 'object' && newNode !== null) {
-    const result = {}
-    for (const key of Object.keys(newNode)) {
-      const value = newNode[key]
-      let finalKey = key
-      const keyExistedInOldCN = oldNode && typeof oldNode === 'object' && key in oldNode
+/**
+ * Build a map of Hash(CNKey) -> [ENKey] from existing translations.
+ * Traverses OldCN and OldEN in parallel.
+ */
+function buildYamlMap(cnNode, enNode, map) {
+  if (!cnNode || !enNode) return
 
-      if (keyExistedInOldCN) {
-        if (oldEnNode && typeof oldEnNode === 'object') {
-          const enKeys = Object.keys(oldEnNode)
-          if (enKeys.length > 0) {
-            finalKey = enKeys[0]
-          } else {
-            collector.push({ targetObj: result, originalKey: key, isKey: true })
-          }
-        } else {
-          collector.push({ targetObj: result, originalKey: key, isKey: true })
-        }
+  if (Array.isArray(cnNode) && Array.isArray(enNode)) {
+    const len = Math.min(cnNode.length, enNode.length)
+    for (let i = 0; i < len; i++) {
+      buildYamlMap(cnNode[i], enNode[i], map)
+    }
+  } else if (typeof cnNode === 'object' && cnNode !== null && typeof enNode === 'object' && enNode !== null) {
+    const cnKeys = Object.keys(cnNode)
+    const enKeys = Object.keys(enNode)
+
+    // Assume structural alignment
+    const len = Math.min(cnKeys.length, enKeys.length)
+    for (let i = 0; i < len; i++) {
+      const cnKey = cnKeys[i]
+      const enKey = enKeys[i]
+      const hash = getHash(cnKey)
+
+      if (!map.has(hash)) {
+        map.set(hash, [])
+      }
+      map.get(hash).push(enKey)
+
+      buildYamlMap(cnNode[cnKey], enNode[enKey], map)
+    }
+  }
+}
+
+/**
+ * Traverse NewCN and reconstruct NewEN using the map.
+ * Collects missing keys for translation.
+ */
+function processYamlNode(node, map, collector) {
+  if (Array.isArray(node)) {
+    return node.map(item => processYamlNode(item, map, collector))
+  } else if (typeof node === 'object' && node !== null) {
+    const result = {}
+    for (const key of Object.keys(node)) {
+      const value = node[key]
+      const hash = getHash(key)
+      let finalKey = key
+
+      if (map.has(hash) && map.get(hash).length > 0) {
+        // Reuse existing translation (FIFO)
+        finalKey = map.get(hash).shift()
       } else {
-        collector.push({ targetObj: result, originalKey: key, isKey: true })
+        // New key, needs translation.
+        collector.push({ targetObj: result, originalKey: key })
       }
 
-      const childOldNode = keyExistedInOldCN ? oldNode[key] : undefined
-      const childOldEnNode = (oldEnNode && typeof oldEnNode === 'object' && finalKey in oldEnNode) ? oldEnNode[finalKey] : undefined
-      result[finalKey] = processSettingsNode(value, childOldNode, childOldEnNode, collector)
+      result[finalKey] = processYamlNode(value, map, collector)
     }
     return result
   } else {
-    return newNode
+    return node
   }
 }
 
@@ -342,13 +366,17 @@ async function processYamlFile(filePath) {
 
   for (const lang of TARGET_LANGS) {
     const targetPath = filePath.replace(SOURCE_DIR, `content/${lang}`)
-    let oldEN = null
-    if (fs.existsSync(targetPath)) {
-      oldEN = yaml.load(fs.readFileSync(targetPath, 'utf-8'))
+
+    // 1. Build Map from OldCN + OldEN
+    const translationMap = new Map()
+    if (oldCN && fs.existsSync(targetPath)) {
+      const oldEN = yaml.load(fs.readFileSync(targetPath, 'utf-8'))
+      buildYamlMap(oldCN, oldEN, translationMap)
     }
 
+    // 2. Process NewCN with Map
     const collector = []
-    const finalObj = processSettingsNode(newCN, oldCN, oldEN, collector)
+    const finalObj = processYamlNode(newCN, translationMap, collector)
 
     if (collector.length > 0) {
       console.log(`    Need to translate ${collector.length} keys for [${lang}]`)
