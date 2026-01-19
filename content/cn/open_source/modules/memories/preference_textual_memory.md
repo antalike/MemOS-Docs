@@ -3,6 +3,28 @@ title: "PreferenceTextMemory: 表示用户偏好的明文记忆"
 desc: "`PreferenceTextMemory` 是MemOS中用于存储和管理用户偏好的明文记忆模块。它适用于需要根据用户偏好进行记忆检索的场景。"
 ---
 
+## 目录
+
+- [为什么需要偏好记忆](#为什么需要偏好记忆)
+  - [优势特性](#优势特性)
+  - [应用场景](#应用场景)
+- [核心概念与工作流程](#核心概念与工作流程)
+  - [记忆结构](#记忆结构)
+  - [元数据字段](#元数据字段)
+  - [核心工作流](#核心工作流)
+- [API 参考](#api-参考)
+  - [初始化](#初始化)
+  - [核心方法](#核心方法)
+  - [文件存储](#文件存储)
+- [动手实践：从 0 到 1](#动手实践从-0-到-1)
+  - [创建 PreferenceTextMemory 配置](#创建-preferencetextmemory-配置)
+  - [初始化 PreferenceTextMemory](#初始化-preferencetextmemory)
+  - [抽取结构化记忆](#抽取结构化记忆)
+  - [搜索记忆](#搜索记忆)
+  - [备份与恢复](#备份与恢复)
+  - [完整代码示例](#完整代码示例)
+
+
 ## 为什么需要偏好记忆
 
 ### 优势特性
@@ -29,7 +51,7 @@ desc: "`PreferenceTextMemory` 是MemOS中用于存储和管理用户偏好的明
 
 ::alert{type="info"}
 **适用场景**<br>
-当你需要构建能够"记住"用户喜好并据此提供个性化服务的系统时，PreferenceTextMemory 是最佳选择。
+当你需要构建能够"记住"用户喜好并据此提供个性化服务的系统时，`PreferenceTextMemory` 是最佳选择。
 ::
 
 ## 核心概念与工作流程
@@ -54,7 +76,7 @@ desc: "`PreferenceTextMemory` 是MemOS中用于存储和管理用户偏好的明
 
 ::alert{type="success"}
 **智能提取**<br>
-PreferenceTextMemory 使用 LLM 自动从对话中同时提取显式和隐式偏好，无需手动标注！
+`PreferenceTextMemory` 使用 LLM 自动从对话中同时提取显式和隐式偏好，无需手动标注！
 ::
 
 ### 元数据字段 （`PreferenceTextualMemoryMetadata`）

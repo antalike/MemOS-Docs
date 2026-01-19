@@ -3,6 +3,20 @@ title: "GeneralTextMemory: General-Purpose Textual Memory"
 desc: "`GeneralTextMemory` is a flexible, vector-based textual memory module in MemOS, designed for storing, searching, and managing unstructured knowledge. It is suitable for conversational agents, personal assistants, and any system requiring semantic memory retrieval."
 ---
 
+## Table of Contents
+
+- [Memory Structure](#memory-structure)
+  - [Metadata Fields (`TextualMemoryMetadata`)](#metadata-fields-textualmemorymetadata)
+- [API Summary (`GeneralTextMemory`)](#api-summary-generaltextmemory)
+  - [Initialization](#initialization)
+  - [Core Methods](#core-methods)
+- [File Storage](#file-storage)
+- [Example Usage](#example-usage)
+- [Extension: Internet Retrieval](#extension-internet-retrieval)
+- [Advanced: Using MultiModal Reader](#advanced-using-multimodal-reader)
+- [Developer Notes](#developer-notes)
+
+
 ## Memory Structure
 
 Each memory is represented as a `TextualMemoryItem`:
@@ -52,7 +66,7 @@ GeneralTextMemory(config: GeneralTextMemoryConfig)
 
 ## File Storage
 
-When calling `dump(dir)`, the system writes to:
+When calling `dump(dir)`, the system stores the memories to:
 
 ```
 <dir>/<config.memory_filename>
@@ -63,6 +77,7 @@ This file contains a JSON list of all memory items, which can be reloaded using 
 ## Example Usage
 
 ```python
+import os
 from memos.configs.memory import MemoryConfigFactory
 from memos.memories.factory import MemoryFactory
 

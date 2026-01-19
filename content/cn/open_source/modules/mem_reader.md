@@ -84,8 +84,10 @@ memories = reader.get_memory(
 )
 ```
 
-*   **返回结果**：`list[list[TextualMemoryItem]]`。
-    *   为什么是双层列表？因为一个长对话可能会被切成多个窗口（Window），外层列表代表窗口，内层列表代表该窗口提取出的记忆项。
+**返回结果**：`list[list[TextualMemoryItem]]`
+
+为什么是双层列表？  
+因为一个长对话可能会被切成多个窗口（Window），外层列表代表窗口，内层列表代表该窗口提取出的记忆项。
 
 ---
 

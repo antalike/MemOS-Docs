@@ -2,6 +2,20 @@
 title: "GeneralTextMemory: 通用文本的记忆"
 desc: "`GeneralTextMemory` 是MemOS中一个灵活的、基于向量的明文记忆模块，用于存储、搜索和管理非结构化知识。它适用于会话代理、个人助理和任何需要语义记忆检索的系统。"
 ---
+## 目录
+
+- [记忆结构](#记忆结构)
+  - [元数据域 (`TextualMemoryMetadata`)](#元数据域-textualmemorymetadata)
+- [API总结 (`GeneralTextMemory`)](#api总结-generaltextmemory)
+  - [初始化](#初始化)
+  - [核心方法](#核心方法)
+- [文件存储](#文件存储)
+- [示例用法](#示例用法)
+- [扩展与进阶](#扩展与进阶)
+  - [互联网检索](#互联网检索)
+  - [MultiModal Reader](#multimodal-reader)
+- [开发者注意事项](#开发者注意事项)
+
 
 ## 记忆结构
 
@@ -52,7 +66,7 @@ GeneralTextMemory(config: GeneralTextMemoryConfig)
 
 ## 文件存储
 
-当调用 `dump(dir)`, 系统写到:
+当调用 `dump(dir)`, 系统会将记忆保存到：
 
 ```
 <dir>/<config.memory_filename>
@@ -63,6 +77,7 @@ GeneralTextMemory(config: GeneralTextMemoryConfig)
 ## 示例用法
 
 ```python
+import os
 from memos.configs.memory import MemoryConfigFactory
 from memos.memories.factory import MemoryFactory
 
@@ -82,6 +97,18 @@ memories = m.extract([
     {"role": "assistant", "content": "Great! Tomatoes are delicious."},
 ])
 m.add(memories)
+
+# Add a manually created memory item
+memory_id = "xxx"
+m.add(
+  [
+        {
+            "id": memory_id,
+            "memory": "User is Chinese.",
+            ...
+        }
+    ]  
+)
 
 # Search
 results = m.search("Tell me more about the user", top_k=2)

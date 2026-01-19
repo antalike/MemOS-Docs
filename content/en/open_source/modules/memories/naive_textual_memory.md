@@ -179,6 +179,7 @@ Query: "cat" <br>
         "model_name_or_path": "gpt-4o-mini",
         "temperature": 0.8,
         "max_tokens": 1024,
+        "api_base": "xxx",
         "api_key": "sk-xxx"
       }
     },
@@ -208,6 +209,7 @@ config = MemoryConfigFactory(
             "config": {
                 "model_name_or_path": "gpt-4o-mini",
                 "api_key": "your-api-key",
+                "api_base": "your-api-base"
             },
         },
     },

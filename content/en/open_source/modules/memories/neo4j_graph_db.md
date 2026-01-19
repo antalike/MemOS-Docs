@@ -20,10 +20,7 @@ This forms the backbone of long-term, explainable, and compositional memory reas
 - Built-in support for Neo4j
 - Support for vector-enhanced retrieval (`search_by_embedding`)
 - Modular, pluggable, and testable
-- [v0.2.1 New! ] Supports **multi-tenant graph memory architecture** (shared 
-  DB, 
-  per-user 
-  logic)
+- [v0.2.1 New! ] Supports **multi-tenant graph memory architecture** (shared DB, per-user logic)
 - [v0.2.1 New! ] Compatible with **Neo4j Community Edition** environments
 
 ## Directory Structure
@@ -63,7 +60,7 @@ graph = GraphStoreFactory.from_config(config)
 graph.add_node(
     id="node-001",
     memory="Today I learned about retrieval-augmented generation.",
-    metadata={"type": "WorkingMemory", "tags": ["RAG", "AI"], "timestamp": "2025-06-05"}
+    metadata={"type": "WorkingMemory", "tags": ["RAG", "AI"], "timestamp": "2025-06-05", "sources": []}
 )
 ````
 
@@ -156,13 +153,15 @@ config = GraphDBConfigFactory(
         "user_name": "bob",
         "auto_create": False,
         "embedding_dimension": 768,
+        "use_multi_db": False,
         "vec_config": {
             "backend": "qdrant",
             "config": {
                 "host": "localhost",
                 "port": 6333,
                 "collection_name": "neo4j_vec_db",
-                "vector_dimension": 768
+                "vector_dimension": 768,
+                "distance_metric": "cosine"
             },
         },
     },

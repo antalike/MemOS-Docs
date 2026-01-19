@@ -9,10 +9,7 @@ description: 在Coze等平台配置MemOS的MCP服务，实现智能体与记忆�
 
 MemOS提供两种MCP部署方式，您可以根据实际需求选择：
 
-::tabs
-== 云服务MCP（推荐）
-
-### 使用MemOS云服务
+### 使用MemOS云服务（推荐）
 
 如果您希望快速接入，无需自己部署服务器，推荐使用MemOS官方云服务。
 
@@ -31,8 +28,6 @@ MemOS提供两种MCP部署方式，您可以根据实际需求选择：
 2. 在MCP客户端中配置 `@memtensor/memos-api-mcp` 服务
 3. 设置环境变量（`MEMOS_API_KEY`、`MEMOS_USER_ID`、`MEMOS_CHANNEL`）
 
-== 自部署MCP
-
 ### 自己部署MCP服务
 
 如果您需要私有化部署或定制化需求，可以在自己的服务器上部署MCP服务。
@@ -49,7 +44,6 @@ MemOS提供两种MCP部署方式，您可以根据实际需求选择：
 - HTTPS域名（用于Coze等平台）
 
 继续阅读下方内容了解详细部署步骤。
-::
 
 ---
 
@@ -76,7 +70,7 @@ MemOS核心服务
 - **MCP服务器**: 通过HTTP传输暴露MCP协议，调用Server API完成操作
 - **HTTPS反向代理**: Coze等平台要求使用HTTPS安全连接
 
-::steps{}
+::steps{level="3"}
 
 ### 步骤1: 启动Server API
 
@@ -90,7 +84,7 @@ python src/memos/api/server_api.py --port 8001
 验证Server API是否正常运行：
 
 ```bash
-curl http://localhost:8001/product/docs
+curl http://localhost:8001/docs
 ```
 
 如果返回API文档页面，说明启动成功。
@@ -101,8 +95,6 @@ Server API会自动加载配置，确保Neo4j等依赖服务已正确配置。�
 ::
 
 ### 步骤2: 启动MCP HTTP服务
-
-### 步骤1: 步骤2: 启动MCP HTTP服务
 
 在另一个终端启动MCP服务：
 
@@ -209,9 +201,9 @@ Connected to MCP server
 
 服务部署完成后，在Coze空间中配置MCP连接。
 
-::steps{}
+::steps{level="3"}
 
-1. 打开Coze空间并进入工具配置页面
+### 步骤1: 打开Coze空间并进入工具配置页面
 
 ![Coze空间配置页面](https://statics.memtensor.com.cn/memos/coze_space_1.png)
 
@@ -227,6 +219,7 @@ Connected to MCP server
 
 ```
 https://your-domain.com/mcp
+```
 可用的MCP工具：
 - **add_memory**: 添加新记忆
 - **search_memories**: 搜索已有记忆  
@@ -245,17 +238,19 @@ https://your-domain.com/mcp
 
 对于需要更灵活集成的场景，可以直接使用Server API的REST接口。
 
-::steps{}
+::steps{level="3"}
 
 ### 步骤1: 启动Server API
 
 ```bash
 cd /path/to/MemOS
 python src/memos/api/server_api.py --port 8001
-```端口说明**<br>
+```
+**端口说明**
 - Server API默认运行在8001端口
 - 提供 `/product/*` REST API端点
-- 支持步骤2: 在Coze IDE配置自定义工具
+
+### 步骤2: 在Coze IDE配置自定义工具
 
 1. 在Coze中选择"IDE插件"创建方式
 2. 配置请求到您部署的Server API服务
@@ -266,17 +261,18 @@ python src/memos/api/server_api.py --port 8001
 
 ![配置add_memory操作](https://statics.memtensor.com.cn/memos/coze_tools_2.png)
 
-**代码示例：**IDE中配置`add_memory`操作并发布：
+**代码示例：** IDE中配置`add_memory`操作并发布：
 
 ![配置add_memory操作](https://statics.memtensor.com.cn/memos/coze_tools_2.png)
 详细代码如下
 
-```python
+```python 
 import json
 import requests
 from runtime import Args
-from typings.add_memory.add_me -> Output:
-    """添加记忆到MemOS"""
+from typings.add_memory.add_memory import Input, Output
+
+def handler(args: Args[Input])->Output:
     memory_content = args.input.memory_content
     user_id = args.input.user_id
     cube_id = args.input.cube_id
@@ -306,9 +302,30 @@ from typings.add_memory.add_me -> Output:
 # Search工具
 def search_handler(args: Args[Input]) -> Output:
     url = "https://your-domain.com:8001/product/search"
-    payload = {
+    payload = json.dumps{
         "user_id": args.input.user_id,
         "query": args.input.query,
+    })
+    headers = {
+        'Content-Type': 'application/json'
+    }
+    
+    response = requests.post(url, headers=headers, data=payload, timeout=30)
+    response.raise_for_status()
+    
+    return response.json()
+
+# Chat工具
+def chat_handler(args: Args[Input]) -> Output:
+    url = "https://your-domain.com:8001/product/chat/complete"
+    payload = json.dumps({
+        "user_id": args.input.user_id,
+        "query": args.input.query
+    })
+    response = requests.post(url, json=payload, timeout=30)
+    return response.json()
+```
+
 ### 步骤4: 发布并测试工具
 
 发布完成后，可以在"我的资源"中查看插件：
@@ -333,7 +350,7 @@ def search_handler(args: Args[Input]) -> Output:
 ### Q1: MCP服务无法连接到Server API
 
 **解决方案：**
-- 检查Server API是否正常运行：`curl http://localhost:8001/product/docs`
+- 检查Server API是否正常运行：`curl http://localhost:8001/docs`
 - 检查环境变量`MEMOS_API_BASE_URL`配置是否正确
 - 查看MCP服务日志，确认调用地址
 
@@ -371,9 +388,9 @@ def search_handler(args: Args[Input]) -> Output:
 
 无论选择哪种方式，MemOS都能为您的智能体提供强大的记忆管理ders=headers, data=payload)
     return json.loads(response.text)
-````
 
-::API参数说明**<br>
+::note
+**API参数说明**
 - 使用Server API的标准参数格式
 - `messages`: 替代原来的 `memory_content`，支持字符串或消息数组
 - `writable_cube_ids`: 替代原来的 `mem_cube_id`，支持多个cube
@@ -396,7 +413,5 @@ def search_handler(args: Args[Input]) -> Output:
 2. 添加已发布的记忆插件
 3. 配置工作流
 4. 测试记忆存储和检索功能
-
-::
 
 通过以上配置，您就可以在Coze空间中成功集成MemOS的记忆功能，为您的智能体提供强大的记忆能力。
