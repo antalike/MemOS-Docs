@@ -10,7 +10,17 @@ import remarkFrontmatter from 'remark-frontmatter'
 import crypto from 'crypto'
 
 // --- Configuration ---
-const TARGET_LANGS = ['en'] // Add 'fr' etc. here to support more languages
+// Read target languages from external config
+const languagesConfigPath = path.join(path.dirname(new URL(import.meta.url).pathname), 'languages.json')
+let TARGET_LANGS = ['en']
+try {
+  if (fs.existsSync(languagesConfigPath)) {
+    TARGET_LANGS = JSON.parse(fs.readFileSync(languagesConfigPath, 'utf-8'))
+  }
+} catch (e) {
+  console.warn('⚠️ Failed to read languages.json, defaulting to ["en"]', e)
+}
+
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY
 const OPENAI_API_BASE = process.env.OPENAI_API_BASE || 'https://api.deepseek.com'
 const MODEL = process.env.OPENAI_MODEL || 'deepseek-chat'
@@ -40,8 +50,8 @@ function getChangedFiles() {
 
     // If script itself changed, likely a config change (e.g. new language added).
     // Process ALL content files to ensure new language is generated.
-    if (changedFiles.includes('scripts/auto-translate.mjs')) {
-      console.log('⚡️ Script changed, scanning all content files...')
+    if (changedFiles.includes('scripts/languages.json')) {
+      console.log('⚡️ Languages config changed, scanning all content files...')
       const allFiles = exec('git ls-files content/cn').split('\n')
       return allFiles.filter(line =>
         line.startsWith(SOURCE_DIR)
@@ -94,30 +104,52 @@ function splitIntoBlocks(tree, rawContent) {
   const blocks = []
 
   // Helper to process nodes recursively or flatly
-  // We want to treat top-level children of Root as blocks.
-  // If we have nested structures (like Blockquote -> Paragraph),
-  // we treat the outer container (Blockquote) as the unit to preserve context.
+  function processNode(node, isLastInList = false, listSpread = false) {
+    if (node.type === 'list') {
+      // For Lists, iterate children (ListItems) and flatten them
+      for (let i = 0; i < node.children.length; i++) {
+        const item = node.children[i]
+        const isLastItem = i === node.children.length - 1
+        processNode(item, isLastItem, node.spread)
+      }
+      return
+    }
 
-  for (const node of tree.children) {
-    // Generate normalized text for this block (for Hashing)
-    // This handles the "standardization" for comparison purposes.
+    // Determine separator
+    // If it's a ListItem:
+    //   - If it's the last item in the list, use '\n\n' (to separate from next block)
+    //   - If list is loose (spread=true), use '\n\n'
+    //   - Otherwise (tight list), use '\n'
+    let separator = '\n\n'
+    if (node.type === 'listItem') {
+      if (isLastInList) {
+        separator = '\n\n'
+      } else {
+        separator = listSpread ? '\n\n' : '\n'
+      }
+    }
+
+    // Generate normalized text for hashing
     const tempRoot = { type: 'root', children: [node] }
     const normalizedText = processor.stringify(tempRoot).trim()
 
-    // Get Raw Text (for Output/Translation) to preserve original formatting
+    // Get Raw Text for Output
     let rawText = normalizedText // Fallback
     if (rawContent && node.position) {
       rawText = rawContent.slice(node.position.start.offset, node.position.end.offset)
     }
 
-    // We store the original AST node for potential re-stringification if needed,
-    // and the normalized text for hashing/comparison.
     blocks.push({
       type: node.type,
-      text: rawText, // Used for output/translation input
-      normalized: normalizedText, // Used for hashing
-      hash: getHash(normalizedText)
+      text: rawText,
+      normalized: normalizedText,
+      hash: getHash(normalizedText),
+      separator: separator
     })
+  }
+
+  for (const node of tree.children) {
+    processNode(node)
   }
 
   return blocks
@@ -354,8 +386,24 @@ async function processMarkdownFile(filePath) {
     const targetDir = path.dirname(targetPath)
     if (!fs.existsSync(targetDir)) fs.mkdirSync(targetDir, { recursive: true })
 
-    // Join blocks with double newline to ensure separation
-    const finalContent = finalBlocks.join('\n\n')
+    // Join blocks with dynamic separators
+    let finalContent = ''
+    for (let i = 0; i < finalBlocks.length; i++) {
+      const block = newBlocks[i]
+      const content = finalBlocks[i]
+      // Use block.separator if available, default to '\n\n'
+      const separator = block.separator || '\n\n'
+
+      finalContent += content
+      // Don't add separator after the very last block?
+      // Usually Markdown files end with a newline, so adding it is fine/good.
+      if (i < finalBlocks.length - 1) {
+        finalContent += separator
+      } else {
+        finalContent += '\n' // Ensure EOF newline
+      }
+    }
+
     fs.writeFileSync(targetPath, finalContent, 'utf-8')
     console.log(`    ✅ Updated: ${targetPath}`)
   }

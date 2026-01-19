@@ -5,7 +5,7 @@ on:
     paths:
       - 'content/cn/**.md'
       - 'content/cn/settings.yml'
-      - 'scripts/auto-translate.mjs'
+      - 'scripts/languages.json'
   workflow_dispatch:
 
 permissions:
