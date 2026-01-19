@@ -6,8 +6,8 @@ desc: Welcome to the MemOS Cloud Platform. Refer to this beginner's guide to qui
 When building applications with large language models, a common question arises: **How can we make the AI remember users' long-term preferences?**\
 MemOS provides two core interfaces to help you achieve this:
 
-* `addMessage` — Hand over the raw conversation to us, and we will automatically process and store the memories. [(Click here to view detailed API documentation)](/api_docs/core/add_message)
-* `searchMemory` — Recall memories in subsequent conversations, enabling the AI to provide answers that better align with user needs. [(Click here to view detailed API documentation)](/api_docs/core/search_memory)
+- `addMessage` — Send raw conversations to MemOS, where the system automatically processes and securely stores them as memories [(View detailed API documentation here)](/api_docs/core/add_message)
+- `searchMemory` — Recall memories in subsequent conversations to make AI responses more aligned with user needs [(View detailed API documentation here)](/api_docs/core/search_memory)
 
 ![image.svg](https://cdn.memtensor.com.cn/img/1762434889291_h9co0h_compressed.png)
 
@@ -18,6 +18,11 @@ MemOS provides two core interfaces to help you achieve this:
 * Obtain an API Key. [(Click to get)](https://memos-dashboard.openmem.net/apikeys);
 
 * Prepare an environment capable of sending HTTP requests, such as Python or cURL.
+
+::tip
+**Tip**
+Before making API calls, ensure your network environment can normally access MemOS cloud services.
+::
 
 ## 2. Code Configuration
 
@@ -180,27 +185,23 @@ You submit the original message → Memory is processed and produced → The sch
 
 MemOS provides rich project examples. Based on your specific project, you can refer to the following materials:
 
-* [Enabling Financial Assistants to Understand Preferences Behind Customer Behavior](/usecase/financial_assistant)
-  * In smart investment advisory scenarios, user clicks, browsing, favorites, and communication are all behavioral traces for building profiles.
-  * MemOS can abstract these behaviors into memories, such as "Risk Preference = Conservative."
-  * These memories directly come into play when the user asks "What investments are suitable for me?" making investment advice more professional and aligned with reality.
+- [Enabling Financial Assistants to Understand Preferences Behind Customer Behaviors](/usecase/financial_assistant)
+  - In smart investment advisory scenarios, user clicks, browsing, favorites, and communications are all behavioral traces that build profiles.
+  - MemOS can abstract these behaviors into memories, such as "risk preference = conservative"
+  - And directly apply them when users ask "What investments suit me?", making advisory suggestions more professional and practical.
 
-* [Building a Home Life Assistant with Memory](/usecase/home_assistant)
-  * A home assistant not only answers immediate questions but also remembers your to-dos, preferences, and family information.
-  * For example, "Take the kids to the zoo on Saturday" or "Reminders should list key points first." MemOS converts these into memories.
-  * They automatically function in subsequent conversations, making the assistant more attuned to real life.
+- [Building a Home Life Assistant with Memory](/usecase/home_assistant)
+  - A home assistant not only answers immediate questions but also remembers your mentioned tasks, preferences, and family information.
+  - For example, "Take the kids to the zoo on Saturday" or "List key points first when reminding," MemOS converts these into memories
+  - And automatically applies them in subsequent conversations, making the assistant more aligned with real life.
 
-* [A Writing Assistant with Memory is More Useful](/usecase/writting_assistant)
-  * A writing assistant should not only help generate content but also maintain consistent tone and style.
-  * Through MemOS, the user's writing preferences, frequently used information, and contextual instructions can be remembered.
-  * There's no need to repeatedly emphasize them when writing summaries or emails next time, enabling a coherent and personalized creative experience.
+- [A Writing Assistant with Memory is More Useful](/usecase/writting_assistant)
+  - A writing assistant should not only help generate content but also maintain consistent tone and style.
+  - Through MemOS, user writing preferences, frequently used information, and contextual instructions can be remembered.
+  - No need to repeatedly emphasize them when writing summaries or emails next time, achieving a coherent and personalized creative experience.
 
-* [MindDock Browser Extension](https://alidocs.dingtalk.com/i/p/e3ZxX84Z5KM6X7dRZxX8v66wA7xaBG7d?dontjump=true)
-  * MemOS-MindDock creates a unified cross-platform AI memory layer for users.
-  * It automatically records, organizes, and injects personal information and preferences, enabling all AIs to consistently and stably "know you."
-
-* [Coze × MemOS Plugin Tool](/usecase/frameworks/coze_plugin)
-  * Use the MemOS plugin tool listed on the Coze platform to directly access cloud service interfaces within workflows, quickly adding long-term memory capabilities to your Agent.
-
-* [Claude MCP](/usecase/frameworks/claude_mcp)
-  * MemOS provides a way to interact with the cloud platform via MCP, allowing direct access to cloud service interfaces within the Claude client.
+- [Coze × MemOS Plugin Tool](/usecase/frameworks/coze_plugin)
+  - Use the MemOS plugin tool listed on the Coze platform to directly access cloud service interfaces in workflows, quickly adding long-term memory functionality to your Agent.
+    
+- [Claude MCP](/usecase/frameworks/claude_mcp)
+  - MemOS provides a way to interact with the cloud platform via MCP, allowing direct access to cloud service interfaces within the Claude client.
