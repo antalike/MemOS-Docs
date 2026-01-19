@@ -300,7 +300,11 @@ my_tree_textual_memory.drop()
 
 ## 下一步？
 
-恭喜！你已经跑通了 MemOS 的核心流程：**读 -> 存 -> 搜**。
+- **尝试自己的 LLM 后端：** 切换到 OpenAI、HuggingFace 或 Ollama。
+- **探索 [TreeTextMemory](/open_source/modules/memories/tree_textual_memory)：** 构建基于图的层级记忆。
+- **添加 [Activation Memory](/open_source/modules/memories/kv_cache_memory)：** 缓存键值状态，加速推理。
+- **深入学习：** 查看 [API Reference](/api-reference/search-memories) 和 [Examples](/open_source/getting_started/examples) 了解高级工作流程。
+
 
 接下来，你可以去看看更高级的玩法：
 - **[MemReader](/open_source/modules/mem_reader)**：其实它还能读图片和 PDF。

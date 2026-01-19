@@ -91,7 +91,7 @@ nav:
       - "(ri:article-line) 文档编写": open_source/contribution/writing_docs.md
       - "(ri:flask-line) 测试编写": open_source/contribution/writing_tests.md
 
-    - "(ri:file-code-line) API 参考文档": api-reference/configure-memos
+    - "(ri:file-code-line) API 参考文档": api-reference/search-memories
 
   - "(ri:puzzle-line) MCP与Agent框架支持":
     - "(ri:tools-line) MCP 服务":
