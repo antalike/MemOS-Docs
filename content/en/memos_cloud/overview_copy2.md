@@ -13,7 +13,7 @@ For developers, MemOS is like a database for applications: you don't need to rei
 
 Native memory in large models has limitations:
 
-* **Limited Context**: No matter how large the token window for a single conversation is, it cannot carry long-term knowledge.
+* **Context Limitations**: Even with expanding token windows, they cannot efficiently accommodate massive amounts of long-term knowledge.
 
 * **Severe Forgetting**: Preferences mentioned by users last week disappear in the next conversation.
 
@@ -44,6 +44,8 @@ In simple terms: **MemOS transforms AI from a one-time conversation machine into
 
 *   **Open Extension**: Supports standalone use as an API and integration into existing frameworks (official usage guides coming soon, but eager developers can also start on their own~).
 
+* **Emotional Connection**: Build deeper emotional bonds through long-term memory, enhancing user engagement.
+
 ## 3. Next Steps
 
 👉 Go to [Quick Start](/memos_cloud/quick_start) to see a minimal example of how to add 'memory capabilities' to your Agent.
@@ -54,4 +56,3 @@ In simple terms: **MemOS transforms AI from a one-time conversation machine into
 *   [A Writing Assistant with Memory is More Useful](/usecase/writting_assistant)
 *   [Building a Home Life Assistant with Memory](/usecase/home_assistant)
 *   [Claude MCP](/usecase/frameworks/claude_mcp)
-*   [Coze Plugin Tool](/usecase/frameworks/coze_plugin)
