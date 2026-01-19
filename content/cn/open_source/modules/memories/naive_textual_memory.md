@@ -7,7 +7,7 @@ desc: "MemOS 中最轻量级的记忆模块，专为快速原型开发和简单�
 
 让我们从最简单的方式开始使用 MemOS 记忆系统！
 
-**NaiveTextMemory** 是一个轻量级、基于内存的明文记忆模块，将记忆存储在内存列表中，使用关键词匹配进行检索。它是学习 MemOS 的最佳起点，也适用于演示、测试和小规模应用。
+`NaiveTextMemory` 是一个轻量级、基于内存的明文记忆模块，将记忆存储在内存列表中，使用关键词匹配进行检索。它是学习 MemOS 的最佳起点，也适用于演示、测试和小规模应用。
 
 ## 目录
 
@@ -179,6 +179,7 @@ memory = NaiveTextMemory(config: NaiveTextMemoryConfig)
         "model_name_or_path": "gpt-4o-mini",
         "temperature": 0.8,
         "max_tokens": 1024,
+        "api_base": "xxx",
         "api_key": "sk-xxx"
       }
     },
@@ -208,6 +209,7 @@ config = MemoryConfigFactory(
             "config": {
                 "model_name_or_path": "gpt-4o-mini",
                 "api_key": "your-api-key",
+                "api_base": "your-api-base"
             },
         },
     },
@@ -343,6 +345,8 @@ NaiveTextMemory 专注于本地记忆管理。如需从互联网检索信息并�
 ```
 <dir>/<config.memory_filename>
 ```
+
+该文件包含所有记忆条目的JSON列表，可以使用`load(dir)`重新加载.
 
 **默认文件结构**
 

@@ -48,7 +48,7 @@ config = GraphDBConfigFactory(
         "user": "your_neo4j_user_name",
         "password": "your_password",
         "db_name": "memory_user1",
-        "auto_create": true,
+        "auto_create": True,
         "embedding_dimension": 768
     }
 )
@@ -60,7 +60,7 @@ graph = GraphStoreFactory.from_config(config)
 graph.add_node(
     id="node-001",
     memory="Today I learned about retrieval-augmented generation.",
-    metadata={"type": "WorkingMemory", "tags": ["RAG", "AI"], "timestamp": "2025-06-05"}
+    metadata={"type": "WorkingMemory", "tags": ["RAG", "AI"], "timestamp": "2025-06-05", "sources": []}
 )
 
 ````
@@ -126,7 +126,8 @@ config = GraphDBConfigFactory(
 每个用户的数据通过 `user_name` 字段在读写、搜索、导出中逻辑隔离，系统自动完成过滤。
 
 ::note
-**示例参考**<br>话不多说，都在代码里了`examples/basic_modules
+**示例参考**<br>
+话不多说，都在代码里了`examples/basic_modules
 /neo4j_example.example_complex_shared_db(db_name="shared-traval-group-complex-new")`
 ::
 
@@ -151,9 +152,9 @@ config = GraphDBConfigFactory(
         "password": "12345678",
         "db_name": "paper",
         "user_name": "bob",
-        "auto_create": false,
+        "auto_create": False,
         "embedding_dimension": 768,
-        "use_multi_db": false,
+        "use_multi_db": False,
         "vec_config": {
             "backend": "qdrant",
             "config": {

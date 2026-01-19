@@ -6,6 +6,13 @@ MemOS 的性能优化主要围绕 **记忆提取 (Mem-Reader)**、**向量嵌入
 
 ## 1. 记忆提取优化 (Mem-Reader Prompt)
 
+slow_embedder = {
+    "backend": "sentence_transformer",
+    "config": {
+        "model_name_or_path": "nomic-ai/nomic-embed-text-v1.5"
+    }
+}
+```
 `Mem-Reader` 组件负责从对话中提取关键信息。目前的实现中，Prompt 是定义在源代码模板中的。
 
 ### 修改 Prompt 模板

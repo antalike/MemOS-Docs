@@ -3,6 +3,28 @@ title: "PreferenceTextMemory: Textual Memory for User Preferences"
 desc: "`PreferenceTextMemory` is a textual memory module in MemOS for storing and managing user preferences. It is suitable for scenarios where memory retrieval needs to be based on user preferences."
 ---
 
+## Table of Contents
+
+- [Why Preference Memory is Needed](#why-preference-memory-is-needed)
+  - [Key Features](#key-features)
+  - [Application Scenarios](#application-scenarios)
+- [Core Concepts and Workflow](#core-concepts-and-workflow)
+  - [Memory Structure](#memory-structure)
+  - [Metadata Fields (`PreferenceTextualMemoryMetadata`)](#metadata-fields-preferencetextualmemorymetadata)
+  - [Core Workflow](#core-workflow)
+- [API Reference](#api-reference)
+  - [Initialization](#initialization)
+  - [Core Methods](#core-methods)
+  - [File Storage](#file-storage)
+- [Hands-on Practice: From Zero to One](#hands-on-practice-from-zero-to-one)
+  - [Create PreferenceTextMemory Configuration](#create-preferencetextmemory-configuration)
+  - [Initialize PreferenceTextMemory](#initialize-preferencetextmemory)
+  - [Extract Structured Memory](#extract-structured-memory)
+  - [Search Memory](#search-memory)
+  - [Backup and Restore](#backup-and-restore)
+  - [Complete Code Example](#complete-code-example)
+
+
 ## Why Preference Memory is Needed
 
 ### Key Features
@@ -29,7 +51,7 @@ desc: "`PreferenceTextMemory` is a textual memory module in MemOS for storing an
 
 ::alert{type="info"}
 **Applicable Scenarios**<br>
-When you need to build systems that can "remember" user preferences and provide personalized services accordingly, PreferenceTextMemory is the best choice.
+When you need to build systems that can "remember" user preferences and provide personalized services accordingly, `PreferenceTextMemory` is the best choice.
 ::
 
 ## Core Concepts and Workflow
@@ -54,7 +76,7 @@ Preference memory can be divided into explicit preference memory and implicit pr
 
 ::alert{type="success"}
 **Intelligent Extraction**<br>
-PreferenceTextMemory automatically extracts both explicit and implicit preferences from conversations using LLM, no manual annotation required!
+`PreferenceTextMemory` automatically extracts both explicit and implicit preferences from conversations using LLM, no manual annotation required!
 ::
 
 ### Metadata Fields (`PreferenceTextualMemoryMetadata`)
