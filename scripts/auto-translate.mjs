@@ -7,6 +7,7 @@ import { unified } from 'unified'
 import remarkParse from 'remark-parse'
 import remarkStringify from 'remark-stringify'
 import remarkFrontmatter from 'remark-frontmatter'
+import crypto from 'crypto'
 
 // --- Configuration ---
 const TARGET_LANGS = ['en'] // Add 'fr' etc. here to support more languages
@@ -70,68 +71,50 @@ function getGitContent(revision, filePath) {
   }
 }
 
+/**
+ * Generate MD5 hash of a string
+ */
+function getHash(str) {
+  return crypto.createHash('md5').update(str).digest('hex')
+}
+
 // --- Remark AST Logic ---
 
 const processor = unified()
   .use(remarkParse)
-  .use(remarkStringify, { bullet: '-', fenc: '`' }) // normalize output style
+  // Use '*' for bullets to match user preference and reduce diff noise
+  .use(remarkStringify, { bullet: '*', fenc: '`' })
   .use(remarkFrontmatter, ['yaml'])
 
 /**
- * Split AST tree into logical sections based on Headings
- * Returns array of { type: 'heading'|'frontmatter'|'root', nodes: [], hash: string }
+ * Split AST tree into minimal independent blocks (Paragraphs, Headings, Lists, etc.)
+ * Flatten the tree structure into a linear list of "translate units".
  */
-function splitByHeaders(tree) {
-  const sections = []
-  let currentSection = { type: 'root', nodes: [] }
+function splitIntoBlocks(tree) {
+  const blocks = []
+
+  // Helper to process nodes recursively or flatly
+  // We want to treat top-level children of Root as blocks.
+  // If we have nested structures (like Blockquote -> Paragraph),
+  // we treat the outer container (Blockquote) as the unit to preserve context.
 
   for (const node of tree.children) {
-    if (node.type === 'yaml') {
-      // Frontmatter is its own section
-      if (currentSection.nodes.length > 0) {
-        sections.push(currentSection)
-      }
-      sections.push({ type: 'frontmatter', nodes: [node] })
-      currentSection = { type: 'root', nodes: [] }
-    } else if (node.type === 'heading') {
-      // Start new section
-      if (currentSection.nodes.length > 0) {
-        sections.push(currentSection)
-      }
-      // Heading level determines hierarchy? For simplicity, flatten all headers as section starters.
-      // But maybe include the heading IN the section.
-      currentSection = { type: 'heading', depth: node.depth, nodes: [node] }
-    } else {
-      currentSection.nodes.push(node)
-    }
+    // Generate normalized text for this block
+    // This handles the "standardization" for comparison purposes.
+    // Note: We create a temporary root to stringify just this node.
+    const tempRoot = { type: 'root', children: [node] }
+    const normalizedText = processor.stringify(tempRoot).trim()
+
+    // We store the original AST node for potential re-stringification if needed,
+    // and the normalized text for hashing/comparison.
+    blocks.push({
+      type: node.type,
+      text: normalizedText,
+      hash: getHash(normalizedText)
+    })
   }
 
-  if (currentSection.nodes.length > 0) {
-    sections.push(currentSection)
-  }
-
-  // Generate hashes/text for comparison
-  // We use the stringified markdown of the section as the "hash" for comparison.
-  // This handles formatting normalization (e.g. extra spaces are ignored if AST is same).
-  sections.forEach((section) => {
-    const sectionTree = { type: 'root', children: section.nodes }
-    section.text = processor.stringify(sectionTree).trim()
-
-    // Extract header text for mapping if available
-    if (section.type === 'heading') {
-      // Stringify just the heading text content?
-      // Let's use the full text of the heading line as key?
-      // Or just the plain text of heading?
-      // Simple: use the first line of section.text
-      section.headerText = section.text.split('\n')[0]
-    } else if (section.type === 'frontmatter') {
-      section.headerText = '---FRONTMATTER---'
-    } else {
-      section.headerText = '---PREAMBLE---'
-    }
-  })
-
-  return sections
+  return blocks
 }
 
 // --- YAML Logic (Settings.yml) ---
@@ -258,54 +241,81 @@ async function processMarkdownFile(filePath) {
   const newTree = processor.parse(newCNRaw)
   const oldTree = oldCNRaw ? processor.parse(oldCNRaw) : { children: [] }
 
-  const newSections = splitByHeaders(newTree)
-  const oldSections = splitByHeaders(oldTree)
+  const newBlocks = splitIntoBlocks(newTree)
+  const oldBlocks = splitIntoBlocks(oldTree)
 
-  // Map old sections by Header Text (or Preamble/Frontmatter)
-  // Note: If multiple headers have same text, this map will overwrite.
-  // For better accuracy, we could use index + header match, but simple map is usually enough for docs.
-  const oldSectionsMap = new Map()
-  oldSections.forEach(s => oldSectionsMap.set(s.headerText, s.text))
+  // --- Build Block Map (OldCN -> OldEN) ---
+  // We need to map OldCN blocks to OldEN blocks to enable reuse.
+  // Strategy: Assume sequential correspondence for identical blocks?
+  // Or better: Build a Map<Hash, EnText>.
+  // But Hash collision? (e.g. two "Note:" paragraphs).
+  // We can use a queue/list for each hash to handle duplicates sequentially.
+
+  const translationMap = new Map() // Hash -> [EnText1, EnText2, ...]
 
   for (const lang of TARGET_LANGS) {
     const targetPath = filePath.replace(SOURCE_DIR, `content/${lang}`)
-    let oldENRaw = null
-    let oldESectionsMap = new Map()
+
+    // Clear map for each language
+    translationMap.clear()
 
     if (fs.existsSync(targetPath)) {
-      oldENRaw = fs.readFileSync(targetPath, 'utf-8')
-      const oldETree = processor.parse(oldENRaw)
-      const oldESections = splitByHeaders(oldETree)
-      oldESections.forEach(s => oldESectionsMap.set(s.headerText, s.text))
+      const oldENRaw = fs.readFileSync(targetPath, 'utf-8')
+      const oldENTree = processor.parse(oldENRaw)
+      const oldENBlocks = splitIntoBlocks(oldENTree)
+
+      // Populate Map
+      // Assumption: OldCN and OldEN structures are roughly aligned.
+      // We try to match OldCN[i] with OldEN[i].
+      // If OldCN and OldEN have different block counts (e.g. manual edit), alignment might be off.
+      // But this is "Auto Translate", so usually they are synced.
+      // Even if not perfectly synced, mapping by content hash is safer than index.
+      // But we need to know WHICH OldCN block maps to WHICH OldEN block.
+      // If we assume the translator generated them 1-to-1:
+
+      const minLen = Math.min(oldBlocks.length, oldENBlocks.length)
+      for (let i = 0; i < minLen; i++) {
+        const cnHash = oldBlocks[i].hash
+        const enText = oldENBlocks[i].text
+
+        if (!translationMap.has(cnHash)) {
+          translationMap.set(cnHash, [])
+        }
+        translationMap.get(cnHash).push(enText)
+      }
     }
 
+    // --- Reconstruct New File ---
     const segmentsToTranslate = []
     const segmentIndices = []
-    const finalSections = new Array(newSections.length).fill(null)
+    const finalBlocks = new Array(newBlocks.length).fill(null)
 
-    for (let i = 0; i < newSections.length; i++) {
-      const section = newSections[i]
-      const oldText = oldSectionsMap.get(section.headerText)
-      const enText = oldESectionsMap.get(section.headerText)
+    // Helper to consume from map
+    // We clone the map or track indices to avoid reusing same translation for different identical source blocks incorrectly?
+    // Actually, simple FIFO is good for identical blocks.
+    const tempMap = new Map(JSON.parse(JSON.stringify([...translationMap])))
 
-      // AST-based comparison:
-      // processor.stringify() normalizes the output.
-      // So extra newlines/spaces in raw file won't affect equality if AST is same.
-      const isUnchanged = oldText && section.text === oldText
+    for (let i = 0; i < newBlocks.length; i++) {
+      const block = newBlocks[i]
+      const hash = block.hash
 
-      if (isUnchanged && enText) {
-        finalSections[i] = enText
+      if (tempMap.has(hash) && tempMap.get(hash).length > 0) {
+        // Reuse existing translation
+        // Shift ensures we use the first available translation for this hash, preserving order
+        const enText = tempMap.get(hash).shift()
+        finalBlocks[i] = enText
       } else {
-        segmentsToTranslate.push(section.text)
+        // New or Changed Block
+        segmentsToTranslate.push(block.text)
         segmentIndices.push(i)
       }
     }
 
     if (segmentsToTranslate.length > 0) {
-      console.log(`    Need to translate ${segmentsToTranslate.length} sections for [${lang}]`)
+      console.log(`    Need to translate ${segmentsToTranslate.length} blocks for [${lang}]`)
       const translated = await translateBatch(segmentsToTranslate, lang)
       translated.forEach((trans, idx) => {
-        finalSections[segmentIndices[idx]] = trans
+        finalBlocks[segmentIndices[idx]] = trans
       })
     } else {
       console.log(`    ✨ No changes for [${lang}]`)
@@ -314,8 +324,8 @@ async function processMarkdownFile(filePath) {
     const targetDir = path.dirname(targetPath)
     if (!fs.existsSync(targetDir)) fs.mkdirSync(targetDir, { recursive: true })
 
-    // Join sections with double newline to ensure separation
-    const finalContent = finalSections.join('\n\n')
+    // Join blocks with double newline to ensure separation
+    const finalContent = finalBlocks.join('\n\n')
     fs.writeFileSync(targetPath, finalContent, 'utf-8')
     console.log(`    ✅ Updated: ${targetPath}`)
   }
