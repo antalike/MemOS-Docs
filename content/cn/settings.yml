@@ -32,7 +32,7 @@ nav:
       - "(ri:vip-diamond-line) 高级功能":
         - "(ri:book-read-line) 知识库": memos_cloud/features/advanced/knowledge_base.md
         - "(ri:tools-line) 工具调用": memos_cloud/features/advanced/tool_calling.md
-        # - "(ri:chat-history-line) 持续对话": memos_cloud/features/advanced/continuous_dialogue.md
+        - "(ri:chat-history-line) 持续对话": memos_cloud/features/advanced/continuous_dialogue.md
 
   - "(ri:github-line) 开源项目":
     - "(ri:rocket-line) 快速入门":
@@ -74,6 +74,7 @@ nav:
         - "(ri:node-tree) OLLAMA": open_source/cookbook/chapter2/ollama.md
       - "(ri:search-2-line) 第三章 智能小说分析系统": open_source/cookbook/chapter3/overview.md
       - "(ri:graduation-cap-line) 第四章 使用 MemOS 构建生产级知识问答系统": open_source/cookbook/chapter4/overview.md
+      - "(ri:aed-electrodes-line) 第五章 使用Chat API进行记忆问答": open_source/cookbook/chapter5/chat_api.md
 
     - "(ri:star-line) 最佳实践":
       - "(ri:speed-line) 性能调优": open_source/best_practice/performance_tuning.md
@@ -107,15 +108,15 @@ nav:
     - "(ri:edit-box-line) 核心操作":
       - "(ri:message-3-line) 添加消息": api_docs/core/add_message.md
       - "(ri:search-2-line) 检索记忆": api_docs/core/search_memory.md
+      - "(ri:file-list-line) 获取记忆": api_docs/core/get_memory.md
       - "(ri:delete-bin-line) 删除记忆": api_docs/core/delete_memory.md
 
     - "(ri:chat-1-line) 消息":
-      - "(ri:feedback-line) 添加反馈": api_docs/message/add_feedback.md
       - "(ri:file-list-line) 获取消息": api_docs/message/get_message.md
       - "(ri:task-line) 获取任务状态": api_docs/message/get_status.md
 
-    # - "(ri:chat-smile-2-line) 对话":
-    #   - "(ri:chat-4-line) 对话": api_docs/chat/chat.md
+    - "(ri:chat-smile-2-line) 对话":
+      - "(ri:chat-4-line) 对话": api_docs/chat/chat.md
 
     - "(ri:book-read-line) 知识库":
       - "(ri:add-box-line) 创建知识库": api_docs/knowledge/create_kb.md
@@ -123,12 +124,14 @@ nav:
       - "(ri:file-add-line) 添加知识库文档": api_docs/knowledge/add_kb_doc.md
       - "(ri:file-search-line) 获取知识库文档": api_docs/knowledge/get_kb_doc.md
       - "(ri:file-reduce-line) 删除知识库文档": api_docs/knowledge/delete_kb_doc.md
+      - "(ri:feedback-line) 添加反馈": api_docs/message/add_feedback.md
 
     - "(ri:customer-service-line) 帮助与支持":
       - "(ri:error-warning-line) 错误码": api_docs/help/error_codes.md
 
   - "(ri:projector-line) 示例项目":
     - "(ri:lightbulb-line) 最佳实践":
+      - "(ri:customer-service-2-line) 问答助手": usecase/knowledge_qa_assistant.md
       - "(ri:money-dollar-circle-line) 理财助手": usecase/financial_assistant.md
       - "(ri:edit-line) 写作助手": usecase/writting_assistant.md
       - "(ri:heart-line) 家庭生活助手": usecase/home_assistant.md

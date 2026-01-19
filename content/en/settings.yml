@@ -32,7 +32,7 @@ nav:
       - "(ri:vip-diamond-line) Advanced Features":
         - "(ri:book-read-line) Knowledge Base": memos_cloud/features/advanced/knowledge_base.md
         - "(ri:tools-line) Tool Calling": memos_cloud/features/advanced/tool_calling.md
-        # - "(ri:chat-history-line) Continuous Dialogue": memos_cloud/features/advanced/continuous_dialogue.md
+        - "(ri:chat-history-line) Continuous Dialogue": memos_cloud/features/advanced/continuous_dialogue.md
 
   - "(ri:github-line) Open Source":
     - "(ri:rocket-line) Getting Started":
@@ -74,6 +74,7 @@ nav:
         - "(ri:node-tree) OLLAMA": open_source/cookbook/chapter2/ollama.md
       - "(ri:search-2-line) Chapter 3: Intelligent Novel Analysis System": open_source/cookbook/chapter3/overview.md
       - "(ri:graduation-cap-line) Chapter 4: Using MemOS to Build a Production-Grade Knowledge Q&A System": open_source/cookbook/chapter4/overview.md
+      - "(ri:aed-electrodes-line) Chapter 5 Using Chat API to Q&A": open_source/cookbook/chapter5/chat_api.md
 
     - "(ri:star-line) Best Practice":
       - "(ri:speed-line) Performance Tuning": open_source/best_practice/performance_tuning.md
@@ -107,15 +108,15 @@ nav:
     - "(ri:edit-box-line) Core Operations":
       - "(ri:message-3-line) Add Message": api_docs/core/add_message.md
       - "(ri:search-2-line) Search Memory": api_docs/core/search_memory.md
+      - "(ri:file-list-line) Get Memory": api_docs/core/get_memory.md
       - "(ri:delete-bin-line) Delete Memory": api_docs/core/delete_memory.md
 
     - "(ri:chat-1-line) Messages":
-      - "(ri:feedback-line) Add Feedback": api_docs/message/add_feedback.md
       - "(ri:file-list-line) Get Message": api_docs/message/get_message.md
       - "(ri:task-line) Get Task Status": api_docs/message/get_status.md
 
-    # - "(ri:chat-smile-2-line) Chat":
-    #   - "(ri:chat-4-line) Chat": api_docs/chat/chat.md
+    - "(ri:chat-smile-2-line) Chat":
+      - "(ri:chat-4-line) Chat": api_docs/chat/chat.md
 
     - "(ri:book-read-line) Knowledge Base":
       - "(ri:add-box-line) Create Knowledgebase": api_docs/knowledge/create_kb.md
@@ -123,12 +124,14 @@ nav:
       - "(ri:file-add-line) Create Knowledgebase File": api_docs/knowledge/add_kb_doc.md
       - "(ri:file-search-line) Get Knowledgebase File": api_docs/knowledge/get_kb_doc.md
       - "(ri:file-reduce-line) Delete Knowledgebase File": api_docs/knowledge/delete_kb_doc.md
+      - "(ri:feedback-line) Add Feedback": api_docs/message/add_feedback.md
 
     - "(ri:customer-service-line) Help & Support":
       - "(ri:error-warning-line) Error Codes": api_docs/help/error_codes.md
 
   - "(ri:projector-line) Use Cases":
     - "(ri:lightbulb-line) Best Practice":
+      - "(ri:customer-service-2-line) Knowledge Q&A Assistant": usecase/knowledge_qa_assistant.md
       - "(ri:money-dollar-circle-line) Financial Assistant": usecase/financial_assistant.md
       - "(ri:edit-line) Writing Assistant": usecase/writting_assistant.md
       - "(ri:heart-line) Life Assistant": usecase/home_assistant.md

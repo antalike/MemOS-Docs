@@ -116,11 +116,11 @@ headers = {
 }
 BASE_URL = os.environ['MEMOS_BASE_URL']
 
-def add_message(user_id, conversation_id, role, content):
+def add_message(user_id, conversation_id, messages):
     data = {
         "user_id": user_id,
         "conversation_id": conversation_id,
-        "messages": [{"role": role, "content": content}]
+        "messages": messages
     }
     
     res = requests.post(f"{BASE_URL}/add/message", headers=headers, data=json.dumps(data))
@@ -131,11 +131,10 @@ def add_message(user_id, conversation_id, role, content):
     else:
       print(f"❌ 添加失败, {result.get('message')}")
 
-# 用户发送消息
-add_message("memos_user_123", "memos_conversation_123", "user","""我今天早上跑了5公里，膝盖有点酸""")
-
-# AI 回复消息
-add_message("memos_assistant_123", "memos_conversation_123", "assistant","""你今天跑了5公里，膝盖有点酸，说明关节和肌肉还在适应强度。明天建议把距离控制在3公里左右，重点放在充分热身和放松。这样既能维持训练节奏，又能给膝盖恢复的时间。""")
+# 添加用户与助手的对话消息
+add_message("memos_user_123", "memos_conversation_123",
+            [{"role": "user", "content": "我今天早上跑了5公里，膝盖有点酸"}, 
+             {"role": "assistant", "content": "你今天跑了5公里，膝盖有点酸，说明关节和肌肉还在适应强度。明天建议把距离控制在3公里左右，重点放在充分热身和放松。这样既能维持训练节奏，又能给膝盖恢复的时间。"}])
 
 ```
 

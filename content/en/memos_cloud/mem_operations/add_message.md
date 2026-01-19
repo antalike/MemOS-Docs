@@ -116,11 +116,11 @@ headers = {
 }
 BASE_URL = os.environ['MEMOS_BASE_URL']
 
-def add_message(user_id, conversation_id, role, content):
+def add_message(user_id, conversation_id, messages):
     data = {
         "user_id": user_id,
         "conversation_id": conversation_id,
-        "messages": [{"role": role, "content": content}]
+        "messages": messages
     }
     
     res = requests.post(f"{BASE_URL}/add/message", headers=headers, data=json.dumps(data))
@@ -131,11 +131,10 @@ def add_message(user_id, conversation_id, role, content):
     else:
       print(f"❌ Add failed, {result.get('message')}")
 
-# User sends a message
-add_message("memos_user_123", "memos_conversation_123", "user","""I ran 5 kilometers this morning, and my knees are a bit sore""")
-
-# AI replies to the message
-add_message("memos_assistant_123", "memos_conversation_123", "assistant","""You ran 5 kilometers today and your knees are a bit sore, which means your joints and muscles are still adapting to the intensity. It is recommended to control the distance to about 3 kilometers tomorrow, focusing on full warm-up and relaxation. This can maintain the training rhythm while giving the knees time to recover.""")
+# Add Real-time User-Assistant Dialogue
+add_message("memos_user_123", "memos_conversation_123",
+            [{"role": "user", "content": "I ran 5 kilometers this morning, and my knees are a bit sore"}, 
+             {"role": "assistant", "content": "You ran 5 kilometers today and your knees are a bit sore, which means your joints and muscles are still adapting to the intensity. It is recommended to control the distance to about 3 kilometers tomorrow, focusing on full warm-up and relaxation. This can maintain the training rhythm while giving the knees time to recover."}])
 
 ```
 

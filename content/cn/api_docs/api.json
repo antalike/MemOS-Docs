@@ -208,6 +208,35 @@
         }
       }
     },
+    "/get/memory": {
+      "post": {
+        "summary": "获取记忆",
+        "description": "该接口用于获取某个用户的记忆，包含事实记忆与偏好记忆。",
+        "operationId": "get_memory",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetMemoryRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetMemoryResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/delete/memory": {
       "post": {
         "summary": "删除记忆",
@@ -477,7 +506,7 @@
           "filter": {
             "type": "object",
             "title": "Filter",
-            "description": "过滤条件。可用字段包括：\"agent_id\", \"app_id\", \"create_time\", \"update_time\"与\"info\"中的字段。支持逻辑运算符（and，or）和比较运算符（gte、lte、gt、lt）。对于\"info\"字段，支持过滤传入的\"business_type\", \"biz_id\", \"scene\"和其他自定义字段。",
+            "description": "记忆过滤的条件，用于在检索记忆前精确限定记忆范围。可用字段包括：\"agent_id\", \"app_id\", \"create_time\", \"update_time\"与\"info\"中的字段。支持逻辑运算符（and，or）和比较运算符（gte、lte、gt、lt）。对于\"info\"字段，支持过滤传入的\"business_type\", \"biz_id\", \"scene\"和其他自定义字段。",
             "example": "{\"and\": [{\"create_time\":{\"gte\":\"...\"}}]}"
           },
           "knowledgebase_ids": {
@@ -509,9 +538,9 @@
           "model_name": {
             "type": "string",
             "enum": [
-              "Qwen3-32B",
+              "qwen3-32b",
               "deepseek-r1",
-              "qwen2.5-72B-Instruct"
+              "qwen2.5-72b-instruct"
             ],
             "title": "Model Name",
             "description": "指定具体对话模型。",
@@ -1033,7 +1062,7 @@
           "filter": {
             "type": "object",
             "title": "Filter",
-            "description": "过滤条件。可用字段包括：\"agent_id\", \"app_id\", \"create_time\", \"update_time\"以及\"info\"中的字段。支持逻辑运算符（and，or）和比较运算符（gte、lte、gt、lt）。对于\"info\"字段，支持过滤传入的\"business_type\", \"biz_id\", \"scene\"和其他自定义字段。",
+            "description": "记忆过滤的条件，用于在检索记忆前精确限定记忆范围。可用字段包括：\"agent_id\", \"app_id\", \"create_time\", \"update_time\"以及\"info\"中的字段。支持逻辑运算符（and，or）和比较运算符（gte、lte、gt、lt）。对于\"info\"字段，支持过滤传入的\"business_type\", \"biz_id\", \"scene\"和其他自定义字段。",
             "example": "{\"and\": [{\"create_time\":{\"gte\":\"...\"}}]}"
           },
           "knowledgebase_ids": {
@@ -1041,7 +1070,7 @@
             "items": {
               "type": "string"
             },
-            "description": "指定搜索的知识库范围，默认空"
+            "description": "该字段用于限制当次搜索可访问的知识库范围，默认为空（即不检索任何知识库）。"
           },
           "memory_limit_number": {
             "type": "integer",
@@ -1356,28 +1385,229 @@
         },
         "title": "SearchMemoryResponse"
       },
+      "GetMemoryRequest": {
+        "type": "object",
+        "required": [
+          "user_id"
+        ],
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "title": "User ID",
+            "description": "获取的记忆所关联的用户唯一标识符。"
+          },
+          "page": {
+            "type": "integer",
+            "title": "Page",
+            "description": "分页页码，用于在返回结果较多时进行分页控制。",
+            "default":1
+          },
+          "size": {
+            "type": "integer",
+            "title": "Size",
+            "description": "指定每一类记忆在当前页返回的条目数量，最大值为50。",
+            "default":10
+          },
+          "include_preference": {
+            "type": "boolean",
+            "title": "IncludePreference",
+            "description": "是否要返回偏好记忆。",
+            "default":true
+          }
+        },
+        "title": "GetMemoryRequest"
+      },
+      "GetMemoryResponseData": {
+        "type": "object",
+        "title": "GetMemoryResponseData",
+        "properties": {
+          "memory_detail_list": {
+            "type": "array",
+            "title": "Memory Detail List",
+            "description": "获取的事实记忆列表。",
+            "items": {
+              "type": "object",
+              "title": "Memory Detail",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "事实记忆的唯一标识符，系统内部用于区分不同的记忆条目。"
+                },
+                "memory_key": {
+                  "type": "string",
+                  "description": "事实记忆的标题或关键词，用于概括该事实记忆的主要内容。"
+                },
+                "memory_value": {
+                  "type": "string",
+                  "description": "事实记忆的具体内容。"
+                },
+                "memory_type": {
+                  "type": "string",
+                  "enum": [
+                    "WorkingMemory",
+                    "LongTermMemory",
+                    "UserMemory"
+                  ],
+                  "description": "事实记忆类型。"
+                },
+                "create_time": {
+                  "type": "string",
+                  "description": "事实记忆创建时间，ISO 8601 格式。"
+                },
+                "conversation_id": {
+                  "type": "string",
+                  "description": "与该事实记忆关联的会话唯一标识符。"
+                },
+                "status": {
+                  "type": "string",
+                  "description": "事实记忆状态，当前仅返回激活状态。",
+                  "enum":["activated"]
+                },
+                "confidence": {
+                  "type": "number",
+                  "description": "事实记忆的置信度分数，范围 0~1，数值越大表示越可靠；该值可能随时间或使用频率衰减。"
+                },
+                "tags": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "与事实记忆相关的标签列表，用于分类或检索，例如 [\"人物\",\"事件\"]。"
+                },
+                "update_time": {
+                  "type": "string",
+                  "description": "事实记忆最后一次更新的时间，ISO 8601 格式。"
+                },
+                "sources": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": true
+                  },
+                  "description": "事实记忆的原始消息内容列表。"
+                },
+                "info": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "description": "添加消息时自定义的元信息字段。"
+                }
+              }
+            }
+          },
+          "preference_detail_list": {
+            "type": "array",
+            "title": "Preference Detail List",
+            "description": "偏好记忆列表。",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "偏好记忆的唯一标识符。"
+                },
+                "preference_type": {
+                  "type": "string",
+                  "enum": [
+                    "explicit_preference",
+                    "implicit_preference"
+                  ],
+                  "description": "偏好记忆类型。"
+                },
+                "preference": {
+                  "type": "string",
+                  "description": "偏好记忆的具体内容描述。"
+                },
+                "reasoning": {
+                  "type": "string",
+                  "description": "该偏好记忆被提取或形成的原因说明。"
+                },
+                "create_time": {
+                  "type": "string",
+                  "description": "偏好记忆创建时间，ISO 8601 格式。"
+                },
+                "conversation_id": {
+                  "type": "string",
+                  "description": "与该偏好记忆关联的会话唯一标识符。"
+                },
+                "status": {
+                  "type": "string",
+                  "description": "偏好记忆状态，当前仅返回激活状态。",
+                  "enum":["activated"]
+                },
+                "update_time": {
+                  "type": "string",
+                  "description": "偏好记忆最后一次更新的时间，ISO 8601 格式。"
+                },
+                "sources": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": true
+                  },
+                  "description": "偏好记忆的原始消息内容列表。"
+                },
+                "info": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "description": "添加消息时自定义的元信息字段。"
+                }
+              }
+            }
+          },
+          "total": {
+            "type": "integer",
+            "description": "获取的各类记忆总数中的最大值，用于判断是否存在下一页。"
+          },
+          "size": {
+            "type": "integer",
+            "description": "每一类记忆在当前页返回的条目数量。"
+          },
+          "current": {
+            "type": "integer",
+            "description": "当前获取的记忆所在页数。"
+          },
+          "pages": {
+            "type": "integer",
+            "description": "获取记忆的总页数。"
+          }
+        }
+      },
+      "GetMemoryResponse": {
+        "type": "object",
+        "required": [
+          "code",
+          "message"
+        ],
+        "title": "GetMemoryResponse",
+        "properties": {
+          "code": {
+            "type": "number",
+            "title": "Code",
+            "description": "接口状态码，更多内容可查阅错误码列表了解详情。"
+          },
+          "data": {
+            "$ref": "#/components/schemas/GetMemoryResponseData"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "description": "接口提示信息。"
+          }
+        }
+      },
       "DeleteMemoryRequest": {
         "type": "object",
         "required": [
-          "user_ids",
           "memory_ids"
         ],
         "properties": {
-          "user_ids": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "title": "User IDs",
-            "description": "可以删除记忆的用户列表。"
-          },
           "memory_ids": {
             "type": "array",
             "items": {
               "type": "string"
             },
             "title": "Memory IDs",
-            "description": "删除的记忆所关联的唯一标识符。"
+            "description": "需要删除的记忆 ID 列表。每个 ID 均来自 search/memory 或 get/memory 接口返回的 id 字段。"
           }
         },
         "title": "DeleteMemoryRequest"
@@ -1671,10 +1901,15 @@
             "items": {
               "type": "object",
               "properties": {
+                "name": {
+                  "type": "string",
+                  "title": "Name",
+                  "description": "上传的文档名称"
+                },
                 "content": {
                   "type": "string",
                   "title": "Content",
-                  "description": "文档内容，支持 URL 或 Base64"
+                  "description": "文档内容输入方式支持 URL 或 Base64 编码，可上传的文档类型包括：PDF、DOCX、DOC、TXT。"
                 }
               }
             }
