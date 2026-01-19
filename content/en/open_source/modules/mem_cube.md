@@ -260,20 +260,6 @@ for i, mem in enumerate(memories[:2], 1):  # Show first 2
     print(f"  [{i}] {mem.get('memory', 'N/A')[:60]}...")
 ```
 
-### Remote Loading (GeneralMemCube)
-
-For loading static data from remote repositories like Hugging Face:
-
-```python
-from memos.mem_cube.general import GeneralMemCube
-
-general = GeneralMemCube.init_from_remote_repo(
-    "Ki-Seki/mem_cube_2",
-    base_url="https://huggingface.co/datasets"
-)
-print(general.text_mem.get_all())
-```
-
 ### Complete Examples
 
 See examples in the code repository:

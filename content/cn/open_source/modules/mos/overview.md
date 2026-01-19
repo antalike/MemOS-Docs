@@ -83,6 +83,7 @@ from memos.api.product_models import (
 
 # 设置日志级别
 logging.basicConfig(level=logging.INFO)
+logging.raiseExceptions = False
 
 
 def main():
