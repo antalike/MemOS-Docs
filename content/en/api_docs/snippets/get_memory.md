@@ -1,0 +1,46 @@
+::code-group
+```python [Python (HTTP)]
+import os
+import requests
+import json
+
+# Replace with your API Key
+os.environ["MEMOS_API_KEY"] = "YOUR_API_KEY"
+os.environ["MEMOS_BASE_URL"] = "https://memos.memtensor.cn/api/openmem/v1"
+
+data = {
+  "user_id": "memos_user_123"
+}
+headers = {
+  "Content-Type": "application/json",
+  "Authorization": f"Token {os.environ['MEMOS_API_KEY']}"
+}
+url = f"{os.environ['MEMOS_BASE_URL']}/get/memory"
+
+res = requests.post(url=url, headers=headers, data=json.dumps(data))
+
+print(f"result: {res.json()}")
+```
+```python [Python (SDK)]
+# Please ensure that MemOS has been installed (pip install MemoryOS -U)
+from memos.api.client import MemOSClient
+
+# Initialize MemOS client with API Key to start sending requests
+client = MemOSClient(api_key="YOUR_API_KEY")
+
+user_id = "memos_user_123"
+
+res = client.get_memory(user_id=user_id)
+
+print(f"result: {res}")
+```
+```bash [Curl]
+curl --request POST \
+  --url https://memos.memtensor.cn/api/openmem/v1/get/memory \
+  --header 'Authorization: Token YOUR_API_KEY' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "user_id": "memos_user_123"
+  }'
+```
+::

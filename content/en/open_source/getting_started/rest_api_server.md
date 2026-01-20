@@ -138,10 +138,7 @@ CHAT_MODEL_LIST=[{"backend": "qwen", "api_base": "https://dashscope.aliyuncs.com
 ![MemOS bailian](https://cdn.memtensor.com.cn/img/get_key_url_by_bailian_compressed.png)
 <div style="text-align: center; margin-top: 10px">Bailian application API_KEY and BASE_URL example</div>
 
-
-
-##### Configure dependency versions in docker/requirement.txt （negligible）, Complete Mode Reference <a href="https://github.com/MemTensor/MemOS/blob/main/docker/requirements.txt">requirements.txt</a>.
-
+Configure dependency versions in docker/requirement.txt （negligible）, Complete Mode Reference <a href="https://github.com/MemTensor/MemOS/blob/main/docker/requirements.txt">requirements.txt</a>.
 
 ### 4、Start Docker 
 ```bash
@@ -490,7 +487,7 @@ uvicorn memos.api.product_api:app --host 0.0.0.0 --port 8000 --reload
 ::
 
 
-### Method 5：Start using pyCharm
+### Method 5：Start using PyCharm
 
 #### Run server_api
 ```bash

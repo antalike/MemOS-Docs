@@ -1,4 +1,60 @@
 versions:
+  - name: v2.0.2
+    date: 2026-01-15
+    changedInfo:
+      New Features:
+        - type: Released "Knowledge Base Q&A Assistant" Construction Tutorial
+          changedInfo:
+            - Official documentation updated with best practices for "Developing Q&A Assistants Based on Knowledge Bases", guiding you step-by-step to build a "MemOS Knowledge Base Assistant".
+      Improvements:
+        - type: Knowledge Base Document Retrieval
+          changedInfo:
+            - Further improved the retrieval memory interface's ability to recall detailed knowledge base document content, optimizing answer quality for document-based queries.
+        - type: Tool Memory Mechanism
+          changedInfo:
+            - Added procedural experience for call trajectories to enhance the auxiliary effect of tool memory;
+            - Compressed tool schema information to avoid duplicate addition of ToolSchemaMemory.
+        - type: Fact Memory Merging and Archiving Mechanism
+          changedInfo:
+            - Added merging and archiving mechanisms in fact memory processing to optimize issues of duplicate memory writing and recall, while ensuring extraction completeness.
+        - type: Get Memory Interface
+          changedInfo:
+            - Support returning tool memories;
+            - Support returning memories under specific filtering conditions for debugging and display scenarios.
+      Bug Fixes:
+        - type: Get Memory Interface
+          changedInfo:
+            - Fixed call error in get memory interface when parameter include_preference=False.
+  - name: v2.0.1
+    date: 2026-01-08
+    changedInfo:
+      New Features:
+        - type: Get Memory Interface Launch
+          changedInfo:
+            - Get memory interface launched, supporting full retrieval of user memories.
+        - type: Chat Function Launch on Cloud Service
+          changedInfo:
+            - Chat function launched on cloud service, enabling one-click start of "memory-persistent" conversations.
+        - type: Playground Update
+          changedInfo:
+            - Playground memory management page supports memory deletion, allowing users to manually manage and delete expired memories they no longer need.
+      Improvements:
+        - type: Delete Memory Interface
+          changedInfo:
+            - Optimized delete memory interface to support deletion of all types of memories, including user memories, knowledge base memories, etc.
+        - type: Preference Memory
+          changedInfo:
+            - feedback interface added feedback processing operation for preference memory
+        - type: Memory Retrieval Optimization
+          changedInfo:
+            - search interface supports optional deduplication parameter, supporting semantic similarity deduplication to improve retrieval result diversity.
+      Bug Fixes:
+        - type: kv cache Issue Fix
+          changedInfo:
+            - Solved compatibility error of kv cache code in new version of memos
+        - type: Scheduling Module Issue Fix
+          changedInfo:
+            - Fixed error when scheduling enables local mode due to missing redis configuration
   - name: v2.0.0
     date: 2025-12-24
     changedInfo:

@@ -3,6 +3,14 @@ title: Memory Recall
 desc: "In MemOS, memory is not just about archiving information, but also about being dynamically retrieved when needed and transformed into executable input."
 ---
 
+::warning
+**[Go directly to API Docs](/api_docs/core/search_memory)**
+<br>
+<br>
+
+**This article focuses on functional explanation. For detailed interface fields and limits, please click the link above.**
+::
+
 ## 1. Capability Overview
 
 Memory recall is responsible for quickly retrieving the most relevant memory fragments when the user initiates a new request.
