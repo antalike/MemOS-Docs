@@ -506,7 +506,7 @@ touch .env
 ```
 
 2. 示例 .env 内容
-.env详细配置请见[env配置](open_source/getting_started/rest_api_server)
+.env详细配置请见[env配置](/open_source/getting_started/rest_api_server)
 
 有关详细的开发环境设置、工作流程指南和贡献最佳实践，请参阅我们的 [贡献指南](/open_source/contribution/overview)。
 
