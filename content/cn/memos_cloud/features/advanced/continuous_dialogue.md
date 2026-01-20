@@ -117,7 +117,7 @@ print(f"result: {res.json()}")
 | -------------- | ------------------------------------------------- | ------------------------------------------------------------ |
 | 记忆过滤器     | `filter`                                          | 支持自定义结构化查询条件，精确筛选记忆，详见[**记忆过滤器**](/memos_cloud/features/basic/filters)。 |
 | 召回偏好记忆   | `include_preference`<br><span style="line-height:0.6;">&nbsp;</span><br>`preference_limit_number` | 偏好记忆是 MemOS 基于用户历史消息分析生成的用户偏好信息。<br>开启后，可在检索结果中召回用户偏好记忆，“更懂用户”。 |
-| 检索指定知识库 | `knowledgebase_ids`                               | 指定本次检索可使用的项目关联知识库范围，详见[**知识库**](/memos_cloud/features/advanced/knowledgebase_base)。     |
+| 检索指定知识库 | `knowledgebase_ids`                               | 指定本次检索可使用的项目关联知识库范围，详见[**知识库**](/memos_cloud/features/advanced/knowledge_base)。     |
 
 ### 调整模型回答
 
