@@ -1,21 +1,21 @@
 ---
 title: "记忆模块总览"
-desc: "MemOS 记忆系统完整指南 - 从轻量级文本记忆到高级图结构，选择最适合你的记忆模块"
+desc: "MemOS 记忆系统完整指南 - MemOS 提供了丰富的记忆模块，满足从轻量级文本记忆到高级图结构的各种需求。本指南帮助你快速找到最适合的记忆解决方案。"
 ---
 
-# 记忆模块总览
+# 为什么需要不同的记忆模块
 
-MemOS 提供了丰富的记忆模块，满足从快速原型到生产环境的各种需求。本指南帮助你快速找到最适合的记忆解决方案。
+记忆模块是赋予Agent“长期记忆”能力的核心组件。它不只是像数据库一样死板地存取数据，而是能够像人类一样，对信息进行自动化地提取、分类、关联和动态更新。通过选择不同的记忆模块，你可以让 Agent拥有不同能力。
 
 ## 🎯 快速选择指南
 
 ::alert{type="info"}
 **不确定选哪个？** 跟随这个决策树：
-- 🚀 **快速测试/演示** → [NaiveTextMemory](#naivetextmemory-简单明文记忆)
-- 📝 **通用文本记忆** → [GeneralTextMemory](#generaltextmemory-通用文本记忆)
-- 👤 **用户偏好管理** → [PreferenceTextMemory](#preferencetextmemory-偏好记忆)
-- 🌳 **结构化知识图谱** → [TreeTextMemory](#treetextmemory-分层结构记忆)
-- ⚡ **推理加速** → [KVCacheMemory](#kvcachememory-激活记忆)
+- 🚀 **快速测试/演示：简单上手，无需额外软件** → [NaiveTextMemory](#naivetextmemory-简单明文记忆)
+- 📝 **通用文本记忆：记住聊天内容或大量文档，并能根据语义搜索** → [GeneralTextMemory](#generaltextmemory-通用文本记忆)
+- 👤 **用户偏好管理：专门针对用户画像设计** → [PreferenceTextMemory](#preferencetextmemory-偏好记忆)
+- 🌳 **结构化知识图谱：数据之间有复杂的逻辑关联** → [TreeTextMemory](#treetextmemory-分层结构记忆)
+- ⚡ **推理加速：访问量很大，希望回复能更平稳、响应更快** → [KVCacheMemory](#kvcachememory-激活记忆)
 ::
 
 ---
