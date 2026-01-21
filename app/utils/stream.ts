@@ -19,12 +19,12 @@ export class Stream<T> {
 
     const transformStream = new TransformStream<Uint8Array, T>({
       transform(chunk, controller) {
-        // 1. 拼接新收到的数据
+        // 1. Concatenate newly received data
         buffer += decoder.decode(chunk, { stream: true })
 
-        // 2. 尝试用 SSE 分隔符切分
+        // 2. Try splitting by SSE separator
         const parts = buffer.split('\n\n')
-        // 3. 把切分后剩下的一小截（可能是不完整的）放回 buffer，等下次拼起来再处理
+        // 3. Put the remaining small chunk (possibly incomplete) back into buffer for next processing
         buffer = parts.pop() || ''
 
         for (const part of parts) {
@@ -41,19 +41,19 @@ export class Stream<T> {
           }
 
           if (data) {
-            // 遇到结束标记，关闭流
+            // Encountered end marker, close stream
             if (data === '[DONE]') {
               controller.terminate()
               return
             }
 
             try {
-              // 将字符串转为 JSON 对象
+              // Parse string to JSON object
               const parsed = JSON.parse(data)
               if (isError) {
                 controller.error(new Error(parsed.error || 'Stream error'))
               } else {
-                // 将对象放入流中，供下游消费
+                // Enqueue object into stream for downstream consumption
                 controller.enqueue(parsed)
               }
             } catch (e) {

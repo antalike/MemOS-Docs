@@ -7,7 +7,6 @@ export interface Message {
 
 export type AssistantStatus = 'submitted' | 'streaming' | 'ready' | 'error'
 
-// 直接声明每个状态变量 - 更简洁直观
 const isOpen = ref(false)
 const isMaximized = ref(false)
 const messages = ref<Message[]>([])
@@ -16,7 +15,6 @@ const error = ref<string | null>(null)
 const userInput = ref('')
 const suggestions = ref<string[]>([])
 
-// 生成唯一的 Session ID
 function generateSessionId() {
   if (typeof crypto !== 'undefined' && crypto.randomUUID) {
     return crypto.randomUUID()
@@ -31,16 +29,15 @@ function generateSessionId() {
 const sessionId = generateSessionId()
 
 export const useAssistant = () => {
-  // 派生状态
+  const { t } = useI18n()
+
   const isStreaming = computed(() => status.value === 'streaming')
   const isReady = computed(() => status.value === 'ready')
   const hasError = computed(() => !!error.value)
 
-  // 流控制
   let currentController: AbortController | null = null
   const { reqStream } = useStreamFetch()
 
-  // 业务逻辑 - 窗口控制
   function toggleOpen() {
     isOpen.value = !isOpen.value
   }
@@ -49,7 +46,6 @@ export const useAssistant = () => {
     isMaximized.value = !isMaximized.value
   }
 
-  // 业务逻辑 - 消息处理
   function setUserInput(value: string) {
     userInput.value = value
   }
@@ -66,8 +62,6 @@ export const useAssistant = () => {
     error.value = errorMessage
     status.value = errorMessage ? 'error' : 'ready'
   }
-
-  // 业务逻辑 - 流控制
   function stopStreaming() {
     if (currentController) {
       currentController.abort()
@@ -76,13 +70,10 @@ export const useAssistant = () => {
     }
   }
 
-  // 会话初始化 - 确保干净的状态开始新对话
   function initialize() {
-    // 1. 重置状态为准备就绪
     status.value = 'ready'
     error.value = null
 
-    // 2. 清理残留的不完整消息
     if (messages.value.length > 0) {
       const lastMessage = messages.value[messages.value.length - 1]
       if (lastMessage?.role === 'assistant' && !lastMessage.content.trim()) {
@@ -90,7 +81,6 @@ export const useAssistant = () => {
       }
     }
 
-    // 3. 确保控制器被清理
     if (currentController) {
       currentController.abort()
       currentController = null
@@ -113,15 +103,12 @@ export const useAssistant = () => {
     }
   }
 
-  // 核心业务逻辑 - 发送消息
   async function sendMessage(input: string) {
     const query = input.trim()
     if (!query) return
 
-    // 初始化会话状态
     initialize()
 
-    // 添加用户消息
     const userMessage: Message = {
       id: Date.now().toString(),
       role: 'user',
@@ -130,12 +117,10 @@ export const useAssistant = () => {
     }
     addMessage(userMessage)
 
-    // 清空输入框
     if (userInput.value) {
       setUserInput('')
     }
 
-    // 添加助手占位消息
     const assistantId = (Date.now() + 1).toString()
     addMessage({
       id: assistantId,
@@ -144,11 +129,9 @@ export const useAssistant = () => {
       createAt: new Date()
     })
 
-    // 更新状态
     status.value = 'submitted'
 
     try {
-      // 开始流式请求
       currentController = new AbortController()
       const stream = await reqStream<{ type: string, data: string | string[], error?: string }>('/memos-ai/kb_stream_chat', {
         method: 'POST',
@@ -159,7 +142,6 @@ export const useAssistant = () => {
         signal: currentController.signal
       })
 
-      // 处理流式响应
       let assistantContent = ''
 
       for await (const chunk of stream) {
@@ -168,8 +150,6 @@ export const useAssistant = () => {
         }
         if (chunk.type === 'text' && chunk.data) {
           assistantContent += chunk.data
-
-          // 直接更新最后一条消息，创建新数组以触发响应式更新和自动滚动
           updateLastMessage(assistantContent)
         } else if (chunk.type === 'suggestions' && Array.isArray(chunk.data)) {
           setSuggestions(chunk.data as string[])
@@ -178,20 +158,22 @@ export const useAssistant = () => {
         }
       }
 
-      // 完成
       status.value = 'ready'
     } catch (error) {
       status.value = 'ready'
-      updateLastMessage('系统异常，请稍后再试')
+      addMessage({
+        id: (+Date.now()).toString(),
+        role: 'assistant',
+        content: t('assistant.systemError'),
+        createAt: new Date()
+      })
       console.error('Failed to get assistant response:', error)
     } finally {
       currentController = null
     }
   }
 
-  // 返回统一的API - 简洁直观
   return {
-    // 状态变量 - 直接暴露，支持v-model
     isOpen,
     isMaximized,
     userInput,
@@ -199,13 +181,9 @@ export const useAssistant = () => {
     status,
     error,
     suggestions,
-
-    // 派生状态 - 便于使用
     isStreaming,
     isReady,
     hasError,
-
-    // 业务方法 - 状态修改的唯一入口
     toggleOpen,
     toggleMaximize,
     setUserInput,
