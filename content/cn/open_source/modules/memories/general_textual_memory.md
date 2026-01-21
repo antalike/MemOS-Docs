@@ -124,16 +124,16 @@ m.add(
     ]  
 )
 
-# Search
+# 检索记忆
 results = m.search("Tell me more about the user", top_k=2)
 
-# Update
+# 更新记忆
 m.update(memory_id, {"memory": "User is Canadian.", ...})
 
-# Delete
+# 删除记忆
 m.delete([memory_id])
 
-# Dump/load
+# 将所有记忆序列化到目录中的JSON文件/从存储的文件中加载记忆
 m.dump("tmp/mem")
 m.load("tmp/mem")
 ```

@@ -226,18 +226,18 @@ results = memory.search("咖啡")
 
 ### MultiModal Reader（多模态读取）
 在 TreeTextMemory 中支持处理：
-- 📷 对话中的图片
-- 🌐 网页 URL
-- 📄 本地文件（PDF、DOCX、TXT、Markdown）
-- 🔀 混合模式（文本+图片+URL）
+- 对话中的图片
+- 网页 URL
+- 本地文件（PDF、DOCX、TXT、Markdown）
+- 混合模式（文本+图片+URL）
 
 👉 [查看示例](./tree_textual_memory#使用-multimodalstructmemreader高级)
 
 ### Internet Retrieval（互联网检索）
 从网络获取实时信息并添加到记忆：
-- 🔍 BochaAI 搜索
-- 🌍 Google 搜索
-- 🔎 Bing 搜索
+- BochaAI 搜索
+- Google 搜索
+- Bing 搜索
 
 👉 [查看示例](./tree_textual_memory#从互联网检索记忆可选)
 
