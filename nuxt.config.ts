@@ -50,7 +50,8 @@ const config: NuxtConfig = {
   runtimeConfig: {
     public: {
       ...envConfig,
-      version: pkg.version
+      version: pkg.version,
+      apiBase: 'https://apigw.memtensor.cn'
     }
   },
 
@@ -82,7 +83,10 @@ const config: NuxtConfig = {
   vite: {
     plugins: [
       yaml()
-    ]
+    ],
+    optimizeDeps: {
+      include: ['debug']
+    }
   },
 
   ssr: true,
@@ -98,7 +102,7 @@ const config: NuxtConfig = {
     build: {
       markdown: {
         highlight: {
-          langs: ['bash', 'shell', 'ts', 'typescript', 'diff', 'vue', 'json', 'yml', 'css', 'mdc', 'python', 'py', 'mermaid']
+          langs: ['bash', 'shell', 'ts', 'typescript', 'diff', 'vue', 'json', 'yml', 'css', 'mdc', 'python', 'py', 'mermaid', 'markdown', 'md']
         }
       }
     }
