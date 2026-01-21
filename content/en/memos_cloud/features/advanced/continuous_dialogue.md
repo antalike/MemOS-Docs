@@ -102,7 +102,6 @@ Interface Input Limit: 8,000 tokens.
 
 Interface Output Limit: Retrieved memory count — 25 factual memories; 25 preference memories.
 
-
 ## 5. More Features
 
 In addition to one-click copying of the quick start code above, this interface also provides a wealth of other configurable parameters. You can refer to the explanations of the following fields to call the Chat interface for conversation during use.

@@ -16,13 +16,14 @@ desc: MemOS automatically processes multimodal content you add, such as text, fi
 The basis of memory comes from raw message content. MemOS processes the messages you add into memories for subsequent retrieval and use. When building AI applications, whether you have started using MemOS for user memory management or not, you can choose the appropriate timing to add messages based on actual scenarios, including:
 
 *   **One-time Import**: Import existing user historical conversations into MemOS with one click to quickly establish initial memories;
-    
+
 *   **Real-time Addition**: Add messages to MemOS in real-time every time the user sends a message;
-    
+
 *   **Batch Addition by Turn**: Set to add user messages to MemOS every certain number of dialogue turns according to business needs.
-    
+
 ::note
 **&nbsp;Why is memory important?**
+
 <div style="padding-left: 2em;">
 
 * Enables cross-session long-term memory, avoiding information loss after the conversation ends;
@@ -32,32 +33,29 @@ The basis of memory comes from raw message content. MemOS processes the messages
 * Continuously writes new information during the conversation, dynamically updating user memories;
 
 * Shares the same user's memory across your multiple applications or products to achieve a consistent user experience.
+
 </div>
 ::
-
 
 ## 2. Key Parameters
 
 *   **User ID (user\_id)**: Used to identify the unique user to whom the message belongs. Currently, all added conversation information needs to be associated with a specific and unique user identifier.
-    
+
 *   **Conversation ID (conversation\_id)**: Used to identify the unique conversation to which the message belongs. Currently, all added conversation information needs to be associated with a specific and unique conversation identifier.
-    
+
 *   **Messages (messages)**: An ordered list of user and AI conversation content added to MemOS.
-    
+
 *   **Meta Info (info)**: Supplementary information defined by you and submitted with the message, which can be used for filtering during subsequent memory retrieval.
-    
 
 ## 3. Working Principle
 
 *   **Information Extraction**: MemOS uses LLM internally to extract facts, preferences, etc., from messages and processes them into memories, including: factual memory, preference memory, tool memory, etc.
-    
+
 *   **Conflict Resolution**: Existing memories are checked for duplicates or contradictions and updated.
-    
+
 *   **Memory Storage**: The resulting memories are stored using vector databases and graph databases for fast recall during subsequent retrieval.
-    
 
 All the above processes can be triggered by simply calling the `add/message` interface, without the need for you to manually operate on user memories.
-
 
 ## 4. Quick Start
 
@@ -90,6 +88,7 @@ res = requests.post(url=url, headers=headers, data=json.dumps(data))
 
 print(f"result: {res.json()}")
 ```
+
 :::note
 Want to know what memories were generated? Copy the above code and run it, then go to [**Search Memory**](/memos_cloud/mem_operations/search_memory).
 :::

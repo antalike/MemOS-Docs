@@ -5,7 +5,6 @@ desc: "**MemOS** is a **Memory Operating System** for large language models (LLM
 
 ![MemOS Architecture](https://statics.memtensor.com.cn/memos/memos-architecture.png)
 
-
 As LLMs advance to handle complex tasks — like multi-turn dialogue, long-term planning, decision-making, and personalized user experiences — their ability to **structure, manage, and evolve memory** becomes critical for achieving true long-term intelligence and adaptability.
 
 However, most mainstream LLMs still rely heavily on static parametric memory (model weights). This makes it difficult to update knowledge, track memory usage, or accumulate evolving user preferences. The result? High costs to refresh knowledge, brittle behaviors, and limited personalization.
@@ -13,7 +12,6 @@ However, most mainstream LLMs still rely heavily on static parametric memory (mo
 **MemOS** solves these challenges by redefining memory as a **core, modular system resource** with a unified structure, lifecycle management, and scheduling logic. It provides a Python-based layer that sits between your LLM and external knowledge sources, enabling **persistent, structured, and efficient memory operations**.
 
 With MemOS, your LLM can retain knowledge over time, manage context more robustly, and reason with memory that's explainable and auditable — unlocking more intelligent, reliable, and adaptive AI behaviors.
-
 
 ::note
 **Tip**<br>  MemOS helps bridge the gap between static parametric weights and dynamic, user-specific memory.
@@ -35,8 +33,8 @@ transforms, and governs** multiple memory types — from parametric weights to e
 **Insight**<br>  MemOS helps your LLM evolve, by blending parametric, activation, and plaintext memory into a living loop.
 ::
 
-
 ## Core Building Blocks
+
 ### MemCubes
 
 **Flexible containers** that hold one or more memory types.
@@ -51,7 +49,6 @@ Each memory unit can flow through states like:
 Every step is versioned with **provenance tracking** and audit logs.
 Old memories can be "time-machined" back to prior versions for recovery or counterfactual simulations.
 
-
 ### Operation & Governance
 
 Modules like:
@@ -60,11 +57,9 @@ Modules like:
 - **MemLifecycle** — manages state transitions, merging, and archiving.
 - **MemGovernance** — handles access control, redaction, compliance, and audit trails.
 
-
 ::note
 **Compliance Reminder**<br>    Every memory unit carries full provenance metadata, so you can audit who created, modified, or queried it.
 ::
-
 
 ## Multi-Perspective Memory
 
@@ -82,7 +77,6 @@ Over time:
 - Stable context is promoted to KV-cache for rapid injection.
 - Cold or outdated knowledge can be demoted for auditing.
 
-
 ## What makes MemOS different?
 
 - Hybrid retrieval — symbolic & semantic, vector + graph.
@@ -90,7 +84,6 @@ Over time:
 - Provenance & audit trail — every memory unit is governed and explainable.
 - Automatic KV-cache promotion for stable context reuse.
 - Lifecycle-aware scheduling — no more stale facts or bloated weights.
-
 
 ## Who is it for?
 

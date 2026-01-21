@@ -2,6 +2,7 @@
 title: Async Mode
 desc: Use async mode when adding messages; the interface returns immediately while actual processing is queued in the background by MemOS.
 ---
+
 ::warning
 **[This article expands on the async mode in the [Add Memory - addMessage API], click here to view the detailed API documentation directly](/api_docs/core/add_message)**
 ::
@@ -9,6 +10,7 @@ desc: Use async mode when adding messages; the interface returns immediately whi
 :::note
 The `async_mode` parameter currently defaults to `true`. Memory addition operations are processed asynchronously by default, queued for background execution instead of waiting for processing to complete before returning a response.
 :::
+
 ## 1. Using Async Mode
 
 ### Processing Flow
@@ -77,12 +79,10 @@ print(f"result: {res.json()}")
 ### When to Use Async Mode
 
 *   **Reduce Interface Response Latency**: Users do not need to wait and can continuously use memory within the application;
-    
+
 *   **Batch Add Memories**: Process large amounts of data simultaneously to avoid blocking the application;
-    
 
 *   **Background Task Processing**: Offload time-consuming memory processing operations to the background to improve system concurrency capabilities.
-    
 
 :::note
 Note<br>
@@ -136,14 +136,13 @@ At this point, retrieving memory will return memories that have been fully proce
 ### When to Use Sync Mode
 
 *   **Debugging and Development Phase**: View the results after memory processing directly, facilitating memory retrieval debugging;
-    
+
 *   **Instant Query**: Need to confirm that memory has been created or updated when the API call returns, such as in performance testing, functional verification, etc.
-    
+
 *   **Small-scale Operations**: Sync mode can be used when the data volume is small and latency impact is minimal.
-    
 
 ### Important Notes
 
 *   The default behavior for async processing is now `async_mode=true`.
-    
+
 *   If you need sync mode, please set `async_mode=false` when adding messages.

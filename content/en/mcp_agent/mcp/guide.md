@@ -38,6 +38,7 @@ To configure MemOS MCP using JSON configuration:
 ```
 
 How to obtain environment variables:
+
 - `MEMOS_API_KEY`: Register an account on the MemOS official website's [API Console](https://memos-dashboard.openmem.net/cn/apikeys/), then create a new api-key on the API keys page and copy it here.
 
 ![Create a new api-key on the MemOS API Console](https://cdn.memtensor.com.cn/img/1763451978063_251scz_compressed.png)
@@ -52,6 +53,7 @@ How to obtain environment variables:
 ## 4. Using MemOS MCP in different clients
 
 ### Using in Claude Desktop
+
 To use MemOS in Claude Desktop, click the avatar in the lower left corner -> "Settings" -> "Developer" -> "Edit Config", paste the configuration into the Claude_desktop_config.json file, and finally restart the client. You can use it in the chat when you observe that the memos-api-mcp service is in the running state.
 
 ![Verification of using MemOS in Claude](https://cdn.memtensor.com.cn/img/1763105334517_9ayhrp_compressed.png)
@@ -70,11 +72,13 @@ The following is an example of using MemOS in Claude Desktop, by which users can
 ![Example of using MemOS in Claude Desktop](https://cdn.memtensor.com.cn/img/1763105296073_gtqj1s_compressed.png)
 
 ### Using in Cursor
+
 To use MemOS in Cursor, go to "Cursor Settings" -> "Tools & MCP" -> "Add Custom MCP" (or "New MCP Server"), paste the configuration into the pop-up mcp.json file editing page. You can use it in the Cursor chat panel when you observe that memos-api-mcp is in the started state and can see tools such as "add_message" and "search_memory" on the tool details page.
 
 ![Using MemOS in Cursor](https://cdn.memtensor.com.cn/img/1763105278297_n23ukk_compressed.png)
 
 To improve the usage effect, it is recommended that users modify User Rules when using MemOS in Cursor. The specific method is to go to "Cursor Settings" -> "Rules, Memories, Commands" -> "User Rules" -> "+ Add Rule", then copy and paste the following content and save it:
+
 ```
 You are MemOS Memory Management Assistant, dedicated to providing efficient memory management services. It extracts memories based on users' past conversation content and enhances the consistency and personalization of users' conversations with AI through memory retrieval. Before answering each user's question, you need to call the search_memory service of memos-api-mcp and use appropriate search terms to find memories related to the current topic in the user's personal memory bank. After completing the answer based on these memories, call the add_message service of memos-api-mcp to record a summary of the current conversation content. (Note that calling add_message is mandatory. Regardless of what the user says or asks, it must be recorded; otherwise, in subsequent conversations, search_memory will not be able to obtain more detailed user information, leading to your inability to answer the user's questions accurately.)
 ```
@@ -86,6 +90,7 @@ The following is an example of using MemOS in Cursor, by which users can judge w
 ![Usage example of using MemOS in Cursor](https://cdn.memtensor.com.cn/img/1763105238556_p99epu_compressed.png)
 
 ### Using in Visual Studio Code or Trae
+
 To use MemOS in VS Code or Trae, install the Cline extension and configure the model, then click the "MCP Servers" icon in the upper right corner inside the Cline panel -> "Configure" -> "Configure MCP Servers", and paste the configuration into the cline_map_settings.json file. You can use it in the Cline agent when you observe that memos-api-mcp is in the started state. At the same time, it is recommended to turn on the `Auto-approve` switch of each tool to avoid the agent asking before each tool call, making the use more smooth.
 
 ![Configuration process of using MemOS in Cline](https://cdn.memtensor.com.cn/img/1763105211482_g1xclj_compressed.png)
@@ -135,7 +140,9 @@ The following is an example of using MemOS in Cline, by which users can judge wh
 ![Usage example of using MemOS in Cline](https://cdn.memtensor.com.cn/img/1763105156433_jz4k3t_compressed.png)
 
 ### Using in [Chatbox](https://chatboxai.app/en)
+
 To use MemOS in Chatbox, click "Settings" in the lower left corner -> "MCP" -> "Custom MCP Servers - Add Server" -> "Add Custom Server", and add the memos-api-mcp service according to the following configuration.
+
 ```
 Name: MemOS Memory Management
 Type: Local (stdio)
@@ -144,11 +151,13 @@ Environment Variables:
 MEMOS_API_KEY={{api_key applied for on the MemOS official website API Console}}
 MEMOS_USER_ID={{custom USER_ID}}
 ```
+
 After filling in, click "Test". If you can see tools such as "add_message" and "search_memory" at the bottom of the dialog box, the configuration is successful.
 
 ![Verification of using MemOS in Chatbox](https://cdn.memtensor.com.cn/img/1763105136401_xbvcsh_compressed.png)
 
 To improve the usage effect, it is recommended that users modify the system_prompt when using MemOS in Chatbox. The specific method is to go to "Settings" in the lower left corner -> "Chat Settings" -> "Default Settings for New Conversation", and modify the prompt as follows:
+
 ```
 You are MemOS Memory Management Assistant, dedicated to providing efficient memory management services. It extracts memories based on users' past conversation content and enhances the consistency and personalization of users' conversations with AI through memory retrieval. Before answering each user's question, you need to call the search_memory service of memos-api-mcp and use appropriate search terms to find memories related to the current topic in the user's personal memory bank. After completing the answer based on these memories, call the add_message service of memos-api-mcp to record a summary of the current conversation content. (Note that calling add_message is mandatory. Regardless of what the user says or asks, it must be recorded; otherwise, in subsequent conversations, search_memory will not be able to obtain more detailed user information, leading to your inability to answer the user's questions accurately.)
 ```
@@ -159,12 +168,11 @@ The following is an example of using MemOS in Chatbox, by which users can judge 
 
 ![Effect example of using MemOS in Chatbox](https://cdn.memtensor.com.cn/img/1763104980563_q3q7v2_compressed.png)
 
-
 ## 5. Q&A
+
 Q: Why do agents sometimes fail to invoke tools when they should?
 
 A: Due to the different underlying models used, different agents have different proficiency in using tools. When the agent forgets to use the tool, you can guide the model to call the corresponding tool through instructions, or try to use other underlying models.
-
 
 ## 6. Contact Us
 

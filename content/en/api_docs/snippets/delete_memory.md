@@ -1,4 +1,5 @@
 ::code-group
+
 ```python [Python (HTTP)]
 import os
 import requests
@@ -21,6 +22,7 @@ res = requests.post(url=url, headers=headers, data=json.dumps(data))
 
 print(f"result: {res.json()}")
 ```
+
 ```python [Python (SDK)]
 # Ensure MemoS is installed (pip install MemoryOS -U)
 from memos.api.client import MemOSClient
@@ -33,6 +35,7 @@ memory_ids = ["6b23b583-f4c4-4a8f-b345-58d0c48fea04"] # Replace with real Memory
 res = client.delete_memory(memory_ids=memory_ids)
 print(f"result: {res}")
 ```
+
 ```bash [Curl]
 curl --request POST \
   --url https://memos.memtensor.cn/api/openmem/v1/delete/memory \
@@ -42,4 +45,5 @@ curl --request POST \
     "memory_ids": ["6b23b583-f4c4-4a8f-b345-58d0c48fea04"]
   }'
 ```
+
 ::

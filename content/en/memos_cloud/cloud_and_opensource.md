@@ -15,7 +15,6 @@ desc: Choose the MemOS "Memory" solution that best suits your needs.
 👉 [Try Playground Now](https://memos-playground.openmem.net/)
 ::
 
-
 ## 1. The MemOS Solution Best Suited for You
 
 MemOS provides two "Memory" solutions for AI applications. You can choose:
@@ -27,7 +26,6 @@ MemOS provides two "Memory" solutions for AI applications. You can choose:
 > _Whether it's Cloud Service or Open Source Framework, MemOS allows your AI to easily gain persistent memory._
 
 > _You can start with the cloud service for a quick experience, then switch to localized deployment based on business needs._
-
 
 ## 2. Selection Guide
 
@@ -49,9 +47,6 @@ MemOS provides two "Memory" solutions for AI applications. You can choose:
 
 *   **Code Extension**: Modify the codebase directly, extend custom features as needed, and contribute improvements back to the community.
 
-
 ## 3. Still Undecided?
 
 *   [Try Free Platform](/memos_cloud/quick_start): Register and log in to [MemOS Cloud Platform](https://memos-dashboard.openmem.net/quickstart) to try all features for free.
-
-*   [Explore Open Source](/open_source/getting_started/quick_start): Clone the project repository and run it directly locally. And don't forget to give us a Star!

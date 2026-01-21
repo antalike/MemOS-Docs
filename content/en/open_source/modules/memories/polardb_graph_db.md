@@ -7,10 +7,10 @@ desc: "Configuration and usage of PolarDB graph database in the MemOS framework"
 
 MemOS supports using **PolarDB** (based on Apache AGE extension) as a graph database backend for storing and retrieving knowledge graph-style memory data. PolarDB combines the powerful capabilities of PostgreSQL with the flexibility of graph databases, making it particularly suitable for scenarios requiring both relational and graph data queries.
 
-
 ## Features
 
 ::list{icon="ph:check-circle-duotone"}
+
 - Complete graph database operations: node CRUD, edge management
 - Vector embedding search: semantic retrieval with IVFFlat index support
 - Connection pool management: automatic database connection management with high concurrency support

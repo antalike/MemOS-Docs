@@ -17,21 +17,21 @@ Search Memory refers to MemOS recalling the most relevant and important memory c
 
 ::note
 **&nbsp;Why do we need Search Memory?**
+
 <div style="padding-left: 2em;">
 
 *  No need to build context from scratch, directly obtain correct and reliable memories;
 
 *  Ensure that recalled memories are always highly relevant to the current question through filtering conditions, etc.
+
 </div>
 ::
-
 
 ## 2. Key Parameters
 
 *   **Query Content (query)**: Natural language questions or statements used for retrieval. The system will match relevant memories based on semantics.
 
 *   **Memory Filter (filter)**: JSON-based logical conditions used to narrow down the retrieval scope by entity, time, tag, meta information, etc.
-
 
 ## 3. Working Principle
 
@@ -45,9 +45,10 @@ Search Memory refers to MemOS recalling the most relevant and important memory c
 
 All the above processes can be triggered by simply calling the `search/memory` interface, without the need for you to manually operate on user memories.
 
-
 ## 4. Quick Start
+
 ::code-group
+
 ```python [Python (HTTP)]
 import os
 import requests
@@ -72,6 +73,7 @@ res = requests.post(url=url, headers=headers, data=json.dumps(data))
 
 print(f"result: {res.json()}")
 ```
+
 ```python [Output]
 # Example Output (Simplified for easier understanding, for reference only)
 
@@ -100,6 +102,7 @@ memory_detail_list [
     }
   ]
 ```
+
 ::
 
 ::note
@@ -171,7 +174,6 @@ I want to travel during the National Day holiday. Please recommend a city I have
 
 ```
 
-
 ## 6. Usage Scenarios
 
 ### Use Memory in Conversation
@@ -185,6 +187,7 @@ During the user's conversation with AI, you can call MemOS to retrieve memories 
 As shown in the example below, if you have already tried [Add Message](/memos_cloud/mem_operations/add_message) and added historical conversation messages for user `memos_user_123`, you can copy and refer to this example to retrieve user memories.
 
 ::code-group
+
 ```python [Python (HTTP)]
 import os
 import json
@@ -214,6 +217,7 @@ res = requests.post(f"{BASE_URL}/search/memory", headers=headers, data=json.dump
 
 print(f"result: {res.json()}")
 ```
+
 ```python [Output]
  {
   "memory_detail_list": [
@@ -260,6 +264,7 @@ print(f"result: {res.json()}")
   "preference_note": "\n# Note:\nFactual memory is a summary of facts, while preference memory is a summary of user preferences.\nYour reply must not violate any of the user's preferences, whether explicit or implicit, and briefly explain why you answered this way to avoid conflicts.\n"
 }
 ```
+
 ::
 
 ### Get User Profile
@@ -269,6 +274,7 @@ If you need to analyze users for your developed application, or hope to display 
 As shown in the example below, if you have already tried [Add Message](/memos_cloud/mem_operations/add_message) and added historical conversation messages for user `memos_user_123`, you can copy this example to retrieve user memories with one click.
 
 ::code-group
+
 ```python [Python (HTTP)]
 import os
 import json
@@ -297,6 +303,7 @@ res = requests.post(f"{BASE_URL}/search/memory", headers=headers, data=json.dump
 
 print(f"result: {res.json()}")
 ```
+
 ```python[Output]
 # Example return (Showing recalled memory fragments)
 {
@@ -341,6 +348,7 @@ print(f"result: {res.json()}")
   "preference_note": ""
 }
 ```
+
 ::
 
 ### Search Memory with Filters
@@ -349,6 +357,7 @@ MemOS provides a powerful memory filter feature that allows developers to filter
 
 The following is an example of using a memory filter to filter out all memories that contain "Study Plan" in their tags and were created after 2025-11-09:
 ::code-group
+
 ```python [Python (HTTP)]
 import os
 import json
@@ -382,6 +391,7 @@ res = requests.post(f"{BASE_URL}/search/memory", headers=headers, data=json.dump
 
 print(f"result: {res.json()}")
 ```
+
 ```python [Output]
 Example return (showing recalled memory fragments)
 {
@@ -409,10 +419,10 @@ Example return (showing recalled memory fragments)
   "preference_note": ""
 }
 ```
+
 ::
 
 For more filtering options in the filter, please refer to [Memory Filters](/memos_cloud/features/basic/filters).
-
 
 ## 7. More Features
 

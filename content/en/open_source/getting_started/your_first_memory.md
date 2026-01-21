@@ -6,6 +6,7 @@ desc: Let’s build your first plaintext memory in MemOS! **GeneralTextMemory** 
 ## What You'll Learn
 
 By the end of this guide, you will:
+
 - Extract memories from plain text or chat messages.
 - Store them as semantic vectors.
 - Search and manage them using vector similarity.
@@ -15,7 +16,9 @@ By the end of this guide, you will:
 ### Memory Structure
 
 Every memory is stored as a `TextualMemoryItem`:
+
 - `memory`: the main text content (e.g., "The user loves tomatoes.")
+
 - `metadata`: extra details to make the memory searchable and manageable — type,
   time, source, confidence, entities, tags, visibility, and updated_at.
 
@@ -33,14 +36,12 @@ For each `TextualMemoryItem`:
 | `tags`        | `["food", "preferences"]` | Extra labels for grouping                  |
 | `visibility`  | `"private"`               | Who can access it                          |
 | `updated_at`  | `"2025-07-02T00:00:00Z"`  | Last modified                              |
-
 ::note
 **Best Practice**<br>You can define any metadata fields that make sense for your use case!
 ::
 
-
-
 ### The Core Steps
+
 When you run this example:
 
 1. **Extract:**
@@ -59,8 +60,6 @@ You can now `search` by semantic similarity, `update` by ID, or `delete` memorie
 **Hint**<br>Make sure your embedder's output dimension matches your vector DB's `vector_dimension`.
   Mismatch may cause search errors!
 ::
-
-
 
 ::note
 **Hint**<br>If your search results are too noisy or irrelevant, check whether your <code>embedder</code> config and vector DB are properly initialized.
@@ -103,8 +102,11 @@ Here's a minimal script to create, extract, store, and search a memory:
 
 First, create your minimal GeneralTextMemory config.
 It contains three key parts:
+
 - extractor_llm: uses an LLM to extract plaintext memories from conversations.
+
 - embedder: turns each memory into a vector.
+
 - vector_db: stores vectors and supports similarity search.
 
 ```python
@@ -143,8 +145,8 @@ config = MemoryConfigFactory(
 m = MemoryFactory.from_config(config)
 ```
 
-
 #### Extract Memories from Messages
+
 Give your LLM a simple dialogue and see how it extracts structured plaintext memories.
 
 ```python
@@ -156,7 +158,9 @@ memories = m.extract(
 )
 print("Extracted:", memories)
 ```
+
 You'll get a list of TextualMemoryItem, with each of them like:
+
 ```text
 TextualMemoryItem(
   id='...',
@@ -180,9 +184,7 @@ m.add([
 ])
 ```
 
-
 #### Search Memories
-
 Now test similarity search!
 Type any natural language query and find related memories.
 ```python
@@ -193,12 +195,12 @@ print("Search results:", results)
 #### Get Memories by ID
 
 Fetch any memory directly by its ID:
+
 ```python
 print("Get one by ID:", m.get("a19b6caa-5d59-42ad-8c8a-e4f7118435b4"))
 ```
 
 #### Update a Memory
-
 Need to fix or refine a memory?
 Update it by ID and re-embed the new version.
 ```python
@@ -220,10 +222,10 @@ m.update(
 )
 print("Updated:", m.get("a19b6caa-5d59-42ad-8c8a-e4f7118435b4"))
 ```
-
 #### Delete Memories
 
 Remove one or more memories cleanly
+
 ```python
 m.delete(["a19b6caa-5d59-42ad-8c8a-e4f7118435b4"])
 print("Remaining:", m.get_all())
@@ -232,37 +234,26 @@ print("Remaining:", m.get_all())
 #### Dump Memories to Disk
 
 Finally, dump all your memories to local storage:
+
 ```python
 m.dump("tmp/mem")
 print("Memory dumped to tmp/mem")
 ```
+
 By default, your memories are saved to:
+
 ```
 <your_dir>/<config.memory_filename>
 ```
 They can be reloaded anytime with `load()`.
-
 ::note
 By default, your dumped memories are saved to the file path you set in your config.
   Always check <code>config.memory_filename</code> if you want to customize it.
 ::
-
 ::
 
 Now your agent remembers — no more stateless chatbots!
 
 ## What's Next?
-
 Ready to level up?
-
 - **Try your own LLM backend:** Swap to OpenAI, HuggingFace, or Ollama.
-- **Explore [TreeTextMemory](/open_source/modules/memories/tree_textual_memory):** Build a graph-based,
-  hierarchical memory.
-- **Add [Activation Memory](/open_source/modules/memories/kv_cache_memory):** Cache key-value
-  states for faster inference.
-- **Dive deeper:** Check the [API Reference](/api-reference/search-memories) and [Examples](/open_source/getting_started/examples) for advanced workflows.
-
-::note
-**Try Graph Textual Memory**<br>Try switching to
-<code>TreeTextMemory</code> to add a graph-based, hierarchical structure to your memories.<br>Perfect for scenarios that need explainability and long-term structured knowledge.
-::

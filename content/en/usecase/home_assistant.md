@@ -8,11 +8,12 @@ desc: With the support of MemOS, a home assistant can connect daily chores and l
 When developing a home life assistant product, developers often encounter a problem: **once the dialogue context ends, user information is lost**.
 
 *   User casually assigns a to-do (“Take the kids to the zoo on Saturday”)
+
 *   User expresses a habit (“When reminding, first list the key points, then give one action suggestion”)
+
 *   User introduces family information (“My wife is Xiaoyun, the child is 6 years old”)
 
 If the assistant cannot remember this information, it will appear “heartless”: the next day when the user asks, “What plans do I have for the weekend?”, the assistant will have no idea what they are referring to.
-
 
 ### 1.1 Why not traditional RAG?
 
@@ -25,15 +26,15 @@ But the characteristics of traditional RAG determine that it is not suitable for
 | Can only mechanically return fragments, does not learn preferences | Automatically forms to-do items, preferences, and profiles from conversations |
 | Focuses on “common knowledge”, unsuitable for personal information | Designed for individualized scenarios, supports long-term tracking and invocation |
 
-
 ### 1.2 Why not build your own solution?
 
 Of course, you could try to store this information yourself, but this brings several challenges:
 
 *   **Complex storage and retrieval logic**: must distinguish dialogue content, long-term memory, preferences, and facts, and ensure they can be retrieved as needed.
-*   **Troublesome integration with LLMs**: not only storing data, but also embedding relevant information into the prompt before generating responses.
-*   **Poor scalability**: as features increase (to-dos, preferences, profiles), the code becomes increasingly hard to maintain.
 
+*   **Troublesome integration with LLMs**: not only storing data, but also embedding relevant information into the prompt before generating responses.
+
+*   **Poor scalability**: as features increase (to-dos, preferences, profiles), the code becomes increasingly hard to maintain.
 
 ### 1.3 Why use MemOS?
 
@@ -48,6 +49,7 @@ When making a technical choice, you can intuitively compare three approaches:
 Only two API calls are needed:
 
 *   `addMessage`: writes user or assistant messages into the system
+
 *   `searchMemory`: retrieves relevant memories before model response and injects them into the prompt
 
 With this, the assistant can truly appear “with memory”:
@@ -55,11 +57,11 @@ With this, the assistant can truly appear “with memory”:
 *   **Track to-dos**
     *   User says “Take the kids to the zoo on Saturday”
     *   A few days later asks “What plans do I have for the weekend?” → Assistant can answer accurately
-        
+
 *   **Maintain preferences** (future versions will support more fine-grained instruction completion)
     *   User says “When reminding, first list three key points + one short suggestion”
     *   Later asks “Help me plan next week’s housework distribution” → Assistant outputs in the preferred style
-        
+
 *   **Incorporate profiles**
     *   User says “My wife is Xiaoyun, the child is 6 years old”
     *   Later asks “Arrange a weekend activity for the family?” → Suggests a family-friendly activity plan
@@ -70,10 +72,12 @@ We will use MemOS cloud service to quickly implement a home life assistant “th
 When running the example script, developers will see complete logs:
 
 *   Requests/responses for each `addMessage` and `searchMemory` call
-*   Matched memory entries
-*   Concatenated and full instructions  ← TODO: coming soon
-*   Model responses (if LLM is not connected, a message will indicate [LLM not connected])
 
+*   Matched memory entries
+
+*   Concatenated and full instructions  ← TODO: coming soon
+
+*   Model responses (if LLM is not connected, a message will indicate [LLM not connected])
 
 ## 2. Example
 
@@ -84,7 +88,6 @@ Install required dependencies with pip:
 ```shell
 pip install MemoryOS -U
 ```
-
 
 ### 2.2 Full Code
 
@@ -258,7 +261,11 @@ if __name__ == "__main__":
 ### 2.3 Code Explanation
 
 1.   Set your MemOS API key and OpenAI key in environment variables  
+
 2.   Instantiate `HomeAssistant`  
+
 3.   Choose whether to run pre-configured dialogues (consumes 2 add calls and 2 search calls)  
+
 4.   Use the `main()` function to interact with the assistant in a dialogue loop  
+
 5.   The assistant calls `chat`, first performing `search` to retrieve memories, then using OpenAI for conversation, and finally performing `add` to store the memory

@@ -4,6 +4,7 @@ desc: In MemOS, memories are not stored statically; they continuously evolve ove
 ---
 
 ## 1. Capability Overview
+
 A memory, once generated, may gradually consolidate into a stable long-term preference, or be removed if it becomes outdated or invalid.  
 :::note
 **Tip**<br>
@@ -15,6 +16,7 @@ This evolutionary process is called **Memory Lifecycle Management**, and its goa
 
 * **Outdated or conflicting information** is archived or deleted to ensure consistency and compliance.<br>
 :::
+
 > Note that lifecycle management focuses on **the evolution of memory entries at the storage layer**; whether a specific memory is invoked during reasoning is still determined by the scheduling mechanism.
 
 <br>
@@ -41,83 +43,76 @@ Suppose you are building an **online education assistant** with MemOS to help st
 **Generated**
 
 *   A student says for the first time: “I always confuse quadratic functions with linear functions.”
-    
+
 *   The system extracts the memory:
-    
 
 ```json
 {"value": "The student often confuses quadratic and linear functions", "confidence": 0.8, "timestamp": "2025-09-11"}
 ```
 
 *   Status: **Generated**
-    
+
 *   Behavior: Stored into the memory base, awaiting future use.
-    
 
 ---
 
 **Activated**
 
 *   In the following problem-solving sessions, the system frequently calls this memory to assist with answers.
-    
+
 *   Status: **Activated**
-    
+
 *   Behavior: Prioritized by the scheduling mechanism and cached into the MemoryCube to improve retrieval speed.
-    
 
 ---
 
 **Merged**
 
 *   With more interactions, the system discovers that the student not only confuses linear and quadratic functions, but also struggles with exponential functions.
-    
+
 *   The system merges multiple similar memories into:
-    
 
 ```json
 {"value": "This student is confused about function concepts, especially linear, quadratic, and exponential functions", "confidence": 0.95}
 ```
 
 *   Status: **Merged**
-    
+
 *   Behavior: Old entries are compressed to form a new version, reducing redundancy.
-    
 
 ---
 
 **Archived**
 
 *   Three months later, the student has mastered function-related concepts, and this memory hasn’t been scheduled for a long time.
-    
+
 *   Status: **Archived**
-    
+
 *   Behavior: Migrated into MemVault (cold storage), excluded from reasoning by default, but available in “learning trajectory backtracking.”
-    
 
 ---
 
 **Expired**
 
 *   A year later, the student advances to a new grade level. The old “junior high function confusion” memory is judged invalid by policy.
-    
+
 *   Status: **Expired**
-    
+
 *   Behavior: Fully removed from the index, retaining only minimal audit info:
-    
 
 ```json
 {"deleted_memory_id": "12345", "deleted_at": "2026-09-11"}
 ```
+
 ---
 
 **Frozen (special state)**
 
 *   Meanwhile, the student’s “final exam evaluation report” is a compliance-related file that must not be modified.
-    
+
 *   Status: **Frozen**
-    
+
 *   Behavior: Locked against updates, retaining full history for audit and compliance inspection.
-    
 
 ## 3. Advanced: Deep Customization Options
 

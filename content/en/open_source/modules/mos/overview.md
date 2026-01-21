@@ -42,12 +42,14 @@ Main Handlers include:
 ## 2. API Details
 
 ### 2.1 Initialization
+
 Initialization is the foundation of system startup. All Handlers rely on a unified component registry and dependency-injection mechanism.
 
 - Component loading (`init_server`): The system first initializes all core components, including the LLM, storage layers (vector DB, graph DB), the scheduler, and various Memory Cubes.
 - Dependency injection (`HandlerDependencies`): To keep the code decoupled and testable, all components are wrapped into a `HandlerDependencies` object. Handlers receive this dependency container during instantiation, so they can access resources such as `naive_mem_cube`, `mem_reader`, or `feedback_server` on demand, without hard-coding initialization logic inside the Handler.
 
 ### 2.2 Add Memories (AddHandler)
+
 AddHandler is the primary entry point that converts external information into system memories. It supports chats, file uploads, and plain text. Besides writing, it also takes on part of the feedback routing responsibility.
 
 - Core capabilities:
@@ -57,6 +59,7 @@ AddHandler is the primary entry point that converts external information into sy
   - Multi-target writes: You can specify multiple target cubes via `writable_cube_ids`. If multiple targets are provided, the Handler builds a CompositeCubeView and fans out write tasks in parallel. If only one target is provided, it uses a lightweight SingleCubeView.
 
 ### 2.3 Search Memories (SearchHandler)
+
 SearchHandler provides semantic memory retrieval and is a key component for RAG (Retrieval-Augmented Generation).
 
 - Core capabilities:
@@ -66,6 +69,7 @@ SearchHandler provides semantic memory retrieval and is a key component for RAG 
   - Deep search integration: Can integrate `deepsearch_agent` to handle more complex retrieval requests that require multi-step reasoning.
 
 ### 2.4 Chat (ChatHandler)
+
 ChatHandler is the orchestrator of upper-layer business logic. It does not store data directly; instead, it composes other Handlers to complete end-to-end chat tasks.
 
 - Core capabilities:
@@ -75,6 +79,7 @@ ChatHandler is the orchestrator of upper-layer business logic. It does not store
   - Notification integration: Optionally integrates `online_bot` (for example, a DingTalk bot) to push notifications after responses are generated.
 
 ### 2.5 Feedback and Correction (FeedbackHandler)
+
 FeedbackHandler is the system's "self-correction" mechanism. It allows users to intervene in the AI's behavior to improve future retrieval and generation.
 
 - Core capabilities:
@@ -83,6 +88,7 @@ FeedbackHandler is the system's "self-correction" mechanism. It allows users to 
   - Precise targeting: In addition to conversation-history-based feedback, it supports `retrieved_memory_ids` so you can correct specific retrieved items, improving feedback effectiveness.
 
 ### 2.6 Memory Management (MemoryHandler)
+
 MemoryHandler provides low-level CRUD capabilities for memory data. It is mainly used for admin backends or cleanup tools.
 
 - Core capabilities:
@@ -90,6 +96,7 @@ MemoryHandler provides low-level CRUD capabilities for memory data. It is mainly
   - Direct dependency access: Some operations need to interact with the underlying `naive_mem_cube` component directly, bypassing business wrappers to provide the most efficient data operations.
 
 ### 2.7 Scheduler Status (SchedulerHandler)
+
 SchedulerHandler monitors the lifecycle of all async tasks in the system and is an important part of system observability.
 
 - Core capabilities:
@@ -98,6 +105,7 @@ SchedulerHandler monitors the lifecycle of all async tasks in the system and is 
   - Debugging support: Provides utilities such as `handle_scheduler_wait` to force async flows into synchronous waits in test scripts, which is useful for integration tests.
 
 ### 2.8 Suggested Next Questions (SuggestionHandler)
+
 SuggestionHandler improves interaction by predicting users' potential intent and generating "recommended questions" (Next Query Suggestion).
 
 - Core capabilities:
@@ -105,4 +113,3 @@ SuggestionHandler improves interaction by predicting users' potential intent and
     - Conversation-based: If `message` (recent conversation records) is provided, the system analyzes the context and generates 3 follow-up questions closely related to the current topic.
     - Memory-based: If there is no conversation context, the system uses `naive_mem_cube` to quickly retrieve the user's "recent memories" and generates questions related to the user's recent life/work status.
   - Multi-language support: Built-in Chinese and English prompt templates switch the language style automatically based on the `language` parameter.
-

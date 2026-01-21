@@ -7,6 +7,7 @@ title: Memory Structure Design Best Practices
 ### TreeTextMemory
 
 **Best for**: Knowledge management, research assistants, hierarchical data
+
 ```python
 tree_config = {
     "backend": "tree_text",
@@ -78,6 +79,7 @@ preference_config = {
 ### GeneralTextMemory
 
 **Best for**: Conversational AI, personal assistants, FAQ systems
+
 ```python
 general_config = {
     "backend": "general_text",
@@ -107,6 +109,7 @@ general_config = {
 ### NaiveTextMemory
 
 **Best for**: Simple applications, prototyping
+
 ```python
 naive_config = {
     "backend": "naive_text",

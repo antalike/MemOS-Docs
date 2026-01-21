@@ -42,6 +42,7 @@ Use huggingface-cli to download models or datasets. For example:
 For more detailed instructions and additional methods, please refer to [this link](https://hf-mirror.com/).
 
 ### Alternative Sources
+
 You may still encounter limitations accessing some models in your regions. In such cases, you can use modelscope:
 
 ::steps{level="4"}
@@ -62,6 +63,7 @@ Use modelscope to download models or datasets. For example:
   ```bash
   modelscope download --model 'Qwen/Qwen2-7b' --local_dir 'path/to/dir'
   ```
+
 - To download a dataset:
 
   ```bash
@@ -75,6 +77,7 @@ For more detailed instructions and additional methods, please refer to the [offi
 ## **Using Poetry**
 
 ### Network Errors during Installing
+
 To address network errors when using "poetry install" in your regions, you can follow these steps:
 
 ::steps{level="4"}
@@ -98,10 +101,12 @@ Run the command `poetry lock` in the terminal to reconfigure Poetry with the new
 
 **Tips:**
 Be aware that `poetry lock` will modify both Pyproject.toml and poetry.lock files. To avoid committing redundant changes:
-  - Option 1: After successful `poetry install`, revert to the git HEAD node using `git reset --hard HEAD`.
-  - Option 2: When executing `git add`, exclude the Pyproject.toml and poetry.lock files by specifying other files.
+
+- Option 1: After successful `poetry install`, revert to the git HEAD node using `git reset --hard HEAD`.
+- Option 2: When executing `git add`, exclude the Pyproject.toml and poetry.lock files by specifying other files.
 
 For future dependency management tasks like adding or removing packages, you can use the `poetry add` command:
+
 ```bash
 poetry add <lib_name>
 ```

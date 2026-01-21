@@ -24,16 +24,15 @@ Note
 When handling large-scale memories, you need precise control over the scope of memories that can be retrieved. Memory filters (Filter) provide fine-grained control over the retrieval scope, mainly including:
 
 *   **Filter memories by specific agent**: In a user's multi-agent memories, screen out memories belonging to a specific agent.
-    
+
 *   **Filter memories based on time**: Limit the retrieval range via timestamps, such as querying memories from a certain day or a specific time period.
-    
+
 *   **Specify custom range of memories**: Retrieve only memories that meet business conditions based on custom fields in meta information.
 
-    
 ## 2. How It Works  
+
 1. **Precise Filtering**: Based on the filtering conditions you set, the system performs strict filtering on the user's memory and precisely retains the candidate memory entries that meet the constraints.  
 2. **Retrieval and Recall**: Within the filtered candidate memories, [memory search](/memos_cloud/mem_operations/search_memory) is performed to recall the memory fragments most relevant to the user's query.
-
 
 ## 3. Filter Structure Description
 
@@ -70,7 +69,6 @@ During memory retrieval (search), you can filter on meta information attributes 
 | biz_id | str | `=` | `{"biz_id":"order_123456"}` |
 | scene | str | `=` | `{"scene":"Payment"}` |
 | custom_status | str | `=` | `{"custom_status":"VIP3"}` |
-
 
 ### 4.3 Tag Fields
 

@@ -33,6 +33,7 @@ Let's start using the MemOS memory system in the simplest way possible!
 ## What You'll Learn
 
 By the end of this guide, you will be able to:
+
 - Automatically extract structured memories from conversations using LLM
 - Store and manage memories in memory (no database required)
 - Search memories using keyword matching
@@ -44,6 +45,7 @@ By the end of this guide, you will be able to:
 ### Key Advantages
 
 ::list{icon="ph:check-circle-duotone"}
+
 - **Zero Dependencies**: No vector database or embedding model required
 - **Fast Startup**: Up and running in just a few lines of code
 - **Lightweight & Efficient**: Low resource footprint, fast execution
@@ -55,6 +57,7 @@ By the end of this guide, you will be able to:
 ### Suitable Scenarios
 
 ::list{icon="ph:lightbulb-duotone"}
+
 - Rapid prototyping and proof of concept
 - Simple conversational agents (< 1000 memories)
 - Testing and demo scenarios
@@ -128,15 +131,19 @@ Unlike `GeneralTextMemory`'s vector semantic search, `NaiveTextMemory` uses a **
 ::steps{}
 
 #### Step 1: Tokenization
+
 Break down the query and each memory content into lists of tokens
 
 #### Step 2: Calculate Match Score
+
 Count the number of overlapping tokens between query and memory
 
 #### Step 3: Sort
+
 Sort all memories by match count in descending order
 
 #### Step 4: Return Results
+
 Return the top-k memories as search results
 
 ::
@@ -154,6 +161,7 @@ Return the top-k memories as search results
 ::alert{type="info"}
 **Example Comparison**<br>
 Query: "cat" <br>
+
 - **Keyword Matching**: Only matches memories containing "cat"<br>
 - **Semantic Search**: Also matches memories about "pet", "kitten", "feline", etc.
 ::
@@ -377,31 +385,34 @@ Memories are stored in memory and will be lost after process restart. Remember t
 ### Best Suited For
 
 ::list{icon="ph:check-circle-duotone"}
+
 - **Rapid Prototyping**: No need to configure vector databases, get started in minutes
+
 - **Simple Conversational Agents**: Small-scale applications with < 1000 memories
 - **Testing and Demos**: Quickly validate memory extraction and retrieval logic
 - **Resource-Constrained Environments**: Scenarios where embedding models or vector databases cannot run
 - **Keyword Search**: Scenarios where query content directly matches memory text
 - **Learning and Teaching**: The best starting point for understanding MemOS memory system
 ::
-
 ### Not Recommended For
 
 ::list{icon="ph:x-circle-duotone"}
+
 - **Large-Scale Applications**: More than 10,000 memories (search performance degrades)
+
 - **Semantic Search Needs**: Need to understand synonyms (e.g., "cat" and "pet")
 - **Production Environments**: Strict performance and accuracy requirements
 - **Multilingual Scenarios**: Need cross-language semantic understanding
 - **Complex Relationship Reasoning**: Need to understand relationships between memories
 ::
-
 ::alert{type="info"}
 **Upgrade Path**<br>
 For the scenarios not recommended above, consider upgrading to:
+
 - [GeneralTextMemory](/open_source/modules/memories/general_textual_memory) - Vector semantic search, suitable for 10K-100K memories
+
 - [TreeTextMemory](/open_source/modules/memories/tree_textual_memory) - Graph structure storage, supports relationship reasoning and multi-hop queries
 ::
-
 ## Comparison with Other Memory Modules
 
 Choosing the right memory module is crucial for project success. This comparison helps you make the decision:
@@ -422,11 +433,12 @@ Choosing the right memory module is crucial for project success. This comparison
 
 ::alert{type="success"}
 **Selection Guide**<br>
+
 - **Just getting started?** → Start with NaiveTextMemory<br>
+
 - **Need semantic search?** → Use GeneralTextMemory<br>
 - **Need relationship reasoning?** → Choose TreeTextMemory
 ::
-
 ## Best Practices
 
 Follow these recommendations to make the most of NaiveTextMemory:
@@ -504,14 +516,20 @@ if memory_count > 800:
 Congratulations! You've mastered the core usage of NaiveTextMemory. Next, you can:
 
 ::list{icon="ph:arrow-right-duotone"}
+
 - **Upgrade to Vector Search**: Learn about [GeneralTextMemory](/open_source/modules/memories/general_textual_memory)'s semantic retrieval capabilities
+
 - **Explore Graph Structure**: Understand [TreeTextMemory](/open_source/modules/memories/tree_textual_memory)'s relationship reasoning features
 - **Integrate into Applications**: Check [Complete API Documentation](/api-reference/search-memories) to build production-grade applications
 - **Run Example Code**: Browse the `/examples/` directory for more practical cases
 - **Learn Graph Databases**: If you need advanced features, learn about [Neo4j](/open_source/modules/memories/neo4j_graph_db) or [PolarDB](/open_source/modules/memories/polardb_graph_db)
 ::
-
 ::alert{type="success"}
 **Tip**<br>
 NaiveTextMemory is the perfect starting point for learning MemOS. When your application needs more powerful features, you can seamlessly migrate to other memory modules!
+::
+
+::alert{type="success"}
+**Tip**<br>
+NaiveTextMemory is the perfect starting point for learning MemOS. When your application requires more powerful features, you can seamlessly migrate to other memory modules!
 ::

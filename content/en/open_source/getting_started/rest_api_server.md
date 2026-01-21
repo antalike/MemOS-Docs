@@ -4,6 +4,7 @@ desc: MemOS provides a REST API service written using FastAPI. Users can perform
 ---
 
 ![MemOS Architecture](https://cdn.memtensor.com.cn/img/memos_run_server_success_compressed.png)
+
 <div style="text-align: center; margin-top: 10px">APIs supported by MemOS REST API Server</div>  
 
 ### Features
@@ -14,22 +15,24 @@ desc: MemOS provides a REST API service written using FastAPI. Users can perform
 - Memory feedback: Feedback memory content for a specific user.
 - Chat with MemOS: Chat with MemOS, returning SSE streaming response.
 
-
 ## Run Locally
 
 ### 1、Local Download
+
 ```bash
 # Download the code to the local folder
 git clone https://github.com/MemTensor/MemOS
 ```
 
 ### 2、Configure Environment Variables
+
 ```bash
 # Enter the folder directory
 cd MemOS
 ```
 
 #### Create a `.env` file in the root directory and set your environment variables.
+
 ##### .env The quick mode configuration is as follows, Complete Mode Reference <a href="https://github.com/MemTensor/MemOS/blob/main/docker/.env.example">.env.example</a>.
 
 ```bash
@@ -135,12 +138,15 @@ ENABLE_CHAT_API=true
 CHAT_MODEL_LIST=[{"backend": "qwen", "api_base": "https://dashscope.aliyuncs.com/compatible-mode/v1", "api_key": "you_bailian_api_key", "model_name_or_path": "qwen3-max-preview", "extra_body": {"enable_thinking": true} ,"support_models": ["qwen3-max-preview"]}]
 
 ```
+
 ![MemOS bailian](https://cdn.memtensor.com.cn/img/get_key_url_by_bailian_compressed.png)
+
 <div style="text-align: center; margin-top: 10px">Bailian application API_KEY and BASE_URL example</div>
 
 Configure dependency versions in docker/requirement.txt （negligible）, Complete Mode Reference <a href="https://github.com/MemTensor/MemOS/blob/main/docker/requirements.txt">requirements.txt</a>.
 
 ### 4、Start Docker 
+
 ```bash
  # If Docker is not installed, please install the corresponding version. The download link is as follows:
  https://www.docker.com/
@@ -156,9 +162,10 @@ docker images
 
 ```
 
-
 ### Method 1： Docker use repository dependency package image/start (Recommended use)
+
 ::steps{level="4"}
+
 ```bash
 # Enter the Docker directory
 cd docker
@@ -168,8 +175,8 @@ cd docker
 
 #### Configure Dockerfile(cd docker)
 
-  
 Contains quick mode and full mode, distinguishing between using simplified packages (x86 and arm) and full packages (x86 and arm)
+
 ```bash
 ● Simplified package: Simplify dependencies related to Nvidia that are too large in size, achieve lightweight mirroring, and make local deployment lighter and faster.
 url: registry.cn-shanghai.aliyuncs.com/memtensor/memos-base:v1.0
@@ -181,6 +188,7 @@ url: registry.cn-shanghai.aliyuncs.com/memtensor/memos-full-base-arm:v1.0.0
 ```
 
 #### Configure Dockerfile(cd docker)
+
 ```bash
 # The current example uses a simplified package url
 FROM registry.cn-shanghai.aliyuncs.com/memtensor/memos-base:v1.0
@@ -198,38 +206,41 @@ EXPOSE 8000
 CMD ["uvicorn", "memos.api.server_api:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
 
 ```
+
 #### Build and start service using docker compose up:
+
 ```bash
 # Enter docker directory
 docker compose up
 ```
+
 ![MemOS buildComposeupSuccess](https://cdn.memtensor.com.cn/img/memos_build_composeup_success_compressed.png)
+
 <div style="text-align: center; margin-top: 10px">Example image, port as per docker custom configuration</div>  
 
 #### Access API via [http://localhost:8000/docs](http://localhost:8000/docs).
 
 ![MemOS Architecture](https://cdn.memtensor.com.cn/img/memos_run_server_success_compressed.png)
 
-
 #### Test cases (Add user memory->Query user memory) Refer to Docker Compose up test cases
 
 ::
 
-
-
 ### Method 2：Client Install with Docker Compose up
+
 ::steps{level="4"}
 Development Docker Compose up comes pre-configured with qdrant, neo4j.
 Running the server requires the `OPENAI_API_KEY` environment variable.
 
-
 #### Enter docker folder
+
 ```bash 
 # Enter docker folder from current directory
 cd docker
 ```
 
 #### Install corresponding dependency modules
+
 ```bash
 
 pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
@@ -237,7 +248,6 @@ pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
 # pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple/
 
 ```
-
 
 #### Start container using Docker Compose Up in docker directory (ensure vpn connects normally):
 
@@ -257,6 +267,7 @@ docker compose up
 #####  (Query user memory (stop if none) -> Add user memory -> Query user memory)
 
 ##### Add User Memory http://localhost:8000/product/add (POST)
+
 ```bash
 # Request params
 {
@@ -282,6 +293,7 @@ docker compose up
 ```
 
 ##### Query User Memory http://localhost:8000/product/search (POST)
+
 ```bash
 # Request params
 {
@@ -353,9 +365,7 @@ docker compose up
 # Check "neo4j_vec_db" and "EMBEDDING_DIMENSION" configured in get_neo4j_community_config method
 ```
 
-
 #### Modifications to server code or library code will automatically reload the server.
-
 
 ::
 
@@ -399,11 +409,12 @@ export PYTHONPATH=/you-file-absolute-path/MemOS/src
 
 After startup is complete, access API via [http://localhost:8000/docs](http://localhost:8000/docs).
 
-
 ::
 
 ### Method 4： Without Docker
+
 ::steps{level="4"}
+
 #### Reference configuration environment variables above, .env file should be configured
 
 #### Install Poetry for dependency management:
@@ -486,15 +497,6 @@ uvicorn memos.api.product_api:app --host 0.0.0.0 --port 8000 --reload
 
 ::
 
-
 ### Method 5：Start using PyCharm
 
 #### Run server_api
-```bash
-1. Enter MemOS/docker/Dockerfile file, modify run configuration
-# Start the docker
-CMD ["uvicorn", "memos.api.server_api:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
-
-2. Enter directory MemOS/src/memos/api directly run server_api.py
-
-```

@@ -1096,6 +1096,7 @@ Want to experience a text-based game built with MemOS firsthand? We provide a co
 **👉 [MemCube Interactive Text Game Demo - Hugging Face](https://huggingface.co/datasets/MemCube/interactive-text-game-demo)**
 
 This demo project includes:
+
 - ✅ **Complete Source Code**: Shows actual usage of MemOS components
 - ✅ **Setup Guide**: Step-by-step instructions for deployment and running
 - ✅ **Technical Documentation**: Detailed explanation of implementation principles and design ideas

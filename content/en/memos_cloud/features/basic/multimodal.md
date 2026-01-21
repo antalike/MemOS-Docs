@@ -2,6 +2,7 @@
 title: Multimodal Messages
 desc: Integrate images and documents into interactions with MemOS when adding messages.
 ---
+
 ::warning
 **[This article expands on how to add multimodal data in the [Add Memory - addMessage API], click here to view the detailed API documentation directly](/api_docs/core/add_message)**
 ::
@@ -98,6 +99,7 @@ print(json.dumps(res.json(), indent=2, ensure_ascii=False))
 ```
 
 ### Output Result
+
 ```python
 {
   "code": 0,
@@ -154,16 +156,14 @@ print(json.dumps(res.json(), indent=2, ensure_ascii=False))
 MemOS currently supports the following media types:
 
 1.  **Images** - JPG, PNG, and other common image formats
-    
+
 2.  **Documents** - PDF, DOCX, DOC, TXT
-    
 
 ## 3. File Upload Limits
 
 1.  When adding messages, upload no more than 20 files per request, with a single file size not exceeding 100 MB and 200 pages.
-    
+
 2.  When the number of files, single file size, or page count exceeds the above limits, the current task will be judged as "Processing Failed". You need to adjust according to the limit requirements and re-initiate the request.
-    
 
 ## 4. Usage Examples
 
