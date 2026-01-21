@@ -39,7 +39,7 @@ export function useStreamFetch() {
     let timeoutId: NodeJS.Timeout | null = null
     let transformController: TransformStreamDefaultController<Uint8Array> | null = null
 
-    // 超时控制
+    // Timeout control
     const resetTimeout = () => {
       if (timeoutId) clearTimeout(timeoutId)
       if (timeout > 0) {
@@ -61,19 +61,19 @@ export function useStreamFetch() {
       if (timeoutId) clearTimeout(timeoutId)
     }
 
-    // 使用 TransformStream 监听数据流向
+    // Use TransformStream to monitor data flow
     const transformStream = new TransformStream<Uint8Array, Uint8Array>({
       start(controller) {
         transformController = controller
         resetTimeout()
       },
       transform(chunk, controller) {
-        // 每收到一个数据块(chunk)，就重置倒计时
+        // Reset timeout on every received chunk
         resetTimeout()
         controller.enqueue(chunk)
       },
       flush() {
-        // 传输结束，清除定时器
+        // Transmission finished, clear timer
         clearTimeoutTimer()
       }
     })
@@ -96,9 +96,9 @@ export function useStreamFetch() {
       if (!response || !response.pipeThrough) {
         throw new Error('Invalid stream response')
       }
-      // 1. 将原始流接入监控管道
+      // 1. Pipe original stream into monitoring pipeline
       const monitoredStream = response.pipeThrough(transformStream)
-      // 2. 将二进制流转换为好用的对象流（Stream<T>）
+      // 2. Convert binary stream to usable object stream (Stream<T>)
       return Stream.fromSSEResponse<T>(monitoredStream, controller)
     } catch (error: unknown) {
       console.log('error: ', error)
