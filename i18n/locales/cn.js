@@ -95,6 +95,8 @@ export default {
     hideChildAttrs: '隐藏属性'
   },
   assistant: {
-    title: '助手'
+    title: '助手',
+    suggestions: '参考问题',
+    inputPlaceholder: '请输入你想了解的问题...'
   }
 }

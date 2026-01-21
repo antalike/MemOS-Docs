@@ -95,6 +95,8 @@ export default {
     hideChildAttrs: 'Hide child attributes'
   },
   assistant: {
-    title: 'Assistant'
+    title: 'Assistant',
+    suggestions: 'Suggestions',
+    inputPlaceholder: 'Type your messages here...'
   }
 }

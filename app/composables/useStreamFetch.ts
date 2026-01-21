@@ -28,11 +28,9 @@ export function useStreamFetch() {
     // Support external abort signal
     if (signal) {
       if (signal.aborted) {
-        console.log('stop3')
         controller.abort()
       } else {
         signal.addEventListener('abort', () => {
-          console.log('stop4')
           controller.abort()
         })
       }
@@ -55,7 +53,6 @@ export function useStreamFetch() {
           }
           // Abort the fetch request
           controller.abort()
-          console.log('stop5')
         }, timeout)
       }
     }

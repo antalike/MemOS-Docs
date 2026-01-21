@@ -14,6 +14,21 @@ const messages = ref<Message[]>([])
 const status = ref<AssistantStatus>('ready')
 const error = ref<string | null>(null)
 const userInput = ref('')
+const suggestions = ref<string[]>([])
+
+// 生成唯一的 Session ID
+function generateSessionId() {
+  if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+    return crypto.randomUUID()
+  }
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    const r = Math.random() * 16 | 0
+    const v = c === 'x' ? r : (r & 0x3 | 0x8)
+    return v.toString(16)
+  })
+}
+
+const sessionId = generateSessionId()
 
 export const useAssistant = () => {
   // 派生状态
@@ -37,6 +52,10 @@ export const useAssistant = () => {
   // 业务逻辑 - 消息处理
   function setUserInput(value: string) {
     userInput.value = value
+  }
+
+  function setSuggestions(value: string[]) {
+    suggestions.value = value
   }
 
   function addMessage(message: Message) {
@@ -78,11 +97,26 @@ export const useAssistant = () => {
     }
   }
 
-  // 核心业务逻辑 - 发送消息
-  async function sendMessage() {
-    const input = userInput.value.trim()
+  function updateLastMessage(content: string) {
+    const lastIndex = messages.value.length - 1
+    const lastMessage = messages.value[lastIndex]
+    if (lastMessage) {
+      messages.value = [
+        ...messages.value.slice(0, lastIndex),
+        {
+          id: lastMessage.id,
+          role: lastMessage.role,
+          content: content,
+          createAt: lastMessage.createAt
+        }
+      ]
+    }
+  }
 
-    if (!input) return
+  // 核心业务逻辑 - 发送消息
+  async function sendMessage(input: string) {
+    const query = input.trim()
+    if (!query) return
 
     // 初始化会话状态
     initialize()
@@ -91,13 +125,15 @@ export const useAssistant = () => {
     const userMessage: Message = {
       id: Date.now().toString(),
       role: 'user',
-      content: input,
+      content: query,
       createAt: new Date()
     }
     addMessage(userMessage)
 
     // 清空输入框
-    setUserInput('')
+    if (userInput.value) {
+      setUserInput('')
+    }
 
     // 添加助手占位消息
     const assistantId = (Date.now() + 1).toString()
@@ -112,47 +148,31 @@ export const useAssistant = () => {
     status.value = 'submitted'
 
     try {
-      // 准备请求消息
-      const requestMessages = messages.value
-        .map(m => ({
-          role: m.role,
-          content: m.content || (m.role === 'assistant' ? ' ' : '')
-        }))
-        .slice(0, -1) // 移除最后的空助手消息
-
       // 开始流式请求
       currentController = new AbortController()
-      const stream = await reqStream<{ content: string, error?: string }>('/api/chat', {
+      const stream = await reqStream<{ type: string, data: string | string[], error?: string }>('/memos-ai/kb_stream_chat', {
         method: 'POST',
         body: {
-          model: 'deepseek-chat',
-          messages: requestMessages
+          user_id: sessionId,
+          query
         },
         signal: currentController.signal
       })
 
       // 处理流式响应
-      status.value = 'streaming'
       let assistantContent = ''
 
       for await (const chunk of stream) {
-        if (chunk.content) {
-          assistantContent += chunk.content
+        if (status.value !== 'streaming') {
+          status.value = 'streaming'
+        }
+        if (chunk.type === 'text' && chunk.data) {
+          assistantContent += chunk.data
 
           // 直接更新最后一条消息，创建新数组以触发响应式更新和自动滚动
-          const lastIndex = messages.value.length - 1
-          const lastMessage = messages.value[lastIndex]
-          if (lastMessage) {
-            messages.value = [
-              ...messages.value.slice(0, lastIndex),
-              {
-                id: lastMessage.id,
-                role: lastMessage.role,
-                content: assistantContent,
-                createAt: lastMessage.createAt
-              }
-            ]
-          }
+          updateLastMessage(assistantContent)
+        } else if (chunk.type === 'suggestions' && Array.isArray(chunk.data)) {
+          setSuggestions(chunk.data as string[])
         } else if (chunk.error) {
           throw new Error(chunk.error)
         }
@@ -161,9 +181,8 @@ export const useAssistant = () => {
       // 完成
       status.value = 'ready'
     } catch (error) {
-      // 错误处理
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error'
-      setError(errorMessage)
+      status.value = 'ready'
+      updateLastMessage('系统异常，请稍后再试')
       console.error('Failed to get assistant response:', error)
     } finally {
       currentController = null
@@ -179,6 +198,7 @@ export const useAssistant = () => {
     messages,
     status,
     error,
+    suggestions,
 
     // 派生状态 - 便于使用
     isStreaming,

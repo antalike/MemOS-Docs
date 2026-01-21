@@ -51,7 +51,7 @@ const config: NuxtConfig = {
     public: {
       ...envConfig,
       version: pkg.version,
-      apiBase: 'http://localhost:8000'
+      apiBase: 'https://apigw.memtensor.cn'
     }
   },
 
@@ -83,7 +83,10 @@ const config: NuxtConfig = {
   vite: {
     plugins: [
       yaml()
-    ]
+    ],
+    optimizeDeps: {
+      include: ['debug']
+    }
   },
 
   ssr: true,

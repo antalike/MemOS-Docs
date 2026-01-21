@@ -4,22 +4,35 @@ const {
   messages,
   status,
   userInput,
+  suggestions,
   toggleOpen,
   sendMessage,
   stopStreaming
 } = useAssistant()
 
 const onEnter = (e: KeyboardEvent) => {
-  e.stopImmediatePropagation()
+  if (e.isComposing) {
+    e.stopImmediatePropagation()
+    return
+  }
 }
 
 const handleFormSubmit = async () => {
   try {
-    await sendMessage()
+    await sendMessage(userInput.value)
   } catch (error) {
     console.error('Failed to submit message:', error)
   }
 }
+
+const suggestionsRef = ref<HTMLElement | null>(null)
+
+watch([suggestions, status], async () => {
+  if (status.value === 'ready' && suggestions.value?.length > 0) {
+    await nextTick()
+    suggestionsRef.value?.scrollIntoView({ behavior: 'smooth', block: 'end' })
+  }
+})
 </script>
 
 <template>
@@ -78,11 +91,31 @@ const handleFormSubmit = async () => {
           </p>
         </template>
       </UChatMessages>
+      <div
+        v-show="status === 'ready' && suggestions.length"
+        ref="suggestionsRef"
+        class="space-y-3 mb-4"
+      >
+        <div class="text-sm text-gray-300">
+          {{ $t('assistant.suggestions') }}
+        </div>
+        <ul class="text-sm text-primary space-y-2">
+          <li
+            v-for="(item, index) in suggestions"
+            :key="index"
+            class="hover:text-primary/80 cursor-pointer"
+            @click="sendMessage(item)"
+          >
+            {{ item }}
+          </li>
+        </ul>
+      </div>
       <template #prompt>
         <UChatPrompt
           v-model="userInput"
           class="border border-white/10 px-2 rounded-t-lg"
           variant="soft"
+          :placeholder="$t('assistant.inputPlaceholder')"
           :ui="{
             body: 'items-end'
           }"
