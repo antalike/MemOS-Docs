@@ -1,5 +1,11 @@
 <script setup lang="ts">
 const { toggleOpen } = useAssistant()
+const { trackEvent } = useArms()
+
+function onToggleOpen() {
+  trackEvent('点击Ask AI', '按钮点击')
+  toggleOpen()
+}
 </script>
 
 <template>
@@ -11,7 +17,7 @@ const { toggleOpen } = useAssistant()
       base: 'rounded-lg cursor-pointer',
       leadingIcon: 'size-4'
     }"
-    @click="toggleOpen"
+    @click="onToggleOpen"
   >
     Ask AI
   </UButton>
