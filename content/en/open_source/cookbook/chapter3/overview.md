@@ -43,7 +43,7 @@ This chapter will guide you to build an intelligent memory analysis system based
 
 **Core Technical Architecture**:
 
-::cdn-img{src="/memos/cookbook-chapter3-core-en.png" alt="Cookbook-Chapter3-Core"}
+::cdn-img{src="/memos/cookbook-chapter3-core.png" alt="Cookbook-Chapter3-Core"}
 ::
 
 **Data Processing Pipeline**:
@@ -1098,6 +1098,7 @@ Want to experience a text-based game built with MemOS firsthand? We provide a co
 **👉 [MemCube Interactive Text Game Demo - Hugging Face](https://huggingface.co/datasets/MemCube/interactive-text-game-demo)**
 
 This demo project includes:
+
 - ✅ **Complete Source Code**: Shows actual usage of MemOS components
 - ✅ **Setup Guide**: Step-by-step instructions for deployment and running
 - ✅ **Technical Documentation**: Detailed explanation of implementation principles and design ideas
