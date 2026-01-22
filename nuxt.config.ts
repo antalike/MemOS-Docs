@@ -30,20 +30,6 @@ const config: NuxtConfig = {
     '@nuxt/image',
     '@nuxt/ui-pro',
     '@nuxt/content',
-    [
-      'nuxt-openapi-docs-module',
-      {
-        folder: './content',
-        name: 'Api Docs',
-        list: true,
-        prefix: '/api',
-        files: function () {
-          return {
-            'api.json': 'API Proxy'
-          }
-        }
-      }
-    ],
     '@nuxtjs/i18n'
   ],
 
