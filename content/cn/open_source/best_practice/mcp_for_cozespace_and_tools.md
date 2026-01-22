@@ -205,13 +205,15 @@ Connected to MCP server
 
 ### 步骤1: 打开Coze空间并进入工具配置页面
 
-![Coze空间配置页面](https://statics.memtensor.com.cn/memos/coze_space_1.png)
+::cdn-img{src="memos/coze_space_1.png" alt="Coze空间配置页面"}
+::
 
 ### 步骤2: 添加自定义MCP工具
 
 在工具配置页面中添加自定义工具：
 
-![添加自定义工具](https://statics.memtensor.com.cn/memos/coze_space_2.png)
+::cdn-img{src="memos/coze_space_2.png" alt="添加自定义工具"}
+::
 
 ### 步骤3: 配置MCP连接地址
 
@@ -255,15 +257,18 @@ python src/memos/api/server_api.py --port 8001
 1. 在Coze中选择"IDE插件"创建方式
 2. 配置请求到您部署的Server API服务
 
-![Coze IDE插件配置](https://statics.memtensor.com.cn/memos/coze_tools_1.png)
+::cdn-img{src="memos/coze_tools_1.png" alt="Coze IDE插件配置"}
+::
 
 ### 步骤3: 实现add_memory工具
 
-![配置add_memory操作](https://statics.memtensor.com.cn/memos/coze_tools_2.png)
+::cdn-img{src="memos/coze_tools_2.png" alt="配置add_memory操作"}
+::
 
 **代码示例：** IDE中配置`add_memory`操作并发布：
 
-![配置add_memory操作](https://statics.memtensor.com.cn/memos/coze_tools_2.png)
+::cdn-img{src="memos/coze_space_2.png" alt="配置add_memory操作"}
+::
 详细代码如下
 
 ```python 
@@ -330,7 +335,8 @@ def chat_handler(args: Args[Input]) -> Output:
 
 发布完成后，可以在"我的资源"中查看插件：
 
-![发布后的插件资源](https://statics.memtensor.com.cn/memos/coze_tools_3.png)
+::cdn-img{src="memos/coze_tools_3.png" alt="发布后的插件资源"}
+::
 
 ### 步骤5: 集成到智能体工作流
 
@@ -403,7 +409,8 @@ def chat_handler(args: Args[Input]) -> Output:
 
 发布完成后，可以在"我的资源"中查看插件，以插件形式融入智能体工作流：
 
-![发布后的插件资源](https://statics.memtensor.com.cn/memos/coze_tools_3.png)
+::cdn-img{src="memos/coze_tools_3.png" alt="发布后的插件资源"}
+::
 
 ### 构建智能体并测试
 

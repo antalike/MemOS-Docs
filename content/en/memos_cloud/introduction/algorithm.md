@@ -54,7 +54,8 @@ In short, MemOS aims to:
 At its core, MemOS treats “memory” as an independent system layer—like computation and storage—becoming a fundamental capability for AI applications.  
 Its overall architecture can be summarized as a **three-layer structure**: <span style="color: rgb(61, 170, 214);">**API & Application Interface Layer, Memory Scheduling & Management Layer, Memory Storage & Infrastructure Layer**</span>
 
-![art.gif](https://statics.memtensor.com.cn/memos/art.gif)
+::cdn-img{src="/memos/art.gif" alt="art.gif"}
+::
 
 *   In the <span style="color: rgb(61, 170, 214);">**API & Application Interface Layer**</span>, MemOS provides standardized Memory APIs. Developers can perform operations such as <span style="color: rgb(61, 170, 214);">**memory creation, deletion, and updating**</span> through simple interfaces, giving large models persistent memory capabilities for multi-turn conversations, long-term tasks, and cross-session personalization.
     
@@ -95,7 +96,7 @@ From Next-Token Prediction to Next-Scene Prediction
 *   With precise awareness of conversation turns and time gaps, the system intelligently predicts which memory elements may be needed in the next scene. It dynamically routes and preloads the required plaintext, parameter, and activating memories, ensuring immediate hits during generation and maximizing efficiency and fluency of reasoning.
     
 
-![640.gif](https://statics.memtensor.com.cn/memos/ani.gif)
+::cdn-img{src="/memos/ani.gif" alt="640.gif"}
 
 <figure style="width: fit-content">
   <img src="https://cdn.memtensor.com.cn/img/1758687680524_waiu4s_compressed.png " alt="Core idea of memory scheduling" />

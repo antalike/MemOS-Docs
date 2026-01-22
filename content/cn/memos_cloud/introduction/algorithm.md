@@ -53,7 +53,8 @@ desc: 让大模型从一次性对话工具，进化为真正具有长期记忆�
 
 MemOS 的设计核心，是把「记忆」作为一个独立系统层，和计算、存储一样，成为 AI 应用的基础能力。它的整体架构可以概括为 **三层结构**： <span style="color: rgb(61, 170, 214);">**API 与应用接口层、记忆调度与管理层、记忆存储与基础设施层**</span>
 
-![art.gif](https://statics.memtensor.com.cn/memos/art.gif)
+::cdn-img{src="/memos/art.gif" alt="art.gif"}
+::
 
 *   在 <span style="color: rgb(61, 170, 214);">**API 与应用接口层**</span>，MemOS 提供了标准化的 Memory API，开发者可以通过简单的接口实现<span style="color: rgb(61, 170, 214);">**记忆创建、删除、更新**</span>等操作，让大模型具备易于调用和扩展的持久记忆能力，支持多轮对话、长期任务和跨会话个性化等复杂应用场景。
     
@@ -94,7 +95,8 @@ MemOS 的设计核心，是把「记忆」作为一个独立系统层，和计�
 *   依托对对话轮次与时间差的精准感知，系统能够智能预测下一个场景中可能被调用的记忆内容，并动态路由与预加载所需的明文、参数和激活记忆，从而在生成阶段即刻命中，最大化信息引入的效率和推理的流畅性。
     
 
-![640.gif](https://statics.memtensor.com.cn/memos/ani.gif)
+::cdn-img{src="/memos/ani.gif" alt="640.gif"}
+::
 
 <figure style="width: fit-content">
   <img src="https://cdn.memtensor.com.cn/img/1758687680524_waiu4s_compressed.png " alt="记忆调度的核心思路" />

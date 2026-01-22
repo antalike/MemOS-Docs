@@ -3,7 +3,8 @@ title: 什么是 MemOS？
 desc: "**MemOS** 是为大语言模型 (LLMs) 和智能体打造的**记忆操作系统**。它将记忆视为**可管理、调度和解释的一级资源**，而不是隐藏在模型权重内部的不透明层。"
 ---
 
-![MemOS Architecture](https://statics.memtensor.com.cn/memos/memos-architecture.png)
+::cdn-img{src="/memos/memos-architecture.png" alt="MemOS Architecture"}
+::
 
 
 随着 LLMs 的发展，它们需要处理复杂任务——如多轮对话、长期规划、决策制定和个性化用户体验——**赋予它们结构化、管理和演进记忆的能力**对于实现真正的长期智能和适应性变得至关重要。

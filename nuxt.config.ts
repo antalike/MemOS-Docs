@@ -15,12 +15,15 @@ const envConfig = await import(`./envConfig/config.${env}.ts`).then(m => m.defau
   }
 })
 
+const staticCdnUrl = envConfig.staticCdnUrl || 'https://statics.memtensor.com.cn'
+const cdnUrl = envConfig.cdnUrl || 'https://cdn.memtensor.com.cn'
+
 const config: NuxtConfig = {
   app: {
     head: {
       script: [
-        { src: 'https://cdn.memtensor.com.cn/file/js-cookie-3.0.5.min.js', type: 'text/javascript' },
-        { src: 'https://cdn.memtensor.com.cn/file/locale.1.1.2.min.js', type: 'text/javascript' }
+        { src: `${cdnUrl}/file/js-cookie-3.0.5.min.js`, type: 'text/javascript' },
+        { src: `${cdnUrl}/file/locale.1.1.2.min.js`, type: 'text/javascript' }
       ]
     }
   },
@@ -37,7 +40,9 @@ const config: NuxtConfig = {
     public: {
       ...envConfig,
       version: pkg.version,
-      apiBase: 'https://apigw.memtensor.cn'
+      apiBase: 'https://apigw.memtensor.cn',
+      staticCdnUrl,
+      cdnUrl
     }
   },
 

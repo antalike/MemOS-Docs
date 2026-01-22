@@ -21,7 +21,8 @@ As large language models (LLMs) evolve to tackle advanced tasks—such as multi-
 
 **MemOS** addresses these challenges by redefining memory as a core, first-class resource with unified structure, lifecycle management, and scheduling strategies. It provides a Python package that delivers a unified memory layer for LLM-based applications, enabling persistent, structured, and efficient memory operations. This empowers LLMs with long-term knowledge retention, robust context management, and memory-augmented reasoning, supporting more intelligent and adaptive behaviors.
 
-![MemOS Architecture](https://statics.memtensor.com.cn/memos/memos-architecture.png)
+::cdn-img{src="/memos/memos-architecture.png" alt="MemOS Architecture"}
+::
 
 ## Key Features
 

@@ -21,7 +21,7 @@ Add YAML frontmatter at the top of your file to provide metadata. The frontmatte
 - `banner` (string) - URL to a banner image displayed at the top of the page
 - `links` (array) - Array of related links with labels, URLs, and icons
 
-![Frontmatter Example](https://statics.memtensor.com.cn/memos/frontmatter.png)
+::cdn-img{src="/memos/frontmatter.png" alt="Frontmatter Example"}
 ::
 
 **Complete Frontmatter Example:**
