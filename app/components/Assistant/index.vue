@@ -46,9 +46,12 @@ watch([suggestions, status], async () => {
         class="overflow-y-auto h-full border-l border-default -ml-px"
         side="right"
         resizable
-        :default-size="368"
-        :min-size="368"
+        :default-size="400"
+        :min-size="400"
         :max-size="576"
+        :ui="{
+          body: 'pb-4'
+        }"
       >
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-1.5">
@@ -73,7 +76,7 @@ watch([suggestions, status], async () => {
 
         <UChatPalette
           :ui="{
-            content: 'scrollbar-hide'
+            content: 'scrollbar-hide pr-px'
           }"
         >
           <UChatMessage
@@ -90,12 +93,12 @@ watch([suggestions, status], async () => {
             :status="status"
             should-auto-scroll
             :ui="{
-              root: 'px-0'
+              root: 'px-0 [&>article]:last-of-type:min-h-auto'
             }"
           >
             <template #content="{ message }">
               <AssistantMDC
-                v-if="message.role === 'assistant'"
+                v-if="message.role === 'assistant' && message.content"
                 :value="message.content"
                 class="text-sm"
               />
@@ -140,6 +143,8 @@ watch([suggestions, status], async () => {
             >
               <UChatPromptSubmit
                 size="sm"
+                submitted-icon="i-lucide-circle"
+                streaming-icon="i-lucide-circle"
                 :status="status"
                 @stop="stopStreaming"
               />
