@@ -1,6 +1,6 @@
 ---
 title: MemChat
-desc: "MemChat 是你的 Agent 的‘外交官’，它协调用户输入、记忆检索与 LLM 生成，打造连贯且具备长期记忆的对话体验。"
+desc: "MemChat 是你的“记忆外交官”，它协调用户输入、记忆检索与 LLM 生成，打造连贯且具备长期记忆的对话体验。"
 ---
 
 ## 1. 简介
@@ -17,7 +17,7 @@ desc: "MemChat 是你的 Agent 的‘外交官’，它协调用户输入、记�
 在回答用户问题前，MemChat 会自动从 MemCube 中检索相关的 Textual Memory（文本记忆），将其注入到 Prompt 中。这使得 Agent 能够基于过往的交互历史或知识库来回答问题，而不仅仅依赖于 LLM 的预训练知识。
 
 ### 自动记忆沉淀 (Auto-Memorization)
-对话不仅仅是消耗 tokens，MemChat 会利用 Extractor LLM 自动从对话流中提取有价值的信息（如用户偏好、事实知识），并将其存储到 MemCube 中。这个过程是自动化的，无需用户手动干预。
+对话后，MemChat 会利用 Extractor LLM 自动从对话流中提取有价值的信息（如用户偏好、事实知识），并存储到 MemCube 中。无需用户手动干预，整个过程完全自动化。
 
 ### 上下文管理
 自动管理对话历史窗口 (`max_turns_window`)。当对话过长时，它会智能裁剪旧的上下文，同时依赖检索到的长期记忆来保持对话的连贯性，有效解决了 LLM Context Window 的限制问题。
@@ -34,7 +34,6 @@ desc: "MemChat 是你的 Agent 的‘外交官’，它协调用户输入、记�
 *   **`simple.py`**: **默认实现 (SimpleMemChat)**。这是一个开箱即用的 REPL（Read-Eval-Print Loop）实现，包含了完整的“检索 -> 生成 -> 存储”闭环逻辑。
 *   **`base.py`**: **接口定义 (BaseMemChat)**。定义了 MemChat 的基本行为，如 `run()` 和 `mem_cube` 属性。
 *   **`factory.py`**: **工厂类**。负责根据配置 (`MemChatConfig`) 实例化具体的 MemChat 对象。
-*   **`llm_chat.py`**: **LLM 交互层**。处理与底层 LLM 的具体通信细节。
 
 ---
 
