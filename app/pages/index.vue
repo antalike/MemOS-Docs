@@ -61,7 +61,8 @@ const items = computed(() => localeItems.value.map((item, index) => ({
         :to="item.to"
       >
         <div
-          class="flex items-center justify-center h-40 bg-[#171823] bg-cover rounded-xl mb-8 bg-[url(https://cdn.memtensor.com.cn/img/1766476630033_bbjhot_compressed.png)] group-hover:bg-[url(https://cdn.memtensor.com.cn/img/1766476753478_f7b4hm_compressed.png)]"
+          class="flex items-center justify-center h-40 bg-[#171823] bg-cover rounded-xl mb-8 group-hover:bg-[url(https://cdn.memtensor.com.cn/img/1766476753478_f7b4hm_compressed.png)]"
+          :style="{ backgroundImage: `url(${useCdnUrl('/img/1766476630033_bbjhot_compressed.png')})` }"
         >
           <UIcon
             :name="item.icon!"

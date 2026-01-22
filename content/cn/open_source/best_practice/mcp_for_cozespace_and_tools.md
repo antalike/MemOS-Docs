@@ -24,7 +24,7 @@ MemOS提供两种MCP部署方式，您可以根据实际需求选择：
 请访问 [MemOS云服务MCP配置指南](https://memos-docs.openmem.net/cn/mcp_agent/mcp/guide) 获取详细的配置说明。
 
 主要步骤：
-1. 在 [MemOS API控制台](https://memos-dashboard.openmem.net/cn/apikeys/) 注册账号并获取API Key
+1. 在 [MemOS API控制台]({{dashboardUrl}}/cn/apikeys/) 注册账号并获取API Key
 2. 在MCP客户端中配置 `@memtensor/memos-api-mcp` 服务
 3. 设置环境变量（`MEMOS_API_KEY`、`MEMOS_USER_ID`、`MEMOS_CHANNEL`）
 
@@ -205,15 +205,13 @@ Connected to MCP server
 
 ### 步骤1: 打开Coze空间并进入工具配置页面
 
-::cdn-img{src="memos/coze_space_1.png" alt="Coze空间配置页面"}
-::
+![Coze空间配置页面]({{staticCdnUrl}}/memos/coze_space_1.png)
 
 ### 步骤2: 添加自定义MCP工具
 
 在工具配置页面中添加自定义工具：
 
-::cdn-img{src="memos/coze_space_2.png" alt="添加自定义工具"}
-::
+![添加自定义工具]({{staticCdnUrl}}/memos/coze_space_2.png)
 
 ### 步骤3: 配置MCP连接地址
 
@@ -257,18 +255,15 @@ python src/memos/api/server_api.py --port 8001
 1. 在Coze中选择"IDE插件"创建方式
 2. 配置请求到您部署的Server API服务
 
-::cdn-img{src="memos/coze_tools_1.png" alt="Coze IDE插件配置"}
-::
+![Coze IDE插件配置]({{staticCdnUrl}}/memos/coze_tools_1.png)
 
 ### 步骤3: 实现add_memory工具
 
-::cdn-img{src="memos/coze_tools_2.png" alt="配置add_memory操作"}
-::
+![配置add_memory操作]({{staticCdnUrl}}/memos/coze_tools_2.png)
 
 **代码示例：** IDE中配置`add_memory`操作并发布：
 
-::cdn-img{src="memos/coze_space_2.png" alt="配置add_memory操作"}
-::
+![配置add_memory操作]({{staticCdnUrl}}/memos/coze_space_2.png)
 详细代码如下
 
 ```python 
@@ -335,8 +330,7 @@ def chat_handler(args: Args[Input]) -> Output:
 
 发布完成后，可以在"我的资源"中查看插件：
 
-::cdn-img{src="memos/coze_tools_3.png" alt="发布后的插件资源"}
-::
+![发布后的插件资源]({{staticCdnUrl}}/memos/coze_tools_3.png)
 
 ### 步骤5: 集成到智能体工作流
 
@@ -409,8 +403,7 @@ def chat_handler(args: Args[Input]) -> Output:
 
 发布完成后，可以在"我的资源"中查看插件，以插件形式融入智能体工作流：
 
-::cdn-img{src="memos/coze_tools_3.png" alt="发布后的插件资源"}
-::
+![发布后的插件资源]({{staticCdnUrl}}/memos/coze_tools_3.png)
 
 ### 构建智能体并测试
 

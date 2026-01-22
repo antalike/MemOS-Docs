@@ -6,6 +6,7 @@ const props = defineProps<{
 
 const collectionName = inject<CollectionName>('collectionName')
 const { getSecurityWithTypes } = useOpenApi(collectionName)
+const { replaceVariables } = useVariableReplacement()
 
 const securitys = computed<SecurityProps[]>(() => {
   return getSecurityWithTypes(props.path, props.method)
@@ -47,7 +48,7 @@ const securitys = computed<SecurityProps[]>(() => {
         <template v-if="security.scheme.description">
           <p
             class="mt-4 whitespace-pre-line text-gray-400 text-sm"
-            v-html="security.scheme.description"
+            v-html="replaceVariables(security.scheme.description)"
           />
         </template>
       </div>

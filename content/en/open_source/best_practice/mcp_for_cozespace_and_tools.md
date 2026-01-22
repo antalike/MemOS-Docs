@@ -24,7 +24,7 @@ If you want to connect quickly without deploying your own server, MemOS official
 Visit [MemOS Cloud MCP Configuration Guide](https://memos-docs.openmem.net/cn/mcp_agent/mcp/guide) for detailed instructions.
 
 Main steps:
-1. Register and get an API Key in [MemOS API Console](https://memos-dashboard.openmem.net/cn/apikeys/)
+1. Register and get an API Key in [MemOS API Console]({{dashboardUrl}}/cn/apikeys/)
 2. Configure `@memtensor/memos-api-mcp` service in your MCP client
 3. Set environment variables (`MEMOS_API_KEY`, `MEMOS_USER_ID`, `MEMOS_CHANNEL`)
 
@@ -205,15 +205,13 @@ After the service is deployed, configure the MCP connection in Coze Space.
 
 ### Step 1: Open Coze Space and go to the tool configuration page
 
-::cdn-img{src="/memos/coze_space_1.png" alt="Coze Space configuration page"}
-::
+![Coze Space configuration page]({{staticCdnUrl}}/memos/coze_space_1.png)
 
 ### Step 2: Add a custom MCP tool
 
 Add a custom tool on the tool configuration page:
 
-::cdn-img{src="/memos/coze_space_2.png" alt="Add a custom tool"}
-::
+![Add a custom tool]({{staticCdnUrl}}/memos/coze_space_2.png)
 
 ### Step 3: Configure the MCP endpoint URL
 
@@ -259,16 +257,15 @@ python src/memos/api/server_api.py --port 8001
 1. In Coze, choose the "IDE plugin" creation method
 2. Configure requests to your deployed Server API service
 
-::cdn-img{src="/memos/coze_tools_1.png" alt="Coze IDE plugin configuration"}
+![Coze IDE plugin configuration]({{staticCdnUrl}}/memos/coze_tools_1.png)
 
 ### Step 3: Implement the add_memory tool
 
-::cdn-img{src="/memos/coze_tools_2.png" alt="Configure add_memory operation"}
-::
+![Configure add_memory operation]({{staticCdnUrl}}/memos/coze_tools_2.png)
 
 **Code example:** configure and publish the `add_memory` operation in the IDE:
 
-::cdn-img{src="/memos/coze_tools_2.png" alt="Configure add_memory operation"}
+::cdn-img{src="/memos/coze_tools_2.png" alt="Configure add_memory operation" is-static=true}
 ::
 
 Full code is as follows:
@@ -337,8 +334,7 @@ def chat_handler(args: Args[Input]) -> Output:
 
 After publishing, you can view the plugin under "My Resources":
 
-::cdn-img{src="/memos/coze_tools_3.png" alt="Published plugin resource"}
-::
+![Published plugin resource]({{staticCdnUrl}}/memos/coze_tools_3.png)
 
 ### Step 5: Integrate into agent workflow
 
@@ -411,7 +407,7 @@ No matter which option you choose, MemOS can provide your agent with powerful me
 
 After publishing, you can view the plugin under "My Resources" and integrate it into the agent workflow as a plugin:
 
-::cdn-img{src="/memos/coze_tools_3.png" alt="Published plugin resource"}
+::cdn-img{src="/memos/coze_tools_3.png" alt="Published plugin resource" is-static=true}
 ::
 
 ### Build an Agent and Test

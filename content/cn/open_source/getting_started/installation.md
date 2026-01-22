@@ -160,7 +160,7 @@ ENABLE_CHAT_API=true
 
 CHAT_MODEL_LIST=[{"backend": "qwen", "api_base": "https://dashscope.aliyuncs.com/compatible-mode/v1", "api_key": "you_bailian_api_key", "model_name_or_path": "qwen3-max-preview", "extra_body": {"enable_thinking": true} ,"support_models": ["qwen3-max-preview"]}]
 ```
-![MemOS bailian](https://cdn.memtensor.com.cn/img/get_key_url_by_bailian_compressed.png)
+![MemOS bailian]({{cdnUrl}}/img/get_key_url_by_bailian_compressed.png)
 <div style="text-align: center; margin-top: 10px">百炼申请 API_KEY和 BASE_URL 示例</div>
 
 ::
@@ -233,12 +233,12 @@ docker images
 # 在docker目录下
 docker compose up
 ```
-![MemOS buildComposeupSuccess](https://cdn.memtensor.com.cn/img/memos_build_composeup_success_compressed.png)
+![MemOS buildComposeupSuccess]({{cdnUrl}}/img/memos_build_composeup_success_compressed.png)
 <div style="text-align: center; margin-top: 10px">示例图片，端口按 docker 自定义的配置</div>  
 
 #### 通过 [http://localhost:8000/docs](http://localhost:8000/docs) 访问 API。
 
-![MemOS Architecture](https://cdn.memtensor.com.cn/img/memos_run_server_success_compressed.png)
+![MemOS Architecture]({{cdnUrl}}/img/memos_run_server_success_compressed.png)
 
 #### ADD Memory
 ```bash

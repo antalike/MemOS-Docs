@@ -5,7 +5,7 @@ title: Claude MCP
 ### Using in Claude Desktop
 To use MemOS in Claude Desktop, click the avatar in the lower left corner -> "Settings" -> "Developer" -> "Edit Config", paste the configuration into the Claude_desktop_config.json file, and finally restart the client. You can use it in the chat when you observe that the memos-api-mcp service is in the running state.
 
-![Verification of using MemOS in Claude](https://cdn.memtensor.com.cn/img/1763105334517_9ayhrp_compressed.png)
+![Verification of using MemOS in Claude]({{cdnUrl}}/img/1763105334517_9ayhrp_compressed.png)
 
 To improve the usage effect, it is recommended that users modify the user preference settings that apply to all conversations when using MemOS in Claude Desktop. The specific method is to click the avatar in the lower left corner -> "General", and paste the following content into the input box under "What personal preferences should Claude consider in responses?":
 
@@ -14,8 +14,8 @@ You are MemOS Memory Management Assistant, dedicated to providing efficient memo
 
 ```
 
-![Modifying user preferences for using MemOS in Claude Desktop](https://cdn.memtensor.com.cn/img/1763105312212_yqu9m7_compressed.png)
+![Modifying user preferences for using MemOS in Claude Desktop]({{cdnUrl}}/img/1763105312212_yqu9m7_compressed.png)
 
 The following is an example of using MemOS in Claude Desktop, by which users can judge whether they have successfully configured MemOS in Claude Desktop.
 
-![Example of using MemOS in Claude Desktop](https://cdn.memtensor.com.cn/img/1763105296073_gtqj1s_compressed.png)
+![Example of using MemOS in Claude Desktop]({{cdnUrl}}/img/1763105296073_gtqj1s_compressed.png)

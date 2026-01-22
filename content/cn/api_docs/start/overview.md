@@ -7,7 +7,7 @@ title: 概述
 MemOS 提供了完整的接口，通过简单的 API 请求，即可将记忆相关的功能集成到您的 AI 应用内，实现不同用户与 AI 智能体的记忆生产、调度、召回与生命周期管理。
 
 ::tip
-**快速开始：** 从 [**MemOS 控制台**](https://memos-dashboard.openmem.net/apikeys/) 获取你的接口密钥，一分钟即可完成首次记忆操作。
+**快速开始：** 从 [**MemOS 控制台**]({{dashboardUrl}}/apikeys/) 获取你的接口密钥，一分钟即可完成首次记忆操作。
 ::
 
 ## 2. 入门指南
@@ -32,7 +32,7 @@ MemOS 提供了完整的接口，通过简单的 API 请求，即可将记忆
 
 ## 4. 鉴权认证
 
-所有API请求都需要认证，请在请求头的 `Authorization` 中包含您的接口密钥。从[**MemOS 控制台**](https://memos-dashboard.openmem.net/apikeys/)获取接口密钥。
+所有API请求都需要认证，请在请求头的 `Authorization` 中包含您的接口密钥。从[**MemOS 控制台**]({{dashboardUrl}}/apikeys/)获取接口密钥。
 
 ::warning
 请勿在客户端或公共仓库中暴露您的接口密钥，所有请求都应通过环境变量或服务器端调用进行。
