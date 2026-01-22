@@ -9,6 +9,7 @@ const {
   sendMessage,
   stopStreaming
 } = useAssistant()
+const { trackEvent } = useArms()
 
 const onEnter = (e: KeyboardEvent) => {
   if (e.isComposing) {
@@ -18,6 +19,7 @@ const onEnter = (e: KeyboardEvent) => {
 }
 
 const handleFormSubmit = async () => {
+  trackEvent('发起对话', '按钮点击')
   try {
     await sendMessage(userInput.value)
   } catch (error) {
@@ -33,6 +35,21 @@ watch([suggestions, status], async () => {
     suggestionsRef.value?.scrollIntoView({ behavior: 'smooth', block: 'end' })
   }
 })
+
+function onClose() {
+  trackEvent('关闭助手面板', '按钮点击')
+  toggleOpen()
+}
+
+function onSuggestionClick(item: string) {
+  trackEvent('参考问题', '按钮点击')
+  sendMessage(item)
+}
+
+function onStopStreaming() {
+  trackEvent('停止对话', '按钮点击')
+  stopStreaming()
+}
 </script>
 
 <template>
@@ -64,7 +81,7 @@ watch([suggestions, status], async () => {
           <div class="flex items-center gap-2">
             <button
               class="group flex items-center hover:bg-gray-100 dark:hover:bg-white/10 p-1.5 rounded-lg cursor-pointer"
-              @click="toggleOpen"
+              @click="onClose"
             >
               <UIcon
                 name="i-lucide:x"
@@ -123,7 +140,7 @@ watch([suggestions, status], async () => {
                 v-for="(item, index) in suggestions"
                 :key="index"
                 class="hover:text-primary/80 cursor-pointer"
-                @click="sendMessage(item)"
+                @click="onSuggestionClick(item)"
               >
                 {{ item }}
               </li>
@@ -146,7 +163,7 @@ watch([suggestions, status], async () => {
                 submitted-icon="i-lucide-circle"
                 streaming-icon="i-lucide-circle"
                 :status="status"
-                @stop="stopStreaming"
+                @stop="onStopStreaming"
               />
             </UChatPrompt>
           </template>
