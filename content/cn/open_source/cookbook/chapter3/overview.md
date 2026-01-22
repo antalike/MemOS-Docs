@@ -6,7 +6,8 @@ title: 使用 MemOS 构建智能小说分析系统
 
 在开始编码之前，让我们看看MemOS到底解决了什么问题：
 
-![Cookbook-Chapter3-Chart](https://statics.memtensor.com.cn/memos/cookbook-chapter3-chart.png)
+::cdn-img{src="/memos/cookbook-chapter3-chart.png" alt="Cookbook-Chapter3-Chart"}
+::
 
 **实际效果对比举例：**
 
@@ -42,7 +43,8 @@ MemOS就像是专业的"调料品牌"，它已经为我们准备好了：
 
 **核心技术架构**：
 
-![Cookbook-Chapter3-Core](https://statics.memtensor.com.cn/memos/cookbook-chapter3-core.png)
+::cdn-img{src="/memos/cookbook-chapter3-core.png" alt="Cookbook-Chapter3-Core"}
+::
 
 **数据处理流水线**：
 
