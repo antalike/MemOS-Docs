@@ -3,7 +3,8 @@ title: What is MemOS?
 desc: "**MemOS** is a **Memory Operating System** for large language models (LLMs) and autonomous agents. It treats memory as a **first-class, orchestrated, and explainable resource**, rather than an opaque layer hidden inside model weights."
 ---
 
-![MemOS Architecture](https://statics.memtensor.com.cn/memos/memos-architecture.png)
+::cdn-img{src="/memos/memos-architecture.png" alt="MemOS Architecture"}
+::
 
 
 As LLMs advance to handle complex tasks — like multi-turn dialogue, long-term planning, decision-making, and personalized user experiences — their ability to **structure, manage, and evolve memory** becomes critical for achieving true long-term intelligence and adaptability.

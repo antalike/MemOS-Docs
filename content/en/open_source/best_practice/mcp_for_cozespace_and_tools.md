@@ -205,13 +205,15 @@ After the service is deployed, configure the MCP connection in Coze Space.
 
 ### Step 1: Open Coze Space and go to the tool configuration page
 
-![Coze Space configuration page](https://statics.memtensor.com.cn/memos/coze_space_1.png)
+::cdn-img{src="/memos/coze_space_1.png" alt="Coze Space configuration page"}
+::
 
 ### Step 2: Add a custom MCP tool
 
 Add a custom tool on the tool configuration page:
 
-![Add a custom tool](https://statics.memtensor.com.cn/memos/coze_space_2.png)
+::cdn-img{src="/memos/coze_space_2.png" alt="Add a custom tool"}
+::
 
 ### Step 3: Configure the MCP endpoint URL
 
@@ -257,15 +259,17 @@ python src/memos/api/server_api.py --port 8001
 1. In Coze, choose the "IDE plugin" creation method
 2. Configure requests to your deployed Server API service
 
-![Coze IDE plugin configuration](https://statics.memtensor.com.cn/memos/coze_tools_1.png)
+::cdn-img{src="/memos/coze_tools_1.png" alt="Coze IDE plugin configuration"}
 
 ### Step 3: Implement the add_memory tool
 
-![Configure add_memory operation](https://statics.memtensor.com.cn/memos/coze_tools_2.png)
+::cdn-img{src="/memos/coze_tools_2.png" alt="Configure add_memory operation"}
+::
 
 **Code example:** configure and publish the `add_memory` operation in the IDE:
 
-![Configure add_memory operation](https://statics.memtensor.com.cn/memos/coze_tools_2.png)
+::cdn-img{src="/memos/coze_tools_2.png" alt="Configure add_memory operation"}
+::
 
 Full code is as follows:
 
@@ -333,7 +337,8 @@ def chat_handler(args: Args[Input]) -> Output:
 
 After publishing, you can view the plugin under "My Resources":
 
-![Published plugin resource](https://statics.memtensor.com.cn/memos/coze_tools_3.png)
+::cdn-img{src="/memos/coze_tools_3.png" alt="Published plugin resource"}
+::
 
 ### Step 5: Integrate into agent workflow
 
@@ -406,7 +411,8 @@ No matter which option you choose, MemOS can provide your agent with powerful me
 
 After publishing, you can view the plugin under "My Resources" and integrate it into the agent workflow as a plugin:
 
-![Published plugin resource](https://statics.memtensor.com.cn/memos/coze_tools_3.png)
+::cdn-img{src="/memos/coze_tools_3.png" alt="Published plugin resource"}
+::
 
 ### Build an Agent and Test
 

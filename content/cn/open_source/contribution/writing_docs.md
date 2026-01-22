@@ -21,7 +21,7 @@ desc: 本项目使用 Nuxt Content 构建支持 Markdown 和富 Vue 组件的文
 - `banner`（字符串） - 页面顶部展示的横幅图片链接
 - `links`（数组） - 包含标签、URL 和图标的相关链接数组
 
-![Frontmatter 示例](https://statics.memtensor.com.cn/memos/frontmatter.png)
+::cdn-img{src="/memos/frontmatter.png" alt="Frontmatter 示例"}
 ::
 
 **完整 Frontmatter 示例：**
