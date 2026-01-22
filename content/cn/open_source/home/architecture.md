@@ -78,7 +78,6 @@ MemOS 支持几种专门的记忆类型以满足不同需求：
 ::note{title="架构选型建议"}
 **起步建议**<br>：从 `GeneralTextMemory` 开始快速验证概念
 **演进路径**<br>：随着业务复杂度提升，逐步引入 `TreeTextMemory` 处理结构化知识
-**性能优化**<br>：高频访问内容可升级为 `ActivationMemory` 加速推理
 ::
 
 #### 基础支撑组件
