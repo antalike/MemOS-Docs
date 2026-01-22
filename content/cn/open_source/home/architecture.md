@@ -87,11 +87,11 @@ MemOS 的基础模块提供标准化能力，确保系统的可扩展性与一�
 
 | 组件类别 | 核心功能 | 实现示例 |
 |---------|---------|---------|
-| **文本处理** | 智能分块、语义解析 | Chunkers, Parsers |
-| **向量化** | 文本嵌入生成 | Embedders (OpenAI, 本地模型) |
-| **存储接口** | 多数据库适配 | GraphDBs |
-| **模型连接** | 统一 LLM 接口 | LLMs (OpenAI, Ollama, 本地) |
-| **质量优化** | 检索结果重排 | Reranker 模块 |
+| **文本处理** | 智能分块、记忆提取 | Chunkers, MemReaders |
+| **向量化** | 文本嵌入生成 | Embedders (bge-m3, text-embedding-3-large) |
+| **存储接口** | 多数据库适配 | GraphDBs (Neo4j, Qdrant, PolarDB) |
+| **模型连接** | 统一 LLM 接口 | LLMs (OpenAI, Ollama) |
+| **质量优化** | 检索结果重排 | Rerankers (bge-reranker-v2-m3) |
 
 ## 代码组织架构
 
@@ -126,7 +126,7 @@ src/memos/
 **专业提示**<br>
  - **快速实验**：使用 `examples/` 目录中的示例快速验证功能
  - **深度定制**：参考 `src/` 中的模块实现进行二次开发
- - **配置管理**：所有组件均支持通过 `srcconfigs/` 进行灵活配置
+ - **配置管理**：所有组件均支持通过 `configs/` 进行灵活配置
 ::
 
 ## 可扩展性
