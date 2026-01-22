@@ -94,15 +94,15 @@ On this foundation, MemOS 2.0 provides knowledge base and multimodal capabilitie
 
 #### Create a knowledge base
 
-Create a knowledge base via the [Console](https://memos-dashboard.openmem.net/cn/knowledgeBase/) or API. This article categorizes documents based on [MemOS official docs](https://github.com/MemTensor/MemOS-Docs), MemTensor’s past announcements, and release notes to make future updates and management easier. In this example, you can create just **one** knowledge base and upload a subset of documents for testing.
+Create a knowledge base via the [Console]({{dashboardUrl}}/cn/knowledgeBase/) or API. This article categorizes documents based on [MemOS official docs](https://github.com/MemTensor/MemOS-Docs), MemTensor’s past announcements, and release notes to make future updates and management easier. In this example, you can create just **one** knowledge base and upload a subset of documents for testing.
 
-![image.png](https://cdn.memtensor.com.cn/img/1768481403940_o97qz4_compressed.png)
+![image.png]({{cdnUrl}}/img/1768481403940_o97qz4_compressed.png)
 
 #### Upload documents
 
 Enter the knowledge base and upload your documents. Note the document requirements: MemOS-Docs are in MD format; you can use an AI tool to convert them to TXT format with one click, then upload them. When uploading, pay attention to the requirements. The rest—**storage, parsing, chunking, and memory generation**—is handled by MemOS. Just wait until processing finishes and the status shows “Available.”
 
-![image.png](https://cdn.memtensor.com.cn/img/1768481436752_31pl0b_compressed.png)
+![image.png]({{cdnUrl}}/img/1768481436752_31pl0b_compressed.png)
 
 ### 2.2 Run the Code (5 min)
 
@@ -368,9 +368,9 @@ pip install OpenAI && pip install datetime
 
 ##### Get the key (API_KEY)
 
-Log into the console at [https://memos-dashboard.openmem.net/cn/apikeys/](https://memos-dashboard.openmem.net/cn/apikeys/) and copy the key.
+Log into the console at [{{dashboardUrl}}/cn/apikeys/]({{dashboardUrl}}/cn/apikeys/) and copy the key.
 
-![image.png](https://cdn.memtensor.com.cn/img/1768481468406_q51iqx_compressed.png)
+![image.png]({{cdnUrl}}/img/1768481468406_q51iqx_compressed.png)
 
 ```python
 os.environ["MEMOS_API_KEY"] = "mpg-xx"
@@ -391,7 +391,7 @@ openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"), os.getenv("OPEN_API_
 
 For the knowledge base you just uploaded to, copy the ID and save it.
 
-![image.png](https://cdn.memtensor.com.cn/img/1768481493435_bkwqlu_compressed.png)
+![image.png]({{cdnUrl}}/img/1768481493435_bkwqlu_compressed.png)
 
 ```python
 # Replace with your own knowledge base ID (this is an example only)
@@ -405,7 +405,7 @@ os.environ["KNOWLEDGE_BASE_IDS"] = json.dumps([
 python knowledge_qa_assistant.py
 ```
 
-![image.png](https://cdn.memtensor.com.cn/img/1768533833272_krke26_compressed.jpeg)
+![image.png]({{cdnUrl}}/img/1768533833272_krke26_compressed.jpeg)
 
 ### 2.3 Code walkthrough
 

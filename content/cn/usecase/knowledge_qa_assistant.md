@@ -93,15 +93,15 @@ DAY 20 员工询问:内网代理打不开了,我该重新装哪个版本?
 
 #### 创建知识库
 
-通过[控制台](https://memos-dashboard.openmem.net/cn/knowledgeBase/)或API创建知识库， 本文是基于[MemOS的官方文档](https://github.com/MemTensor/MemOS-Docs)、记忆张量过去宣发的文章以及发布说明进行了知识库的分类，便于后续更新和管理，在此示例中，您可以只创建1个知识库，并上传部分文档用于测试
+通过[控制台]({{dashboardUrl}}/cn/knowledgeBase/)或API创建知识库， 本文是基于[MemOS的官方文档](https://github.com/MemTensor/MemOS-Docs)、记忆张量过去宣发的文章以及发布说明进行了知识库的分类，便于后续更新和管理，在此示例中，您可以只创建1个知识库，并上传部分文档用于测试
 
-![image.png](https://cdn.memtensor.com.cn/img/1768481403940_o97qz4_compressed.png)
+![image.png]({{cdnUrl}}/img/1768481403940_o97qz4_compressed.png)
 
 #### 上传文档
 
 进入知识库，上传文档，要注意文档的要求，MemOS-Docs都是MD格式，可基于AI一键转换为TXT格式，再进行上传，上传时需关注文档要求，剩下的**存储，解析，分段，生成记忆**全部交给MemOS，你只需静静等待文档处理完毕，直到状态显示「可用」
 
-![image.png](https://cdn.memtensor.com.cn/img/1768481436752_31pl0b_compressed.png)
+![image.png]({{cdnUrl}}/img/1768481436752_31pl0b_compressed.png)
 
 ### 2.2 运行代码(5min)
 
@@ -369,9 +369,9 @@ pip install OpenAI && pip install datetime
 
 ##### 获取秘钥(API\_KEY)
 
-登录控制台[https://memos-dashboard.openmem.net/cn/apikeys/](https://memos-dashboard.openmem.net/cn/apikeys/)，复制秘钥
+登录控制台[{{dashboardUrl}}/cn/apikeys/]({{dashboardUrl}}/cn/apikeys/)，复制秘钥
 
-![image.png](https://cdn.memtensor.com.cn/img/1768481468406_q51iqx_compressed.png)
+![image.png]({{cdnUrl}}/img/1768481468406_q51iqx_compressed.png)
 
 ```python
 os.environ["MEMOS_API_KEY"] = "mpg-xx" 
@@ -390,7 +390,7 @@ openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 针对刚才上传的知识库，复制ID，并保存
 
-![image.png](https://cdn.memtensor.com.cn/img/1768481493435_bkwqlu_compressed.png)
+![image.png]({{cdnUrl}}/img/1768481493435_bkwqlu_compressed.png)
 
 ```python
 # 替换为你自己的知识库ID，以下ID仅为示例，并非真实知识库ID
@@ -404,7 +404,7 @@ os.environ["KNOWLEDGE_BASE_IDS"] = json.dumps([
 python knowledge_qa_assistant.py
 ```
 
-![image.png](https://cdn.memtensor.com.cn/img/1768533833272_krke26_compressed.jpeg)
+![image.png]({{cdnUrl}}/img/1768533833272_krke26_compressed.jpeg)
 
 ### 2.3 代码说明
 

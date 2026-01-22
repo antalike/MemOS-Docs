@@ -458,7 +458,7 @@
         "type": "apiKey",
         "name": "Authorization",
         "in": "header",
-        "description": "Token API_key, available in <a href=\"https://memos-dashboard.openmem.net/apikeys/\" class=\"text-primary border-b border-transparent hover:border-primary font-medium focus-visible:outline-primary [&amp;&gt;code]:border-dashed hover:[&amp;&gt;code]:border-primary hover:[&amp;&gt;code]:text-primary transition-colors [&amp;&gt;code]:transition-colors\" target=\"_blank\">API Console > API Keys</a>"
+        "description": "Token API_key, available in <a href=\"{{dashboardUrl}}/apikeys/\" class=\"text-primary border-b border-transparent hover:border-primary font-medium focus-visible:outline-primary [&amp;&gt;code]:border-dashed hover:[&amp;&gt;code]:border-primary hover:[&amp;&gt;code]:text-primary transition-colors [&amp;&gt;code]:transition-colors\" target=\"_blank\">API Console > API Keys</a>"
       }
     },
     "schemas": {
@@ -881,7 +881,7 @@
             "type": "integer",
             "format": "int32",
             "title": "Code",
-            "description": "API status code. See <a href=\"https://memos-dashboard.openmem.net/apikeys/\" class=\"text-primary border-b border-transparent hover:border-primary font-medium focus-visible:outline-primary [&amp;&gt;code]:border-dashed hover:[&amp;&gt;code]:border-primary hover:[&amp;&gt;code]:text-primary transition-colors [&amp;&gt;code]:transition-colors\">Error Code</a> for details",
+            "description": "API status code. See <a href=\"{{dashboardUrl}}/apikeys/\" class=\"text-primary border-b border-transparent hover:border-primary font-medium focus-visible:outline-primary [&amp;&gt;code]:border-dashed hover:[&amp;&gt;code]:border-primary hover:[&amp;&gt;code]:text-primary transition-colors [&amp;&gt;code]:transition-colors\">Error Code</a> for details",
             "example": 0
           },
           "data": {
@@ -962,7 +962,7 @@
             "type": "integer",
             "format": "int32",
             "title": "Code",
-            "description": "API status code. See <a href=\"https://memos-dashboard.openmem.net/apikeys/\" class=\"text-primary border-b border-transparent hover:border-primary font-medium focus-visible:outline-primary [&amp;&gt;code]:border-dashed hover:[&amp;&gt;code]:border-primary hover:[&amp;&gt;code]:text-primary transition-colors [&amp;&gt;code]:transition-colors\">Error Code</a> for details.",
+            "description": "API status code. See <a href=\"{{dashboardUrl}}/apikeys/\" class=\"text-primary border-b border-transparent hover:border-primary font-medium focus-visible:outline-primary [&amp;&gt;code]:border-dashed hover:[&amp;&gt;code]:border-primary hover:[&amp;&gt;code]:text-primary transition-colors [&amp;&gt;code]:transition-colors\">Error Code</a> for details.",
             "example": 0
           },
           "data": {

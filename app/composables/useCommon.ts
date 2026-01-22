@@ -39,3 +39,15 @@ export function useOpenMemUrl() {
 
   return $config.public.openMemUrl || 'https://openmem.net/'
 }
+
+export function useStaticCdnUrl(path = '/') {
+  const { $config } = useNuxtApp()
+  const baseUrl = $config.public.staticCdnUrl || 'https://statics.memtensor.com.cn'
+  return `${baseUrl}${path}`
+}
+
+export function useCdnUrl(path = '/') {
+  const { $config } = useNuxtApp()
+  const baseUrl = $config.public.cdnUrl || 'https://cdn.memtensor.com.cn'
+  return `${baseUrl}${path}`
+}

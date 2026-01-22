@@ -124,11 +124,11 @@ const columns = computed(() => [
 ])
 const qrcodeData = computed(() => [
   {
-    img: 'https://statics.memtensor.com.cn/landing-v2/qrcode-wechat-v2.webp',
+    img: useStaticCdnUrl(`/landing-v2/qrcode-wechat-v2.webp`),
     label: t('footer.wechatGroup')
   },
   {
-    img: 'https://cdn.memtensor.com.cn/img/1768371361386_sjmr00_compressed.png',
+    img: useCdnUrl(`/img/1768371361386_sjmr00_compressed.png`),
     label: t('footer.officialAccount')
   }
 ])
@@ -153,7 +153,7 @@ const qrcodeData = computed(() => [
         <div class="flex flex-col">
           <div class="flex flex-row items-center gap-3.5 w-fit ">
             <img
-              src="https://statics.memtensor.com.cn/logo/memtensor-w.png"
+              :src="useStaticCdnUrl(`/logo/memtensor-w.png`)"
               class="sm:w-20 w-15"
             >
             <p class="sm:mt-1.5 text-[28px] leading-10 font-semibold bg-linear-180 from-8% from-white to-100% to-white/60 bg-clip-text text-transparent">
@@ -240,7 +240,7 @@ const qrcodeData = computed(() => [
                 <div class="grid grid-cols-2 gap-4">
                   <div class="space-y-2">
                     <img
-                      src="https://statics.memtensor.com.cn/landing-v2/qrcode-wechat-v2.webp"
+                      :src="useStaticCdnUrl(`/landing-v2/qrcode-wechat-v2.webp`)"
                       class="size-30"
                     >
                     <div class="flex items-center justify-center gap-1.5">
@@ -253,7 +253,7 @@ const qrcodeData = computed(() => [
                   </div>
                   <div class="space-y-2">
                     <img
-                      src="https://statics.memtensor.com.cn/landing-v2/qrcode-discord-v2.webp"
+                      :src="useStaticCdnUrl(`/landing-v2/qrcode-discord-v2.webp`)"
                       class="size-30"
                     >
                     <div class="flex items-center justify-center gap-1.5">

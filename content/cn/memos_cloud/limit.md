@@ -6,9 +6,9 @@ desc: 注册登录即享有免费额度，便于快速体验和验证记忆功�
 
 ## 1. 额度说明
 
-![image.png](https://cdn.memtensor.com.cn/img/1766481509513_5d4x8o_compressed.png)
+![image.png]({{cdnUrl}}/img/1766481509513_5d4x8o_compressed.png)
 
-MemOS 云服务目前为所有开发者提供了从免费版到企业版的多种定价方案，满足不同规模团队的需求。目前，所有版本限时免费，欢迎前往[MemOS 官网-价格](https://memos.openmem.net/cn/pricing)，申请符合你需求的版本。
+MemOS 云服务目前为所有开发者提供了从免费版到企业版的多种定价方案，满足不同规模团队的需求。目前，所有版本限时免费，欢迎前往[MemOS 官网-价格]({{landingUrl}}/cn/pricing)，申请符合你需求的版本。
 立即行动，享受 MemOS 云服务带来的无限可能，助力你的项目快速成长！
 
 ::note
@@ -38,4 +38,4 @@ MemOS 云服务目前为所有开发者提供了从免费版到企业版的多�
 
 您可通过**API 控制台**查看各接口的剩余额度，并支持按项目、接口密钥和日期进行筛选，方便跟踪和管理调用情况。
 
-![image.png](https://cdn.memtensor.com.cn/img/1766632358212_mxan3a_compressed.png)
+![image.png]({{cdnUrl}}/img/1766632358212_mxan3a_compressed.png)

@@ -21,8 +21,7 @@ Add YAML frontmatter at the top of your file to provide metadata. The frontmatte
 - `banner` (string) - URL to a banner image displayed at the top of the page
 - `links` (array) - Array of related links with labels, URLs, and icons
 
-::cdn-img{src="/memos/frontmatter.png" alt="Frontmatter Example"}
-::
+![Frontmatter Example]({{staticCdnUrl}}/memos/frontmatter.png)
 
 **Complete Frontmatter Example:**
 
@@ -30,13 +29,13 @@ Add YAML frontmatter at the top of your file to provide metadata. The frontmatte
 ---
 title: MemOS Documentation
 desc: Welcome to the official documentation for MemOS – a Python package designed to empower large language models (LLMs) with advanced, modular memory capabilities.
-banner: https://statics.memtensor.com.cn/memos/memos-banner.gif
+banner: {{staticCdnUrl}}/memos/memos-banner.gif
 links:
   - label: 'PyPI'
     to: https://pypi.org/project/MemoryOS/
     target: _blank
     avatar:
-      src: https://statics.memtensor.com.cn/icon/pypi.svg
+      src: {{staticCdnUrl}}/icon/pypi.svg
       alt: PyPI logo
   - label: 'Open Source'
     to: https://github.com/MemTensor/MemOS
@@ -76,7 +75,7 @@ For images stored in the `public/assets` directory, use the `Base64Image` compon
 For remote images (hosted on external servers), use standard Markdown image syntax:
 
 ```markdown
-![MemOS Architecture](https://statics.memtensor.com.cn/memos/memos-architecture.png)
+![MemOS Architecture]({{staticCdnUrl}}/memos/memos-architecture.png)
 ```
 
 ### Steps

@@ -129,7 +129,7 @@ MemOS can understand information such as **relationships, time, and preferences*
 MemOS Cloud Service currently offers multiple pricing plans from free to enterprise versions for all developers. Different versions have different limits on knowledge base capacity and quantity.
 
 ::note
-Currently, all versions are free for a limited time. Welcome to [Official Website - Pricing](https://memos.openmem.net/cn/pricing) to apply for the version that suits your needs.
+Currently, all versions are free for a limited time. Welcome to [Official Website - Pricing]({{landingUrl}}/cn/pricing) to apply for the version that suits your needs.
 ::
 
 | **Version**   | **Knowledge Base Storage Limit**                        |
@@ -498,9 +498,9 @@ The output result is as follows (Simplified):
 ]
 ```
 
-The [Console - Knowledge Base](https://memos-dashboard.openmem.net/knowledgeBase/) displays details of all corrections or completions of knowledge base memories through natural language interaction.
+The [Console - Knowledge Base]({{dashboardUrl}}/knowledgeBase/) displays details of all corrections or completions of knowledge base memories through natural language interaction.
 
-![image.png](https://cdn.memtensor.com.cn/img/1766634697599_d1j187_compressed.png)
+![image.png]({{cdnUrl}}/img/1766634697599_d1j187_compressed.png)
 
 ::note
 For a complete list of feedback API fields, formats, etc., please refer to [Add Feedback API Documentation](/api_docs/message/add_feedback).

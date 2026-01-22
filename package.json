@@ -10,6 +10,7 @@
     "sync-api": "node scripts/fetch-api.mjs",
     "sync-releases": "node scripts/fetch-releases.mjs",
     "generate": "node scripts/generate.mjs",
+    "generate:intl": "node scripts/generate.mjs --env=intl",
     "publish": "node scripts/generate.mjs",
     "preview": "nuxt preview",
     "lint": "eslint .",

@@ -11,5 +11,4 @@ desc: Welcome to the MemOS contribution guide! Learn how to set up your developm
 
 Your contributions make this project better! ✨ If you have any questions, feel free to open an issue or join the discussion or scan the QR codes below to connect with us on Discord or WeChat.
 
-::cdn-img{src="/memos/qr-code.png" alt="QR Code" width="600"}
-::
+<img src="{{staticCdnUrl}}/memos/qr-code.png" alt="QR Code" width="600">

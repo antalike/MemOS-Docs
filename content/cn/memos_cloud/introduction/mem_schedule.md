@@ -333,5 +333,5 @@ mem_scheduler.memos_message_queue.submit_messages([task_item])
 
 
 ## 3. 联系我们
-<img src="https://cdn.memtensor.com.cn/img/1758685658684_nbhka4_compressed.png" alt="image" style="width:70%;">
+<img src="{{cdnUrl}}/img/1758685658684_nbhka4_compressed.png" alt="image" style="width:70%;">
 

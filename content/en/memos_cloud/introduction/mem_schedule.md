@@ -333,4 +333,4 @@ By doing this, you can easily decouple complex memory management logic and hand 
 
 
 ## 3. Contact Us
-<img src="https://cdn.memtensor.com.cn/img/1758685658684_nbhka4_compressed.png" alt="image" style="width:70%;">
+<img src="{{cdnUrl}}/img/1758685658684_nbhka4_compressed.png" alt="image" style="width:70%;">
