@@ -1,4 +1,29 @@
 versions:
+  - name: v2.0.3
+    date: 2026-01-22
+    changedInfo:
+      New Features:
+        - type: 官网开源项目文档
+          changedInfo:
+            - 修复格式、示例描述、中英文不匹配问题，新增使用小 tips。
+        - type: GitHub 仓库示例
+          changedInfo:
+            - 调整启动方式（新建类server router），移除 src/memos/product_api.py 引用。
+        - type: 知识库
+          changedInfo:
+            - 知识库新增支持文件类型, 支持 json、md、xml。
+      Improvements:
+        - type: 记忆添加
+          changedInfo:
+            - 优化文字与图片记忆添加，将两类信息作为单条消息协同处理。
+        - type: 知识库检索
+          changedInfo:
+            - 知识库检索支持 all 字段。
+      Bug Fixes:
+        - type: 记忆检索
+          changedInfo:
+            - 修复当检索输入文本过长时的调用异常。
+
   - name: v2.0.2
     date: 2026-01-15
     changedInfo:
@@ -25,7 +50,7 @@ versions:
         - type: 获取记忆接口
           changedInfo:
             - 修复了获取记忆接口在入参为 include_preference=False 时的调用错误。
-        
+
   - name: v2.0.1
     date: 2026-01-08
     changedInfo:
