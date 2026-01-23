@@ -37,7 +37,6 @@ nav:
   - "(ri:github-line) 开源项目":
     - "(ri:rocket-line) 快速入门":
       - "(ri:install-line) 安装指南": open_source/getting_started/installation.md
-      - "(ri:play-line) 快速启动": open_source/getting_started/quick_start.md
       - "(ri:bookmark-line) 创建你的第一个记忆": open_source/getting_started/your_first_memory.md
       - "(ri:lightbulb-line) 核心概念": open_source/home/core_concepts.md
       - "(ri:building-2-line) 架构设计": open_source/home/architecture.md
@@ -46,39 +45,27 @@ nav:
 
     - "(ri:cpu-line) MemOS":
       - "(ri:eye-line) 概览": open_source/modules/mos/overview.md
-      - "(ri:book-open-line) 简化版本": open_source/modules/mos/memos_neo.md
-      - "(ri:tools-line) MCP服务": open_source/modules/mos/memos_mcp.md
-      - "(ri:team-line) 用户管理": open_source/modules/mos/users.md
-      - "(ri:settings-3-line) 用户配置": open_source/modules/mos/users_configurations.md
       - "(ri:checkbox-multiple-blank-line) 记忆立方": open_source/modules/mem_cube.md
       - "(ri:book-open-line) 记忆读取": open_source/modules/mem_reader.md
       - "(ri:calendar-line) 记忆调度": open_source/modules/mem_scheduler.md
-      - "(ri:robot-2-line) 大模型与Embedding调用": open_source/modules/model_backend.md
+      - "(ri:calendar-line) 使用记忆进行聊天": open_source/modules/mem_chat.md
+      - "(ri:feedback-line) 记忆修正": open_source/modules/mem_feedback.md
+
 
     - "(ri:brain-line) 记忆系统":
-      - "(ri:database-2-line) KV cache 记忆": open_source/modules/memories/kv_cache_memory.md
+      - "(ri:database-2-line) 概览": open_source/modules/memories/overview.md
       - "(ri:book-2-line) 明文记忆":
+        - "(ri:file-text-line) 简单明文记忆": open_source/modules/memories/naive_textual_memory.md
         - "(ri:file-text-line) 通用明文记忆": open_source/modules/memories/general_textual_memory.md
+        - "(ri:user-heart-line) 偏好明文记忆": open_source/modules/memories/preference_textual_memory.md
         - "(ri:tree-line) 树形明文记忆": open_source/modules/memories/tree_textual_memory.md
         - "(ri:database-line) Neo4j 图数据库": open_source/modules/memories/neo4j_graph_db.md
-        - "(ri:database-line) Nebula 图数据库": open_source/modules/memories/nebula_graph_db.md
+        - "(ri:database-line) PolarDB 图数据库": open_source/modules/memories/polardb_graph_db.md
+      - "(ri:database-2-line) KV cache 记忆": open_source/modules/memories/kv_cache_memory.md
       - "(ri:cpu-line) 参数记忆": open_source/modules/memories/parametric_memory.md
-
-    - "(ri:history-line) 场景案例":
-      - "(ri:database-2-line) 概览": open_source/cookbook/overview.md
-      - "(ri:seedling-line) 第一章 你的第一个 MemCube":
-        - "(ri:cloud-line) API": open_source/cookbook/chapter1/api.md
-        - "(ri:node-tree) OLLAMA": open_source/cookbook/chapter1/ollama.md
-      - "(ri:database-2-line) 第二章 TreeNodeTextualMemoryMetadata":
-        - "(ri:cloud-line) API": open_source/cookbook/chapter2/api.md
-        - "(ri:node-tree) OLLAMA": open_source/cookbook/chapter2/ollama.md
-      - "(ri:search-2-line) 第三章 智能小说分析系统": open_source/cookbook/chapter3/overview.md
-      - "(ri:graduation-cap-line) 第四章 使用 MemOS 构建生产级知识问答系统": open_source/cookbook/chapter4/overview.md
-      - "(ri:aed-electrodes-line) 第五章 使用Chat API进行记忆问答": open_source/cookbook/chapter5/chat_api.md
 
     - "(ri:star-line) 最佳实践":
       - "(ri:speed-line) 性能调优": open_source/best_practice/performance_tuning.md
-      - "(ri:building-3-line) 记忆结构设计": open_source/best_practice/memory_structure_design.md
       - "(ri:wifi-line) 网络环境适配": open_source/best_practice/network_workarounds.md
       - "(ri:error-warning-line) 常见错误与解决方案": open_source/best_practice/common_errors_solutions.md
       - "(ri:tools-line) Coze空间配置Memos的MCP": open_source/best_practice/mcp_for_cozespace_and_tools.md
@@ -91,7 +78,7 @@ nav:
       - "(ri:article-line) 文档编写": open_source/contribution/writing_docs.md
       - "(ri:flask-line) 测试编写": open_source/contribution/writing_tests.md
 
-    - "(ri:file-code-line) API 参考文档": api-reference/configure-memos
+    - "(ri:file-code-line) API 参考文档": api-reference/search-memories
 
   - "(ri:puzzle-line) MCP与Agent框架支持":
     - "(ri:tools-line) MCP 服务":

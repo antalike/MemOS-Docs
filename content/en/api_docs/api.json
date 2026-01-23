@@ -193,7 +193,7 @@
     "/get/memory": {
       "post": {
         "summary": "Get Memory",
-        "description": "Retrieve a user’s memories, including factual and preference memories.",
+        "description": "Retrieve a user’s memories, including factual, preference, and tool memories.",
         "operationId": "get_memory",
         "requestBody": {
           "required": true,
@@ -1056,7 +1056,7 @@
             "items": {
               "type": "string"
             },
-            "description": "Specifies the scope of knowledge bases accessible for the current search. Defaults to empty, meaning no knowledge bases are searched."
+            "description": "Specifies the scope of knowledge bases accessible for the current search. Defaults to empty, meaning no knowledge bases are searched.Pass specific Knowledgebase IDs to search within that designated repository; pass "all" to search across all associated knowledgebases within the project."
           },
           "memory_limit_number": {
             "type": "integer",
@@ -1105,7 +1105,7 @@
             "type": "integer",
             "format": "int32",
             "title": "Code",
-            "description": "API status code. See <a href=\"/dashboard/api/error_code\" class=\"text-primary border-b border-transparent hover:border-primary font-medium focus-visible:outline-primary [&amp;&gt;code]:border-dashed hover:[&amp;&gt;code]:border-primary hover:[&amp;&gt;code]:text-primary transition-colors [&amp;&gt;code]:transition-colors\">Error Code</a> for details.",
+            "description": "API status code. See <a href=\"/api_docs/help/error_codes\" class=\"text-primary border-b border-transparent hover:border-primary font-medium focus-visible:outline-primary [&amp;&gt;code]:border-dashed hover:[&amp;&gt;code]:border-primary hover:[&amp;&gt;code]:text-primary transition-colors [&amp;&gt;code]:transition-colors\">Error Code</a> for details.",
             "example": 0
           },
           "data": {
@@ -1299,20 +1299,20 @@
             "title": "Used Tool",
             "description": "Name of the tool used."
           },
-          "experience": {
-            "type": "string",
-            "title": "Experience",
-            "description": "Tool usage experience or collaboration suggestions."
-          },
           "error_type": {
             "type": "string",
             "title": "Error Type",
             "description": "Error description when call fails."
           },
           "success_rate": {
-            "type": "string",
+            "type": "number",
             "title": "Success Rate",
             "description": "Success rate of this tool trajectory."
+          },
+          "tool_experience": {
+            "type": "string",
+            "title": "Tool Experience",
+            "description": "Experience with this tool in the current trajectory."
           }
         },
         "title": "ToolUsedStatus"
@@ -1369,6 +1369,16 @@
             "type": "string",
             "title": "Update Time",
             "description": "Last update time of the tool memory (ISO 8601 format)."
+          },
+          "relativity": {
+            "type": "number",
+            "title": "Relativity",
+            "description": "Relevance score of the tool memory to the query content."
+          },
+          "experience": {
+            "type": "string",
+            "title": "Experience",
+            "description": "Procedural experience of the entire trajectory, serving as overall guidance for task completion."
           }
         },
         "title": "ToolMemoryDetail"
@@ -1396,10 +1406,22 @@
             "description": "Number of entries returned per memory category on the current page, up to 50.",
             "default": 10
           },
+          "filter": {
+            "type": "object",
+            "title": "Filter",
+            "description": "Filter conditions, used to precisely limit the memory scope before retrieval. Available fields include: \"agent_id\", \"app_id\", \"create_time\", \"update_time\", and specific fields in \"info\". Supports logical operators (and, or) and comparison operators (gte, lte, gt, lt). For the \"info\" field, supports filtering by \"business_type\", \"biz_id\", \"scene\", and other custom fields.",
+            "example": "{\"and\": [{\"create_time\":{\"gte\":\"...\"}}]}"
+          },
           "include_preference": {
             "type": "boolean",
             "title": "Include Preference",
             "description": "Whether preference memories should be included.",
+            "default": true
+          },
+          "include_tool_memory": {
+            "type": "boolean",
+            "title": "Include Tool Memory",
+            "description": "Whether tool memories should be included.",
             "default": true
           }
         },
@@ -1531,6 +1553,85 @@
                     "additionalProperties": true
                   },
                   "description": "Source messages associated with the preference."
+                },
+                "info": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "description": "Custom metadata provided when adding the message."
+                }
+              }
+            }
+          },
+          "tool_memory_detail_list": {
+            "type": "array",
+            "title": "Tool Memory Detail List",
+            "description": "List of tool memory fragment details returned.",
+            "items": {
+              "type": "object",
+              "title": "Tool Memory Detail",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "title": "ID",
+                  "description": "Unique identifier of the tool memory fragment."
+                },
+                "tool_type": {
+                  "type": "string",
+                  "title": "Tool Type",
+                  "description": "Tool memory type. ToolTrajectoryMemory: tool trajectory memory; ToolSchema: tool info memory.",
+                  "enum": [
+                    "ToolTrajectoryMemory",
+                    "ToolSchema"
+                  ]
+                },
+                "tool_value": {
+                  "type": "string",
+                  "title": "Tool Value",
+                  "description": "Specific content of the tool memory."
+                },
+                "tool_used_status": {
+                  "type": "array",
+                  "title": "Tool Used Status",
+                  "description": "List of tool trajectory memories, each record contains tool used and experience info.",
+                  "items": {
+                    "$ref": "#/components/schemas/ToolUsedStatus"
+                  }
+                },
+                "create_time": {
+                  "type": "string",
+                  "title": "Create Time",
+                  "description": "Tool memory creation time (ISO 8601 format)."
+                },
+                "conversation_id": {
+                  "type": "string",
+                  "title": "Conversation ID",
+                  "description": "Unique identifier of the conversation associated with the tool memory."
+                },
+                "status": {
+                  "type": "string",
+                  "title": "Status",
+                  "description": "Tool memory status, currently activated.",
+                  "enum": [
+                    "activated"
+                  ]
+                },
+                "update_time": {
+                  "type": "string",
+                  "title": "Update Time",
+                  "description": "Last update time of the tool memory (ISO 8601 format)."
+                },
+                "experience": {
+                  "type": "string",
+                  "title": "Experience",
+                  "description": "Procedural experience of the entire trajectory, serving as overall guidance for task completion."
+                },
+                "sources": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": true
+                  },
+                  "description": "List of original message content associated with the tool memory."
                 },
                 "info": {
                   "type": "object",

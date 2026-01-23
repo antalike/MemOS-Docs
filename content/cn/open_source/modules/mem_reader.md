@@ -1,187 +1,182 @@
 ---
-title: MemReader 入门
-desc: 本指南将带您逐步了解如何使用 `SimpleStructMemReader`——借助大语言模型（LLMs）和嵌入模型，从对话和文档中提取结构化记忆。它非常适合用于构建具备记忆能力的对话式 AI、知识库和语义搜索系统。
+title: "MemReader"
+desc: "MemReader 是 MemOS 的“记忆翻译官”。它负责把用户杂乱的输入（聊天、文档、图片）翻译成系统能理解的、结构化的记忆片段。"
 ---
 
-##  初始化 `SimpleStructMemReader`
+## 1. 简介
 
-首先，使用您首选的 LLM 和嵌入器模型配置并初始化读取器。
+在构建 AI 应用时，我们经常遇到这样的问题：用户发来的东西千奇百怪——有的是随口的聊天，有的是 PDF 文档，有的是图片。**MemReader** 的作用就是把这些原始数据（Raw Data）“嚼碎”并“消化”，变成带有 Embedding 和元数据的标准记忆块（Memory Item）。
 
-### 示例：
+简单来说，它做三件事：
+1.  **归一化**：不管你发来的是字符串还是 JSON，先统一变成标准格式。
+2.  **切片 (Chunking)**：把长对话或长文档切成合适的小块，方便后续处理。
+3.  **精炼 (Extraction)**：调用 LLM 把非结构化的信息提取成结构化的知识点（Fine 模式），或者直接生成快照（Fast 模式）。
 
-```python
-from memos.configs.mem_reader import SimpleStructMemReaderConfig
-from memos.mem_reader.simple_struct import SimpleStructMemReader
-reader_config = SimpleStructMemReaderConfig.from_json_file(
-    "examples/data/config/simple_struct_reader_config.json"
-)
-reader = SimpleStructMemReader(reader_config)
-```
-::tip
-您可以根据环境自定义模型名称或后端。
-::
 ---
 
-## 获取您的第一个聊天记忆
+## 2. 核心模式
 
-从用户和助手之间的对话中提取结构化记忆。
+MemReader 设计了两种工作模式，分别对应“快”和“准”两种需求：
 
-### 示例输入：
+### ⚡ Fast 模式（唯快不破）
+*   **特点**：**不调用 LLM**，只做切片和 Embedding。
+*   **适用场景**：
+    *   用户发消息飞快，系统需要毫秒级响应。
+    *   只需保留对话的“快照”，不需要深度理解。
+*   **产物**：原始文本片段 + 向量索引。
+
+### 🧠 Fine 模式（精雕细琢）
+*   **特点**：**调用 LLM** 进行深度分析。
+*   **适用场景**：
+    *   长时记忆写入（需要提取关键事实）。
+    *   文档分析（需要总结核心观点）。
+    *   多模态理解（需要看懂图片里的内容）。
+*   **产物**：结构化的事实 + 摘要 (Background) + 来源追踪 (Provenance)。
+
+---
+
+## 3. 代码结构
+
+MemReader 的代码结构非常清晰，主要由以下几部分组成：
+
+*   **`base.py`**: 定义了所有 Reader 必须遵守的接口规范。
+*   **`simple_struct.py`**: **最常用的实现**。专攻纯文本对话和本地文档，轻量高效。
+*   **`multi_modal_struct.py`**: **全能型选手**。能处理图片、文件 URL、Tool 调用等复杂输入。
+*   **`read_multi_modal/`**: 存放了各种具体的解析器（Parser），比如专门解析图片的 `ImageParser`，解析文件的 `FileParser` 等。
+
+---
+
+## 4. 如何选择？
+
+| 你的需求 | 推荐选择 | 理由 |
+| :--- | :--- | :--- |
+| **只处理纯文本对话** | `SimpleStructMemReader` | 简单、直接、性能好。 |
+| **需要处理图片、文件链接** | `MultiModalStructMemReader` | 内置了多模态解析能力。 |
+| **需要从 Fast 升级到 Fine** | 任意 Reader 的 `fine_transfer` 方法 | 支持“先存后优”的渐进式策略。 |
+
+---
+
+## 5. API 概览
+
+### 统一工厂：`MemReaderFactory`
+
+不要自己去 `new` 对象，使用工厂模式是最佳实践：
 
 ```python
-conversation_data = [
-    [
-        {"role": "user", "content": "I have a meeting tomorrow at 3 PM"},
-        {"role": "assistant", "content": "What's the meeting about?"},
-        {"role": "user", "content": "It's about the Q4 project deadline"}
-    ]
-]
+from memos.configs.mem_reader import MemReaderConfigFactory
+from memos.mem_reader.factory import MemReaderFactory
+
+# 从配置创建 Reader
+cfg = MemReaderConfigFactory.model_validate({...})
+reader = MemReaderFactory.from_config(cfg)
 ```
 
-### 提取记忆：
+### 核心方法：`get_memory()`
+
+这是你最常调用的方法。
 
 ```python
 memories = reader.get_memory(
-    conversation_data,
+    scene_data,       # 你的输入数据
+    type="chat",      # 类型：chat 或 doc
+    info=user_info,   # 用户信息（user_id, session_id）
+    mode="fine"       # 模式：fast 或 fine（强烈建议显式指定！）
+)
+```
+
+**返回结果**：`list[list[TextualMemoryItem]]`
+
+为什么是双层列表？  
+因为一个长对话可能会被切成多个窗口（Window），外层列表代表窗口，内层列表代表该窗口提取出的记忆项。
+
+---
+
+## 6. 开发实战
+
+### 场景一：处理简单的聊天记录
+
+这是最基础的用法，使用 `SimpleStructMemReader`。
+
+```python
+# 1. 准备输入：标准的 OpenAI 格式对话
+conversation = [
+    [
+        {"role": "user", "content": "我明天下午 3 点有个会"},
+        {"role": "assistant", "content": "会议主题是什么？"},
+        {"role": "user", "content": "讨论 Q4 项目截止日期"},
+    ]
+]
+
+# 2. 提取记忆 (Fine 模式)
+memories = reader.get_memory(
+    conversation,
     type="chat",
-    info={"user_id": "user_001", "session_id": "session_001"}
+    mode="fine",
+    info={"user_id": "u1", "session_id": "s1"}
+)
+
+# 3. 结果
+# memories 里会包含提取出的事实，例如："用户明天下午3点有关于Q4项目的会议"
+```
+
+### 场景二：处理多模态输入
+
+当用户发来图片或文件链接时，切换到 `MultiModalStructMemReader`。
+
+```python
+# 1. 准备输入：包含文件和图片的复杂消息
+scene_data = [
+    [
+        {
+            "role": "user",
+            "content": [
+                {"type": "text", "text": "看看这个文件和图片"},
+                # 文件支持 URL 自动下载解析
+                {"type": "file", "file": {"file_data": "https://example.com/readme.md"}},
+                # 图片支持 URL
+                {"type": "image_url", "image_url": {"url": "https://example.com/chart.png"}},
+            ]
+        }
+    ]
+]
+
+# 2. 提取记忆
+memories = multimodal_reader.get_memory(
+    scene_data,
+    type="chat",
+    mode="fine", # 只有 Fine 模式才会调用视觉模型解析图片
+    info={"user_id": "u1", "session_id": "s1"}
 )
 ```
 
-### 示例输出：
+### 场景三：渐进式优化 (Fine Transfer)
 
-```json
-[
-    TextualMemoryItem(
-        id='2d5965f9-4c9b-4c24-9068-325b53db098b',
-        memory='Tomorrow at 3:00 PM, the user will meet with the Q4 project team to discuss the deadline.',
-        metadata=TreeNodeTextualMemoryMetadata(
-            user_id='user_001',
-            session_id='session_001',
-            status='activated',
-            type='fact',
-            confidence=0.99,
-            tags=['deadline', 'project'],
-            visibility=None,
-            updated_at='2025-07-03T14:34:33.535844',
-            memory_type='UserMemory',
-            key='Meeting schedule',
-            sources=[
-                "user: I have a meeting tomorrow at 3 PM",
-                "assistant: What's the meeting about?",
-                "user: It's about the Q4 project deadline"
-            ],
-            embedding=[0.0058597163, ..., 0.009375607],
-            created_at='2025-07-03T14:34:33.535860',
-            usage=[],
-            background="The user plans to meet with the Q4 project team tomorrow at 3:00 PM to address the project's deadline. This action reflects their proactive approach to managing project timelines and their focus on ensuring timely completion."
-        )
-    )
-]
-```
-::note
-读取器从对话会话中提取相关记忆和标签。
-::
----
-
-## 获取您的第一个文档记忆
-
-处理文本文件以提取结构化摘要和标签。
-
-### 示例代码：
+为了用户体验，你可以先用 Fast 模式快速存下对话，等系统空闲时再把它“精炼”成 Fine 记忆。
 
 ```python
-doc_paths = [
-    "examples/mem_reader/text1.txt",
-    "examples/mem_reader/text2.txt",
-]
+# 1. 先快速存（毫秒级）
+fast_memories = reader.get_memory(conversation, mode="fast", ...)
 
-doc_memories = reader.get_memory(
-    doc_paths,
-    type="doc",
-    info={
-        "user_id": "user_001",
-        "session_id": "session_001",
-        "chunk_size": 512,
-        "chunk_overlap": 128
-    }
+# ... 存入数据库 ...
+
+# 2. 后台异步精炼
+refined_memories = reader.fine_transfer_simple_mem(
+    fast_memories_flat_list, # 注意这里传入的是展平后的 Item 列表
+    type="chat"
 )
-```
 
-### 示例输出：
-
-```json
-[
-    TextualMemoryItem(
-        id='24dabd9f-200b-40c4-84cc-2c0fccaaf8fd',
-        memory='This is another sample document content for testing purposes.',
-        metadata=TreeNodeTextualMemoryMetadata(
-            user_id='user_001',
-            session_id='session_001',
-            status='activated',
-            type='fact',
-            memory_time=None,
-            source=None,
-            confidence=0.99,
-            entities=None,
-            tags=['Testing', 'Sample'],
-            visibility=None,
-            updated_at='2025-07-03T14:38:29.776147',
-            memory_type='LongTermMemory',
-            key='',
-            sources=['examples/mem_reader/text2.txt_0'],
-            embedding=[0.028731367, ..., -0.018501928],
-            created_at='2025-07-03T14:38:29.776213',
-            usage=[],
-            background=''
-        )
-    )
-]
-```
-::note
-文档被分块和摘要以创建可搜索的知识项。
-::
-
-### 支持的文件
-
-我们使用 [`markitdown`](https://github.com/microsoft/markitdown) 将文件转换为 Markdown 格式文本。
-
-**MarkItDown 目前支持从以下格式转换：**  
-
-```
-PDF  
-PowerPoint  
-Word  
-Excel  
-Images (EXIF metadata and OCR)  
-Audio (EXIF metadata and speech transcription)  
-HTML  
-Text-based formats (CSV, JSON, XML)  
-ZIP files (iterates over contents)  
-YouTube URLs  
-EPUBs  
-... and more!
-```
-*(内容来源于 [MarkItDown GitHub 仓库](https://github.com/microsoft/markitdown))*
-
----
-
-
-## 试试看：打印提取的记忆
-
-```python
-for memory_list in memories:
-    for memory_item in memory_list:
-        print("🧠 Memory:", memory_item.memory)
-        print("🏷 Tags:", memory_item.metadata.tags)
-        print("👤 User ID:", memory_item.metadata.user_id)
-        print("📅 Created At:", memory_item.metadata.created_at)
-        print("---")
+# 3. 用 refined_memories 替换掉原来的 fast_memories
 ```
 
 ---
 
-您现在已成功：
-- 初始化了 `SimpleStructMemReader`
-- 从聊天对话中提取了结构化记忆
-- 从文档中提取了知识
+## 7. 配置项说明
+
+在 `.env` 或配置文件中，你可以调整以下关键参数：
+
+*   **`chat_window_max_tokens`**: **滑窗大小**。默认 1024。决定了多少上下文会被打包在一起处理。设得太小容易丢失语境，设得太大容易爆 LLM 的 Token 限制。
+*   **`remove_prompt_example`**: **是否移除 Prompt 里的示例**。如果你想节省 Token，可以设为 True；如果你发现提取效果不好，建议设为 False（保留 Few-shot 示例）。
+*   **`direct_markdown_hostnames`** (仅多模态): **域名白名单**。如果文件 URL 的域名在这个名单里（比如 `raw.githubusercontent.com`），Reader 会直接把它当 Markdown 文本处理，而不是去尝试 OCR 或转换，效率更高。
+
+
+
