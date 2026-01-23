@@ -476,7 +476,7 @@
         "type": "apiKey",
         "name": "Authorization",
         "in": "header",
-        "description": "Token API_key，可在 <a href=\"{{dashboardUrl}}/apikeys/\" class=\"text-primary border-b border-transparent hover:border-primary font-medium focus-visible:outline-primary [&amp;&gt;code]:border-dashed hover:[&amp;&gt;code]:border-primary hover:[&amp;&gt;code]:text-primary transition-colors [&amp;&gt;code]:transition-colors\" target=\"_blank\">API 控制台>接口密钥</a> 中查看"
+        "description": "Token API_key，可在 <a href=\"https://memos-dashboard.openmem.net/apikeys/\" class=\"text-primary border-b border-transparent hover:border-primary font-medium focus-visible:outline-primary [&amp;&gt;code]:border-dashed hover:[&amp;&gt;code]:border-primary hover:[&amp;&gt;code]:text-primary transition-colors [&amp;&gt;code]:transition-colors\" target=\"_blank\">API 控制台>接口密钥</a> 中查看"
       }
     },
     "schemas": {

@@ -54,7 +54,7 @@ In short, MemOS aims to:
 At its core, MemOS treats “memory” as an independent system layer—like computation and storage—becoming a fundamental capability for AI applications.  
 Its overall architecture can be summarized as a **three-layer structure**: <span style="color: rgb(61, 170, 214);">**API & Application Interface Layer, Memory Scheduling & Management Layer, Memory Storage & Infrastructure Layer**</span>
 
-![art.gif]({{staticCdnUrl}}/memos/art.gif)
+![art.gif](https://statics.memtensor.com.cn/memos/art.gif)
 
 *   In the <span style="color: rgb(61, 170, 214);">**API & Application Interface Layer**</span>, MemOS provides standardized Memory APIs. Developers can perform operations such as <span style="color: rgb(61, 170, 214);">**memory creation, deletion, and updating**</span> through simple interfaces, giving large models persistent memory capabilities for multi-turn conversations, long-term tasks, and cross-session personalization.
     
@@ -73,7 +73,7 @@ Its overall architecture can be summarized as a **three-layer structure**: <span
     
 
 <figure style="width: fit-content">
-  <img src="{{cdnUrl}}/img/1758183504775_2ehjk2_compressed.png" alt="Basic structure of standardized MemCube (Memory Cube)" />
+  <img src="https://cdn.memtensor.com.cn/img/1758183504775_2ehjk2_compressed.png" alt="Basic structure of standardized MemCube (Memory Cube)" />
   <figcaption style="text-align: center;">Basic structure of standardized MemCube (Memory Cube)</figcaption>
 </figure>
 
@@ -95,10 +95,10 @@ From Next-Token Prediction to Next-Scene Prediction
 *   With precise awareness of conversation turns and time gaps, the system intelligently predicts which memory elements may be needed in the next scene. It dynamically routes and preloads the required plaintext, parameter, and activating memories, ensuring immediate hits during generation and maximizing efficiency and fluency of reasoning.
     
 
-![640.gif]({{staticCdnUrl}}/memos/ani.gif)
+![640.gif](https://statics.memtensor.com.cn/memos/ani.gif)
 
 <figure style="width: fit-content">
-  <img src="{{cdnUrl}}/img/1758687680524_waiu4s_compressed.png " alt="Core idea of memory scheduling" />
+  <img src="https://cdn.memtensor.com.cn/img/1758687680524_waiu4s_compressed.png " alt="Core idea of memory scheduling" />
   <figcaption style="text-align: center;">Core idea of memory scheduling</figcaption>
 </figure>
 
@@ -114,7 +114,7 @@ From Next-Token Prediction to Next-Scene Prediction
 *   Public results show that **MemOS achieves significant improvements in both accuracy and computational efficiency**. Compared with OpenAI’s global memory approach, it demonstrates superior performance on key metrics, further verifying its technological leadership in memory scheduling, management, and reasoning integration.
     
 
-![image.png]({{cdnUrl}}/img/1758687655761_blkqnr_compressed.png)
+![image.png](https://cdn.memtensor.com.cn/img/1758687655761_blkqnr_compressed.png)
 
 
 ### 4.2 KV Cache Memory Evaluation
@@ -126,7 +126,7 @@ From Next-Token Prediction to Next-Scene Prediction
 *   Results (see Figure 10) show that **MemOS significantly optimizes KV Cache build and reuse efficiency across configurations**, making inference more efficient and smooth. This reduces user waiting latency and achieves substantial performance acceleration in large-scale model scenarios.
     
 
-![image.png]({{cdnUrl}}/img/1758687596553_iptom0_compressed.png)
+![image.png](https://cdn.memtensor.com.cn/img/1758687596553_iptom0_compressed.png)
 
 
 ## 5. Next Steps

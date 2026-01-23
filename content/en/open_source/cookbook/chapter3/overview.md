@@ -6,7 +6,7 @@ title: Building an Intelligent Novel Analysis System with MemOS
 
 Before we start coding, let's see what problems MemOS actually solves:
 
-![Cookbook-Chapter3-Chart]({{staticCdnUrl}}/memos/cookbook-chapter3-chart.png)
+![Cookbook-Chapter3-Chart](https://statics.memtensor.com.cn/memos/cookbook-chapter3-chart.png)
 
 **Actual Effect Comparison Example:**
 
@@ -42,7 +42,7 @@ This chapter will guide you to build an intelligent memory analysis system based
 
 **Core Technical Architecture**:
 
-![Cookbook-Chapter3-Core]({{staticCdnUrl}}/memos/cookbook-chapter3-core-en.png)
+![Cookbook-Chapter3-Core](https://statics.memtensor.com.cn/memos/cookbook-chapter3-core-en.png)
 
 **Data Processing Pipeline**:
 

@@ -53,7 +53,7 @@ desc: 让大模型从一次性对话工具，进化为真正具有长期记忆�
 
 MemOS 的设计核心，是把「记忆」作为一个独立系统层，和计算、存储一样，成为 AI 应用的基础能力。它的整体架构可以概括为 **三层结构**： <span style="color: rgb(61, 170, 214);">**API 与应用接口层、记忆调度与管理层、记忆存储与基础设施层**</span>
 
-![art.gif]({{staticCdnUrl}}/memos/art.gif)
+![art.gif](https://statics.memtensor.com.cn/memos/art.gif)
 
 *   在 <span style="color: rgb(61, 170, 214);">**API 与应用接口层**</span>，MemOS 提供了标准化的 Memory API，开发者可以通过简单的接口实现<span style="color: rgb(61, 170, 214);">**记忆创建、删除、更新**</span>等操作，让大模型具备易于调用和扩展的持久记忆能力，支持多轮对话、长期任务和跨会话个性化等复杂应用场景。
     
@@ -72,7 +72,7 @@ MemOS 的设计核心，是把「记忆」作为一个独立系统层，和计�
     
 
 <figure style="width: fit-content">
-  <img src="{{cdnUrl}}/img/1758183504775_2ehjk2_compressed.png" alt="标准化 MemCube（记忆立方体）的基础构成" />
+  <img src="https://cdn.memtensor.com.cn/img/1758183504775_2ehjk2_compressed.png" alt="标准化 MemCube（记忆立方体）的基础构成" />
   <figcaption style="text-align: center;">标准化 MemCube（记忆立方体）的基础构成</figcaption>
 </figure>
 
@@ -94,10 +94,10 @@ MemOS 的设计核心，是把「记忆」作为一个独立系统层，和计�
 *   依托对对话轮次与时间差的精准感知，系统能够智能预测下一个场景中可能被调用的记忆内容，并动态路由与预加载所需的明文、参数和激活记忆，从而在生成阶段即刻命中，最大化信息引入的效率和推理的流畅性。
     
 
-![640.gif]({{staticCdnUrl}}/memos/ani.gif)
+![640.gif](https://statics.memtensor.com.cn/memos/ani.gif)
 
 <figure style="width: fit-content">
-  <img src="{{cdnUrl}}/img/1758687680524_waiu4s_compressed.png " alt="记忆调度的核心思路" />
+  <img src="https://cdn.memtensor.com.cn/img/1758687680524_waiu4s_compressed.png " alt="记忆调度的核心思路" />
   <figcaption style="text-align: center;">记忆调度的核心思路</figcaption>
 </figure>
 
@@ -113,7 +113,7 @@ MemOS 的设计核心，是把「记忆」作为一个独立系统层，和计�
 *   从官方公开的评测数据来看，**MemOS在准确率和计算效率上均实现了显著提升**，相较于OpenAI的全局记忆方案，在关键指标上展现出更优的性能表现，进一步验证了其在记忆调度、管理与推理融合方面的技术领先性。
     
 
-![image.png]({{cdnUrl}}/img/1758687655761_blkqnr_compressed.png)
+![image.png](https://cdn.memtensor.com.cn/img/1758687655761_blkqnr_compressed.png)
 
 
 ### 4.2 KV Cache记忆评测
@@ -125,7 +125,7 @@ MemOS 的设计核心，是把「记忆」作为一个独立系统层，和计�
 *   实验结果（见图10）表明，**MemOS在多种配置下均显著优化了KV Cache的构建与复用效率**，使推理过程更加高效流畅，有效缩短了用户的等待时延，并在大规模模型场景中实现了可观的性能加速。
     
 
-![image.png]({{cdnUrl}}/img/1758687596553_iptom0_compressed.png)
+![image.png](https://cdn.memtensor.com.cn/img/1758687596553_iptom0_compressed.png)
 
 
 ## 5. 下一步行动

@@ -22,7 +22,7 @@ links:
 
 **MemOS** 通过将记忆重新定义为具有统一结构、生命周期管理和调度策略的核心一级资源来解决这些挑战。它提供了一个 Python 包，为基于 LLM 的应用程序提供统一的记忆层，实现持久化、结构化和高效的记忆操作。这使 LLMs 具备长期知识保留、强大的上下文管理和记忆增强推理能力，支持更智能和自适应的行为。
 
-![MemOS Architecture]({{staticCdnUrl}}/memos/memos-architecture.png)
+![MemOS Architecture](https://statics.memtensor.com.cn/memos/memos-architecture.png)
 
 ## 主要特性
 

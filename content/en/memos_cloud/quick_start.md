@@ -9,14 +9,14 @@ MemOS provides two core interfaces to help you achieve this:
 - `addMessage` —— Hand over the original conversation to us, and we will automatically process and store memories [(Click for detailed API documentation)](/api_docs/core/add_message)
 - `searchMemory` —— Recall memories in subsequent conversations to make AI answers more relevant to user needs [(Click for detailed API documentation)](/api_docs/core/search_memory)
 
-![image.svg]({{cdnUrl}}/img/1762435152160_rnausc_compressed.png)
+![image.svg](https://cdn.memtensor.com.cn/img/1762435152160_rnausc_compressed.png)
 
 
 ## 1. Preparation
 
-* Register and log in to MemOS Cloud Platform [(Click to Register)]({{dashboardUrl}}/quickstart);
+* Register and log in to MemOS Cloud Platform [(Click to Register)](https://memos-dashboard.openmem.net/quickstart);
 
-* Get API Key [(Click to Get)]({{dashboardUrl}}/apikeys);
+* Get API Key [(Click to Get)](https://memos-dashboard.openmem.net/apikeys);
 
 * Prepare an environment capable of sending HTTP requests, such as Python or cURL.
 

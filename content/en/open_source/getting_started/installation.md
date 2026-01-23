@@ -159,7 +159,7 @@ ENABLE_CHAT_API=true
 
 CHAT_MODEL_LIST=[{"backend": "qwen", "api_base": "https://dashscope.aliyuncs.com/compatible-mode/v1", "api_key": "you_bailian_api_key", "model_name_or_path": "qwen3-max-preview", "extra_body": {"enable_thinking": true} ,"support_models": ["qwen3-max-preview"]}]
 ```
-![MemOS bailian]({{cdnUrl}}/img/get_key_url_by_bailian_compressed.png)
+![MemOS bailian](https://cdn.memtensor.com.cn/img/get_key_url_by_bailian_compressed.png)
 <div style="text-align: center; margin-top: 10px">Example of applying for API_KEY and BASE_URL in Bailian</div>
 
 ::
@@ -232,12 +232,12 @@ The build command must also be executed in the docker directory.
 # In the docker directory
 docker compose up
 ```
-![MemOS buildComposeupSuccess]({{cdnUrl}}/img/memos_build_composeup_success_compressed.png)
+![MemOS buildComposeupSuccess](https://cdn.memtensor.com.cn/img/memos_build_composeup_success_compressed.png)
 <div style="text-align: center; margin-top: 10px">Example image, port according to custom docker configuration</div>  
 
 #### Access the API at [http://localhost:8000/docs](http://localhost:8000/docs).
 
-![MemOS Architecture]({{cdnUrl}}/img/memos_run_server_success_compressed.png)
+![MemOS Architecture](https://cdn.memtensor.com.cn/img/memos_run_server_success_compressed.png)
 
 #### Search Memory
 ```bash

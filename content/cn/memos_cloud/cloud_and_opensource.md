@@ -12,7 +12,7 @@ desc: 选择最适合您需求的 MemOS “记忆”方案。
 
 * **可视化记忆**：你能看到哪些内容被加工成了记忆、是如何被调度、召回的<br>
 
-👉 [立即体验 Playground]({{playgroundUrl}}/)
+👉 [立即体验 Playground](https://memos-playground.openmem.net/)
 ::
 
 
@@ -51,6 +51,6 @@ MemOS 为 AI 应用提供了两种“记忆”解决方案。您可以选择�
 
 ## 3. 还未确定？
 
-*   [试用免费平台](/memos_cloud/quick_start)：注册并登录 [MemOS 云平台]({{dashboardUrl}}/quickstart)，免费试用所有功能。
+*   [试用免费平台](/memos_cloud/quick_start)：注册并登录 [MemOS 云平台](https://memos-dashboard.openmem.net/quickstart)，免费试用所有功能。
 
 *   [探索开源方案](/open_source/getting_started/quick_start)：克隆项目仓库，直接在本地运行试用。顺便点个 Star 支持我们吧！

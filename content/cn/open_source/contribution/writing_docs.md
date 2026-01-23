@@ -21,7 +21,8 @@ desc: 本项目使用 Nuxt Content 构建支持 Markdown 和富 Vue 组件的文
 - `banner`（字符串） - 页面顶部展示的横幅图片链接
 - `links`（数组） - 包含标签、URL 和图标的相关链接数组
 
-![Frontmatter 示例]({{staticCdnUrl}}/memos/frontmatter.png)
+![Frontmatter 示例](https://statics.memtensor.com.cn/memos/frontmatter.png)
+::
 
 **完整 Frontmatter 示例：**
 
@@ -29,13 +30,13 @@ desc: 本项目使用 Nuxt Content 构建支持 Markdown 和富 Vue 组件的文
 ---
 title: MemOS 文档
 desc: 欢迎阅读 MemOS 的官方文档——一个旨在赋能大语言模型（LLMs）实现高级、模块化记忆能力的 Python 包。
-banner: {{staticCdnUrl}}/memos/memos-banner.gif
+banner: https://statics.memtensor.com.cn/memos/memos-banner.gif
 links:
   - label: 'PyPI'
     to: https://pypi.org/project/MemoryOS/
     target: _blank
     avatar:
-      src: {{staticCdnUrl}}/icon/pypi.svg
+      src: https://statics.memtensor.com.cn/icon/pypi.svg
       alt: PyPI logo
   - label: '开源地址'
     to: https://github.com/MemTensor/MemOS
@@ -75,7 +76,7 @@ links:
 对于托管在外部服务器上的图片，使用标准的 Markdown 图片语法：
 
 ```markdown
-![MemOS Architecture]({{staticCdnUrl}}/memos/memos-architecture.png)
+![MemOS Architecture](https://statics.memtensor.com.cn/memos/memos-architecture.png)
 ```
 
 ### Steps

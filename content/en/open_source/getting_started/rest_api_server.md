@@ -3,7 +3,7 @@ title: REST API Server
 desc: MemOS provides a REST API service written using FastAPI. Users can perform all operations via REST interfaces.
 ---
 
-![MemOS Architecture]({{cdnUrl}}/img/memos_run_server_success_compressed.png)
+![MemOS Architecture](https://cdn.memtensor.com.cn/img/memos_run_server_success_compressed.png)
 <div style="text-align: center; margin-top: 10px">APIs supported by MemOS REST API Server</div>  
 
 ### Features
@@ -135,7 +135,7 @@ ENABLE_CHAT_API=true
 CHAT_MODEL_LIST=[{"backend": "qwen", "api_base": "https://dashscope.aliyuncs.com/compatible-mode/v1", "api_key": "you_bailian_api_key", "model_name_or_path": "qwen3-max-preview", "extra_body": {"enable_thinking": true} ,"support_models": ["qwen3-max-preview"]}]
 
 ```
-![MemOS bailian]({{cdnUrl}}/img/get_key_url_by_bailian_compressed.png)
+![MemOS bailian](https://cdn.memtensor.com.cn/img/get_key_url_by_bailian_compressed.png)
 <div style="text-align: center; margin-top: 10px">Bailian application API_KEY and BASE_URL example</div>
 
 Configure dependency versions in docker/requirement.txt （negligible）, Complete Mode Reference <a href="https://github.com/MemTensor/MemOS/blob/main/docker/requirements.txt">requirements.txt</a>.
@@ -203,12 +203,12 @@ CMD ["uvicorn", "memos.api.server_api:app", "--host", "0.0.0.0", "--port", "8000
 # Enter docker directory
 docker compose up
 ```
-![MemOS buildComposeupSuccess]({{cdnUrl}}/img/memos_build_composeup_success_compressed.png)
+![MemOS buildComposeupSuccess](https://cdn.memtensor.com.cn/img/memos_build_composeup_success_compressed.png)
 <div style="text-align: center; margin-top: 10px">Example image, port as per docker custom configuration</div>  
 
 #### Access API via [http://localhost:8000/docs](http://localhost:8000/docs).
 
-![MemOS Architecture]({{cdnUrl}}/img/memos_run_server_success_compressed.png)
+![MemOS Architecture](https://cdn.memtensor.com.cn/img/memos_run_server_success_compressed.png)
 
 
 #### Test cases (Add user memory->Query user memory) Refer to Docker Compose up test cases

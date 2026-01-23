@@ -79,4 +79,4 @@ Generate user_id with UUID only during the user's first conversation, and reuse 
 ```
 
 [Agent Example Link](https://www.coze.cn/s/85NOIg062vQ)
-![Agent Workflow]({{cdnUrl}}/img/coze_workflow_compressed.png)
+![Agent Workflow](https://cdn.memtensor.com.cn/img/coze_workflow_compressed.png)

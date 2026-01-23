@@ -15,7 +15,7 @@ The Chat interface provided by MemOS supports end-to-end conversation message in
 
 ## 2. How It Works
 
-# ![chat_interface_process.png]({{cdnUrl}}/img/1767784468613_46u5xe_compressed.png)
+# ![chat_interface_process.png](https://cdn.memtensor.com.cn/img/1767784468613_46u5xe_compressed.png)
 
 The figure above illustrates the complete interaction process between the end user, your AI application, and MemOS:
 
@@ -123,7 +123,7 @@ For a complete list of API fields, formats, etc., please see the [Chat Interface
 
 | Feature | Field | Description & Optional Values |
 | :--- | :--- | :--- |
-| Select Model | model\_name | Currently MemOS provides three models you can specify for responses. You can view detailed model introductions in [Console - Model List]({{dashboardUrl}}/models/). Optional model names:<br>* qwen2.5-72b-instruct (Default)<br>* qwen3-32b<br>* deepseek-r1 |
+| Select Model | model\_name | Currently MemOS provides three models you can specify for responses. You can view detailed model introductions in [Console - Model List](https://memos-dashboard.openmem.net/models/). Optional model names:<br>* qwen2.5-72b-instruct (Default)<br>* qwen3-32b<br>* deepseek-r1 |
 | Custom System Prompt | system\_prompt | Supports developers to customize system prompts. Defaults to MemOS built-in instructions. |
 | Stream/Non-stream Response | stream | MemOS provides both streaming and non-streaming response modes. You can choose either mode based on your needs.<br>Pass `stream=true or false` when calling the interface. The default output mode is: non-streaming output. |
 | Key Parameters | temperature | Controls the randomness of model generated content. Lower values make the answer more stable and closer to a fixed answer; higher values make the answer more divergent and diverse.<br>Optional value range: 0-2, default temperature value: 0.7 |

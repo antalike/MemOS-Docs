@@ -81,4 +81,4 @@ memos_key = "Token mpg-XXXXXXXXXXXXXXXXXXXXXXXXXXX"
 ```
 
 [Agent示例链接](https://www.coze.cn/s/85NOIg062vQ)
-![Agent 工作流]({{cdnUrl}}/img/coze_workflow_compressed.png)
+![Agent 工作流](https://cdn.memtensor.com.cn/img/coze_workflow_compressed.png)

@@ -12,7 +12,7 @@ desc: Choose the MemOS "Memory" solution that best suits your needs.
 
 * **Visualized Memory**: See exactly what content is processed into memories, and how they are scheduled and recalled<br>
 
-👉 [Try Playground Now]({{playgroundUrl}}/)
+👉 [Try Playground Now](https://memos-playground.openmem.net/)
 ::
 
 
@@ -52,6 +52,6 @@ MemOS provides two "Memory" solutions for AI applications. You can choose:
 
 ## 3. Still Undecided?
 
-*   [Try Free Platform](/memos_cloud/quick_start): Register and log in to [MemOS Cloud Platform]({{dashboardUrl}}/quickstart) to try all features for free.
+*   [Try Free Platform](/memos_cloud/quick_start): Register and log in to [MemOS Cloud Platform](https://memos-dashboard.openmem.net/quickstart) to try all features for free.
 
 *   [Explore Open Source](/open_source/getting_started/quick_start): Clone the project repository and run it directly locally. And don't forget to give us a Star!

@@ -7,7 +7,7 @@ title: Overview
 MemOS provides a complete set of interfaces. Through simple API requests, you can integrate memory-related functions into your AI applications, realizing memory production, scheduling, recall, and lifecycle management for different users and AI agents.
 
 ::tip
-**Quick Start:** Get your API key from the [**MemOS Console**]({{dashboardUrl}}/apikeys/) and complete your first memory operation in one minute.
+**Quick Start:** Get your API key from the [**MemOS Console**](https://memos-dashboard.openmem.net/apikeys/) and complete your first memory operation in one minute.
 ::
 
 ## 2. Getting Started
@@ -32,7 +32,7 @@ Explore the rich functional interfaces provided by MemOS:
 
 ## 4. Authentication
 
-All API requests require authentication. Please include your API key in the `Authorization` header of the request. Get your API key from the [**MemOS Console**]({{dashboardUrl}}/apikeys/).
+All API requests require authentication. Please include your API key in the `Authorization` header of the request. Get your API key from the [**MemOS Console**](https://memos-dashboard.openmem.net/apikeys/).
 
 ::warning
 Do not expose your API key in client-side code or public repositories. All requests should be made via environment variables or server-side calls.

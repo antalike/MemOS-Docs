@@ -129,7 +129,7 @@ MemOS 能够理解**关系、时间与偏好**等信息，将当前问题与历
 MemOS 云服务目前为所有开发者提供了从免费版到企业版的多种定价方案，不同版本对应的知识库容量与数量限制不同。
 
 ::note
-目前，所有版本限时免费，欢迎前往[官网-价格]({{landingUrl}}/cn/pricing)，申请符合你需求的版本。
+目前，所有版本限时免费，欢迎前往[官网-价格](https://memos.openmem.net/cn/pricing)，申请符合你需求的版本。
 ::
 
 | **版本**   | **知识库存储限制**                        |
@@ -498,9 +498,9 @@ print(json.dumps(json_res, indent=2, ensure_ascii=False))
 ]
 ```
 
-[控制台-知识库]({{dashboardUrl}}/knowledgeBase/)中展示了知识库中所有通过自然语言交互，更正或补全知识库记忆的详情。
+[控制台-知识库](https://memos-dashboard.openmem.net/knowledgeBase/)中展示了知识库中所有通过自然语言交互，更正或补全知识库记忆的详情。
 
-![image.png]({{cdnUrl}}/img/1765970178683_5tuxe4_compressed.png)
+![image.png](https://cdn.memtensor.com.cn/img/1765970178683_5tuxe4_compressed.png)
 
 ::note
 有关反馈 API 字段、格式等信息的完整列表，详见[Add Feedback 接口文档](/api_docs/message/add_feedback)。
