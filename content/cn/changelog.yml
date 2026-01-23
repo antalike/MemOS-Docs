@@ -3,24 +3,22 @@ versions:
     date: 2026-01-22
     changedInfo:
       New Features:
-        - type: 官网开源项目文档
+        - type: 文档
           changedInfo:
-            - 修复格式、示例描述、中英文不匹配问题，新增使用小 tips。
-        - type: GitHub 仓库示例
-          changedInfo:
-            - 调整启动方式（新建类server router），移除 src/memos/product_api.py 引用。
-        - type: 知识库
+            - 开源项目文档，修复格式、示例描述、中英文不匹配问题，新增使用小 tips。
+        - type: Dashboard
           changedInfo:
             - 知识库新增支持文件类型, 支持 json、md、xml。
+        - type: GitHub 示例仓库
+          changedInfo:
+            - 调整启动方式（新建类server router），移除 src/memos/product_api.py 引用。
       Improvements:
-        - type: 记忆添加
+        - type: 开源项目
           changedInfo:
             - 优化文字与图片记忆添加，将两类信息作为单条消息协同处理。
-        - type: 知识库检索
-          changedInfo:
             - 知识库检索支持 all 字段。
       Bug Fixes:
-        - type: 记忆检索
+        - type: 开源项目
           changedInfo:
             - 修复当检索输入文本过长时的调用异常。
 
