@@ -2,6 +2,7 @@ import yaml from '@rollup/plugin-yaml'
 import type { NuxtConfig } from '@nuxt/schema'
 import pkg from './package.json'
 import { getCnRoutes, getCnApiReferenceRoutes } from './scripts/extract-routes.mjs'
+import remarkReplaceDomains from './scripts/remark-replace-domains.mjs'
 
 const cnRoutes = getCnRoutes()
 const cnApiRoutes = getCnApiReferenceRoutes()
@@ -15,12 +16,15 @@ const envConfig = await import(`./envConfig/config.${env}.ts`).then(m => m.defau
   }
 })
 
+const staticCdnUrl = envConfig.staticCdnUrl || 'https://statics.memtensor.com.cn'
+const cdnUrl = envConfig.cdnUrl || 'https://cdn.memtensor.com.cn'
+
 const config: NuxtConfig = {
   app: {
     head: {
       script: [
-        { src: 'https://cdn.memtensor.com.cn/file/js-cookie-3.0.5.min.js', type: 'text/javascript' },
-        { src: 'https://cdn.memtensor.com.cn/file/locale.1.1.2.min.js', type: 'text/javascript' }
+        { src: `${cdnUrl}/file/js-cookie-3.0.5.min.js`, type: 'text/javascript' },
+        { src: `${cdnUrl}/file/locale.1.1.2.min.js`, type: 'text/javascript' }
       ]
     }
   },
@@ -37,7 +41,9 @@ const config: NuxtConfig = {
     public: {
       ...envConfig,
       version: pkg.version,
-      apiBase: 'https://apigw.memtensor.cn'
+      apiBase: 'https://apigw.memtensor.cn',
+      staticCdnUrl,
+      cdnUrl
     }
   },
 
@@ -72,6 +78,11 @@ const config: NuxtConfig = {
     ],
     optimizeDeps: {
       include: ['debug']
+    },
+    build: {
+      rollupOptions: {
+        external: ['remark-replace-domains']
+      }
     }
   },
 
@@ -87,6 +98,22 @@ const config: NuxtConfig = {
   content: {
     build: {
       markdown: {
+        remarkPlugins: {
+          'remark-replace-domains': {
+            instance: remarkReplaceDomains,
+            options: {
+              imageDomains: {
+                'https://cdn.memtensor.com.cn': cdnUrl,
+                'https://statics.memtensor.com.cn': staticCdnUrl
+              },
+              linkDomains: {
+                'https://memos-playground.openmem.net': envConfig.playgroundUrl,
+                'https://memos-dashboard.openmem.net': envConfig.dashboardUrl,
+                'https://memos.openmem.net': envConfig.homeDomain
+              }
+            }
+          }
+        },
         highlight: {
           langs: ['bash', 'shell', 'ts', 'typescript', 'diff', 'vue', 'json', 'yml', 'css', 'mdc', 'python', 'py', 'mermaid', 'markdown', 'md']
         }

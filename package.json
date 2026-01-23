@@ -6,9 +6,11 @@
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
+    "dev:intl": "NUXT_ENV_CONFIG=intl nuxt dev",
     "sync-api": "node scripts/fetch-api.mjs",
     "sync-releases": "node scripts/fetch-releases.mjs",
     "generate": "node scripts/generate.mjs",
+    "generate:intl": "node scripts/generate.mjs --env=intl",
     "publish": "node scripts/generate.mjs",
     "preview": "nuxt preview",
     "lint": "eslint .",

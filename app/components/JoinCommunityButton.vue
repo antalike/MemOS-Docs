@@ -17,7 +17,7 @@
         <div class="grid grid-cols-2 gap-4">
           <div class="space-y-2">
             <img
-              src="https://statics.memtensor.com.cn/landing-v2/qrcode-wechat-v2.webp"
+              :src="useStaticCdnUrl(`/landing-v2/qrcode-wechat-v2.webp`)"
               class="size-30"
             >
             <div class="flex items-center justify-center gap-1.5">
@@ -30,7 +30,7 @@
           </div>
           <div class="space-y-2">
             <img
-              src="https://statics.memtensor.com.cn/landing-v2/qrcode-discord-v2.webp"
+              :src="useStaticCdnUrl(`/landing-v2/qrcode-discord-v2.webp`)"
               class="size-30"
             >
             <div class="flex items-center justify-center gap-1.5">
