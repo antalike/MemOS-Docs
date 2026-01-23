@@ -2,7 +2,7 @@ import yaml from '@rollup/plugin-yaml'
 import type { NuxtConfig } from '@nuxt/schema'
 import pkg from './package.json'
 import { getCnRoutes, getCnApiReferenceRoutes } from './scripts/extract-routes.mjs'
-import remarkVariables from './scripts/remark-variables.mjs'
+import remarkReplaceDomains from './scripts/remark-replace-domains.mjs'
 
 const cnRoutes = getCnRoutes()
 const cnApiRoutes = getCnApiReferenceRoutes()
@@ -18,9 +18,6 @@ const envConfig = await import(`./envConfig/config.${env}.ts`).then(m => m.defau
 
 const staticCdnUrl = envConfig.staticCdnUrl || 'https://statics.memtensor.com.cn'
 const cdnUrl = envConfig.cdnUrl || 'https://cdn.memtensor.com.cn'
-const dashboardUrl = envConfig.dashboardUrl || 'https://memos-dashboard.openmem.net'
-const playgroundUrl = envConfig.playgroundUrl || 'https://memos-playground.openmem.net'
-const landingUrl = envConfig.homeDomain || 'https://memos.openmem.net'
 
 const config: NuxtConfig = {
   app: {
@@ -46,10 +43,7 @@ const config: NuxtConfig = {
       version: pkg.version,
       apiBase: 'https://apigw.memtensor.cn',
       staticCdnUrl,
-      cdnUrl,
-      dashboardUrl,
-      playgroundUrl,
-      landingUrl
+      cdnUrl
     }
   },
 
@@ -87,7 +81,7 @@ const config: NuxtConfig = {
     },
     build: {
       rollupOptions: {
-        external: ['remark-variables']
+        external: ['remark-replace-domains']
       }
     }
   },
@@ -105,15 +99,17 @@ const config: NuxtConfig = {
     build: {
       markdown: {
         remarkPlugins: {
-          'remark-variables': {
-            instance: remarkVariables,
+          'remark-replace-domains': {
+            instance: remarkReplaceDomains,
             options: {
-              variables: {
-                staticCdnUrl,
-                cdnUrl,
-                dashboardUrl,
-                playgroundUrl,
-                landingUrl
+              imageDomains: {
+                'https://cdn.memtensor.com.cn': cdnUrl,
+                'https://statics.memtensor.com.cn': staticCdnUrl
+              },
+              linkDomains: {
+                'https://memos-playground.openmem.net': envConfig.playgroundUrl,
+                'https://memos-dashboard.openmem.net': envConfig.dashboardUrl,
+                'https://memos.openmem.net': envConfig.homeDomain
               }
             }
           }
