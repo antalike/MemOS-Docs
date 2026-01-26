@@ -1,6 +1,6 @@
 ---
-title: "MemScheduler: 记忆组织调度器"
-desc: "`MemScheduler` 是一个与 MemOS 系统并行运行的并发记忆管理系统，它协调 AI 系统中工作记忆、长时记忆和激活记忆之间的记忆操作。它通过事件驱动调度处理记忆检索、更新和压缩。<br/> 该系统特别适合需要动态记忆管理的对话代理和推理系统。"
+title: "MemScheduler"
+desc: "MemScheduler 是你的“记忆组织调度器”，它在后台异步管理记忆的流转和更新，协调工作记忆、长时记忆和激活记忆之间的交互，让对话系统能够动态地组织和利用记忆。"
 ---
 
 ## 主要特性
@@ -12,19 +12,24 @@ desc: "`MemScheduler` 是一个与 MemOS 系统并行运行的并发记忆管理
 - 📊 **全面监控**：实时监控记忆使用率、任务队列状态和调度延迟。
 - 📝 **详细日志记录**：全链路追踪记忆操作，便于调试和系统分析。
 
-## 记忆调度器架构
+##  MemScheduler 架构
 
-`MemScheduler` 系统采用模块化架构，核心组件如下：
+`MemScheduler` 采用模块化架构，分为三层：
 
-1. **消息处理**：核心调度引擎，通过带有特定标签（Label）的消息来驱动业务逻辑。
-2. **任务队列**：支持 Redis Stream (生产环境推荐) 和 Local Queue (开发测试) 两种模式，用于缓冲和持久化任务。
-3. **记忆管理**：负责不同层级记忆（Working/Long-term/User）的读写、压缩和遗忘策略，以及同类型记忆的组织和不同类型记忆间的转换。
-4. **检索系统**：结合用户意图、历史记忆场景管理与关键词匹配的混合检索模块。
-5. **监控**：跟踪任务积压情况、处理耗时以及记忆库的健康状态。
-6. **调度器 (路由器)**：智能路由器，根据消息类型（如 `QUERY`, `ANSWER`, `MEM_UPDATE`）和预设的触发埋点将任务分发给对应的处理任务。
-7. **日志记录**：维护记忆操作日志用于调试和分析。
+### 调度层（核心）
+1. **调度器（路由器）**：智能消息路由器，根据消息类型（`QUERY`, `ANSWER`, `MEM_UPDATE` 等）将任务分发给对应的处理器。
+2. **消息处理**：通过带有特定标签（Label）的消息驱动业务逻辑，定义消息格式和处理规则。
 
-## 记忆调度组件 MemScheduler 的初始化方法
+### 执行层（保障）
+3. **任务队列**：支持 Redis Stream（生产环境）和 Local Queue（开发测试）两种模式，提供异步任务缓冲和持久化。
+4. **记忆管理**：执行三层记忆（Working/Long-term/User）的读写、压缩、遗忘和类型转换。
+5. **检索系统**：混合检索模块，结合用户意图、场景管理与关键词匹配，快速定位相关记忆。
+
+### 支撑层（辅助）
+6. **监控**：跟踪任务积压、处理耗时和记忆库健康状态。
+7. **日志记录**：维护全链路记忆操作日志，便于调试和分析。
+
+##  MemScheduler 初始化
 
 在 MemOS 的架构中，`MemScheduler` 是作为服务器组件的一部分在启动时被初始化的。
 
@@ -62,11 +67,13 @@ redis_client = components["redis_client"]
 ```
 
 
-## 当前版本记忆调度默认设置的调度任务以及任务触发消息
+## 调度任务与数据模型
 
-调度器通过注册特定的任务标签（Label）与处理器（Handler）来分发和执行任务。以下是当前版本（基于 `GeneralScheduler` 和 `OptimizedScheduler`）默认支持的调度任务：
+调度器通过消息驱动的方式分发和执行任务。本节介绍支持的任务类型、消息结构和执行日志。
 
 ### 消息类型与处理器
+
+调度器通过注册特定的任务标签（Label）与处理器（Handler）来分发和执行任务。以下是当前版本（基于 `GeneralScheduler` 和 `OptimizedScheduler`）默认支持的调度任务：
 
 | 消息标签 (Label) | 对应常量 | 处理器方法 | 描述 |
 | :--- | :--- | :--- | :--- |
@@ -80,7 +87,7 @@ redis_client = components["redis_client"]
 | `mem_feedback` | `MEM_FEEDBACK_TASK_LABEL` | `_mem_feedback_message_consumer` | 处理用户反馈，用于修正记忆或强化偏好。 |
 | `api_mix_search` | `API_MIX_SEARCH_TASK_LABEL` | `_api_mix_search_message_consumer` | (OptimizedScheduler 特有) 执行异步混合搜索任务，结合快速检索与精细检索。 |
 
-### 调度消息结构 (ScheduleMessageItem)
+### 消息数据结构 (ScheduleMessageItem)
 
 调度器使用统一的 `ScheduleMessageItem` 结构在队列中传递消息。
 
@@ -101,7 +108,7 @@ redis_client = components["redis_client"]
 | `info` | `dict` | 额外的自定义上下文信息 | `None` |
 | `stream_key` | `str` | (内部使用) Redis Stream 的键名 | `""` |
 
-### Web 日志结构 (ScheduleLogForWebItem)
+### 执行日志结构 (ScheduleLogForWebItem)
 
 调度器会生成用于前端展示或持久化存储的结构化日志消息。
 
