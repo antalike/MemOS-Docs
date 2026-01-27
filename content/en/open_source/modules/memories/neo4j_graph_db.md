@@ -185,4 +185,4 @@ You can add support for any other graph engine (e.g., **TigerGraph**, **DGraph**
    * `GraphDBConfigFactory.backend_to_class`
    * `GraphStoreFactory.backend_to_class`
 
-See `src/memos/graph_dbs/neo4j.py` as a reference implementation.
+See `src/memos/graph_dbs/neo4j.py` as a reference for implementation.
