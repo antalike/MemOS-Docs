@@ -14,6 +14,7 @@ const props = defineProps<{
 }>()
 
 const { server } = useOpenApi(inject('collectionName'))
+const { replaceVariables } = useVariableReplacement()
 
 const colorsMap: colorsProps = {
   get: {
@@ -52,7 +53,7 @@ function isParameter(path: string) {
 
 // Copy full path
 function handleCopy() {
-  const baseUrl = server.value ?? ''
+  const baseUrl = replaceVariables(server.value ?? '')
 
   copyText(baseUrl + props.path)
   isCopy.value = true
