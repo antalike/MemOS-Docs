@@ -6,5 +6,8 @@ export default {
   dashboardUrl: 'https://memos-dashboard.memtensor.net',
   playgroundUrl: 'https://memos-playground.memtensor.net',
   staticCdnUrl: 'https://cdn.memt.ai/static',
-  cdnUrl: 'https://cdn.memt.ai'
+  cdnUrl: 'https://cdn.memt.ai',
+  docsUrl: 'https://docs-pre.openmem.net',
+  docsIntl: 'https://memos-docs.memtensor.net',
+  baseUrl: 'https://api.memt.ai'
 }

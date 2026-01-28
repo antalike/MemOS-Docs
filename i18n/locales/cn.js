@@ -100,5 +100,15 @@ export default {
     inputPlaceholder: '请输入你想了解的问题...',
     welcome: 'Hi，我是MemOS知识库助手小忆，您有什么问题可以直接向我提问！',
     systemError: '系统繁忙，请稍后再试'
+  },
+  sites: {
+    cn: {
+      label: '中国大陆',
+      description: '阿里云服务'
+    },
+    intl: {
+      label: '全球',
+      description: '亚马逊云服务'
+    }
   }
 }

@@ -26,6 +26,14 @@ export default function remarkReplaceDomains(options = {}) {
         })
       }
 
+      // Handle code blocks
+      if (node.type === 'code' && node.value && typeof node.value === 'string') {
+        Object.keys(linkDomains).forEach((key) => {
+          const regex = new RegExp(escapeRegExp(key), 'g')
+          node.value = node.value.replace(regex, linkDomains[key])
+        })
+      }
+
       // Handle HTML nodes for both images and links
       if (node.type === 'html' && node.value && typeof node.value === 'string') {
         // Replace image sources

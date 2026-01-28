@@ -11,7 +11,8 @@ export const useVariableReplacement = () => {
       'https://statics.memtensor.com.cn': config.public.staticCdnUrl as string,
       'https://memos-playground.openmem.net': config.public.playgroundUrl as string,
       'https://memos-dashboard.openmem.net': config.public.dashboardUrl as string,
-      'https://memos.openmem.net': config.public.homeDomain as string
+      'https://memos.openmem.net': config.public.homeDomain as string,
+      'https://memos.memtensor.cn': config.public.baseUrl as string
     }
 
     Object.keys(domains).forEach((key) => {

@@ -5,5 +5,8 @@ export default {
   openMemUrl: 'https://pre.openmem.net',
   githubMemosUrl: 'https://github.com/MemTensor/MemOS',
   dashboardUrl: 'https://memos-dashboard-pre.openmem.net',
-  playgroundUrl: 'https://memos-playground-pre.openmem.net'
+  playgroundUrl: 'https://memos-playground-pre.openmem.net',
+  docsUrl: 'https://docs-pre.openmem.net',
+  docsIntl: 'https://memos-docs.memtensor.net',
+  baseUrl: 'https://apigw-pre.memtensor.cn'
 }

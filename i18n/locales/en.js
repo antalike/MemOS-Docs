@@ -100,5 +100,15 @@ export default {
     inputPlaceholder: 'Type your messages here...',
     welcome: 'Hi, I\'m Xiao Yi, your MemOS Knowledge Base Assistant. Feel free to ask me anything you\'d like to know!',
     systemError: 'System is busy, please try again later'
+  },
+  sites: {
+    cn: {
+      label: 'Mainland China',
+      description: 'Alibaba Cloud'
+    },
+    intl: {
+      label: 'Global',
+      description: 'AWS'
+    }
   }
 }
