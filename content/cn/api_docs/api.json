@@ -211,7 +211,7 @@
     "/get/memory": {
       "post": {
         "summary": "获取记忆",
-        "description": "该接口用于获取某个用户的记忆，包含事实记忆与偏好记忆。",
+        "description": "该接口用于获取某个用户的记忆，包含事实记忆、偏好记忆与工具记忆。",
         "operationId": "get_memory",
         "requestBody": {
           "required": true,
@@ -751,7 +751,7 @@
                       "properties": {
                         "file_data": {
                           "type": "string",
-                          "description": "可访问的文件URL或者base64, 只支持四种类型txt / pdf / doc / docx， 单文件不超过100MB、200页，总数不超过20个。type为file时必填。"
+                          "description": "可访问的文件URL或者base64, 只支持四种类型txt / pdf / doc / docx / json / md / xml， 单文件不超过100MB、200页，总数不超过20个。type为file时必填。"
                         }
                       }
                     }
@@ -1070,7 +1070,7 @@
             "items": {
               "type": "string"
             },
-            "description": "该字段用于限制当次搜索可访问的知识库范围，默认为空（即不检索任何知识库）。"
+            "description": "该字段用于限制当次搜索可访问的知识库范围，默认为空（即不检索任何知识库）。传入具体知识库 ID，则可检索指定的知识库；传入all，则可检索该项目下所有关联知识库。"
           },
           "memory_limit_number": {
             "type": "integer",
@@ -1251,20 +1251,20 @@
             "title": "Used Tool",
             "description": "使用的工具名称。"
           },
-          "experience": {
-            "type": "string",
-            "title": "Experience",
-            "description": "工具使用经验或协作建议。"
-          },
           "error_type": {
             "type": "string",
             "title": "Error Type",
             "description": "调用失败时的错误描述。"
           },
           "success_rate": {
-            "type": "string",
+            "type": "number",
             "title": "Success Rate",
             "description": "本次工具轨迹的成功率。"
+          },
+          "tool_experience": {
+            "type": "string",
+            "title": "Tool Experience",
+            "description": "当前轨迹中该工具的经验。"
           }
         },
         "title": "ToolUsedStatus"
@@ -1321,6 +1321,16 @@
             "type": "string",
             "title": "Update Time",
             "description": "工具记忆最后一次更新的时间（ISO 8601 格式）。"
+          },
+          "relativity": {
+            "type": "number",
+            "title": "Relativity",
+            "description": "工具记忆与查询内容的相关性分数。"
+          },
+          "experience": {
+            "type": "string",
+            "title": "Experience",
+            "description": "整个轨迹的程序性经验，作为指导任务完成的总体经验。"
           }
         },
         "title": "ToolMemoryDetail"
@@ -1408,11 +1418,23 @@
             "description": "指定每一类记忆在当前页返回的条目数量，最大值为50。",
             "default":10
           },
+          "filter": {
+            "type": "object",
+            "title": "Filter",
+            "description": "记忆过滤的条件，用于在获取记忆前精确限定记忆范围。可用字段包括：\"agent_id\", \"app_id\", \"create_time\", \"update_time\"以及\"info\"中的字段。支持逻辑运算符（and，or）和比较运算符（gte、lte、gt、lt）。对于\"info\"字段，支持过滤传入的\"business_type\", \"biz_id\", \"scene\"和其他自定义字段。",
+            "example": "{\"and\": [{\"create_time\":{\"gte\":\"...\"}}]}"
+          }, 
           "include_preference": {
             "type": "boolean",
             "title": "IncludePreference",
             "description": "是否要返回偏好记忆。",
             "default":true
+          },
+          "include_tool_memory": {
+            "type": "boolean",
+            "title": "Include Tool Memory",
+            "description": "是否要返回工具记忆。",
+            "default": true
           }
         },
         "title": "GetMemoryRequest"
@@ -1545,6 +1567,85 @@
                     "additionalProperties": true
                   },
                   "description": "偏好记忆的原始消息内容列表。"
+                },
+                "info": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "description": "添加消息时自定义的元信息字段。"
+                }
+              }
+            }
+          },
+          "tool_memory_detail_list": {
+            "type": "array",
+            "title": "Tool Memory Detail List",
+            "description": "返回的工具记忆片段详情列表。",
+            "items": {
+              "type": "object",
+              "title": "Tool Memory Detail",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "title": "ID",
+                  "description": "工具记忆片段的唯一标识符。"
+                },
+                "tool_type": {
+                  "type": "string",
+                  "title": "Tool Type",
+                  "description": "工具记忆类型。ToolTrajectoryMemory 表示工具轨迹记忆；ToolSchema 表示工具信息记忆。",
+                  "enum": [
+                    "ToolTrajectoryMemory",
+                    "ToolSchema"
+                  ]
+                },
+                "tool_value": {
+                  "type": "string",
+                  "title": "Tool Value",
+                  "description": "工具记忆的具体内容。"
+                },
+                "tool_used_status": {
+                  "type": "array",
+                  "title": "Tool Used Status",
+                  "description": "工具轨迹记忆列表，每条记录包含使用的工具及经验信息。",
+                  "items": {
+                    "$ref": "#/components/schemas/ToolUsedStatus"
+                  }
+                },
+                "create_time": {
+                  "type": "string",
+                  "title": "Create Time",
+                  "description": "工具记忆创建时间（ISO 8601 格式）。"
+                },
+                "conversation_id": {
+                  "type": "string",
+                  "title": "Conversation ID",
+                  "description": "与该工具记忆关联的会话唯一标识符。"
+                },
+                "status": {
+                  "type": "string",
+                  "title": "Status",
+                  "description": "工具记忆状态，当前为 activated。",
+                  "enum": [
+                    "activated"
+                  ]
+                },
+                "update_time": {
+                  "type": "string",
+                  "title": "Update Time",
+                  "description": "工具记忆最后一次更新的时间（ISO 8601 格式）。"
+                },
+                "experience": {
+                  "type": "string",
+                  "title": "Experience",
+                  "description": "整个轨迹的程序性经验，作为指导任务完成的总体经验。"
+                },
+                "sources": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": true
+                  },
+                  "description": "工具记忆的原始消息内容列表。"
                 },
                 "info": {
                   "type": "object",
@@ -1909,7 +2010,7 @@
                 "content": {
                   "type": "string",
                   "title": "Content",
-                  "description": "文档内容输入方式支持 URL 或 Base64 编码，可上传的文档类型包括：PDF、DOCX、DOC、TXT。"
+                  "description": "文档内容输入方式支持 URL 或 Base64 编码，可上传的文档类型包括：PDF、DOCX、DOC、TXT、JSON、MD、XML。"
                 }
               }
             }

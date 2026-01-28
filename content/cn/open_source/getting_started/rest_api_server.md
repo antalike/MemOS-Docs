@@ -136,11 +136,7 @@ CHAT_MODEL_LIST=[{"backend": "qwen", "api_base": "https://dashscope.aliyuncs.com
 ![MemOS bailian](https://cdn.memtensor.com.cn/img/get_key_url_by_bailian_compressed.png)
 <div style="text-align: center; margin-top: 10px">百炼申请 API_KEY和 BASE_URL 示例</div>
 
-
-
-
-##### 配置docker/requirement.txt中依赖包的版本等（可忽略）。完整版可参考 <a href="https://github.com/MemTensor/MemOS/blob/main/docker/requirements.txt">requirements.txt</a>。
-
+配置docker/requirement.txt中依赖包的版本等（可忽略）。完整版可参考 <a href="https://github.com/MemTensor/MemOS/blob/main/docker/requirements.txt">requirements.txt</a>。
 
 ### 4、启动docker 
 ```bash
@@ -492,7 +488,7 @@ uvicorn memos.api.product_api:app --host 0.0.0.0 --port 8000 --reload
 ::
 
 
-### 方式五：使用 pyCharm 启动
+### 方式五：使用 PyCharm 启动
 
 #### 运行 server_api
 ```bash
