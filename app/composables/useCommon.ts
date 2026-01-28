@@ -51,3 +51,8 @@ export function useCdnUrl(path = '/') {
   const baseUrl = $config.public.cdnUrl || 'https://cdn.memtensor.com.cn'
   return `${baseUrl}${path}`
 }
+
+export function isIntl() {
+  const { $config } = useNuxtApp()
+  return $config.public.env === 'intl'
+}
