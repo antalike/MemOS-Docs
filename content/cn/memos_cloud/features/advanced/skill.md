@@ -135,7 +135,7 @@ print(f"result: {res.json()}")
 # 待算法ready后补充
 ```
 
-::note** 技能的两种使用方法** 
+::note ** 技能的两种使用方法** 
 <br>
 （这里算法可以补充一下prompt或者具体使用方法）
 
