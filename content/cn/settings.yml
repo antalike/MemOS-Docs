@@ -30,7 +30,7 @@ nav:
         - "(ri:image-add-line) 多模态消息": memos_cloud/features/basic/multimodal.md
         - "(ri:price-tag-3-line) 自定义标签": memos_cloud/features/basic/custom_tags.md
       - "(ri:vip-diamond-line) 高级功能":
-        - "(ri:function-line)技能":memos_cloud/features/advanced/skill.md
+        - "(ri:function-line) 技能":memos_cloud/features/advanced/skill.md
         - "(ri:book-read-line) 知识库": memos_cloud/features/advanced/knowledge_base.md
         - "(ri:tools-line) 工具调用": memos_cloud/features/advanced/tool_calling.md
         - "(ri:chat-history-line) 持续对话": memos_cloud/features/advanced/continuous_dialogue.md
