@@ -1,16 +1,16 @@
 ---
-title: MemCube 概述
-desc: "`MemCube` 是 MemOS 中的核心组织单元，专为封装和管理用户或代理的所有类型记忆而设计。它为加载、保存和操作多个记忆模块提供统一接口，使构建、共享和部署记忆增强应用程序变得容易。"
+title: MemCube
+desc: "MemCube 是你的“记忆收纳箱”，统一管理三种类型的记忆：明文记忆、激活记忆和参数化记忆。它提供简洁的接口，方便加载、保存和操作多个记忆模块，让开发者轻松构建、保存和共享记忆增强应用。"
 ---
 ## 什么是 MemCube？
 
-**MemCube** 是一个容器，捆绑了三种主要类型的记忆：
+**MemCube** 是一个容器，包含了三种主要类型的记忆：
 
 - **明文记忆** (例如，`GeneralTextMemory`、`TreeTextMemory`): 用于存储和检索非结构化或结构化文本知识。
 - **激活记忆** (例如，`KVCacheMemory`): 用于存储键值缓存以加速 LLM 推理和上下文重用。
 - **参数化记忆** (例如，`LoRAMemory`): 用于存储模型适应参数（如 LoRA 权重）。
 
-每种记忆类型都是独立可配置的，可以根据需要进行交换或扩展。
+每种记忆都可以独立配置，根据应用需求灵活组合。
 
 ## 结构
 
@@ -18,6 +18,8 @@ MemCube 由配置定义（参见 `GeneralMemCubeConfig`），该配置为每种�
 
 ```
 MemCube
+ ├── user_id
+ ├── cube_id
  ├── text_mem: TextualMemory
  ├── act_mem: ActivationMemory
  └── para_mem: ParametricMemory
@@ -35,7 +37,7 @@ MemCube
 
 ### SingleCubeView
 
-操作单个 MemCube。当你只有一个逻辑记忆空间时使用。
+用于管理单个 MemCube。当系统只需要一个记忆空间时使用。
 
 ```python
 from memos.multi_mem_cube.single_cube import SingleCubeView
@@ -59,7 +61,7 @@ view.search_memories(search_request)
 
 ### CompositeCubeView
 
-操作多个 MemCube。将操作 fan-out 到多个 SingleCubeView 并聚合结果。
+用于管理多个 MemCube。当需要跨多个记忆空间进行统一操作时使用。
 
 ```python
 from memos.multi_mem_cube.composite_cube import CompositeCubeView
@@ -78,13 +80,23 @@ results = composite.search_memories(search_request)
 
 ### API 请求字段
 
+#### 添加记忆（add模式）
+
 | 字段                  | 描述                                                             |
 | --------------------- | ---------------------------------------------------------------- |
 | `writable_cube_ids` | add 操作的目标 cube                                              |
-| `readable_cube_ids` | search 操作的目标 cube                                           |
-| `async_mode`        | `"async"`（scheduler 启用时）或 `"sync"`（scheduler 禁用时） |
+| `async_mode`        | `"async"`（启用 scheduler 后台处理）或 `"sync"`（禁用 scheduler 同步处理） |
 
-## API 总结 (`GeneralMemCube`)
+#### 搜索记忆（search模式）
+
+| 字段                  | 描述                                                             |
+| --------------------- | ---------------------------------------------------------------- |
+| `readable_cube_ids` | search 操作的目标 cube                                           |
+| `async_mode`        | `"async"`（启用 scheduler 后台处理）或 `"sync"`（禁用 scheduler 同步处理） |
+
+## 核心方法（GeneralMemCube）
+
+GeneralMemCube 是 MemCube 的标准实现，通过统一的接口管理系统的所有记忆。GeneralMemCube 提供以下核心方法来管理记忆数据的生命周期。
 
 ### 初始化
 
@@ -104,7 +116,7 @@ mem_cube = GeneralMemCube(config)
 
 ## 文件存储
 
-MemCube 目录包含：
+MemCube 保存后的目录包含以下文件，每个文件对应一种记忆类型：
 
 - `config.json` (MemCube 配置)
 - `textual_memory.json` (明文记忆)
@@ -273,6 +285,6 @@ for i, mem in enumerate(memories[:2], 1):  # 显示前2条
 
 ## 开发者说明
 
-* MemCube 强制执行模式一致性以确保安全的加载/转储
-* 每种记忆类型都是可插拔的且独立测试
+* MemCube 强制执行模式一致性，确保安全的加载/转储
+* 每种记忆类型都是可插拔的，支持独立测试
 * 参见 `/tests/mem_cube/` 了解集成测试和使用模式

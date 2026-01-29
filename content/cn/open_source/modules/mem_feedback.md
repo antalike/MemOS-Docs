@@ -1,6 +1,6 @@
 ---
 title: MemFeedback
-desc: "MemFeedback 让你的 Agent 能够听懂“你记错了”，并自动修正记忆库。它是实现记忆自进化的关键组件。"
+desc: "MemFeedback 是你的“记忆错题本”，让你的 Agent 能够听懂“你记错了”，并自动修正记忆库。它是实现记忆自进化的关键组件。"
 ---
 
 ## 1. 简介
