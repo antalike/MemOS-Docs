@@ -59,7 +59,7 @@ MemOS 主张“记忆即资产”。我们认为，那些在真实对话中沉�
 
 *   需要提前确认天气和温度
 
-```plaintext
+```
 import os
 import requests
 import json
@@ -94,9 +94,9 @@ print(f"result: {res.json()}")
 
 ### 2. **检索记忆**
 
-   假设该用户又一次向助手提出旅行规划的要求，传入用户的query：
+   假设该用户又一次向助手提出旅行规划的要求，传入用户的query，并开启召回skill：
 
-   ```plaintext
+   ```
    import os
    import requests
    import json
@@ -107,7 +107,8 @@ print(f"result: {res.json()}")
    data = {
      "query": "清明节我打算去云南，帮我规划7天的行程。",
      "user_id": "memos_user_123",
-     "conversation_id": "0928"
+     "conversation_id": "0301",
+     "include_skill": True # 开启召回skill
    }
    headers = {
      "Content-Type": "application/json",
@@ -160,7 +161,7 @@ MemOS构建的技能文件包含了：
 
 *   穿插小众景点。
 
-```plaintext
+```
 # 待算法ready后补充
 ```
 ::note
