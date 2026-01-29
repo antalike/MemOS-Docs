@@ -131,11 +131,12 @@ print(f"result: {res.json()}")
 
 *   关注了天气、温度，推荐需要携带的衣物。
 
-```plaintext
+```
 # 待算法ready后补充
 ```
 
 ::note** 技能的两种使用方法** 
+<br>
 （这里算法可以补充一下prompt或者具体使用方法）
 
 * 如果你调用的模型 / Agent 有使用 Skill 文件的能力，可以直接下载 `skill_url` 链接地址中的文件。
