@@ -1,4 +1,23 @@
 versions:
+  - name: v2.0.4
+    date: 2026-01-30
+    changedInfo:
+      New Features:
+        - type: Core Capabilities
+          changedInfo:
+            - Added Skill Memory.
+            - Added modules supporting memory versioning.
+            - Added chat/completions interface, compatible with OAI protocol.
+      Improvements:
+        - type: Retrieval Optimization
+          changedInfo:
+            - Reduced duplication between factual and preference memories during retrieval.
+      Bug Fixes:
+        - type: Bug Fixes
+          changedInfo:
+            - Fixed bug for new users in Playground.
+            - Fixed occasional latency when adding memories in cloud service.
+            - Resolved graph database efficiency issues.
   - name: v2.0.3
     date: 2026-01-22
     changedInfo:
