@@ -109,7 +109,7 @@ useHead({
 })
 
 function showContentNavigation() {
-  const path = normalizedPath.value
+  const path = normalizedPath.value.split('?')[0] as string
   return path !== '/'
     && !isApiPage()
     && !path.includes('changelog')
