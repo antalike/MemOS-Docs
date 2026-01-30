@@ -30,6 +30,7 @@ nav:
         - "(ri:image-add-line) Multimodal Messages": memos_cloud/features/basic/multimodal.md
         - "(ri:price-tag-3-line) Custom Tags": memos_cloud/features/basic/custom_tags.md
       - "(ri:vip-diamond-line) Advanced Features":
+        - "(ri:function-line) Skill": memos_cloud/features/advanced/skill.md
         - "(ri:book-read-line) Knowledge Base": memos_cloud/features/advanced/knowledge_base.md
         - "(ri:tools-line) Tool Calling": memos_cloud/features/advanced/tool_calling.md
         - "(ri:chat-history-line) Continuous Dialogue": memos_cloud/features/advanced/continuous_dialogue.md

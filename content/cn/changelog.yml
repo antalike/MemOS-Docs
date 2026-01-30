@@ -1,4 +1,23 @@
 versions:
+  - name: v2.0.4
+    date: 2026-01-30
+    changedInfo:
+      New Features:
+        - type: 核心能力
+          changedInfo:
+            - 新增 Skill Memory。
+            - 新增对记忆版本功能做支持的相关模块。
+            - 新增 chat/completions 接口，兼容 OAI 协议。
+      Improvements:
+        - type: 检索优化
+          changedInfo:
+            - 减少了检索阶段事实记忆与偏好记忆的重复。
+      Bug Fixes:
+        - type: 问题修复
+          changedInfo:
+            - 解决 Playground 新用户 bug。
+            - 修复云服务添加记忆时偶发的卡顿问题。
+            - 解决图数据库效率问题。
   - name: v2.0.3
     date: 2026-01-22
     changedInfo:
