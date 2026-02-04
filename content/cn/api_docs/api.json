@@ -19,7 +19,7 @@
   "paths": {
     "/add/message": {
       "post": {
-        "summary": "添加消息",
+        "summary": "Add Message",
         "description": "该接口用于添加会话消息，支持多类型内容、批量添加。MemOS 会自动解析消息并处理记忆，用于后续对话时召回参考。",
         "operationId": "add_message",
         "requestBody": {
@@ -78,7 +78,7 @@
     },
     "/get/message": {
       "post": {
-        "summary": "获取消息",
+        "summary": "Get Message",
         "description": "该接口用于获取指定会话的用户与助手历史对话记录，可按数量限制返回结果。",
         "operationId": "get_message",
         "requestBody": {
@@ -112,7 +112,7 @@
     },
     "/search/memory": {
       "post": {
-        "summary": "检索记忆",
+        "summary": "Search Memory",
         "description": "该接口用于检索指定用户的记忆，返回与输入查询内容最相关的记忆片段，供Agent使用。召回的记忆片段包括“事实记忆”、“偏好记忆”、“工具记忆”。",
         "operationId": "search_memory",
         "requestBody": {
@@ -146,7 +146,7 @@
     },
     "/chat": {
       "post": {
-        "summary": "对话",
+        "summary": "Chat",
         "description": "",
         "operationId": "chat",
         "requestBody": {
@@ -210,7 +210,7 @@
     },
     "/get/memory": {
       "post": {
-        "summary": "获取记忆",
+        "summary": "Get Memory",
         "description": "该接口用于获取某个用户的记忆，包含事实记忆、偏好记忆与工具记忆。",
         "operationId": "get_memory",
         "requestBody": {
@@ -239,7 +239,7 @@
     },
     "/delete/memory": {
       "post": {
-        "summary": "删除记忆",
+        "summary": "Delete Memory",
         "description": "该接口用于删除指定用户的记忆，支持批量删除。",
         "operationId": "delete_memory",
         "requestBody": {
@@ -268,7 +268,7 @@
     },
     "/add/feedback": {
       "post": {
-        "summary": "添加反馈",
+        "summary": "Add Feedback",
         "description": "该接口用于添加对当前会话消息的反馈，MemOS能够基于用户的反馈更正记忆。",
         "operationId": "add_feedback",
         "requestBody": {
@@ -297,7 +297,7 @@
     },
     "/get/status": {
       "post": {
-        "summary": "获取任务状态",
+        "summary": "Get Task Status",
         "description": "获取异步处理任务的状态。",
         "operationId": "get_status",
         "requestBody": {
