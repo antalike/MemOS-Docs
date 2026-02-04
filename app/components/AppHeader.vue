@@ -62,7 +62,7 @@ function gotoHome() {
     <AssistantCollapse class="ml-2.5" />
 
     <template #right>
-      <SiteSwitcher />
+      <!-- <SiteSwitcher /> -->
       <LanguageSwitcher />
       <JoinCommunityButton class="hidden sm:flex" />
       <button
