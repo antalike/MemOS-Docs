@@ -23,8 +23,13 @@ const config: NuxtConfig = {
   app: {
     head: {
       script: [
-        { src: `${cdnUrl}/file/js-cookie-3.0.5.min.js`, type: 'text/javascript' },
-        { src: `${cdnUrl}/file/locale.1.1.2.min.js`, type: 'text/javascript' }
+        { innerHTML: `window.__RUNTIME_CONFIG__ = { 
+          tokenDomain: '${envConfig.cookieDomain}',
+          homeCnUrl: '${envConfig.docsUrl}',
+          homeIntlUrl: '${envConfig.docsIntl}',
+        };`, type: 'text/javascript' },
+        { src: 'https://cdn.memtensor.com.cn/file/js-cookie-3.0.5.min.js', type: 'text/javascript' },
+        { src: 'https://cdn.memtensor.com.cn/file/1769744406627_z3x4mb.js', type: 'text/javascript' }
       ]
     }
   },

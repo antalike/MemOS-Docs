@@ -7,7 +7,8 @@ export default {
   playgroundUrl: 'https://memos-playground.memtensor.net',
   staticCdnUrl: 'https://cdn.memt.ai/static',
   cdnUrl: 'https://cdn.memt.ai',
-  docsUrl: 'https://memos-docs.openmem.net',
+  docsUrl: 'https://docs-gray.openmem.net',
   docsIntl: 'https://memos-docs.memtensor.net',
-  baseUrl: 'https://api.memt.ai'
+  baseUrl: 'https://api.memt.ai',
+  cookieDomain: '.memtensor.net'
 }
