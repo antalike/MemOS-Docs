@@ -497,7 +497,7 @@
               "type": "string"
             },
             "title": "Knowledgebase IDs",
-            "description": "Selected scope of knowledgebases for retrieval."
+            "description": "Specifies the scope of knowledge bases accessible for the current search. Defaults to empty, meaning no knowledge bases are searched.Pass specific Knowledgebase IDs to search within that designated repository; pass \"all\" to search across all associated knowledgebases within the project."
           },
           "memory_limit_number": {
             "type": "integer",
