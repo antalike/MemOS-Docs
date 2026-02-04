@@ -94,18 +94,18 @@ nav:
       - "(ri:settings-3-line) 项目配置": api_docs/start/configuration.md
 
     - "(ri:edit-box-line) 核心操作":
-      - "(ri:message-3-line) 添加消息": api_docs/core/add_message.md
-      - "(ri:search-2-line) 检索记忆": api_docs/core/search_memory.md
-      - "(ri:file-list-line) 获取记忆": api_docs/core/get_memory.md
-      - "(ri:delete-bin-line) 删除记忆": api_docs/core/delete_memory.md
-      - "(ri:feedback-line) 添加反馈": api_docs/message/add_feedback.md
+      - "(ri:message-3-line) Add Message": api_docs/core/add_message.md
+      - "(ri:search-2-line) Search Memory": api_docs/core/search_memory.md
+      - "(ri:file-list-line) Get Memory": api_docs/core/get_memory.md
+      - "(ri:delete-bin-line) Delete Memory": api_docs/core/delete_memory.md
+      - "(ri:feedback-line) Add Feedback": api_docs/message/add_feedback.md
 
     - "(ri:chat-1-line) 消息":
-      - "(ri:file-list-line) 获取消息": api_docs/message/get_message.md
-      - "(ri:task-line) 获取任务状态": api_docs/message/get_status.md
+      - "(ri:file-list-line) Get Message": api_docs/message/get_message.md
+      - "(ri:task-line) Get Task Status": api_docs/message/get_status.md
 
     - "(ri:chat-smile-2-line) 对话":
-      - "(ri:chat-4-line) 对话": api_docs/chat/chat.md
+      - "(ri:chat-4-line) Chat": api_docs/chat/chat.md
 
     - "(ri:book-read-line) 知识库":
       - "(ri:add-box-line) 创建知识库": api_docs/knowledge/create_kb.md
