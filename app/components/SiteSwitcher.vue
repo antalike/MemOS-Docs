@@ -32,7 +32,8 @@ function onClick(item: ItemProps) {
     return
   }
   value.value = item.value
-  navigateTo(`${item.to}${langPrefix}/?site=${item.value}`, { external: true })
+  window.setSitePrefCookie && window.setSitePrefCookie(item.value)
+  navigateTo(`${item.to}${langPrefix}/?site_pref=${item.value}`, { external: true })
 }
 </script>
 
