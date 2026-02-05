@@ -8,7 +8,7 @@ export default {
   docsUrl: 'https://memos-docs.openmem.net',
   docsIntl: 'https://memos-docs.memtensor.net',
   baseUrl: 'https://memos.memtensor.cn',
-  cookieDomain: '.memtensor.net',
+  cookieDomain: '.openmem.net',
   staticCdnUrl: 'https://statics.memtensor.com.cn',
   cdnUrl: 'https://cdn.memtensor.com.cn'
 }
