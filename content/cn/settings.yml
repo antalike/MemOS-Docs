@@ -67,7 +67,7 @@ nav:
 
     - "(ri:star-line) 最佳实践":
       - "(ri:speed-line) 性能调优": open_source/best_practice/performance_tuning.md
-      - "(ri:wifi-line) 网络环境适配": open_source/best_practice/network_workarounds.md
+      - "(ri:wifi-line) 网络问题解决方案": open_source/best_practice/network_workarounds.md
       - "(ri:error-warning-line) 常见错误与解决方案": open_source/best_practice/common_errors_solutions.md
       - "(ri:tools-line) MemOS MCP集成指南": open_source/best_practice/mcp_for_cozespace_and_tools.md
 
