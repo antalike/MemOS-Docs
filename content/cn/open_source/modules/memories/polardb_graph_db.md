@@ -41,7 +41,7 @@ pip install psycopg2-binary  # 推荐：预编译版本
 pip install psycopg2          # 需要 PostgreSQL 开发库
 
 # 安装 MemOS
-pip install memos
+pip install MemoryOS -U
 ```
 
 ### 2. 配置 PolarDB
