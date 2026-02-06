@@ -1,86 +1,62 @@
 ---
-title: 删除记忆
-desc: 从 MemOS 删除记忆,支持批量删除。
+title: 删除记忆 (Delete Memory)
+desc: 从指定的 MemCube 中永久移除记忆条目、关联文件或符合特定过滤条件的记忆集合。
 ---
 
-::warning
-**[直接看 API文档 点这里哦](/api_docs/core/delete_memory)**
-<br>
-<br>
-
-**本文聚焦于功能说明，详细接口字段及限制请点击上方文字链接查看**
-::
-
 **接口路径**：`POST /product/delete_memory`
-**功能描述**：当某条记忆已过期、不再准确或根据用户隐私要求需要移除时，可以使用此接口从向量数据库与图数据库中永久删除指定的记忆内容。
+**功能描述**：本接口用于维护记忆库的准确性与合规性。当用户要求遗忘特定信息、数据过时或需要清理特定的上传文件时，可以通过此接口在向量数据库与图数据库中同步执行物理删除。
 
-## 1. 关键参数
+## 1. 核心机理：Cube 级物理清理
 
-*   **记忆 ID 列表（memory\_ids[]）**：每条存储在 MemOS 中的记忆都对应一个唯一标识符，支持以列表形式传入，用于精确删除一条或多条指定记忆。
-根据开源代码 `src/api/routers/client.py` 的实现，删除操作需要以下两个核心列表参数：
+在开源版中，删除操作遵循严格的 **MemCube** 隔离逻辑：
+
+* **作用域限制**：通过 `writable_cube_ids` 参数，删除操作被严格锁定在指定的记忆体中，绝不会误删其他 Cube 的内容。
+* **多维删除**：支持按 **记忆 ID**（精确）、**文件 ID**（关联删除）以及 **Filter 过滤器**（条件逻辑）三种维度并发执行清理。
+* **原子性同步**：删除操作由 **MemoryHandler** 触发，确保底层向量索引与图数据库中的实体节点同步移除，防止召回“幻觉”。
+
+
+
+## 2. 关键接口参数
+核心参数定义如下：
 
 | 参数名 | 类型 | 必填 | 说明 |
 | :--- | :--- | :--- | :--- |
-| **用户 ID 列表 (`user_ids`)** | `list[str]` | 是 | 指定这些记忆所属的用户标识列表。 |
-| **记忆 ID 列表 (`memory_ids`)** | `list[str]` | 是 | 每条记忆的唯一标识符列表。您可以通过检索接口获取此 ID。 |
+| **`writable_cube_ids`** | `list[str]` | 是 | 指定执行删除操作的目标 Cube 列表。 |
+| **`memory_ids`** | `list[str]` | 否 | 待删除的记忆唯一标识符列表。 |
+| **`file_ids`** | `list[str]` | 否 | 待删除的原始文件标识符列表，将同步清理该文件产生的全部记忆。 |
+| **`filter`** | `object` | 否 | 逻辑过滤器。支持按标签、元信息或时间戳批量删除符合条件的记忆。 |
 
-:::note
-**如何获取待删除记忆的记忆ID**
-<br>
-<br>
-在检索记忆（`search/memory`）和获取记忆（`get/memory`）时，返回结果中的每条记忆都包含唯一的 `id` 字段，作为该记忆的唯一标识符。  <br>
-当发现某条记忆已过期或不符合预期时，可直接取 `id`，并作为 `memory_ids[]` 参数传入 `delete/memory` 接口，即可删除对应的记忆条目。
-:::
+## 3. 工作原理 (MemoryHandler)
 
+1. **权限与路由**：系统通过 `user_id` 校验操作权限，并将请求路由至 **MemoryHandler**。
+2. **定位存储**：根据 `writable_cube_ids` 定位底层的 **naive_mem_cube** 组件。
+3. **分发清理任务**：
+    * **按 ID 清理**：直接根据 UUID 在主数据库和向量库中执行记录抹除。
+    * **按 Filter 清理**：先检索出符合条件的记忆 ID 集合，再执行批量物理移除。
+4. **状态反馈**：操作完成后返回成功状态，相关内容将立即从 [**检索接口**](./search_memory.md) 的召回范围中消失。
 
-## 2. 工作原理
+## 4. 快速上手示例
 
-1. **请求路由**：请求发送至 `server_api.py` 统一定义的路由入口。
-2. **逻辑校验**：系统通过 `_validate_required_params` 确保 `user_ids` 和 `memory_ids` 均不为空。
-3. **物理移除**：MemOS 会同步清理底层向量数据库中的向量索引，以及图数据库中的实体关联。
-4. **异常处理**：若删除过程中出现业务逻辑错误，将由 `APIExceptionHandler` 返回标准化的 400 或 500 响应。
-
-## 3. 快速上手
-
-推荐使用项目中封装的 `MemOSClient` 进行批量删除操作：
+使用 `MemOSClient` 执行不同维度的删除操作：
 
 ```python
-import os
-from memos.api.client import MemOSClient
-
 # 初始化客户端
-client = MemOSClient(
-    api_key="YOUR_LOCAL_API_KEY",
-    base_url="http://localhost:8001/product"
+client = MemOSClient(api_key="...", base_url="...")
+
+# 场景一：精确删除单条已知的错误记忆
+client.delete_memory(
+    writable_cube_ids=["user_01_private"],
+    memory_ids=["2f40be8f-736c-4a5f-aada-9489037769e0"]
 )
 
-# 准备待删除的记忆信息
-target_users = ["memos_user_123"]
-target_memories = [
-    "4a50618f-797d-4c3b-b914-94d7d1246c8d", 
-    "b210928a-1234-5678-90ab-cdef12345678"
-]
-
-# 执行删除操作
-res = client.delete_memory(
-    user_ids=target_users,
-    memory_ids=target_memories
+# 场景二：批量清理某一特定标签下的所有过时记忆
+client.delete_memory(
+    writable_cube_ids=["kb_finance_2026"],
+    filter={"tags": {"contains": "deprecated_policy"}}
 )
-
-if res and res.code == 200:
-    print("✅ 指定记忆已成功删除")
-
 ```
-
-::note
-&nbsp;想知道是否删除成功？
-一键复制上述代码并运行，再次[检索记忆](/memos_cloud/mem_operations/search_memory)，看看记忆是否删除成功？
-::
-
-## 4. 注意事项
+## 5. 注意事项
 
 不可恢复性：删除操作是物理删除。一旦执行成功，该记忆将无法再通过检索接口召回。
 
-批量效率：建议将需要删除的 ID 整合在一次请求中处理，以减少网络开销并利用后端的批量清理机制。
-
-校验机制：开源版要求显式传入 `user_ids`，这为多租户或多用户场景下的数据安全提供了双重保障，防止误删其他用户的记忆。
+文件关联性：通过 `file_ids` 删除时，系统会自动溯源并清理该文件解析出的事实记忆和摘要。

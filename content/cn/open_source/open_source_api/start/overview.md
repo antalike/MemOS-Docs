@@ -4,55 +4,49 @@ title: 概述
 
 ## 1. 接口介绍
 
-MemOS 开源项目提供了一个使用 FastAPI 编写的 REST API 服务。用户可以通过 REST 接口执行所有操作。
-
+MemOS 开源项目提供了一套基于 **FastAPI** 编写的高性能 REST API 服务。系统采用 **Component (组件) + Handler (处理器)** 架构，所有核心逻辑（如记忆提取、语义搜索、异步调度）均可通过标准的 REST 接口进行调用。
 
 ![MemOS Architecture](https://cdn.memtensor.com.cn/img/memos_run_server_success_compressed.png)
-<div style="text-align: center; margin-top: 10px">MemOS REST API 服务支持的 API</div>  
+<div style="text-align: center; margin-top: 10px">MemOS REST API 服务架构概览</div>  
 
-### 功能特点
+### 核心功能特点
 
-- 添加新记忆：为指定用户创建一条新的记忆。
-- 搜索记忆：为指定用户搜索其记忆内容。
-- 获取用户所有记忆：获取某个用户的所有记忆内容。
-- 记忆反馈：为指定用户反馈记忆内容。
-- 与 MemOS 对话：与 MemOS 进行对话，返回 SSE 流式响应。
-
+* **多维记忆生产**：支持通过 `AddHandler` 处理对话、文本或文档，并自动转化为结构化记忆。
+* **MemCube 物理隔离**：基于 Cube ID 实现不同用户或知识库之间的数据物理隔离与独立索引。
+* **端到端对话闭环**：通过 `ChatHandler` 编排“检索 -> 生成 -> 异步存储”的全流程。
+* **异步任务调度**：内置 `MemScheduler` 调度引擎，支持大规模记忆生产任务的削峰填谷与状态追踪。
+* **自我纠偏机制**：提供反馈接口，允许利用自然语言对已存储的记忆进行修正或标记。
 
 ## 2. 入门指南
 
-通过以下两个简单的核心步骤开始使用 MemOS 开源项目API：
+通过以下两个核心步骤，快速将记忆能力集成到您的 AI 应用中：
 
-*   [**添加消息**](/open_source/open_source_api/core/add_message)：通过 POST /memories 接口，储存用户对话中的原始消息内容，生成记忆；
-    
-*   [**检索记忆**](/open_source/open_source_api/core/search_memory)：通过 POST /search 接口，检索召回用户的相关记忆片段，为模型生成的回答内容提供参考。
-    
+* [**添加记忆**](./core/add_memory.md)：通过 `POST /product/add` 接口，将原始消息流写入指定的 MemCube，开启生产链路。
+* [**检索记忆**](./core/search_memory.md)：通过 `POST /product/search` 接口，基于语义相似度从多个 Cube 中召回相关上下文。
 
 ## 3. 接口分类
 
-探索 MemOS 提供的丰富功能接口：
+MemOS 的功能接口分为以下几大类：
 
-*   [**核心记忆接口**](/open_source/open_source_api/core/add_message)：提供记忆核心操作能力，实现记忆生产到消费的全流程。
-
-*   [**消息相关接口**](/open_source/open_source_api/message/add_feedback)：用于上传与管理原始消息内容数据。
-
-*   [**MemCube 空间管理**](/open_source/open_source_api/knowledge/create_kb)：用于管理逻辑隔离的存储空间（MemCube），支持注册、注销及跨用户分享。
-
+* **[核心记忆 (Core)](./core/add_memory.md)**：包含记忆的增、删、改、查等原子操作。
+* **[智能对话 (Chat)](./chat/chat.md)**：实现带记忆增强的流式或全量对话响应。
+* **[消息管理 (Message)](./message/feedback.md)**：涵盖用户反馈、猜你想问（Suggestion）等增强交互接口。
+* **[异步调度 (Scheduler)](./scheduler/get_status.md)**：用于监控后台记忆提取任务的进度与队列状态。
+* **[系统工具 (Tools)](./tools/check_cube.md)**：提供 Cube 存在性校验及记忆归属反查等辅助功能。
 
 ## 4. 鉴权认证与上下文
 
-所有API请求都需要认证，请在请求头的 `Authorization` 中包含您的接口密钥。从[**MemOS 控制台**](https://memos-dashboard.openmem.net/apikeys/)获取接口密钥。
+### 鉴权机制
+在开源环境中，所有的 API 请求需要在 Header 中包含 `Authorization` 字段。
+* **开发环境**：您可以在本地 `.env` 或 `configuration.md` 中自定义 `API_KEY`。
+* **生产部署**：建议通过 `RequestContextMiddleware` 扩展 OAuth2 或更高级的身份校验逻辑。
 
-::warning
-请勿在客户端或公共仓库中暴露您的接口密钥，所有请求都应通过环境变量或服务器端调用进行。
-::
-
-RequestContext： 系统内置了 RequestContextMiddleware 中间件，用于处理请求的上下文信息。
-
-身份标识： 在请求体或 Header 中包含 user_id，以确保记忆归属于正确的用户。由于是开源环境，您可以根据需求在 middleware 中自定义更高级的 OAuth 或 API Key 校验。
+### 请求上下文
+* **user_id**：请求体中必须包含此标识，用于 Handler 层的身份追踪。
+* **MemCube ID**：开源版的核心隔离单元。通过指定 `readable_cube_ids` 或 `writable_cube_ids`，您可以精确控制数据读写的物理边界。
 
 ## 5. 下一步行动
 
-*   👉 [**添加消息**](/api_docs/core/add_message)：生成你的第一条记忆；
-    
-*   👉 [**检索记忆**](/api_docs/core/search_memory)：使用记忆过滤器实现记忆的高级检索。
+* 👉 [**系统配置**](./start/configuration.md)：配置您的 LLM 提供商与向量数据库引擎。
+* 👉 [**添加第一条记忆**](./core/add_memory.md)：尝试通过 SDK 或 Curl 提交第一组对话消息。
+* 👉 [**探索常见错误**](./help/error_codes.md)：了解 API 状态码及其背后的异常处理机制。

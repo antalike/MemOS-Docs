@@ -1,77 +1,81 @@
 ---
-title: 获取记忆
-desc: 分页查询并列出指定用户的所有记忆内容，支持深度过滤与分类筛选。
+title: 获取记忆 (Get Memories)
+desc: 分页查询或全量导出指定 Cube 中的记忆集合，支持按类型过滤及子图提取。
 ---
 
-::warning
-**[直接看 API文档 点这里哦](/api_docs/core/get_memory)**
-<br>
-<br>
+**接口路径**：
+* **分页查询**：`POST /product/get_memory`
+* **全量导出**：`POST /product/get_all`
 
-**本文聚焦于开源项目的功能说明，详细接口字段及限制请点击上方文字链接查看**
-::
+**功能描述**：用于列出或导出指定 **MemCube** 中的记忆资产。通过这两个接口，您可以获取系统生成的原始记忆片段、用户偏好或工具使用记录，支持分页展示与结构化导出。
 
-**接口路径**：`POST /product/get_memory`
-**功能描述**：与侧重于语义匹配的“检索”接口不同，“获取”接口主要用于管理目的。它允许开发者以分页的方式列出指定用户的所有记忆（事实、偏好及工具记忆），常用于构建用户记忆画像展示页或后台管理界面。
+## 1. 核心机理：分页 vs. 全量导出
 
-## 1. 为什么需要“获取”接口？
+在开源版中，系统通过 **MemoryHandler** 提供了两种不同的集合访问模式：
 
-* **全局视图**：无需输入查询语句即可查看用户已有的全部记忆资产。
-* **分页管理**：支持 `page` 和 `size` 参数，能够高效处理拥有数千条记忆的高级用户数据。
-* **精确清理前置**：在执行删除操作前，通过此接口确认记忆的 `id`。
+* **业务分页模式 (`/get_memory`)**：
+    * **设计初衷**：为前端 UI 列表设计。支持 `page` 和 `page_size` 参数。
+    * **特性**：默认包含偏好记忆（`include_preference`），支持轻量级的数据加载。
+* **全量导出模式 (`/get_all`)**：
+    * **设计初衷**：为数据迁移或复杂关系分析设计。
+    * **核心能力**：支持传入 `search_query` 提取相关的**子图（Subgraph）**，或按 `memory_type`（文本/动作/参数）导出全量数据。
 
-## 2. 关键参数说明
 
+## 2. 关键接口参数
+
+### 2.1 分页查询参数 (`/get_memory`)
 
 | 参数名 | 类型 | 必填 | 说明 |
 | :--- | :--- | :--- | :--- |
-| **`user_id`** | `str` | 是 | 关联用户的唯一标识符。 |
-| **`include_preference`** | `bool` | 否 | 是否返回偏好记忆（默认为 `True`）。 |
-| **`page`** | `int` | 否 | 分页页码，默认从 `1` 开始。 |
-| **`size`** | `int` | 否 | 每页返回的记忆条目数量（建议最大不超过 50）。 |
-| **`filter`** | `dict` | 否 | 结构化过滤器。支持按 `create_time` 或自定义 `info` 字段精确锁定。 |
+| **`mem_cube_id`** | `str` | 是 | 目标 MemCube ID。 |
+| **`user_id`** | `str` | 否 | 用户唯一标识符。 |
+| **`page`** | `int` | 否 | 页码（从 1 开始）。若设为 `None` 则尝试全量导出。 |
+| **`page_size`** | `int` | 否 | 每页条目数。 |
+| `include_preference` | `bool` | 否 | 是否包含偏好记忆。 |
 
+### 2.2 全量/子图导出参数 (`/get_all`)
 
+| 参数名 | 类型 | 必填 | 说明 |
+| :--- | :--- | :--- | :--- |
+| **`user_id`** | `str` | 是 | 用户 ID。 |
+| **`memory_type`** | `str` | 是 | 记忆类型：`text_mem`, `act_mem`, `para_mem`。 |
+| `mem_cube_ids` | `list` | 否 | 待导出的 Cube ID 列表。 |
+| `search_query` | `str` | 否 | 若提供，将基于此查询召回并返回相关的记忆子图。 |
 
-## 3. 工作原理
+## 3. 快速上手示例
 
-1. **多级过滤**：系统根据提供的 `user_id` 定位私有存储空间。
-2. **分类聚合**：根据 `include_preference` 和 `include_tool_memory` 参数，从不同的存储索引中聚合数据。
-3. **分页切片**：利用 `page` 和 `size` 对聚合后的结果集进行切片处理，降低网络传输压力。
-4. **结果返回**：返回包含记忆 ID、内容、标签及创建时间的数据列表。
-
-## 4. 快速上手示例
-
-通过 `MemOSClient` 快速拉取用户的记忆列表：
+### 3.1 前端分页展示 (SDK 调用)
 
 ```python
-from memos.api.client import MemOSClient
-
-# 初始化客户端
-client = MemOSClient(
-    api_key="YOUR_LOCAL_API_KEY",
-    base_url="http://localhost:8000/product"
-)
-
-# 获取用户最近的 10 条记忆，包含偏好信息
+# 获取第一页，每页 10 条记忆
 res = client.get_memory(
-    user_id="memos_user_123",
-    include_preference=True,
+    user_id="sde_dev_01",
+    mem_cube_id="cube_research_01",
     page=1,
-    size=10
+    page_size=10
 )
 
-if res and res.code == 200:
-    for memory in res.data.get('memory_detail_list', []):
-        print(f"ID: {memory['id']} | 内容: {memory['memory_value']}")
+for mem in res.data:
+    print(f"[{mem['type']}] {mem['memory_value']}")
+```
+### 3.2 导出特定的事实记忆子图
+```python
+# 提取与“R 语言”相关的全部事实记忆
+res = client.get_all(
+    user_id="sde_dev_01",
+    memory_type="text_mem",
+    search_query="R language visualization"
+)
 ```
 
-## 5. 使用场景
-### 5.1 构建用户画像看板
-展示“AI 对你的印象”或“已记住的偏好”。由于该接口支持分页，非常适合瀑布流或列表展示。
+## 4. 响应结构说明
+接口返回标准的业务响应，其中 data 包含记忆对象数组。每条记忆通常包含以下核心字段：
 
-### 5.2 数据审计与纠偏
-您可以定期通过此接口扫描某个用户的记忆条目，配合过滤器查找是否存在过时的业务标签（如 custom_status='deprecated'），并利用删除记忆接口进行清理。
+`id`: 记忆唯一标识，用于执行 获取详情 或 删除 操作。
 
-### 5.3 导出记忆资产
-支持将用户的记忆批量拉取并导出，方便进行离线分析或跨平台的数据迁移。
+`memory_value`: 经过算法加工后的记忆文本。
+
+`tags`: 关联的自定义标签。
+
+::note
+开发者提示： 如果您已知记忆 ID 并希望查看其完整的元数据（如 confidence 或 usage 记录），请使用`获取记忆详情`（Get_ memory_by_id）接口。 :::
