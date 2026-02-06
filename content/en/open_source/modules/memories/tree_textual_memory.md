@@ -1,12 +1,12 @@
 ---
-title: "TreeTextMemory: Structured Hierarchical Textual Memory"
-desc: "Let’s build your first **graph-based, tree-structured memory** in MemOS!
-
-**TreeTextMemory** helps you organize, link, and retrieve memories with rich context and explainability.
-
-[Neo4j](/open_source/modules/memories/neo4j_graph_db) is the current backend, with support for additional graph stores planned in the future."
+title: "TreeTextMemory: Tree-Structured Plain Text Memory"
+desc: >
+    Let's build your first **graph-based, tree-structured plain text memory** in MemOS!
+    <br>
+    **TreeTextMemory** supports organizing, associating, and retrieving memories in a structured way while preserving rich contextual information and good interpretability.
+    <br>
+    MemOS currently uses [Neo4j](/open_source/modules/memories/neo4j_graph_db) as the backend, with plans to support more graph databases in the future.
 ---
-
 
 ## Table of Contents
 
@@ -31,6 +31,7 @@ desc: "Let’s build your first **graph-based, tree-structured memory** in MemOS
 ## What You’ll Learn
 
 By the end of this guide, you will:
+
 - Extract structured memories from raw text or conversations.
 - Store them as **nodes** in a graph database.
 - Link memories into **hierarchies** and semantic graphs.
@@ -41,6 +42,7 @@ By the end of this guide, you will:
 ### Memory Structure
 
 Every node in your `TreeTextMemory` is a `TextualMemoryItem`:
+
 - `id`: Unique memory ID (auto-generated if omitted).
 - `memory`: the main text.
 - `metadata`: includes hierarchy info, embeddings, tags, entities, source, and status.
@@ -63,7 +65,6 @@ Every node in your `TreeTextMemory` is a `TextualMemoryItem`:
 | `usage`         | `list[str]`                                           | Usage history                              |
 | `background`    | `str`                                                 | Additional context                         |
 
-
 ::note
 **Best Practice**<br>
   Use meaningful tags and background — they help organize your graph for
@@ -76,15 +77,11 @@ When you run this example, your workflow will:
 
 1. **Extract:** Use an LLM to pull structured memories from raw text.
 
-
 2. **Embed:** Generate vector embeddings for similarity search.
-
 
 3. **Store & Link:** Add nodes to your graph database (Neo4j) with relationships.
 
-
 4. **Search:** Query by vector similarity, then expand results by graph hops.
-
 
 ::note
 **Hint**<br>Graph links help retrieve context that pure vector search might miss!
@@ -133,7 +130,9 @@ This file contains a JSON structure with `nodes` and `edges`. It can be reloaded
 ::steps{}
 
 ### Create TreeTextMemory Config
+
 Define:
+
 - your embedder (to create vectors),
 - your graph DB backend (Neo4j),
 - and your extractor LLM (optional).
@@ -143,7 +142,6 @@ from memos.configs.memory import TreeTextMemoryConfig
 
 config = TreeTextMemoryConfig.from_json_file("examples/data/config/tree_config.json")
 ```
-
 
 ### Initialize TreeTextMemory
 
@@ -311,23 +309,27 @@ print(f"✓ Extracted and added {len(mixed_memories)} memories from mixed conten
 
 ::note
 **MultiModal Reader Advantages**<br>
+
 - **Smart Routing**: Automatically identifies content type (image/URL/file) and selects appropriate parser<br>
+
 - **Format Support**: Supports PDF, DOCX, Markdown, HTML, images, and more<br>
 - **URL Parsing**: Automatically extracts web content (including GitHub, documentation sites, etc.)<br>
 - **Large File Handling**: Automatically chunks oversized files to avoid token limits<br>
 - **Context Preservation**: Uses sliding window to maintain context continuity between chunks
 ::
-
 ::note
 **Configuration Tips**<br>
-- Use the `direct_markdown_hostnames` parameter to specify which domains should return Markdown format<br>
+
+::note
+**Configuration Tip**<br>
+
 - Supports both `mode="fast"` and `mode="fine"` extraction modes; fine mode extracts more details<br>
 - See complete examples: `/examples/mem_reader/multimodal_struct_reader.py`
 ::
-
 ### Search Memories
 
 Try a vector + graph search:
+
 ```python
 results = tree_memory.search("Talk about the garden", top_k=5)
 for i, node in enumerate(results):
@@ -393,10 +395,10 @@ Alternatively, you can configure the `internet_retriever` field directly in the 
 
 With this setup, when you call `tree_memory.search(query)`, the system will automatically trigger an internet search (via BochaAI, Google, or Bing), and merge the results with local memory nodes in a unified ranked list — no need to manually call `retriever.retrieve_from_internet`.
 
-
 ### Replace Working Memory
 
 Replace your current `WorkingMemory` nodes with new ones:
+
 ```python
 tree_memory.replace_working_memory(
     [{
@@ -407,14 +409,15 @@ tree_memory.replace_working_memory(
 ```
 
 ### Backup & Restore
+
 Dump your entire tree structure to disk and reload anytime:
+
 ```python
 tree_memory.dump("tmp/tree_memories")
 tree_memory.load("tmp/tree_memories")
 ```
 
 ::
-
 
 ### Full Code Example
 
@@ -489,12 +492,12 @@ my_tree_textual_memory.drop()
 
 - **Structured Hierarchy:** Organize memories like a mind map — nodes can
 have parents, children, and cross-links.
+
 - **Graph-Style Linking:** Beyond pure hierarchy — build multi-hop reasoning
   chains.
 - **Semantic Search + Graph Expansion:** Combine the best of vectors and
   graphs.
 - **Explainability:** Trace how memories connect, merge, or evolve over time.
-
 ::note
 **Try This**<br>Add memory nodes from documents or web content. Link them
 manually or auto-merge similar nodes!
@@ -504,11 +507,13 @@ manually or auto-merge similar nodes!
 
 - **Know more about [Neo4j](/open_source/modules/memories/neo4j_graph_db):** TreeTextMemory is powered by a graph database backend.
   Understanding how Neo4j handles nodes, edges, and traversal will help you design more efficient memory hierarchies, multi-hop reasoning, and context linking strategies.
+
 - **Add [Activation Memory](/open_source/modules/memories/kv_cache_memory):**
   Experiment with
   runtime KV-cache for session
   state.
 - **Explore Graph Reasoning:** Build workflows for multi-hop retrieval and answer synthesis.
 - **Go Deep:** Check the [API Reference](/api-reference/search-memories) for advanced usage, or run more examples in `examples/`.
-
 Now your agent remembers not just facts — but the connections between them!
+
+Now your Agent can not only remember facts but also the connections between them!
