@@ -69,7 +69,7 @@ nav:
       - "(ri:speed-line) 性能调优": open_source/best_practice/performance_tuning.md
       - "(ri:wifi-line) 网络环境适配": open_source/best_practice/network_workarounds.md
       - "(ri:error-warning-line) 常见错误与解决方案": open_source/best_practice/common_errors_solutions.md
-      - "(ri:tools-line) Coze空间配置Memos的MCP": open_source/best_practice/mcp_for_cozespace_and_tools.md
+      - "(ri:tools-line) MemOS MCP集成指南": open_source/best_practice/mcp_for_cozespace_and_tools.md
 
     - "(ri:heart-line) 贡献指南":
       - "(ri:eye-line) 参与 MemOS 开发": open_source/contribution/overview.md

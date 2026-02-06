@@ -1,5 +1,5 @@
 ---
-title: Coze空间配置Memos的MCP
+title: MemOS MCP集成指南
 description: 在Coze等平台配置MemOS的MCP服务，实现智能体与记忆系统的无缝集成
 ---
 
