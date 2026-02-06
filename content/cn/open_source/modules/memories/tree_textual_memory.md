@@ -1,12 +1,13 @@
 ---
 title: "TreeTextMemory: 分层结构的明文记忆"
----
-
-让我们在MemOS中构建你的第一个**基于图的、树形明文记忆**！
+desc: "让我们在MemOS中构建你的第一个**基于图的、树形明文记忆**！
 
 **TreeTextMemory** 支持以结构化方式组织、关联并检索记忆，同时保留丰富的上下文信息与良好的可解释性。
 
-MemOS当前使用[Neo4j](/open_source/modules/memories/neo4j_graph_db)作为后端，未来计划支持更多图数据库。
+MemOS当前使用[Neo4j](/open_source/modules/memories/neo4j_graph_db)作为后端，未来计划支持更多图数据库。"
+---
+
+
 
 ## 目录
 
