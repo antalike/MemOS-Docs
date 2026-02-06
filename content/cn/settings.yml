@@ -42,15 +42,15 @@ nav:
       - "(ri:lightbulb-line) 核心概念": open_source/home/core_concepts.md
       - "(ri:building-2-line) 架构设计": open_source/home/architecture.md
       - "(ri:file-code-line) REST API 服务": open_source/getting_started/rest_api_server.md
-      - "(ri:code-line) MemOS示例": open_source/getting_started/examples.md
+      - "(ri:code-line) MemOS 示例": open_source/getting_started/examples.md
 
     - "(ri:cpu-line) MemOS":
       - "(ri:eye-line) API 开发指南": open_source/modules/mos/overview.md
       - "(ri:checkbox-multiple-blank-line) MemCube记忆立方": open_source/modules/mem_cube.md
-      - "(ri:book-open-line) MemReader记忆读取": open_source/modules/mem_reader.md
-      - "(ri:calendar-line) MemScheduler记忆调度": open_source/modules/mem_scheduler.md
-      - "(ri:calendar-line) MemChat使用记忆进行聊天": open_source/modules/mem_chat.md
-      - "(ri:feedback-line) MemFeedback记忆反馈": open_source/modules/mem_feedback.md
+      - "(ri:book-open-line) MemReader 记忆读取": open_source/modules/mem_reader.md
+      - "(ri:calendar-line) MemScheduler 记忆调度": open_source/modules/mem_scheduler.md
+      - "(ri:calendar-line) MemChat 使用记忆进行聊天": open_source/modules/mem_chat.md
+      - "(ri:feedback-line) MemFeedback 记忆反馈": open_source/modules/mem_feedback.md
 
 
     - "(ri:brain-line) 记忆系统":
