@@ -121,14 +121,6 @@ export const useAssistant = () => {
       setUserInput('')
     }
 
-    const assistantId = (Date.now() + 1).toString()
-    addMessage({
-      id: assistantId,
-      role: 'assistant',
-      content: '',
-      createAt: new Date()
-    })
-
     status.value = 'submitted'
 
     try {
@@ -147,6 +139,13 @@ export const useAssistant = () => {
       for await (const chunk of stream) {
         if (status.value !== 'streaming') {
           status.value = 'streaming'
+          const assistantId = (Date.now() + 1).toString()
+          addMessage({
+            id: assistantId,
+            role: 'assistant',
+            content: '',
+            createAt: new Date()
+          })
         }
         if (chunk.type === 'text' && chunk.data) {
           assistantContent += chunk.data

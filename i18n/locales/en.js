@@ -98,7 +98,7 @@ export default {
     title: 'Assistant',
     suggestions: 'Suggestions',
     inputPlaceholder: 'Type your messages here...',
-    welcome: 'Hi, I am Xiao Yi, the MemOS Knowledge Base Assistant. Feel free to ask me anything!',
+    welcome: 'Hi, I\'m Xiao Yi, your MemOS Knowledge Base Assistant. Feel free to ask me anything you\'d like to know!',
     systemError: 'System is busy, please try again later'
   }
 }

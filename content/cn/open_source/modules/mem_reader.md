@@ -1,6 +1,6 @@
 ---
 title: "MemReader"
-desc: "MemReader 是 MemOS 的“记忆翻译官”。它负责把用户杂乱的输入（聊天、文档、图片）翻译成系统能理解的、结构化的记忆片段。"
+desc: “MemReader 是你的“记忆翻译官”。它负责把杂乱的输入（聊天、文档、图片）翻译成系统能理解的、结构化的记忆片段。"
 ---
 
 ## 1. 简介
@@ -23,7 +23,7 @@ MemReader 设计了两种工作模式，分别对应“快”和“准”两种�
 *   **适用场景**：
     *   用户发消息飞快，系统需要毫秒级响应。
     *   只需保留对话的“快照”，不需要深度理解。
-*   **产物**：原始文本片段 + 向量索引。
+*   **产物**：原始文本片段 + 向量索引 + 来源追踪 (Sources)。
 
 ### 🧠 Fine 模式（精雕细琢）
 *   **特点**：**调用 LLM** 进行深度分析。
@@ -31,7 +31,7 @@ MemReader 设计了两种工作模式，分别对应“快”和“准”两种�
     *   长时记忆写入（需要提取关键事实）。
     *   文档分析（需要总结核心观点）。
     *   多模态理解（需要看懂图片里的内容）。
-*   **产物**：结构化的事实 + 摘要 (Background) + 来源追踪 (Provenance)。
+*   **产物**：结构化的事实 + 关键信息提取 (Key) + 背景 (Background) + 向量索引 + 来源追踪 (Sources) + 多模态细节。
 
 ---
 
@@ -86,8 +86,10 @@ memories = reader.get_memory(
 
 **返回结果**：`list[list[TextualMemoryItem]]`
 
+::note{icon="ri:bnb-fill"}
 为什么是双层列表？  
 因为一个长对话可能会被切成多个窗口（Window），外层列表代表窗口，内层列表代表该窗口提取出的记忆项。
+::
 
 ---
 
@@ -174,9 +176,9 @@ refined_memories = reader.fine_transfer_simple_mem(
 
 在 `.env` 或配置文件中，你可以调整以下关键参数：
 
-*   **`chat_window_max_tokens`**: **滑窗大小**。默认 1024。决定了多少上下文会被打包在一起处理。设得太小容易丢失语境，设得太大容易爆 LLM 的 Token 限制。
-*   **`remove_prompt_example`**: **是否移除 Prompt 里的示例**。如果你想节省 Token，可以设为 True；如果你发现提取效果不好，建议设为 False（保留 Few-shot 示例）。
-*   **`direct_markdown_hostnames`** (仅多模态): **域名白名单**。如果文件 URL 的域名在这个名单里（比如 `raw.githubusercontent.com`），Reader 会直接把它当 Markdown 文本处理，而不是去尝试 OCR 或转换，效率更高。
+*   **`chat_window_max_tokens`**: **滑窗大小**。默认 1024。决定了多少上下文会被打包在一起处理。设得太小容易丢失语境，设得太大容易超出 LLM 的 Token 限制。
+*   **`remove_prompt_example`**: **是否移除 Prompt 里的示例**。True = 省 Token 但可能降低提取质量；False = 保留示例提高准确度但消耗更多 Token（保留 Few-shot 示例）。
+*   **`direct_markdown_hostnames`** (仅多模态): **域名白名单**。列表中的域名（如 `raw.githubusercontent.com`）会被直接当作 Markdown 文本处理，跳过 OCR/格式转换步骤，加速处理。
 
 
 

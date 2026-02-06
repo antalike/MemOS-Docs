@@ -9,6 +9,7 @@ const {
   sendMessage,
   stopStreaming
 } = useAssistant()
+const { trackEvent } = useArms()
 
 const onEnter = (e: KeyboardEvent) => {
   if (e.isComposing) {
@@ -18,6 +19,7 @@ const onEnter = (e: KeyboardEvent) => {
 }
 
 const handleFormSubmit = async () => {
+  trackEvent('发起对话', '按钮点击')
   try {
     await sendMessage(userInput.value)
   } catch (error) {
@@ -33,22 +35,40 @@ watch([suggestions, status], async () => {
     suggestionsRef.value?.scrollIntoView({ behavior: 'smooth', block: 'end' })
   }
 })
+
+function onClose() {
+  trackEvent('关闭助手面板', '按钮点击')
+  toggleOpen()
+}
+
+function onSuggestionClick(item: string) {
+  trackEvent('参考问题', '按钮点击')
+  sendMessage(item)
+}
+
+function onStopStreaming() {
+  trackEvent('停止对话', '按钮点击')
+  stopStreaming()
+}
 </script>
 
 <template>
   <Transition name="slide">
     <div
       v-if="isOpen"
-      class="h-full shrink-0 overflow-hidden"
+      class="h-screen sticky top-0 shrink-0 overflow-hidden"
     >
       <UDashboardSidebar
         id="assistant"
         class="overflow-y-auto h-full border-l border-default -ml-px"
         side="right"
         resizable
-        :default-size="368"
-        :min-size="368"
+        :default-size="400"
+        :min-size="400"
         :max-size="576"
+        :ui="{
+          body: 'pb-4'
+        }"
       >
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-1.5">
@@ -61,7 +81,7 @@ watch([suggestions, status], async () => {
           <div class="flex items-center gap-2">
             <button
               class="group flex items-center hover:bg-gray-100 dark:hover:bg-white/10 p-1.5 rounded-lg cursor-pointer"
-              @click="toggleOpen"
+              @click="onClose"
             >
               <UIcon
                 name="i-lucide:x"
@@ -73,7 +93,7 @@ watch([suggestions, status], async () => {
 
         <UChatPalette
           :ui="{
-            content: 'scrollbar-hide'
+            content: 'scrollbar-hide pr-px'
           }"
         >
           <UChatMessage
@@ -90,12 +110,12 @@ watch([suggestions, status], async () => {
             :status="status"
             should-auto-scroll
             :ui="{
-              root: 'px-0'
+              root: 'px-0 [&>article]:last-of-type:min-h-auto'
             }"
           >
             <template #content="{ message }">
               <AssistantMDC
-                v-if="message.role === 'assistant'"
+                v-if="message.role === 'assistant' && message.content"
                 :value="message.content"
                 class="text-sm"
               />
@@ -120,7 +140,7 @@ watch([suggestions, status], async () => {
                 v-for="(item, index) in suggestions"
                 :key="index"
                 class="hover:text-primary/80 cursor-pointer"
-                @click="sendMessage(item)"
+                @click="onSuggestionClick(item)"
               >
                 {{ item }}
               </li>
@@ -140,8 +160,10 @@ watch([suggestions, status], async () => {
             >
               <UChatPromptSubmit
                 size="sm"
+                submitted-icon="i-lucide-circle"
+                streaming-icon="i-lucide-circle"
                 :status="status"
-                @stop="stopStreaming"
+                @stop="onStopStreaming"
               />
             </UChatPrompt>
           </template>

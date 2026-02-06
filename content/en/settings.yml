@@ -30,6 +30,7 @@ nav:
         - "(ri:image-add-line) Multimodal Messages": memos_cloud/features/basic/multimodal.md
         - "(ri:price-tag-3-line) Custom Tags": memos_cloud/features/basic/custom_tags.md
       - "(ri:vip-diamond-line) Advanced Features":
+        - "(ri:function-line) Skill": memos_cloud/features/advanced/skill.md
         - "(ri:book-read-line) Knowledge Base": memos_cloud/features/advanced/knowledge_base.md
         - "(ri:tools-line) Tool Calling": memos_cloud/features/advanced/tool_calling.md
         - "(ri:chat-history-line) Continuous Dialogue": memos_cloud/features/advanced/continuous_dialogue.md
@@ -97,6 +98,7 @@ nav:
       - "(ri:search-2-line) Search Memory": api_docs/core/search_memory.md
       - "(ri:file-list-line) Get Memory": api_docs/core/get_memory.md
       - "(ri:delete-bin-line) Delete Memory": api_docs/core/delete_memory.md
+      - "(ri:feedback-line) Add Feedback": api_docs/message/add_feedback.md
 
     - "(ri:chat-1-line) Messages":
       - "(ri:file-list-line) Get Message": api_docs/message/get_message.md
@@ -111,7 +113,6 @@ nav:
       - "(ri:file-add-line) Create Knowledgebase File": api_docs/knowledge/add_kb_doc.md
       - "(ri:file-search-line) Get Knowledgebase File": api_docs/knowledge/get_kb_doc.md
       - "(ri:file-reduce-line) Delete Knowledgebase File": api_docs/knowledge/delete_kb_doc.md
-      - "(ri:feedback-line) Add Feedback": api_docs/message/add_feedback.md
 
     - "(ri:customer-service-line) Help & Support":
       - "(ri:error-warning-line) Error Codes": api_docs/help/error_codes.md

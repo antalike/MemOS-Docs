@@ -497,7 +497,7 @@
               "type": "string"
             },
             "title": "Knowledgebase IDs",
-            "description": "Selected scope of knowledgebases for retrieval."
+            "description": "Specifies the scope of knowledge bases accessible for the current search. Defaults to empty, meaning no knowledge bases are searched.Pass specific Knowledgebase IDs to search within that designated repository; pass \"all\" to search across all associated knowledgebases within the project."
           },
           "memory_limit_number": {
             "type": "integer",
@@ -818,7 +818,7 @@
                       "properties": {
                         "file_data": {
                           "type": "string",
-                          "description": "Accessible file URL or base64. Supports txt / pdf / doc / docx. Single file max 100MB, 200 pages, total max 20 files. Required when type is file."
+                          "description": "Accessible file URL or base64. Supports txt / pdf / doc / docx / json / md / xml. Single file max 100MB, 200 pages, total max 20 files. Required when type is file."
                         }
                       }
                     }
@@ -1056,7 +1056,7 @@
             "items": {
               "type": "string"
             },
-            "description": "Specifies the scope of knowledge bases accessible for the current search. Defaults to empty, meaning no knowledge bases are searched."
+            "description": "Specifies the scope of knowledge bases accessible for the current search. Defaults to empty, meaning no knowledge bases are searched.Pass specific Knowledgebase IDs to search within that designated repository; pass \"all\" to search across all associated knowledgebases within the project."
           },
           "memory_limit_number": {
             "type": "integer",
@@ -1090,6 +1090,16 @@
             "title": "Tool Memroy Limit Number",
             "description": "Limits the number of tool memory items returned, controlling the count of recalled tool memories. Effective only when include_tool_memory=true. Default is 6 if not provided, max is 25.",
             "default": 6
+          },
+          "include_skill": {
+            "type": "boolean",
+            "title": "Include Skill",
+            "description": "Whether to enable Skill recall. When enabled, the system will intelligently recall memories related to tools based on the query content. Default is disabled if not provided."
+          },
+          "skill_limit_number": {
+            "type": "number",
+            "title": "Include Skill",
+            "description": "Limits the number of returned Skills, controlling the count of recalled skills. Effective only when `include_skill=true`. Default is 6 if not provided, max is 25."
           }
         },
         "title": "SearchMemoryRequest"
@@ -1151,6 +1161,14 @@
             "type": "string",
             "title": "Preference Note",
             "description": "Preference memory usage note when it is retrieved."
+          },
+          "skill_detail_list": {
+            "type": "array",
+            "title": "Skill Detail List",
+            "description": "List of skill details returned.",
+            "items": {
+              "$ref": "#/components/schemas/SkillDetail"
+            }
           }
         },
         "description": "Object containing the query result."
@@ -1382,6 +1400,129 @@
           }
         },
         "title": "ToolMemoryDetail"
+      },
+      "SkillValue": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name",
+            "description": "The name of the Skill, used for display and identification of the capability."
+          },
+          "description": {
+            "type": "string",
+            "title": "Description",
+            "description": "The description of the Skill."
+          },
+          "procedure": {
+            "type": "string",
+            "title": "Procedure",
+            "description": "Recommended procedures or operational steps to complete the task."
+          },
+          "experience": {
+            "type": "array",
+            "title": "Experience",
+            "items": {
+              "type": "string"
+            },
+            "description": "Experience accumulated from historical tasks, including best practices, common pitfalls, and avoidance suggestions."
+          },
+          "preference": {
+            "type": "array",
+            "title": "Preference",
+            "items": {
+              "type": "string"
+            },
+            "description": "User preference settings for this type of task, such as style, constraints, or priorities."
+          },
+          "examples": {
+            "type": "array",
+            "title": "Examples",
+            "items": {
+              "type": "string"
+            },
+            "description": "Typical usage examples of the Skill, helping the Agent understand input/output formats and usage boundaries."
+          },
+          "script": {
+            "type": "object",
+            "title": "Script",
+            "description": "Reusable code scripts or logic implementations used to complete the Skill."
+          },
+          "others": {
+            "type": "object",
+            "title": "Others",
+            "description": "Other supplementary information."
+          }
+        }
+      },
+      "SkillDetail": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "ID",
+            "description": "The unique identifier of the Skill, used internally by the system to distinguish different memory entries."
+          },
+          "skill_value": {
+            "type": "object",
+            "title": "Skill Value",
+            "description": "The specific content of the Skill.",
+            "items": {
+              "$ref": "#/components/schemas/SkillValue"
+            }
+          },
+          "skill_url": {
+            "type": "string",
+            "title": "Skill Url",
+            "description": "The download link for the Skill, downloaded as reusable skill implementations or configuration files."
+          },
+          "skill_type": {
+            "type": "string",
+            "title": "Skill Type",
+            "description": "The type of the Skill."
+          },
+          "create_time": {
+            "type": "string",
+            "title": "Create Time",
+            "description": "The creation time of the Skill content, usually in ISO 8601 format."
+          },
+          "conversation_id": {
+            "type": "string",
+            "title": "Conversation ID",
+            "description": "The unique identifier of the conversation associated with the Skill."
+          },
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "description": "The status of the Skill. Currently, all retrieved Skills are 'activated'. activated: Active status, the Skill is currently retrievable and usable.",
+            "enum": [
+              "activated"
+            ]
+          },
+          "confidence": {
+            "type": "number",
+            "title": "Confidence",
+            "description": "The confidence score of the Skill, ranging from 0 to 1. A value closer to 1 indicates the Skill is more accurate and reliable.\nThe confidence score gradually decays as the model infers this Skill more times, reflecting the uncertainty that may arise over time or usage frequency."
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "A list of tags associated with the Skill, used for classification, retrieval, or topic marking. Each element in the array is a string, e.g., [\"Person\", \"Event\", \"Work\"]."
+          },
+          "update_time": {
+            "type": "string",
+            "title": "Update Time",
+            "description": "The time when the Skill was last modified or updated, usually in ISO 8601 format."
+          },
+          "relativity": {
+            "type": "string",
+            "title": "Relativity",
+            "description": "The relevance score between the query content and the Skill, ranging from 0 to 1. A value closer to 1 indicates higher relevance."
+          }
+        },
+        "title": "SkillDetail"
       },
       "GetMemoryRequest": {
         "type": "object",
@@ -1996,7 +2137,7 @@
                 "content": {
                   "type": "string",
                   "title": "Content",
-                  "description": "The file content input supports URL or Base64 encoding, and the supported document types include PDF, DOCX, DOC, and TXT."
+                  "description": "The file content input supports URL or Base64 encoding, and the supported document types include PDF, DOCX, DOC, TXT, JSON, MD and XML."
                 }
               }
             }
