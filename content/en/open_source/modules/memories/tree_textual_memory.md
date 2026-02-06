@@ -1,10 +1,11 @@
 ---
 title: "TreeTextMemory: Structured Hierarchical Textual Memory"
-desc: "Let’s build your first **graph-based, tree-structured memory** in MemOS!
-
-**TreeTextMemory** helps you organize, link, and retrieve memories with rich context and explainability.
-
-[Neo4j](/open_source/modules/memories/neo4j_graph_db) is the current backend, with support for additional graph stores planned in the future."
+desc: >
+    Let’s build your first **graph-based, tree-structured memory** in MemOS!
+    <br>
+    **TreeTextMemory** helps you organize, link, and retrieve memories with rich context and explainability.
+    <br>
+    [Neo4j](/open_source/modules/memories/neo4j_graph_db) is the current backend, with support for additional graph stores planned in the future.
 ---
 
 
