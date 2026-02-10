@@ -5,25 +5,25 @@ versions:
       New Features:
         - type: Knowledge Base Retrieval Optimization
           changedInfo:
-            - Dual-track retrieval: Supports coordinated storage and retrieval of "original text + memory", with customizable recall modes.
-            - Context wake-up: Supports recalling surrounding context before/after chunks to improve semantic coherence in long texts.
-            - Relevance filtering: The search API adds a relativity field (0~1) to filter low-quality recalls by threshold.
+            - 'Dual-track retrieval: Supports coordinated storage and retrieval of "original text + memory", with customizable recall modes.'
+            - 'Context wake-up: Supports recalling surrounding context before/after chunks to improve semantic coherence in long texts.'
+            - 'Relevance filtering: The search API adds a relativity field (0~1) to filter low-quality recalls by threshold.'
         - type: MindDock
           changedInfo:
-            - Cloud Skill: Added cloud skill support and a quick entry.
-            - Real-time prompt injection: Dynamically inject Skill modules during chat to enable skill interoperability across models.
+            - 'Cloud Skill: Added cloud skill support and a quick entry.'
+            - 'Real-time prompt injection: Dynamically inject Skill modules during chat to enable skill interoperability across models.'
         - type: MCP Memory Deletion
           changedInfo:
             - When deletion intent is detected, synchronously trigger deleteMemory and addFeedback.
       Improvements:
         - type: Scheduling & Retrieval Pipeline Refactor
           changedInfo:
-            - Pipeline refactor: Rebuilt the retrieval chain into four stages—Search -> Enhance -> Rerank -> Filter—scheduled by a unified API.
-            - Scheduling optimization: Modularized the task processor and fixed Redis Streams serialization and user_context passing issues.
+            - 'Pipeline refactor: Rebuilt the retrieval chain into four stages—Search -> Enhance -> Rerank -> Filter—scheduled by a unified API.'
+            - 'Scheduling optimization: Modularized the task processor and fixed Redis Streams serialization and user_context passing issues.'
         - type: Skills Improvements
           changedInfo:
-            - Skill docs localization: Supports local storage of skill docs and generates dedicated URLs, downloadable directly via API.
-            - Skill generation optimization: Can now generate richer and more complete skills from users' historical information.
+            - 'Skill docs localization: Supports local storage of skill docs and generates dedicated URLs, downloadable directly via API.'
+            - "Skill generation optimization: Can now generate richer and more complete skills from users' historical information."
       Bug Fixes:
         - type: Playground Improvements
           changedInfo:
@@ -53,10 +53,10 @@ versions:
       New Features:
         - type: Documentation
           changedInfo:
-            - Open-source project documentation: Fixed formatting issues, improved example descriptions, resolved Chinese-English inconsistencies, and added practical usage tips.
+            - 'Open-source project documentation: Fixed formatting issues, improved example descriptions, resolved Chinese-English inconsistencies, and added practical usage tips.'
         - type: Dashboard
           changedInfo:
-            - Knowledge base now supports more file types: JSON, MD, XML.
+            - 'Knowledge base now supports more file types: JSON, MD, XML.'
         - type: GitHub Repository
           changedInfo:
             - Adjusted the startup approach (introduced a new server router class) and removed the reference to src/memos/product_api.py.
