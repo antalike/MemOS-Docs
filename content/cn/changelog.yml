@@ -1,4 +1,33 @@
 versions:
+  - name: v2.0.5
+    date: 2026-02-10
+    changedInfo:
+      New Features:
+        - type: 知识库检索优化
+          changedInfo:
+            - 双轨检索：支持“原文+记忆”协同存储与检索，可自定义召回模式。
+            - 上下文唤醒：支持召回分片前后的上下文，增强长文本语义连贯性。
+            - 相关性精筛：search 接口新增 relativity 字段（0~1），支持按阈值过滤低质召回。
+        - type: MindDock
+          changedInfo:
+            - 云服务 Skill：新增云服务技能支持及快捷入口。
+            - Prompt 实时注入：聊天中动态注入 Skill 模块，实现多模型间技能互通。
+        - type: MCP 记忆删除
+          changedInfo:
+            - 当识别删除意图时，同步触发 deleteMemory 与 addFeedback。
+      Improvements:
+        - type: 调度与检索 pipeline 重构
+          changedInfo:
+            - Pipeline 重构：检索链路重构为 Search -> Enhance -> Rerank -> Filter 四阶段，由统一 API 调度。
+            - 调度优化：任务处理器模块化，修复 Redis Streams 序列化及 user_context 传递问题。
+        - type: Skills 优化
+          changedInfo:
+            - Skills 文档本地化：支持技能文档本地存储并生成专属 URL，可通过接口直接下载。
+            - Skills 生成优化：目前能够从用户添加的历史信息中生成更丰富完整的 skills。
+      Bug Fixes:
+        - type: Playground 优化
+          changedInfo:
+            - 修复已知体验问题，提升环境稳定性。
   - name: v2.0.4
     date: 2026-01-30
     changedInfo:
