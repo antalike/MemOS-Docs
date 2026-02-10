@@ -18,15 +18,19 @@ MemFeedback can understand these natural language instructions, accurately locat
 It can handle four common feedback scenarios:
 
 ### Correction
+
 When the user points out a factual error. The system will not brutally delete the old data but **Archive** it and write new data. This corrects the error while preserving version history (Traceability). If it is an ongoing conversation (WorkingMemory), it updates in place to ensure context continuity.
 
 ### Addition
+
 If the user just supplements new information that does not conflict with old memories, it is simple—directly save it as a new node in the memory database.
 
 ### Keyword Replacement
+
 Similar to "Global Refactor" in an IDE. For example, if the user says, "Change 'Zhang San' to 'Li Si' in all documents," the system will combine the Reranker to automatically determine the scope of affected documents and update all relevant memories in batches.
 
 ### Preference Evolution
+
 Specifically handles preferences like "I don't eat cilantro" or "I like Python." The system records the context in which this preference arose, constantly enriching the user profile to make the Agent more tailored to use.
 
 ---
@@ -59,6 +63,7 @@ There is only one main entry point: `process_feedback()`. It is usually called a
 ### 4.2 Output Result
 
 Returns a dictionary telling you what changed in this operation:
+
 *   **`record`**: Database change details (e.g., `{ "add": [...], "update": [...] }`).
 *   **`answer`**: Natural language response to the user.
 
@@ -150,3 +155,5 @@ To make MemFeedback work, you need to prepare the configuration of the following
 *   **Embedder (`embedder`)**: Used to convert new memories into vectors.
 *   **GraphDB (`graph_db`)**: Where memories are stored and how, handled by these two.
 *   **MemReader (`mem_reader`)**: Used to parse purely new memories.
+
+---

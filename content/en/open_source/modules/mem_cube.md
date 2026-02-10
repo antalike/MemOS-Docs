@@ -2,6 +2,7 @@
 title: MemCube Overview
 desc: "`MemCube` is the core organizational unit in MemOS, designed to encapsulate and manage all types of memory for a user or agent. It provides a unified interface for loading, saving, and operating on multiple memory modules, making it easy to build, share, and deploy memory-augmented applications."
 ---
+
 ## What is a MemCube?
 
 A **MemCube** is a container that bundles three major types of memory:

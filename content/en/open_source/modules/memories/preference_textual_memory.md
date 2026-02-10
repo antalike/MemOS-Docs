@@ -24,12 +24,12 @@ desc: "`PreferenceTextMemory` is a textual memory module in MemOS for storing an
   - [Backup and Restore](#backup-and-restore)
   - [Complete Code Example](#complete-code-example)
 
-
 ## Why Preference Memory is Needed
 
 ### Key Features
 
 ::list{icon="ph:check-circle-duotone"}
+
 - **Dual Preference Extraction**: Automatically identifies explicit and implicit preferences
 - **Semantic Understanding**: Uses vector embeddings to understand the deep meaning of preferences
 - **Smart Deduplication**: Automatically detects and merges duplicate or conflicting preferences
@@ -42,6 +42,7 @@ desc: "`PreferenceTextMemory` is a textual memory module in MemOS for storing an
 ### Application Scenarios
 
 ::list{icon="ph:lightbulb-duotone"}
+
 - Personalized conversational agents (remembering user likes/dislikes)
 - Intelligent recommendation systems (recommendations based on preferences)
 - Customer service systems (providing customized services)
@@ -55,14 +56,17 @@ When you need to build systems that can "remember" user preferences and provide 
 ::
 
 ## Core Concepts and Workflow
+
 ### Memory Structure
 
 In MemOS, preference memory is represented by `PreferenceTextMemory`, where each memory item is a `TextualMemoryItem` stored in Milvus database.
+
 - `id`: Unique memory ID (automatically generated if omitted)
 - `memory`: Main text content
 - `metadata`: Includes hierarchical structure information, embeddings, tags, entities, sources, and status
 
 Preference memory can be divided into explicit preference memory and implicit preference memory:
+
 - **Explicit Preference Memory**: Preferences that users explicitly express. **Examples**:
     - "I like dark mode"
     - "I don't eat spicy food"
@@ -98,12 +102,9 @@ When you run this example, your workflow will:
 
 1. **Extraction:** Use LLM to extract structured memory from raw text.
 
-
 2. **Embedding:** Generate vector embeddings for similarity search.
 
-
 3. **Storage:** Store preference memory in Milvus database while updating metadata fields.
-
 
 4. **Search:** Return the most relevant preference memories through vector similarity queries.
 
@@ -133,10 +134,10 @@ PreferenceTextMemory(config: PreferenceTextMemoryConfig)
 | `delete_with_collection_name(collection_name, memory_ids)` | Delete all preference memories with specified collection name and IDs. |
 | `delete_all()` | Delete all preference memories. |
 
-
 ### File Storage
 
 When calling `dump(dir)`, MemOS will serialize all preference memories to JSON files in the directory:
+
 ```
 <dir>/<config.memory_filename>
 ```
@@ -148,7 +149,9 @@ When calling `dump(dir)`, MemOS will serialize all preference memories to JSON f
 ::steps{}
 
 ### Create PreferenceTextMemory Configuration
+
 Define:
+
 - Your embedding model (e.g., nomic-embed-text:latest),
 - Your Milvus database backend,
 - Memory extractor (based on LLM) (optional).
@@ -188,7 +191,9 @@ results = preference_memory.search("Tell me more about the user", top_k=2)
 ```
 
 ### Backup and Restore
+
 Support persistent storage and on-demand reloading of preference memories:
+
 ```python
 preference_memory.dump("tmp/pref_memories")
 preference_memory.load("tmp/pref_memories")

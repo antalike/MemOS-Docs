@@ -19,6 +19,7 @@ desc: This document provides a comprehensive overview of all configuration field
 ## Configuration Overview
 
 MemOS uses a hierarchical configuration system with factory patterns for different backends. Each component has:
+
 - A base configuration class
 - Backend-specific configuration classes
 - A factory class that creates the appropriate configuration based on the backend
@@ -42,7 +43,6 @@ The main MOS configuration that orchestrates all components.
 | `enable_activation_memory` | bool | False | Enable activation memory |
 | `enable_parametric_memory` | bool | False | Enable parametric memory |
 | `enable_mem_scheduler` | bool | False | Enable scheduler memory |
-
 
 ### Example MOS Configuration
 
@@ -114,17 +114,20 @@ Configuration for different Large Language Model backends.
 ### Backend-Specific Fields
 
 #### OpenAI LLM
+
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `api_key` | str | required | OpenAI API key |
 | `api_base` | str | "https://api.openai.com/v1" | OpenAI API base URL |
 
 #### Ollama LLM
+
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `api_base` | str | "http://localhost:11434" | Ollama API base URL |
 
 #### HuggingFace LLM
+
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `do_sample` | bool | False | Use sampling vs greedy decoding |
@@ -304,16 +307,19 @@ Configuration for different types of memory systems.
 ### Textual Memory Configurations
 
 #### Base Text Memory
+
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `memory_filename` | str | "textual_memory.json" | Filename for storing memories |
 
 #### Naive Text Memory
+
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `extractor_llm` | LLMConfigFactory | required | LLM for memory extraction |
 
 #### General Text Memory
+
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `extractor_llm` | LLMConfigFactory | required | LLM for memory extraction |
@@ -321,6 +327,7 @@ Configuration for different types of memory systems.
 | `embedder` | EmbedderConfigFactory | required | Embedder configuration |
 
 #### Tree Text Memory
+
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `extractor_llm` | LLMConfigFactory | required | LLM for memory extraction |
@@ -331,11 +338,13 @@ Configuration for different types of memory systems.
 ### Activation Memory Configurations
 
 #### Base Activation Memory
+
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `memory_filename` | str | "activation_memory.pickle" | Filename for storing memories |
 
 #### KV Cache Memory
+
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `extractor_llm` | LLMConfigFactory | required | LLM for memory extraction (must be huggingface) |
@@ -343,11 +352,13 @@ Configuration for different types of memory systems.
 ### Parametric Memory Configurations
 
 #### Base Parametric Memory
+
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `memory_filename` | str | "parametric_memory.adapter" | Filename for storing memories |
 
 #### LoRA Memory
+
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `extractor_llm` | LLMConfigFactory | required | LLM for memory extraction (must be huggingface) |
@@ -413,11 +424,13 @@ Configuration for embedding models.
 ### Backend-Specific Fields
 
 #### Ollama Embedder
+
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `api_base` | str | "http://localhost:11434" | Ollama API base URL |
 
 #### Sentence Transformer Embedder
+
 No additional fields beyond base configuration.
 
 ### Example Embedder Configurations

@@ -10,7 +10,6 @@ desc: MemOS treats memory as a first-class citizen. Its core design revolves aro
 * [Memory Types](#memory-types)
 * [Cross-Cutting Concepts](#cross-cutting-concepts)
 
-
 ## MOS (Memory Operating System)
 
 **What it is:**
@@ -57,6 +56,7 @@ By storing stable background content (like FAQs or known facts) in a KV-cache, y
 This dramatically reduces Time To First Token (TTFT) and improves throughput for multi-turn conversations or retrieval-augmented generation.
 
 **When to use:**
+
 - Reuse background knowledge across many user queries.
 - Speed up chatbots that rely on the same domain context each turn.
 - Combine with MemScheduler to auto-promote stable plaintext memory to KV format.
@@ -68,18 +68,16 @@ Structured or unstructured knowledge units — user-visible, explainable. These 
 
 **When to use:**
 Best for semantic search, user preferences, or traceable facts that evolve over time. Supports tags, provenance, and lifecycle states.
-
-
 ## How They Work Together
 
 MemOS lets you orchestrate all three memory types in a living loop:
 
 - Hot plaintext memories can be distilled into parametric weights.
+
 - High-frequency activation paths become reusable KV templates.
+
 - Stale parametric or activation units can be downgraded to plaintext nodes for traceability.
-
 With MemOS, your AI doesn't just store facts — it **remembers**, **understands**, and **grows**.
-
 ::note
 **Insight**<br>
   Over time, frequently used plaintext memories can be distilled into parametric form.
@@ -105,3 +103,7 @@ Always track provenance and state changes for each memory unit.
 ## Key Takeaway
 
 With MemOS, your LLM applications gain structured, evolving memory — empowering agents to plan, reason, and adapt like never before.
+
+## Key Takeaways
+
+With MemOS, your LLM application gains structured, evolving memory—enabling agents to plan, reason, and adapt like never before.

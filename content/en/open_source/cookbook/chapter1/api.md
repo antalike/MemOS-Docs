@@ -2,6 +2,7 @@
 title: Linux API Version
 desc: "MemCube is the core component of MemOS, like a 'memory chip' in Cyberpunk 2077, allowing agents to load different 'memory packages' to gain different knowledge and abilities. In this chapter, we will help you master the basic operations of MemCube through three progressive recipes.<br/>Note that the MemOS system has two levels: OS level and Cube level. Here we first introduce the more basic Cube level. Many of the operations below, such as add and search operations, also exist at the OS level. The difference is: OS manages multiple Cubes and can perform overall search and operations on multiple Cubes, while Cube is only responsible for its own writing and querying."
 ---
+
 ### Recipe 1.1: Install and Configure Your MemOS Development Environment (API Version)
 
 **🎯 Problem Scenario:** You are an AI application developer who wants to try the latest and hottest MemOS, but don't know how to configure the MemOS environment.
@@ -1077,6 +1078,7 @@ python memcube_lifecycle_api.py
    # ❌ Avoid: Loading MemCubes without limit
    # This may cause memory overflow
    ```
+
 2. **Persistence Strategy**
 
    ```python
@@ -1088,6 +1090,7 @@ python memcube_lifecycle_api.py
    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
    cube_manager.save_memcube(mem_cube, f"data_backup_{timestamp}")
    ```
+
 3. **Query Optimization**
 
    ```python

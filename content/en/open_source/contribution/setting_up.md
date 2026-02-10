@@ -10,6 +10,7 @@ desc: To contribute to MemOS, you'll need to set up your local development envir
 Set up the repository on your local machine:
 
 - Fork the repository on GitHub
+
 - Clone your fork to your local machine:
 
   ```bash
@@ -68,6 +69,7 @@ Tip:
 - If you switch branches or dependencies change, you may need to **re-run `make install`** to keep the environment consistent.
 
 ### Understanding Memory Modules and Dependency Selection
+
 Before setting up the environment, we need to understand MemOS's memory module classification and their corresponding database dependencies. This will determine which components you need to install.
 
 #### Memory Types
@@ -209,4 +211,5 @@ docker compose up neo4j
 cd MemOS
 make serve
 ```
+
 ::

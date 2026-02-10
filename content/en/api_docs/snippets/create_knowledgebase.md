@@ -1,4 +1,5 @@
 ::code-group
+
 ```python [Python (HTTP)]
 import os
 import requests
@@ -22,6 +23,7 @@ res = requests.post(url=url, headers=headers, data=json.dumps(data))
 
 print(f"result: {res.json()}")
 ```
+
 ```python [Python (SDK)]
 # Ensure MemoS is installed (pip install MemoryOS -U)
 from memos.api.client import MemOSClient
@@ -38,6 +40,7 @@ res = client.create_knowledgebase(
 )
 print(f"result: {res}")
 ```
+
 ```bash [Curl]
 curl --request POST \
   --url https://memos.memtensor.cn/api/openmem/v1/create/knowledgebase \
@@ -48,4 +51,5 @@ curl --request POST \
     "knowledgebase_description": "A compilation of all knowledge related to financial reimbursement in the company."
   }'
 ```
+
 ::

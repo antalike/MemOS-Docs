@@ -3,20 +3,17 @@ title: Let the Financial Assistant Understand Customer Preferences Behind Behavi
 desc: With MemOS, user operations and conversational behaviors are abstracted into "memories," enabling the identification and extraction of underlying investment preferences to deliver more personalized services.
 ---
 
-
 ## 1. Overview
 
 In intelligent investment advisory products, users leave behind a large number of **behavioral traces**:
 
 *   **Traffic Source**: Which ad or post did the user click? (e.g., clicked the “Retirement Finance” ad)
-    
+
 *   **In-App Operations**: Which fund products did they browse? Which financial products did they bookmark?
-    
+
 *   **Communication Records**: Conversations with financial advisors and interactions with the AI financial assistant.
-    
 
 These are just raw behaviors. If stored directly as logs, they are of limited help to large models. **The key is how to abstract behaviors into "memories."**
-
 
 ### 1.1 How are behaviors abstracted into memories?
 
@@ -28,7 +25,6 @@ These are just raw behaviors. If stored directly as logs, they are of limited he
 | Said in conversation: “I don’t want to take too much risk” | Memory: “Explicitly expressed low-risk demand” |
 
 When the user later asks, “What kind of investment suits me?”, the financial assistant does not need to scan through a pile of logs but instead directly uses these semantic memories to drive the model to generate personalized answers.
-
 
 ### 1.2 Why not traditional RAG?
 
@@ -44,11 +40,10 @@ RAG is more suitable for knowledge Q&A, such as explaining “What is a bond.”
 Of course, developers can store behaviors themselves, but they will face three challenges:
 
 *   **Lack of abstraction**: Simply storing “clicked Fund A” is not useful; it needs to be transformed into “risk preference = low risk.”
-    
+
 *   **Integration complexity**: Before calling the model, developers must manually build prompts by abstracting scattered behaviors into semantic information.
-    
+
 *   **Poor scalability**: As more channels, products, and communication scenarios are added, the code quickly becomes unmanageable.
-    
 
 ### 1.4 Why use MemOS?
 
@@ -60,7 +55,6 @@ When making a technology selection, you can directly compare three approaches:
 | **Self-Built Storage** | Directly stores behavior logs | Requires manual abstraction from behavior → memory; high prompt engineering cost | Requires developing大量 glue code |
 | **MemOS** | Two interfaces: `addMessage` for writing, `searchMemory` for retrieval | —— | Automatically abstracts behavior traces into memories for direct use by the model |
 
-
 ### 1.5 What will this case demonstrate?
 
 This case demonstrates how to use MemOS cloud services to quickly build an intelligent financial assistant that “turns user behaviors into memories.”
@@ -68,27 +62,24 @@ This case demonstrates how to use MemOS cloud services to quickly build an intel
 In the demo:
 
 *   **D1 Traffic Behavior**: Clicking the “Retirement Finance” ad → generates memory “Interest in retirement finance.”
-    
+
 *   **D2 In-App Behavior**: Browsing and bookmarking low-risk funds → generates memory “Risk preference = low risk.”
-    
+
 *   **D3 Conversational Behavior**: Saying “I don’t want to take risks” → generates memory “Explicit low-risk demand.”
-    
 
 When the user asks, “What kind of investment suits me?”:
 
 *   `searchMemory` retrieves the above memories
-    
+
 *   The large model generates an answer that combines these profiles → outputs “More suitable for low-risk fixed income products.”
-    
 
 When running this case script, developers will see in the console:
 
 *   Each `addMessage` request/response (behaviors stored)
-    
+
 *   Each `searchMemory` request/response (semantic memories retrieved)
-    
+
 *   The model’s final personalized investment recommendation
-    
 
 ## 2. Example
 
@@ -263,11 +254,11 @@ if __name__ == "__main__":
 ### 2.3 Code Explanation
 
 1.   Set your MemOS API key and OpenAI API key in environment variables
-    
+
 2.   Instantiate **FinancialManagementAssistant**
-    
+
 3.   Choose whether to execute preset conversations, which will consume 1 add and 2 search quotas
-    
+
 4.   Use the `main()` function to interact with the assistant through a conversation loop
-    
+
 5.   The assistant will call `chat`, first performing a `search` to retrieve memories, then calling OpenAI for conversation, and finally performing an `add` to store memories

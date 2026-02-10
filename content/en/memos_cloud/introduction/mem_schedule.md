@@ -41,7 +41,6 @@ API Request
               -> Status Tracker Updates Status + Redis ACK
 ```
 
-
 ### 1.1 Queue Model
 
 #### Local Queue (SchedulerLocalQueue)
@@ -63,7 +62,6 @@ The Redis version is the **recommended default path for production environments*
 - Consumer Group: `scheduler_group`
   - Redis queue prefix can be overridden by `MEMSCHEDULER_REDIS_STREAM_KEY_PREFIX`.
   - Default constant `DEFAULT_STREAM_KEY_PREFIX` can be overridden by `MEMSCHEDULER_STREAM_KEY_PREFIX` (if a unified style is needed, configuring the former is recommended).
-
 
 ### 1.2 Status Tracking (TaskStatusTracker)
 
@@ -239,8 +237,6 @@ The scheduler sends monitoring events at critical stages:
 
 These events are the core basis for scheduling performance analysis and troubleshooting.
 
-        
-
 ## 2. Advanced: Deep Customization
 
 Developers can customize system behavior by **extending scheduling policies**, mainly including:
@@ -331,6 +327,6 @@ mem_scheduler.memos_message_queue.submit_messages([task_item])
 
 By doing this, you can easily decouple complex memory management logic and hand it over to the Memos scheduling system for reliable background execution.
 
-
 ## 3. Contact Us
-<img src="{{cdnUrl}}/img/1758685658684_nbhka4_compressed.png" alt="image" style="width:70%;">
+
+<img src="https://cdn.memtensor.com.cn/img/1758685658684_nbhka4_compressed.png" alt="image" style="width:70%;">

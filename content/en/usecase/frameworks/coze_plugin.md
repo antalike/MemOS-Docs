@@ -3,7 +3,6 @@ title: Coze Plugin
 desc: The Coze plugin tool directly accesses MemOS cloud service interfaces to quickly add long-term memory capabilities to your Agent, making conversations more thoughtful and continuous.
 ---
 
-
 ## 1. Plugin Information
 
 The MemOS Cloud Service Plugin is now available in the Coze Store! You can directly [visit the tool link](https://www.coze.cn/store/plugin/7569918012912893995?from=store_search_suggestion) to add the plugin and achieve zero-code integration.
@@ -41,6 +40,7 @@ The MemOS Cloud Service Plugin is now available in the Coze Store! You can direc
 ## 3. Agent Call Example
 
 ### Agent Persona and Reply Logic Example
+
 ```
 You are a Q&A robot. Each time, you will read the user's memory and content of interest, and reply with very clear logic to gain the user's favor.
 

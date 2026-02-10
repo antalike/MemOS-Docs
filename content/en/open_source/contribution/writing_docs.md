@@ -6,17 +6,22 @@ desc: This project uses Nuxt Content to build a documentation system that suppor
 ## Creating New Documents
 
 ::steps
+
 ### Create Markdown File
+
 Create a new `.md` file in the `content/` directory or its subdirectories. Choose an appropriate location based on your content type.
 
 ### Add Frontmatter
+
 Add YAML frontmatter at the top of your file to provide metadata. The frontmatter supports the following fields:
 
 ::card{title="Frontmatter Fields"}
 **Required Fields:**
+
 - `title` (string) - The document title that appears in navigation and page headers
 
 **Optional Fields:**
+
 - `desc` (string) - Brief description of the document content
 - `banner` (string) - URL to a banner image displayed at the top of the page
 - `links` (array) - Array of related links with labels, URLs, and icons
@@ -45,12 +50,15 @@ links:
 ```
 
 ### Write Content
+
 Use Markdown syntax and MDC components to write your documentation content. Take advantage of the available components to create engaging and well-structured content.
 
 ### Update Navigation
+
 Add the new document to the `nav` section in `content/settings.yml` to make it accessible through the site navigation.
 
 ### Merge to Main Branch
+
 Once changes are merged into the `main` branch, the documentation will be automatically updated and deployed.
 ::
 
@@ -84,82 +92,86 @@ Use `steps` to create step-by-step guides from document headings. The `steps` co
 
 ::code-preview
 ---
+
 class: "[&>div]:*:w-full"
 ---
-  :::steps{level="4"}
-  #### Fork & Clone the Repository
-  
-  Set up the repository on your local machine:
-  
-  - Fork the repository on GitHub
-  - Clone your fork to your local machine:
+
+:::steps{level="4"}
+
+#### Fork & Clone the Repository
+
+Set up the repository on your local machine:
+
+- Fork the repository on GitHub
+
+- Clone your fork to your local machine:
   
     ```bash
     git clone https://github.com/YOUR-USERNAME/MemOS.git
     cd MemOS
     ```
-  
-  - Add the upstream repository as a remote:
+
+- Add the upstream repository as a remote:
   
     ```bash
     git remote add upstream https://github.com/MemTensor/MemOS.git
     ```
-  
-  #### Prepare Development Dependencies
-  
-  Ensure the following are installed locally:
-  
-  - Git
-  - Python 3.9+
-  - Make
-  
-  Verify Python:
-  
-  ```bash
+
+#### Prepare Development Dependencies
+
+Ensure the following are installed locally:
+
+- Git
+- Python 3.9+
+- Make
+
+Verify Python:
+
+```bash
   python3 --version
   ```
-  
-  #### Install Poetry
-  
-  MemOS uses Poetry for dependency management. We recommend using the official installer:
-  
-  ```bash
+
+#### Install Poetry
+
+MemOS uses Poetry for dependency management. We recommend using the official installer:
+
+```bash
   curl -sSL https://install.python-poetry.org | python3 -
   ```
-  
-  Verify the installation:
-  
-  ```bash
+
+Verify the installation:
+
+```bash
   poetry --version
   ```
-  
-  If you see `poetry: command not found`, please add the Poetry executable directory to your PATH as prompted by the installer, then restart your terminal and verify again.
-  
-  For more installation options, see the [official installation guide](https://python-poetry.org/docs/#installing-with-the-official-installer).
-  
-  #### Install Dependencies and Set Up Pre-commit Hooks
-  
-  Install all project dependencies and development tools in the repository root:
-  
-  ```bash
+
+If you see `poetry: command not found`, please add the Poetry executable directory to your PATH as prompted by the installer, then restart your terminal and verify again.
+
+For more installation options, see the [official installation guide](https://python-poetry.org/docs/#installing-with-the-official-installer).
+
+#### Install Dependencies and Set Up Pre-commit Hooks
+
+Install all project dependencies and development tools in the repository root:
+
+```bash
   make install
   ```
-  
-  Tip:
-  
-  - If you switch branches or dependencies change, you may need to **re-run `make install`** to keep the environment consistent.
+
+Tip:
+
+- If you switch branches or dependencies change, you may need to **re-run `make install`** to keep the environment consistent.
   :::
-  
-  ```python
+
+```python
   from memos.configs.mem_os import MOSConfig
   
   # init MOSConfig
   mos_config = MOSConfig.from_json_file("examples/data/config/simple_memos_config.json")
   ```
-  
-  #### Create a User & Register a MemCube
-  
-  ```python
+
+#### Create a User & Register a MemCube
+
+```python
   import uuid
   from memos.mem_os.main import MOS
   
@@ -171,9 +183,11 @@ class: "[&>div]:*:w-full"
   # Create the user
   mos.create_user(user_id=user_id)
   ```
-  :::
+
+:::
 
 #code
+
 ````mdc
 ::steps{level="4"}
 
@@ -211,8 +225,8 @@ mos.create_user(user_id=user_id)
 
 ::
 ````
-::
 
+::
 
 ### Accordion
 
@@ -220,9 +234,11 @@ Use `accordion` and `accordion-item` to create collapsible content sections. Acc
 
 ::code-preview
 ---
+
 class: "[&>div]:*:my-0"
 ---
-  :::accordion
+
+:::accordion
     ::::accordion-item
     ---
     icon: i-lucide-circle-help
@@ -230,7 +246,7 @@ class: "[&>div]:*:my-0"
     ---
     Yes. MemOS is designed to be as compatible as possible with various types of models. However, it's important to note that if you're using API-based models, activation and parametric memories cannot be utilized.
     ::::
-  
+
     ::::accordion-item
     ---
     icon: i-lucide-circle-help
@@ -242,9 +258,11 @@ class: "[&>div]:*:my-0"
     ::::accordion-item{icon="i-lucide-circle-help" label="What is the pricing?"}
     MemOS open-source is free.
     ::::
-  :::
+
+:::
 
 #code
+
 ```mdc
 ::accordion
 
@@ -262,6 +280,7 @@ MemOS open-source is free.
 
 ::
 ```
+
 ::
 
 ### Badge
@@ -270,21 +289,23 @@ Use badge to display status indicators or labels. Badges are great for highlight
 
 ::code-preview
 ---
+
 label: Preview
 ---
-  :::badge
+
+:::badge
   **v1.0.0**
   :::
 
 #code
+
 ```mdc
 ::badge
 **v1.0.0**
 ::
 ```
+
 ::
-
-
 
 ### Callout
 
@@ -294,18 +315,22 @@ Customize with `icon` and `color` props or use `note`, `tip`, `warning`, `cautio
 
 ::code-preview
 ---
+
 class: "[&>div]:*:my-0 [&>div]:*:w-full"
 ---
-  :::callout
+
+:::callout
   This is a `callout` with full **markdown** support.
   :::
 
 #code
+
 ```mdc
 ::callout
 This is a `callout` with full **markdown** support.
 ::
 ```
+
 ::
 
 ::code-preview
@@ -333,9 +358,11 @@ This is a `callout` with full **markdown** support.
     ::::caution{.w-full.my-0}
     This action cannot be undone.
     ::::
-  :::
+
+:::
 
 #code
+
 ```mdc
 ::note
 Basic note content
@@ -361,6 +388,7 @@ Be careful with this action as it might have unexpected results.
 This action cannot be undone.
 ::
 ```
+
 ::
 
 ### Card
@@ -371,19 +399,24 @@ Customize with `title`, `icon`, and `color` props. Cards can also act as links u
 
 ::code-preview
 ---
+
 class: "[&>div]:*:my-0 [&>div]:*:w-full"
 ---
-  :::card
+
+:::card
   ---
-  icon: i-simple-icons-github
+
+icon: i-simple-icons-github
   target: _blank
   title: Open Source
   to: https://github.com/MemTensor/MemOS
   ---
-  Use our open-source version
+
+Use our open-source version
   :::
 
 #code
+
 ```mdc
 ::card
 ---
@@ -395,6 +428,7 @@ target: _blank
 Use our open-source version
 ::
 ```
+
 ::
 
 ### CardGroup
@@ -411,7 +445,7 @@ Use `card-group` to arrange cards in a grid layout. `card-group` is ideal for di
     ---
     The smallest working pipeline — add, search, update and dump plaintext memories.
     ::::
-  
+
     ::::card
     ---
     icon: ri:tree-line
@@ -438,9 +472,11 @@ Use `card-group` to arrange cards in a grid layout. `card-group` is ideal for di
     ---
     Combine explainable graph memory with fast KV caching in a single MemCube.
     ::::
-  :::
+
+:::
 
 #code
+
 ```mdc
 ::card-group
 
@@ -482,6 +518,7 @@ Combine explainable graph memory with fast KV caching in a single MemCube.
 
 ::
 ```
+
 ::
 
 ## Navigation Icons
@@ -499,7 +536,6 @@ Available icons can be found at: [https://icones.js.org/](https://icones.js.org/
 ## Local Preview
 
 To preview the documentation locally, run the following command from the project root:
-
 
 ```bash
 ## Make sure to install the dependencies:
@@ -521,16 +557,9 @@ This project uses Nuxt Content and supports rich Typography components and style
 - [Nuxt UI Typography Documentation](https://ui.nuxt.com/getting-started/typography)
 
 ## Best Practices
-
 ::note
 **Documentation Writing Tips**
-
 1. **Keep document structure clear**: Use appropriate heading levels to organize content logically
 2. **Use components wisely**: Use note, card, and other components to improve readability and engagement
-3. **Code examples**: Provide clear code examples for technical documentation with proper syntax highlighting
-4. **Icon usage**: Use appropriate icons in navigation to enhance user experience and visual hierarchy
-::
 
-::card{title="Quick Reference"}
-Remember to test your documentation locally before submitting. Use `npm run dev` to preview your changes and ensure all components render correctly.
-::
+3. **Code examples**: Provide clear code examples for technical documentation with proper syntax highlighting

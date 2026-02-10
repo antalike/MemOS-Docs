@@ -1,4 +1,5 @@
 ::code-group
+
 ```python [Python (HTTP)]
 import os
 import requests
@@ -22,6 +23,7 @@ res = requests.post(url=url, headers=headers, data=json.dumps(data))
 
 print(f"result: {res.json()}")
 ```
+
 ```python [Python (SDK)]
 # Please ensure that MemoS has been installed (pip install MemoryOS -U).
 from memos.api.client import MemOSClient
@@ -36,6 +38,7 @@ res = client.get_message(user_id=user_id, conversation_id=conversation_id)
 
 print(f"result: {res}")
 ```
+
 ```bash [Curl]
 curl --request POST \
   --url https://memos.memtensor.cn/api/openmem/v1/get/message \
@@ -46,4 +49,5 @@ curl --request POST \
     "conversation_id": "0610"
   }'
 ```
+
 ::

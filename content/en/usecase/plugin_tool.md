@@ -3,13 +3,11 @@ title: Agent Development Platform Plugin Tool
 desc: The plugin tool directly accesses the MemOS cloud service interface, quickly adding long-term memory functionality to your Agent for more considerate and continuous conversations.
 ---
 
-
 ## 1. Coze Platform Plugin Tool
 
 ### 1.1 Plugin Tool Information
 
 The MemOS cloud service interface plugin is now listed in the Coze Store! You can search for it directly or visit the link to add the plugin, achieving zero-code integration.
-
 
 [TOOL Link](https://www.coze.cn/store/plugin/7569918012912893995?from=store_search_suggestion)
 
@@ -46,6 +44,7 @@ The MemOS cloud service interface plugin is now listed in the Coze Store! You ca
 ### 1.3 Agent Call Example
 
 *   **Agent Development Example**
+
 ```
 You are a Q&A robot. You always read the user's memories and focus content, and reply with very clear logic to gain the user's favor.
 
@@ -82,4 +81,4 @@ Generate the user_id using UUID only once during the first conversation with the
 ```
 
 [Agent Example Link](https://www.coze.cn/s/85NOIg062vQ)
-![Agent workflow]({{cdnUrl}}/img/coze_workflow_compressed.png)
+![Agent workflow](https://cdn.memtensor.com.cn/img/coze_workflow_compressed.png)

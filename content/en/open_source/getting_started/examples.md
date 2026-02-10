@@ -5,73 +5,87 @@ desc: "Congratulations - you've mastered the Quick Start and built your first wo
 
 ::card-group
 
-  :::card
+:::card
   ---
-  icon: ri:play-line
+
+icon: ri:play-line
   title: Minimal Pipeline
   to: /open_source/getting_started/examples#example-1-minimal-pipeline
   ---
-  The smallest working pipeline — add, search, update and dump plaintext memories.
+
+The smallest working pipeline — add, search, update and dump plaintext memories.
   :::
 
-  :::card
+:::card
   ---
-  icon: ri:tree-line
+
+icon: ri:tree-line
   title: Adding and retrieving multiple information sources
   to: /open_source/getting_started/examples#example-2-multi-modal
   ---
-  Adding multi-source messages—including text, images, files, and tool calls—into memory and enabling their retrieval.
+
+Adding multi-source messages—including text, images, files, and tool calls—into memory and enabling their retrieval.
   :::
 
-  :::card
+:::card
   ---
-  icon: ri:apps-line
+
+icon: ri:apps-line
   title: Multi-Cube addition and retrieval
   to: /open_source/getting_started/examples#example-3-multi-cube
   ---
-  Add different memories to different Cubes and retrieve them simultaneously during a search.
+
+Add different memories to different Cubes and retrieve them simultaneously during a search.
   :::
 
-  :::card
+:::card
   ---
-  icon: ri:database-2-line
+
+icon: ri:database-2-line
   title: KVCacheMemory Only
   to: /open_source/getting_started/examples#example-4-kvcachememory-only
   ---
-  Speed up sessions with short-term KV cache for fast context injection.
+
+Speed up sessions with short-term KV cache for fast context injection.
   :::
 
-  :::card
+:::card
   ---
-  icon: hugeicons:share-07
+
+icon: hugeicons:share-07
   title: Hybrid TreeText + KVCache
   to: /open_source/getting_started/examples#example-5-hybrid
   ---
-  Combine explainable graph memory with fast KV caching in a single MemCube.
+
+Combine explainable graph memory with fast KV caching in a single MemCube.
   :::
 
-  :::card
+:::card
   ---
-  icon: ri:calendar-check-line
+
+icon: ri:calendar-check-line
   title: Multi-Memory Scheduling
   to: /open_source/getting_started/examples#example-6-multi-memory-scheduling
   ---
-  Run dynamic memory orchestration for multi-user, multi-session agents.
+
+Run dynamic memory orchestration for multi-user, multi-session agents.
   :::
 
 ::
-
-
 ## Example 1: Minimal Pipeline
 
 ### When to Use:
+
 - You want the smallest possible working example.
+
 - You only need simple plaintext memories stored in a vector DB and retrieve them.
 
 ### Key Points:
+
 - Supports basic personal memory integration and search.
 
 ### Full Example Code
+
 ```python
 import json
 from memos.api.routers.server_router import add_memories, search_memories
@@ -104,21 +118,25 @@ search_req = APISearchRequest(
 search_rsp = search_memories(search_req).data
 print("\n\nsearch_rsp: \n\n", json.dumps(search_rsp, indent=2, ensure_ascii=False))
 ```
-
 ##  Example 2: Adding and retrieving multi-source memories
 
 ### When to Use:
+
 - In addition to plain text conversations, you need to add files, image content, or tool call history to memory.
 - At the same time, you want to retrieve memories from these multiple sources.
-
 ### Key Points:
 - Adding memories from multiple information sources.
+
 - Needs to include downloadable file and image URLs.
+
 - The added information must strictly follow the OpenAI Messages format.
+
 - The tool schema in the system prompt needs to be wrapped in <tool_schema> </tool_schema>.
 
 ### Full Example Code
+
 Adding text and files to memory
+
 ```python
 import json
 from memos.api.routers.server_router import add_memories, search_memories
@@ -172,7 +190,9 @@ search_req = APISearchRequest(
 search_rsp = search_memories(search_req).data
 print("\n\nsearch_rsp: \n\n", json.dumps(search_rsp, indent=2, ensure_ascii=False))
 ```
+
 Adding messages from multiple mixed information sources to memory
+
 ```python
 import json
 from memos.api.routers.server_router import add_memories, search_memories
@@ -268,12 +288,12 @@ search_req = APISearchRequest(
 search_rsp = search_memories(search_req).data
 print("\n\nsearch_rsp: \n\n", json.dumps(search_rsp, indent=2, ensure_ascii=False))
 ```
-
 ## Example 3: Multi-Cube addition and retrieval
 
 ### When to Use:
 
 - Add memories to separate, isolated Cube spaces
+
 - You want to retrieve memories from different Cube spaces simultaneously
 
 ### Key Points:
@@ -328,17 +348,19 @@ search_req = APISearchRequest(
 search_rsp = search_memories(search_req).data
 print("\n\nsearch_rsp: \n\n", json.dumps(search_rsp, indent=2, ensure_ascii=False))
 ```
-
 ## Example 4: KVCacheMemory Only
-
 ### When to Use:
+
 - You want short-term working memory for faster multi-turn conversation.
+
 - Useful for chatbot session acceleration or prompt reuse.
 - Best for caching hidden states / KV pairs.
-
 ### Key Points:
+
 - Uses KVCacheMemory with no explicit text memory.
+
 - Demonstrates extract → add → merge → get → delete.
+
 - Shows how to dump/load KV caches.
 
 ### Full Example Code
@@ -400,20 +422,20 @@ kv_mem.delete_all()
 kv_mem.load("tmp/kv_mem")
 print("Loaded caches:", kv_mem.get_all())
 ```
-
 ## Example 5: Hybrid
-
 ### When to Use:
+
 - You want long-term explainable memory and short-term fast context together.
+
 - Ideal for complex agents that plan, remember facts, and keep chat context.
 - Demonstrates multi-memory orchestration.
-
 ### How It Works:
 
 - **TreeTextMemory** stores your long-term knowledge in a graph DB (Neo4j).
-- **KVCacheMemory** stores recent or stable context as activation caches.
-- Both work together in a single **MemCube**, managed by your `MOS` pipeline.
 
+- **KVCacheMemory** stores recent or stable context as activation caches.
+
+- Both work together in a single **MemCube**, managed by your `MOS` pipeline.
 
 ###  Full Example Code
 
@@ -471,111 +493,8 @@ print("📢 [System] MemChat has stopped.")
 ## Example 6: Multi-Memory Scheduling
 
 ### When to Use:
+
 - You want to manage multiple users, multiple MemCubes, or dynamic memory flows.
 - Good for SaaS agents or multi-session LLMs.
+
 - Demonstrates MemScheduler + config YAMLs.
-
-### Key Points:
-- Uses parse_yaml to load MOSConfig and MemCubeConfig.
-- Dynamic user and cube creation.
-- Shows runtime scheduling of memories.
-
-### Full Example Code
-
-```python
-import shutil
-import uuid
-from pathlib import Path
-
-from memos.configs.mem_cube import GeneralMemCubeConfig
-from memos.configs.mem_os import MOSConfig
-from memos.mem_cube.general import GeneralMemCube
-from memos.mem_os.main import MOS
-from memos.mem_scheduler.utils import parse_yaml
-
-# Load main MOS config with MemScheduler
-config = parse_yaml("./examples/data/config/mem_scheduler/memos_config_w_scheduler.yaml")
-mos_config = MOSConfig(**config)
-mos = MOS(mos_config)
-
-# Create user with dynamic ID
-user_id = str(uuid.uuid4())
-mos.create_user(user_id=user_id)
-
-# Create MemCube config and dump it
-config = GeneralMemCubeConfig.from_yaml_file(
-    "./examples/data/config/mem_scheduler/mem_cube_config.yaml"
-)
-mem_cube_id = "mem_cube_5"
-mem_cube_name_or_path = f"./outputs/mem_scheduler/{user_id}/{mem_cube_id}"
-
-# Remove old folder if exists
-if Path(mem_cube_name_or_path).exists():
-    shutil.rmtree(mem_cube_name_or_path)
-    print(f"{mem_cube_name_or_path} is not empty, and has been removed.")
-
-# Dump new cube
-mem_cube = GeneralMemCube(config)
-mem_cube.dump(mem_cube_name_or_path)
-
-# Register MemCube for this user
-mos.register_mem_cube(
-    mem_cube_name_or_path=mem_cube_name_or_path,
-    mem_cube_id=mem_cube_id,
-    user_id=user_id
-)
-
-# Add messages
-messages = [
-    {
-        "role": "user",
-        "content": "I like playing football."
-    },
-    {
-        "role": "assistant",
-        "content": "I like playing football too."
-    },
-]
-mos.add(messages, user_id=user_id, mem_cube_id=mem_cube_id)
-
-# Chat loop: show TreeTextMemory nodes + KVCache
-while True:
-    user_input = input("👤 [You] ").strip()
-    print()
-    response = mos.chat(user_input, user_id=user_id)
-    retrieved_memories = mos.get_all(mem_cube_id=mem_cube_id, user_id=user_id)
-
-    print(f"🤖 [Assistant] {response}")
-
-    # Show WorkingMemory nodes in TreeTextMemory
-    for node in retrieved_memories["text_mem"][0]["memories"]["nodes"]:
-        if node["metadata"]["memory_type"] == "WorkingMemory":
-            print(f"[WorkingMemory] {node['memory']}")
-
-    # Show Activation Memory
-    if retrieved_memories["act_mem"][0]["memories"]:
-        for act_mem in retrieved_memories["act_mem"][0]["memories"]:
-            print(f"⚡ [KVCache] {act_mem['memory']}")
-    else:
-        print("⚡ [KVCache] None\n")
-```
-
-
-
-::note
-**Keep in Mind**<br>
-Use dump() and load() to persist your memory cubes.
-
-Always check your vector DB dimension matches your embedder.
-
-For graph memory, you'll need Neo4j Desktop (community version support coming soon).
-::
-
-## Next Steps
-You're just getting started!Next, try:
-
-- Pick the example that matches your use case.
-- Combine modules to build smarter, more persistent agents!
-
-Need more?
-See the API Reference or contribute your own example!

@@ -8,6 +8,7 @@ desc: "MemReader is MemOS's “memory translator”. It translates messy user in
 When building AI applications, we often run into this problem: users send all kinds of things—casual chat messages, PDF documents, and images. **MemReader** turns these raw inputs (Raw Data) into standard memory blocks (Memory Items) with embeddings and metadata.
 
 In short, it does three things:
+
 1.  **Normalization**: Whether you send a string or JSON, it first converts everything into a standard format.
 2.  **Chunking**: It splits long conversations or documents into appropriately sized chunks for downstream processing.
 3.  **Extraction**: It calls an LLM to extract unstructured information into structured knowledge points (Fine mode), or directly generates snapshots (Fast mode).
@@ -19,6 +20,7 @@ In short, it does three things:
 MemReader provides two modes, corresponding to the needs for “speed” and “accuracy”:
 
 ### ⚡ Fast Mode (speed first)
+
 *   **Characteristics**: **Does not call an LLM**, only performs chunking and embeddings.
 *   **Use cases**:
     *   Users are sending messages quickly and the system needs millisecond-level responses.
@@ -26,6 +28,7 @@ MemReader provides two modes, corresponding to the needs for “speed” and “
 *   **Output**: raw text chunks + vector index.
 
 ### 🧠 Fine Mode (carefully crafted)
+
 *   **Characteristics**: **Calls an LLM** for deeper analysis.
 *   **Use cases**:
     *   Long-term memory writing (needs key facts extracted).
@@ -173,6 +176,7 @@ refined_memories = reader.fine_transfer_simple_mem(
 In `.env` or configuration files, you can adjust these key parameters:
 
 *   **`chat_window_max_tokens`**: **sliding window size**. Default is 1024. It determines how much context is packed together for processing. Too small may lose context; too large may exceed the LLM token limit.
+
 *   **`remove_prompt_example`**: **whether to remove examples from the prompt**. Set to True if you want to save tokens; set to False if extraction quality is not good (keep few-shot examples).
 *   **`direct_markdown_hostnames`** (multimodal only): **hostname allowlist**. If a file URL’s hostname is in this list (e.g., `raw.githubusercontent.com`), the Reader treats it as Markdown text directly instead of trying OCR or conversion, which is more efficient.
-
+*   **`direct_markdown_hostnames`** (Multimodal only): **Domain whitelist**. If the domain of a file URL is in this list (e.g., `raw.githubusercontent.com`), the Reader will treat it directly as Markdown text for processing, rather than attempting OCR or conversion, which is more efficient.

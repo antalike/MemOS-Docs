@@ -10,13 +10,17 @@ desc: This chapter introduces a single, unified Chat API that allows AI develope
 **🔧 Solution:** We provide a unified chat interface that allows users to perform semantic search, conversational Q&A, and memory addition without calling multiple separate APIs.
 
 **🔧 Execution Flow:** The execution flow is as follows:
+
 ```markdown
 A[User Query] --> B[Search Memory] --> C[LLM Chat] --> D[Add to Memory]
 ```
 
 ### Specific Steps
+
 #### Step 1: Start the MemOS API Service
+
 First, you need to configure your Chat Model List in the .env
+
 ```dotenv
 CHAT_MODEL_LIST=[{"backend": "qwen", "api_base": "https://dashscope.aliyuncs.com/compatible-mode/v1", "api_key": "xxx", "model_name_or_path": "qwen2.5-72b-instruct", "support_models": ["qwen2.5-72b-instruct"]}, {"backend": "deepseek", "api_base": "https://dashscope.aliyuncs.com/compatible-mode/v1", "api_key": "xxx", "model_name_or_path": "deepseek-r1", "support_models": ["deepseek-r1"]}]
 ```
@@ -28,6 +32,7 @@ uvicorn memos.api.server_api:app --host 0.0.0.0 --port 8001 --workers 8
 #### Step 2: Call the Chat API
 
 **Non-Streaming**
+
 ```bash
 curl -X POST "http://0.0.0.0:8001/product/chat/complete" \
   -H "Content-Type: application/json" \
@@ -42,6 +47,7 @@ curl -X POST "http://0.0.0.0:8001/product/chat/complete" \
 ```
 
 **Streaming**
+
 ```bash
 curl -N -X POST "http://0.0.0.0:8001/product/chat/stream" \
   -H "Content-Type: application/json" \

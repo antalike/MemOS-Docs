@@ -14,10 +14,10 @@ In the MemOS architecture, parametric memory does not just refer to static pre-t
 
 For example, you could distill structured or stable knowledge into parametric form, save it as a **capability block**, and dynamically load or unload it during inference. This makes it easy to create “expert sub-models” for tasks like legal reasoning, financial analysis, or domain-specific summarization — all managed by MemOS.
 
-
 ## Design Goals
 
 ::list{icon="ph:check-circle-duotone"}
+
 -  **Controllability** — Generate, load, swap, or compose parametric modules
    on demand.
 -  **Plasticity** — Evolve alongside plaintext and activation memories; support knowledge distillation and rollback.
@@ -31,10 +31,10 @@ APIs for generating, compressing, and hot-swapping parametric modules will be re
 
 Stay tuned!
 
-
 ## Related Modules
 
 While parametric memory is under development, try out these today:
+
 - **[GeneralTextMemory](/open_source/modules/memories/general_textual_memory)**: Flexible vector-based semantic storage.
 - **[TreeTextMemory](/open_source/modules/memories/tree_textual_memory)**: Structured, hierarchical knowledge graphs.
 - **[Activation Memory](/open_source/modules/memories/kv_cache_memory)**: Efficient runtime state caching.
@@ -42,6 +42,7 @@ While parametric memory is under development, try out these today:
 ## Developer Note
 
 Parametric Memory will complete MemOS’s vision of a unified **Memory³** architecture:
+
 - **Parametric**: Embedded knowledge
 - **Activation**: Ephemeral runtime states
 - **Plaintext**: Structured, traceable external memories

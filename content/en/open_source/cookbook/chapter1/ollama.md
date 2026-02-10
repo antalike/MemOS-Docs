@@ -422,7 +422,6 @@ Finance Department: finance@company.com
 
 For usage of other parsers, please refer to documentation: TODO
 
-
 ```python
 # create_memcube_with_memreader_ollama.py
 # 🎯 Complete process of creating MemCube using MemReader (Ollama version)
@@ -621,7 +620,6 @@ if __name__ == "__main__":
 python create_memcube_with_memreader_ollama.py
 ```
 
-
 #### Step 3: Test Search and Chat Functionality
 
 **💡 Ollama Mode:** This script uses local Ollama models for search and chat.
@@ -806,9 +804,6 @@ if __name__ == "__main__":
 # Step 3: Test search and chat
 python test_memcube_search_and_chat_ollama.py
 ```
-
-
-
 
 ### Recipe 1.3: MemCube Basic Operations: Create, Add Memory, Save, Load, Query, Delete (Ollama Version)
 
@@ -1192,7 +1187,6 @@ if __name__ == "__main__":
         traceback.print_exc()
 ```
 
-
 #### Run Example
 
 ```bash
@@ -1268,3 +1262,22 @@ memory_manager.memory_health_check()
 memory_manager.unload_cube("unused_cube_id")
 gc.collect()
 ``` 
+
+```python
+# 🔧 Check if the embedding model is correctly configured
+print(f"Embedding model: {mem_cube.text_mem.config.embedder}")
+
+# 🔧 Try different search terms
+synonyms = ["important", "key", "core", "main"]
+for synonym in synonyms:
+    results = mem_cube.text_mem.search(synonym)
+```
+
+**Q3: High memory usage?**
+
+```python
+# 🔧 Monitor and optimize memory usage
+memory_manager.memory_health_check()
+memory_manager.unload_cube("unused_cube_id")
+gc.collect()
+```

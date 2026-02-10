@@ -15,9 +15,8 @@ MemOS provides a complete set of interfaces. Through simple API requests, you ca
 Start using MemOS API through these two simple core steps:
 
 *   [**Add Message**](/api_docs/core/add_message): Store original message content from user conversations and generate memories;
-    
+
 *   [**Search Memory**](/api_docs/core/search_memory): Retrieve and recall relevant user memory fragments to provide reference for model-generated responses.
-    
 
 ## 3. Interface Categories
 
@@ -28,7 +27,6 @@ Explore the rich functional interfaces provided by MemOS:
 *   [**Message API**](/api_docs/message/add_feedback): Used for uploading and managing original message content data.
 
 *   [**Knowledge Base API**](/api_docs/knowledge/create_kb): Used for uploading and managing knowledge bases and their documents.
-
 
 ## 4. Authentication
 
@@ -41,5 +39,5 @@ Do not expose your API key in client-side code or public repositories. All reque
 ## 5. Next Steps
 
 *   👉 [**Add Message**](/api_docs/core/add_message): Generate your first memory;
-    
+
 *   👉 [**Search Memory**](/api_docs/core/search_memory): Use memory filters to implement advanced memory retrieval.

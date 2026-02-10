@@ -14,8 +14,8 @@ desc: "`GeneralTextMemory` is a flexible, vector-based textual memory module in 
 - [Example Usage](#example-usage)
 - [Extension: Internet Retrieval](#extension-internet-retrieval)
 - [Advanced: Using MultiModal Reader](#advanced-using-multimodal-reader)
-- [Developer Notes](#developer-notes)
 
+- [Developer Notes](#developer-notes)
 
 ## Memory Structure
 
@@ -45,11 +45,13 @@ All values are validated. Invalid values will raise errors.
 ## API Summary (`GeneralTextMemory`)
 
 ### Initialization
+
 ```python
 GeneralTextMemory(config: GeneralTextMemoryConfig)
 ```
 
 ### Core Methods
+
 | Method                   | Description                                         |
 | ------------------------ | --------------------------------------------------- |
 | `extract(messages)`      | Extracts memories from message list (LLM-based)     |
@@ -125,7 +127,5 @@ View documentation: [Using MultiModalStructMemReader](./tree_textual_memory#usin
 ::
 
 ## Developer Notes
-
 * Uses Qdrant (or compatible) vector DB for fast similarity search
 * Embedding and extraction models are configurable (Ollama/OpenAI supported)
-* All methods are covered by integration tests in `/tests`

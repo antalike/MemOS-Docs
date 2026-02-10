@@ -14,8 +14,8 @@ These stable **plaintext memory items** are automatically identified and managed
 
 Once converted, these KV memories can be **reused across queries without requiring re-encoding** of the original content. This reduces the computational overhead of processing and storing large amounts of text, making it ideal for applications that require **rapid response times** and **high throughput**.
 
-
 ## Why KV-cache Memory
+
 Integrating `MemScheduler` with KV-cache memory enables significant performance optimization, particularly in the **prefill phase** of LLM inference.
 
 ### Without KVCacheMemory
@@ -42,7 +42,6 @@ This optimization is especially valuable in:
 - Multi-turn chatbot interactions
 - Retrieval-augmented or context-augmented generation (RAG, CAG)
 - Assistants operating over fixed documentation or FAQ-style memory
-
 
 ### KVCacheMemory Acceleration Evaluation
 
@@ -107,12 +106,14 @@ The following table shows results across three models (Qwen3-8B, Qwen3-32B, Qwen
 MemOS now supports using vLLM to manage activation memory. To evaluate the impact of KV Cache prefilling for different prefix text lengths, we conducted performance tests on a system equipped with 8x `H800 80GB GPUs (112 vCPUs, 1920 GiB Memory)` and a system equipped with 8x `RTX4090-24G-PCIe (112 vCPUs, 960 GiB Memory)`. The evaluation covered two core models: Qwen3-32B and Qwen2.5-72B.
 
 The benchmarks were run across a range of memory and context length combinations to simulate various activation memory scenarios:
+
 - **Memory Text Lengths (tokens)**: 500, 1000, 2000
 - **Context Text Lengths (tokens)**: 500, 1000, 2000, 4000
 
 The following table summarizes the benchmark results.
 
 **Qwen2.5-72B**
+
 - On 4090 (2 Nodes 16 GPUs)
 
 | mem tks | prompt tks | TTFT (without cache, ms) | TTFT (With cache, ms) | TTFT Speedup (%) | Abs Dis(ms) |
@@ -129,7 +130,6 @@ The following table summarizes the benchmark results.
 | 2k | 1k | 4443.34 | 1491.24 | 66.439% | 2952.10 |
 | 2k | 2k | 5733.14 | 2758.48 | 51.885% | 2974.66 |
 | 2k | 4k | 8152.76 | 5627.41 | 30.975% | 2525.35 |
-
 
 - On H800 (4 GPUs)
 
@@ -167,7 +167,6 @@ The following table summarizes the benchmark results.
 | 2k | 2k | 1083.93 | 498.05 | 54.051% | 585.88 |
 | 2k | 4k | 1435.39 | 1053.31 | 26.619% | 382.08 |
 
-
 - On H800 (2 GPUs)
 
 | mem tks | prompt tks | TTFT (without cache, ms) | TTFT (With cache, ms) | TTFT Speedup (%) | Abs Dis(ms) |
@@ -199,15 +198,16 @@ Each cache is stored as a `KVCacheItem`:
 | `kv_cache`    | `DynamicCache` | The actual key-value cache (transformers)   |
 | `metadata`    | `dict`         | Metadata (source, extraction time, etc.)    |
 
-
 ## API Summary (`KVCacheMemory`)
 
 ### Initialization
+
 ```python
 KVCacheMemory(config: KVCacheMemoryConfig)
 ```
 
 ### Core Methods
+
 | Method                   | Description                                              |
 | ------------------------ | -------------------------------------------------------- |
 | `extract(text)`          | Extracts a KV cache from input text using the LLM        |
@@ -223,7 +223,6 @@ KVCacheMemory(config: KVCacheMemoryConfig)
 | `from_textual_memory(mem)` | Convert a `TextualMemoryItem` to a `KVCacheItem`      |
 | `build_vllm_kv_cache( messages)` | Build a vLLM KV cache from a list of messages   |
 
-
 When calling `dump(dir)`, the system writes to:
 
 ```
@@ -231,7 +230,6 @@ When calling `dump(dir)`, the system writes to:
 ```
 
 This file contains a pickled dictionary of all KV caches, which can be reloaded using `load(dir)`.
-
 
 ## How to Use
 
@@ -259,9 +257,14 @@ mem.dump("tmp/act_mem")
 mem.load("tmp/act_mem")
 ```
 
-
 ## Developer Notes
 
 * Uses HuggingFace `DynamicCache` for efficient key-value storage
+
 * Pickle-based serialization for fast load/save
+
 * All methods are covered by integration tests in `/tests`
+
+* Efficient key-value storage using HuggingFace `DynamicCache`
+* Pickle-based serialization for fast loading/saving
+* Integration tests in `/tests` cover all methods.

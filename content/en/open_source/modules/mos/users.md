@@ -21,14 +21,17 @@ MOS supports four user roles with different permission levels:
 Creates a new user in the MOS system.
 
 **Parameters:**
+
 - `user_id` (str): Unique identifier for the user
 - `role` (UserRole, optional): User role. Defaults to `UserRole.USER`
 - `user_name` (str, optional): Display name for the user. If not provided, uses `user_id`
 
 **Returns:**
+
 - `str`: The created user ID
 
 **Example:**
+
 ```python
 import uuid
 from memos.mem_user.user_manager import UserRole
@@ -47,6 +50,7 @@ memory.create_user(user_id=guest_id, role=UserRole.GUEST, user_name="Guest User"
 ```
 
 **Notes:**
+
 - If a user with the same `user_name` already exists, the method returns the existing user's ID
 - The system automatically creates a root user during initialization
 - User IDs must be unique across the system
@@ -56,9 +60,11 @@ memory.create_user(user_id=guest_id, role=UserRole.GUEST, user_name="Guest User"
 Retrieves information about all active users in the system.
 
 **Parameters:**
+
 - None
 
 **Returns:**
+
 - `list`: List of dictionaries containing user information:
   - `user_id` (str): Unique user identifier
   - `user_name` (str): Display name of the user
@@ -67,6 +73,7 @@ Retrieves information about all active users in the system.
   - `is_active` (bool): Whether the user account is active
 
 **Example:**
+
 ```python
 # List all users
 users = memory.list_users()
@@ -79,6 +86,7 @@ for user in users:
 ```
 
 **Output Example:**
+
 ```
 User: root (ID: root)
 Role: root
@@ -97,15 +105,18 @@ Created: 2024-01-15T11:00:00
 Creates a new memory cube for a specific user as the owner.
 
 **Parameters:**
+
 - `cube_name` (str): Name of the cube
 - `owner_id` (str): User ID of the cube owner
 - `cube_path` (str, optional): Local file path or remote repository URL for the cube
 - `cube_id` (str, optional): Custom cube identifier. If not provided, a UUID is generated
 
 **Returns:**
+
 - `str`: The created cube ID
 
 **Example:**
+
 ```python
 import uuid
 
@@ -125,6 +136,7 @@ print(f"Created cube: {cube_id}")
 ```
 
 **Notes:**
+
 - The owner automatically gets full access to the created cube
 - The cube owner can share the cube with other users
 - If `cube_path` is provided, it can be a local directory path or a remote repository URL
@@ -135,9 +147,11 @@ print(f"Created cube: {cube_id}")
 Retrieves detailed information about the current user and their accessible cubes.
 
 **Parameters:**
+
 - None
 
 **Returns:**
+
 - `dict`: Dictionary containing user information and accessible cubes:
   - `user_id` (str): Current user's ID
   - `user_name` (str): Current user's display name
@@ -151,6 +165,7 @@ Retrieves detailed information about the current user and their accessible cubes
     - `is_loaded` (bool): Whether the cube is currently loaded in memory
 
 **Example:**
+
 ```python
 # Get current user information
 user_info = memory.get_user_info()
@@ -167,6 +182,7 @@ for cube in user_info['accessible_cubes']:
 ```
 
 **Output Example:**
+
 ```
 Current User: Alice (550e8400-e29b-41d4-a716-446655440000)
 Role: user
@@ -188,13 +204,16 @@ Accessible Cubes:
 Shares a memory cube with another user, granting them access to the cube's contents.
 
 **Parameters:**
+
 - `cube_id` (str): ID of the cube to share
 - `target_user_id` (str): ID of the user to share the cube with
 
 **Returns:**
+
 - `bool`: `True` if sharing was successful, `False` otherwise
 
 **Example:**
+
 ```python
 # Share a cube with another user
 success = memory.share_cube_with_user(
@@ -209,6 +228,7 @@ else:
 ```
 
 **Notes:**
+
 - The current user must have access to the cube being shared
 - The target user must exist and be active
 - Sharing a cube grants the target user read and write access to the cube
@@ -293,6 +313,7 @@ The user management methods include comprehensive error handling:
 ## Database Persistence
 
 User management data is persisted in a SQLite database:
+
 - **Location**: Defaults to `~/.memos/memos_users.db`
 - **Tables**: `users`, `cubes`, `user_cube_association`
 - **Relationships**: Many-to-many relationship between users and cubes

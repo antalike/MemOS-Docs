@@ -3,7 +3,6 @@ title: Limits
 desc: Register and log in to enjoy free quota, facilitating quick experience and verification of memory functions.
 ---
 
-
 ## 1. Quota
 
 ![image.png]({{cdnUrl}}/img/1766630472243_emn5fx_compressed.png)
@@ -13,6 +12,7 @@ Take action now and use MemOS Cloud Services to support the growth of your proje
 
 ::note
 **Note**
+
 - The free quota is provided per **developer account** and is shared across all projects under that account.
 - Failed requests (authentication failure, parameter error, exceeding limits, etc.) **do not consume quota**.
 ::
@@ -30,6 +30,7 @@ Document upload features are currently limited to a maximum of 500 pages. For hi
 
 ::note
 **Note**
+
 - Requests exceeding the per-call limit will return the corresponding error code without deducting quota.
 - Additionally, we recommend a maximum QPS ≤ 50 (i.e., up to 50 requests per second). This is not a strict limit, but high concurrency may be affected by platform capacity, so control request frequency according to actual needs.
 ::

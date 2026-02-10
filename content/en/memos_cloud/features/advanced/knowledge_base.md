@@ -2,10 +2,10 @@
 title: Knowledge Base
 desc: Create a knowledge base associated with the project, and combine user memory with knowledge base to supplement knowledge when retrieving memories.
 ---
+
 ::warning
 **[This article is an introduction to the [MemOS Knowledge Base] feature. Click here to view the detailed API documentation directly.](/api_docs/knowledge/create_kb)**
 ::
-
 
 ## 1. MemOS Knowledge Base vs Traditional RAG
 
@@ -52,6 +52,7 @@ DAY 10 User asks: The dog has diarrhea eating this dog food. I want to change to
 
 # ✅ Shopping Assistant: You mentioned before that the dog is a 3-month-old Golden Retriever and cannot eat chicken flavor, so I have excluded all chicken-flavored puppy foods for you. You bought lamb + salmon puppy food before. If diarrhea occurs now, you can try the milder C (Salmon Puppy Hypoallergenic).
 ```
+
 <br>
 <br>
 
@@ -104,7 +105,6 @@ MemOS can understand information such as **relationships, time, and preferences*
 * **Knowledge Evolution**: When there are "rules of thumb" not written in documents in the actual process, MemOS will precipitate them into new memories, continuously supplementing and perfecting the knowledge system.
 ::
 
-
 ## 2. How it Works
 
 1.  **Upload**: Create a knowledge base and upload documents via the console or API.
@@ -121,7 +121,6 @@ MemOS can understand information such as **relationships, time, and preferences*
 
 7.  **Embedding and Indexing**: Write all memory content into the database and establish embedding indexes to support millisecond-level retrieval.
 
-
 ## 3. Knowledge Base Requirements
 
 ### Capacity Limits
@@ -137,7 +136,6 @@ Currently, all versions are free for a limited time. Welcome to [Official Websit
 | **Free** | Knowledge Base Count: 10; Single KB Storage: 1G    |
 | **Starter** | Knowledge Base Count: 30; Single KB Storage: 10G   |
 | **Pro** | Knowledge Base Count: 100; Single KB Storage: 100G |
-
 
 ::warning
 &nbsp;Note<br>
@@ -170,6 +168,7 @@ Here is a complete knowledge base usage example to help you quickly get started 
 ### Create Knowledge Base: Financial Reimbursement Knowledge Base
 
 ::code-group
+
 ```python [Python (HTTP)]
 import os
 import requests
@@ -193,6 +192,7 @@ res = requests.post(url=url, headers=headers, data=json.dumps(data))
 
 print(f"result: {res.json()}")
 ```
+
 ```python [Output]
 "result": {
   "code": 0,
@@ -202,11 +202,13 @@ print(f"result: {res.json()}")
   "message": "ok"
 }
 ```
+
 ::
 
 ### Upload Document: Software Procurement Reimbursement Policy
 
 ::code-group
+
 ```python [Python (HTTP)]
 import os
 import requests
@@ -233,6 +235,7 @@ res = requests.post(url=url, headers=headers, data=json.dumps(data))
 
 print(f"result: {res.json()}")
 ```
+
 ```python [Output]
 "result": {
   "code": 0,
@@ -247,12 +250,14 @@ print(f"result: {res.json()}")
   "message": "ok"
 }
 ```
+
 ::
 
 ### Add User Conversation
 
 ::note{icon="websymbol:chat"}
 &nbsp;Session A: Occurred on 2025-06-10<br>
+
 <div style="padding-left: 2em;">
 The designer indicated in the chat that they are a [Designer in the Creative Platform Department].
 </div>
@@ -297,11 +302,12 @@ print(f"result: {res.json()}")
 
 ::note{icon="websymbol:chat"}
 &nbsp;Session A: Occurred on 2025-12-12<br>
+
 <div style="padding-left: 2em;">
 In a new session, the user asks about [Software Reimbursement Policy]. MemOS will automatically recall [Knowledge Base Memory: Software Reimbursement Policy Content] and [User Memory: Creative Platform Designer], thereby providing a more specific and "user-understanding" answer about software reimbursement.
 </div>
 ::
-  
+
 ::code-group
 
 ```python [Python (HTTP)]
@@ -375,6 +381,7 @@ print(json.dumps(json_res, indent=2, ensure_ascii=False))
   }
 ]
 ```
+
 ::
 
 ### Feedback to Optimize Knowledge Base
@@ -385,6 +392,7 @@ Try it out, drive the knowledge base to always stay up-to-date with the simplest
 
 ::note{icon="websymbol:chat"}
 &nbsp;Session A: Occurred on 2025-12-12<br>
+
 <div style="padding-left: 2em;">
 In another new session, the financial supervisor provides feedback that [The procurement limit for office software is 600 yuan, not 800 yuan].
 </div>
@@ -419,6 +427,7 @@ print(f"result: {res.json()}")
 
 ::note{icon="websymbol:chat"}
 &nbsp;Session A: Occurred on 2025-12-12<br>
+
 <div style="padding-left: 2em;">
 When any other user searches for [Software Reimbursement Policy], they get a newly added high-weight memory [The procurement limit for office software is 600 yuan, not 800 yuan].
 </div>

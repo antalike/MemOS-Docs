@@ -23,7 +23,6 @@ When retrieving memories via `search/memory` or `get/memory`, each memory item i
 If a memory is found to be expired or does not meet expectations, you can directly take this `id` and pass it as the `memory_ids[]` parameter when calling the `delete/memory` API to delete the corresponding memory entry.
 :::
 
-
 ## 2. Working Principle
 
 *   **Delete Memory**: Delete the memory content matching the specified users based on the provided memory IDs.

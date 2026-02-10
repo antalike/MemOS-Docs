@@ -11,7 +11,6 @@ MemOS provides two core interfaces to help you achieve this:
 
 ![image.svg]({{cdnUrl}}/img/1762435152160_rnausc_compressed.png)
 
-
 ## 1. Preparation
 
 * Register and log in to MemOS Cloud Platform [(Click to Register)]({{dashboardUrl}}/quickstart);
@@ -20,10 +19,10 @@ MemOS provides two core interfaces to help you achieve this:
 
 * Prepare an environment capable of sending HTTP requests, such as Python or cURL.
 
-
 ## 2. Code Configuration
 
 ### 2.1 Install SDK
+
 If you choose Python SDK, please ensure Python 3.10+ is installed, then execute:
 
 ```
@@ -160,7 +159,6 @@ Now that you can run MemOS, you can explore more cloud platform features:
 
 * [**API Documentation**](/api_docs/start/overview): View complete API documentation and call examples.
 
-
 ## 4. More Resources
 
 ### Understand MemOS Memory Production Process
@@ -203,6 +201,6 @@ MemOS provides rich project examples. Depending on your specific project, you ca
 
 - [Coze × MemOS Plugin Tool](/usecase/frameworks/coze_plugin)
   - Use the MemOS plugin tool listed on the Coze platform to directly access cloud service interfaces in the workflow, quickly adding long-term memory capabilities to your Agent.
-    
+
 - [Claude MCP](/usecase/frameworks/claude_mcp)
   - MemOS provides a way to interact with the cloud platform through MCP, directly accessing cloud service interfaces in the Claude client.

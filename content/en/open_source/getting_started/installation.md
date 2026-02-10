@@ -3,47 +3,54 @@ title: "Installation Guide"
 desc: "Complete installation guide for MemOS."
 ---
 
-
 ::card-group
 
-  :::card
+:::card
   ---
-  icon: ri:database-2-line
+
+icon: ri:database-2-line
   title: Install via Docker
   to: /open_source/getting_started/installation#from-docker
   ---
-  Ideal for quick deployment: one-click startup for services and dependencies.
+
+Ideal for quick deployment: one-click startup for services and dependencies.
   :::
 
-  :::card
+:::card
   ---
-  icon: ri:play-line
+
+icon: ri:play-line
   title: Install from Source
   to: /open_source/getting_started/installation#from-source
   ---
-  Ideal for development and contribution: editable installation, run tests, local debugging.
+
+Ideal for development and contribution: editable installation, run tests, local debugging.
   :::
 
-  :::card
+:::card
   ---
-  icon: ri:tree-line
+
+icon: ri:tree-line
   title: Install via pip
   to: /open_source/getting_started/installation#from-pip
   ---
-  The simplest installation method: get started with MemOS quickly.
+
+The simplest installation method: get started with MemOS quickly.
   :::
 
 ::
 
-
 :span{id="from-docker"}
+
 ## Install via Docker
+
 ```bash
 git clone https://github.com/MemTensor/MemOS.git
 cd MemOS
 ```
 
 #### Create .env Configuration File
+
 ::note
 **Please Note**<br>
 The .env file must be placed in the MemOS project root directory.
@@ -52,6 +59,7 @@ The .env file must be placed in the MemOS project root directory.
 ::steps{level="4"}
 
 #### 1. Create .env
+
 ```bash
 cd MemOS
 touch .env
@@ -60,6 +68,7 @@ touch .env
 #### 2. .env Contents
 
 Here is a quick .env configuration example:
+
 ```bash 
 
 # OpenAI API Key (Required configuration)
@@ -107,7 +116,9 @@ ENABLE_CHAT_API=true
 # Chat model list, can be applied through Bailian. Models are customizable.
 CHAT_MODEL_LIST=[{"backend": "qwen", "api_base": "https://xxx/v1", "api_key": "sk-xxx", "model_name_or_path": "qwen3-max", "extra_body": {"enable_thinking": true} ,"support_models": ["qwen3-max"]}]
 ```
+
 #### .env Configuration Example using Bailian
+
 ```bash
 # Can be applied through Bailian platform
 # https://bailian.console.aliyun.com/?spm=a2c4g.11186623.0.0.2f2165b08fRk4l&tab=api#/api
@@ -159,13 +170,15 @@ ENABLE_CHAT_API=true
 
 CHAT_MODEL_LIST=[{"backend": "qwen", "api_base": "https://dashscope.aliyuncs.com/compatible-mode/v1", "api_key": "you_bailian_api_key", "model_name_or_path": "qwen3-max-preview", "extra_body": {"enable_thinking": true} ,"support_models": ["qwen3-max-preview"]}]
 ```
-![MemOS bailian]({{cdnUrl}}/img/get_key_url_by_bailian_compressed.png)
+
+![MemOS bailian](https://cdn.memtensor.com.cn/img/get_key_url_by_bailian_compressed.png)
+
 <div style="text-align: center; margin-top: 10px">Example of applying for API_KEY and BASE_URL in Bailian</div>
 
 ::
 
-
 #### Configure Dockerfile
+
 ::note
 **Please Note**<br>
 The Dockerfile is located in the docker directory.
@@ -175,6 +188,7 @@ The Dockerfile is located in the docker directory.
 # Enter the docker directory
 cd docker
 ```
+
 Includes quick mode and full mode. You can choose to use the lite package (distinguished by arm and x86) or the full package (distinguished by arm and x86).
 
 ```bash
@@ -207,6 +221,7 @@ CMD ["uvicorn", "memos.api.server_api:app", "--host", "0.0.0.0", "--port", "8000
 ```
 
 #### Start Docker Client
+
 ```bash
  # If Docker is not installed, please install the corresponding version. Download address:
  https://www.docker.com/
@@ -224,15 +239,19 @@ docker images
 ```
 
 #### Build and Start Service:
+
 ::note
 **Please Note**<br>
 The build command must also be executed in the docker directory.
 ::
+
 ```bash
 # In the docker directory
 docker compose up
 ```
-![MemOS buildComposeupSuccess]({{cdnUrl}}/img/memos_build_composeup_success_compressed.png)
+
+![MemOS buildComposeupSuccess](https://cdn.memtensor.com.cn/img/memos_build_composeup_success_compressed.png)
+
 <div style="text-align: center; margin-top: 10px">Example image, port according to custom docker configuration</div>  
 
 #### Access the API at [http://localhost:8000/docs](http://localhost:8000/docs).
@@ -240,6 +259,7 @@ docker compose up
 ![MemOS Architecture]({{cdnUrl}}/img/memos_run_server_success_compressed.png)
 
 #### Search Memory
+
 ```bash
 curl --location --request POST 'http://127.0.0.1:8000/product/search' \
 --header 'Content-Type: application/json' \
@@ -308,17 +328,21 @@ curl --location --request POST 'http://127.0.0.1:8000/product/search' \
 }
 ```
 
-
 :span{id="from-source"}
+
 ## Install from Source
+
 ```bash
 git clone https://github.com/MemTensor/MemOS.git
 cd MemOS
 ```
 
 #### Create .env Configuration File
+
 The MemOS server_api relies on environment variables to start, so you need to create a .env file in the startup directory.
+
 1. Create .env file
+
 ```bash
 cd MemOS
 touch .env
@@ -334,6 +358,7 @@ The .env file must be placed in the MemOS project root directory.
 ::
 
 #### Install Dependencies
+
 ```bash
 # Execute the installation command
 pip install -e .
@@ -349,14 +374,15 @@ export PYTHONPATH=/******/MemOS/src
 Additionally, you need to set **NEO4J_BACKEND=neo4j** in .env file
 ::
 
-
 #### Start MemOS Server
+
 ```bash
 # project root directory
 uvicorn memos.api.server_api:app --host 0.0.0.0 --port 8000 --workers 1
 ```
 
 #### Add Memory
+
 ```bash
 curl --location --request POST 'http://127.0.0.1:8000/product/add' \
 --header 'Content-Type: application/json' \
@@ -379,6 +405,7 @@ curl --location --request POST 'http://127.0.0.1:8000/product/add' \
 ```
 
 #### Search Memory
+
 ```bash
 curl --location --request POST 'http://127.0.0.1:8000/product/search' \
 --header 'Content-Type: application/json' \
@@ -447,9 +474,10 @@ curl --location --request POST 'http://127.0.0.1:8000/product/search' \
 }
 ```
 
-
 :span{id="from-pip"}
+
 ## Install via pip
+
 The simplest way to install MemOS is using pip.
 
 ::steps{level="4"}
@@ -464,6 +492,7 @@ conda activate memos
 ```
 
 #### Install MemOS from PyPI
+
 Install MemOS with all optional components:
 
 ```bash
@@ -475,7 +504,6 @@ After installation, you can verify it was successful:
 ```bash
 python -c "import memos; print(memos.__version__)"
 ```
-
 
 ::note
 **Optional Dependencies**<br>
@@ -496,16 +524,21 @@ pip install MemoryOS[tree-mem,mem-reader]
 pip install MemoryOS[mem-scheduler]
 pip install MemoryOS[tree-mem,mem-reader,mem-scheduler]
 ```
+
 ::
 
 #### Create .env Configuration File
+
 The MemOS server_api relies on environment variables to start, so you need to create a .env file in the startup directory.
+
 1. Create .env file
+
 ```bash
 touch .env
 ```
 
 2. Example .env contents
+
 ```text
 # ========== Required Configuration ==========
 CHAT_MODEL_LIST='[
@@ -531,14 +564,18 @@ env notes
 For detailed development environment setup, workflow guidelines, and contribution best practices, please see our [Contribution Guide](/open_source/contribution/overview).
 
 #### Start MemOS Server
+
 MemOS does not automatically load .env files. Please use the python-dotenv method to start.
+
 ```bash
 python -m dotenv run -- \
   uvicorn memos.api.server_api:app \
   --host 0.0.0.0 \
   --port 8000
 ```
+
 After successful startup, you will see output similar to:
+
 ```text
 INFO:     Uvicorn running on http://0.0.0.0:8000
 INFO:     Application startup complete.
@@ -549,6 +586,7 @@ INFO:     Application startup complete.
 ::
 
 #### Ollama Support
+
 To use MemOS with [Ollama](https://ollama.com/), first install the Ollama CLI:
 
 ```bash
@@ -560,17 +598,3 @@ curl -fsSL https://ollama.com/install.sh | sh
 To use functionalities based on the `transformers` library, ensure you have [PyTorch](https://pytorch.org/get-started/locally/) installed (CUDA version recommended for GPU acceleration).
 
 #### Neo4j Support
-
-::note
-**Neo4j Desktop Requirement**<br>If you plan to use Neo4j for graph memory, please install Neo4j Desktop.
-::
-
-#### Download Examples
-
-To download example code, data, and configurations, run the following command:
-
-```bash
-memos download_examples
-```
-
-

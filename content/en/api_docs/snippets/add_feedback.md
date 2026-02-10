@@ -1,4 +1,5 @@
 ::code-group
+
 ```python [Python (HTTP)]
 import os
 import requests
@@ -24,6 +25,7 @@ res = requests.post(url=url, headers=headers, data=json.dumps(data))
 
 print(f"result: {res.json()}")
 ```
+
 ```python [Python (SDK)]
 # Ensure MemoS is installed (pip install MemoryOS -U)
 from memos.api.client import MemOSClient
@@ -45,6 +47,7 @@ res = client.add_feedback(
 
 print(f"result: {res}")
 ```
+
 ```bash [Curl]
 curl --request POST \
   --url https://memos.memtensor.cn/api/openmem/v1/add/feedback \
@@ -57,4 +60,5 @@ curl --request POST \
     "allow_knowledgebase_ids":["basee5ec9050-c964-484f-abf1-ce3e8e2aa5b7"]
   }'
 ```
+
 ::

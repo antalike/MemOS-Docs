@@ -2,6 +2,7 @@
 title: Custom Tags
 desc: Use tags according to your business needs when adding messages.
 ---
+
 ::warning 
 Note
 <br>
@@ -31,16 +32,16 @@ You need to apply these tags to generate structured content.
 ## 1. Tag Mechanism
 
 *   **Automatic Tag Generation**: MemOS analyzes semantics when processing memories and automatically generates relevant tags for subsequent retrieval and filtering.
-    
+
 *   **Custom Tags**: When adding messages, you can pass a set of custom tags through the `tags` field as a candidate tag set.
-    
+
 *   **Semantic Matching**: MemOS will judge the semantic similarity between the memory content and the tag list provided by the developer, select matching tags from them, and write them into the `tags` field of the memory along with the system-generated tags.
-    
 
 ## 2. Usage Example
 
 :::note 
 Tip<br>
+
 *  Tag content should be concise while clearly distinguishing the meanings of different categories to facilitate identification and matching.
 
 *  Use a unified list under the same project dimension and do not replace it easily to ensure consistency in retrieval and filtering.

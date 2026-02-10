@@ -9,19 +9,17 @@ In writing assistant products, users often hope that the assistant can **remembe
 
 *   **Writing Style**  
     "When helping me write a summary, keep the tone light."
-    
+
 *   **Common Information**  
     "Remember that I am in charge of the Marketing Department at XX company."
-    
+
 *   **Writing Preferences**  
     "From now on, always start emails with 'Dear Customer.'"
-    
+
 *   **Context Continuity**  
     "Please further optimize yesterday’s proposal summary by adding the budget section."
-    
 
 Without memory, this information is lost once the conversation ends. Users must repeatedly remind the assistant, which makes the experience feel fragmented and unprofessional.
-
 
 ### 1.1 Why Not Use Traditional RAG?
 
@@ -33,17 +31,15 @@ In the writing assistant scenario, RAG is not suitable.
 | Retrieval results are usually generic knowledge fragments | Can store and retrieve personalized style, tone, and commonly used expressions |
 | More suitable for “company documents/encyclopedia knowledge” | More suitable for “continuous iteration and personalization” in writing assistants |
 
-
 ### 1.2 Why Not Build It Yourself?
 
 Of course, you could try to save user preferences and context in a database, but this brings several challenges:
 
 *   **Complex storage and retrieval logic**: You need to distinguish main text, preferences, and user profiles, and design retrieval strategies.
-    
+
 *   **Troublesome integration with large models**: Storing is only the first step; before calling the large model, you still need to “insert” the relevant information into the prompt.
-    
+
 *   **Poor scalability**: As user needs increase (writing style, common phrases, contextual links), the code will quickly become bloated.
-    
 
 ### 1.3 Why Use MemOS?
 
@@ -55,7 +51,6 @@ When making a choice, you can directly compare the three approaches:
 | **Self-built Storage Solution** | Build your own tables/caches to save preferences and content | Complex logic: must distinguish main text/preferences/profiles; manual prompt insertion needed; difficult to scale | MemOS encapsulates storage + retrieval + prompt injection, reducing development burden |
 | **MemOS** | Just two APIs: `addMessage` for writing, `searchMemory` for retrieval | —— | Supports long-term tracking of writing styles and reuse of common information; out-of-the-box and easy to expand |
 
-
 ### 1.4 What Will This Case Show?
 
 This case demonstrates how to use the MemOS cloud service to quickly implement a writing assistant that “remembers the user.”
@@ -63,29 +58,26 @@ This case demonstrates how to use the MemOS cloud service to quickly implement a
 In this demo, the user may:
 
 *   Set preferences: “When helping me write a summary, keep the tone light.”
-    
+
 *   Reuse background: “Remember that I am in charge of the Marketing Department at XX company.”
-    
+
 *   Iterate tasks: “Please further optimize yesterday’s proposal summary by adding the budget section.”
-    
 
 With MemOS, the writing assistant can:
 
 1.  **Maintain Style**: Keep consistent tone and formatting as required by the user.
-    
+
 2.  **Reuse Information**: Automatically include the user’s common background information.
-    
+
 3.  **Iterate Quickly**: Modify based on existing content instead of starting over.
-    
 
 When running this case script, developers will see in the console:
 
 *   Each `addMessage` and `searchMemory` request/response
-    
+
 *   Retrieved memories such as writing style and background information
-    
+
 *   The final model-generated answer (if no large model is connected, it will display [No model connected])
-    
 
 ## 2. Example
 
@@ -96,7 +88,6 @@ Install the required dependencies via pip:
 ```shell
 pip install MemoryOS -U
 ```
-
 
 ### 2.2 Complete Code
 
@@ -270,11 +261,11 @@ if __name__ == "__main__":
 ### 2.3 Code Explanation
 
 1.   Set your MemOS API key and OpenAI key in environment variables.
-    
+
 2.   Instantiate `WritingAssistant`.
-    
+
 3.   Choose whether to run pre-configured dialogues, which will consume 2 add and 2 search calls.
-    
+
 4.   Use the `main()` function to interact with the assistant through a dialogue loop.
-    
+
 5.   The assistant will call `chat`: first execute `search` to retrieve memories, then call OpenAI for dialogue, and finally execute `add` to store memories.

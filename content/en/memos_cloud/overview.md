@@ -35,13 +35,13 @@ Simply put: **MemOS makes AI no longer a disposable chat machine, but a partner 
 ## 2. What Can MemOS Do?
 
 *   **Personalized Conversation**: Remember user's name, habits, interests, and instruction preferences, automatically supplementing them next time.
-    
+
 *   **Team Knowledge Base**: Transform fragmented conversations into structured knowledge for collaborative use by multiple Agents. See [Knowledge Base](/memos_cloud/features/advanced/knowledge_base) for details.
-    
+
 *   **Task Continuity**: Maintain memory across sessions and applications, allowing AI to calmly handle long-process tasks.
-    
+
 *   **Multi-layer Memory Scheduling**: Call the most suitable memory for different needs to improve performance and accuracy.
-    
+
 *   **Open Extension**: Supports independent use as an API, and can also be integrated into existing frameworks (Official usage guides are coming soon. For those who can't wait, feel free to try it out yourself!).
 
 ## 3. Next Steps
@@ -49,6 +49,7 @@ Simply put: **MemOS makes AI no longer a disposable chat machine, but a partner 
 👉 Enter [Quick Start](/memos_cloud/quick_start) to show how to add "memory capabilities" to your Agent through a minimal example.
 
 👉 Or start developing business applications directly. We provide practical projects for your reference:
+
 *   [Let Financial Assistant Understand Preferences Behind Customer Behavior](/usecase/financial_assistant)
 *   [Writing Assistant with Memory is More Useful](/usecase/writting_assistant)
 *   [Build a Home Assistant with Memory](/usecase/home_assistant)
