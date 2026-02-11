@@ -8,9 +8,14 @@ import remarkParse from 'remark-parse'
 import remarkStringify from 'remark-stringify'
 import remarkFrontmatter from 'remark-frontmatter'
 import crypto from 'crypto'
+import * as diffSequencesModule from 'diff-sequences'
+
+const diffSequences =
+  diffSequencesModule.diffSequences
+  || diffSequencesModule.default
+  || diffSequencesModule
 
 // --- Configuration ---
-// Read target languages from external config
 const languagesConfigPath = path.join(path.dirname(new URL(import.meta.url).pathname), 'languages.json')
 const translationCachePath = path.join(path.dirname(new URL(import.meta.url).pathname), 'translation-cache.json')
 let TARGET_LANGS = ['en']
@@ -28,13 +33,14 @@ const MODEL = process.env.OPENAI_MODEL || 'deepseek-chat'
 const SOURCE_DIR = 'content/cn'
 const TRANSLATE_BATCH_SIZE = Number(process.env.TRANSLATE_BATCH_SIZE || 50)
 const ENABLE_EDIT_TRANSLATE = process.env.ENABLE_EDIT_TRANSLATE !== '0'
-const EDIT_SIM_THRESHOLD = Number(process.env.EDIT_SIM_THRESHOLD || 0.8)
+const EDIT_SIM_THRESHOLD = Number(process.env.EDIT_SIM_THRESHOLD || 0.75)
+
+// 新增配置：结构权重
+const STRUCTURAL_MATCH_WEIGHT = 0.3 // 结构匹配权重
+const CONTENT_MATCH_WEIGHT = 0.7    // 内容匹配权重
 
 // --- Helpers ---
 
-/**
- * Execute a shell command and return stdout
- */
 function exec(command) {
   try {
     return execSync(command, { encoding: 'utf-8', stdio: ['ignore', 'pipe', 'ignore'] }).trim()
@@ -53,23 +59,17 @@ function parseGitStatus() {
       files.push(line.slice(3))
       continue
     }
-    // e.g. "R  old -> new"
     const renameMatch = line.match(/^[A-Z?]{1,2}\s+(.+)\s+->\s+(.+)$/)
     if (renameMatch) {
       files.push(renameMatch[2])
       continue
     }
-    // e.g. " M path"
     const pathPart = line.slice(3)
     if (pathPart) files.push(pathPart)
   }
   return files
 }
 
-/**
- * Get list of changed files in content/cn
- * If scripts/auto-translate.mjs changed, return ALL content files
- */
 function getChangedFiles() {
   try {
     const diffOutput = exec('git diff --name-only HEAD^ HEAD')
@@ -78,8 +78,6 @@ function getChangedFiles() {
     const combined = new Set([...changedFiles, ...statusFiles])
     const allChanged = Array.from(combined)
 
-    // If script itself changed, likely a config change (e.g. new language added).
-    // Process ALL content files to ensure new language is generated.
     if (allChanged.includes('scripts/languages.json')) {
       console.log('⚡️ Languages config changed, scanning all content files...')
       const allFiles = exec('git ls-files content/cn').split('\n')
@@ -89,7 +87,6 @@ function getChangedFiles() {
       )
     }
 
-    // Otherwise only process changed content files
     return allChanged.filter(line =>
       line.startsWith(SOURCE_DIR)
       && (line.endsWith('.md') || line.endsWith('.yml') || line.endsWith('.yaml'))
@@ -100,9 +97,6 @@ function getChangedFiles() {
   }
 }
 
-/**
- * Get file content from a specific git revision
- */
 function getGitContent(revision, filePath) {
   try {
     return exec(`git show ${revision}:${filePath}`)
@@ -111,9 +105,6 @@ function getGitContent(revision, filePath) {
   }
 }
 
-/**
- * Generate MD5 hash of a string
- */
 function getHash(str) {
   return crypto.createHash('md5').update(str).digest('hex')
 }
@@ -122,34 +113,36 @@ function getHash(str) {
 
 const processor = unified()
   .use(remarkParse)
-  // Use '*' for bullets to match user preference and reduce diff noise
-  .use(remarkStringify, { bullet: '*', fenc: '`' })
+  .use(remarkStringify, { bullet: '*', fences: '`' })
   .use(remarkFrontmatter, ['yaml'])
 
 /**
- * Split AST tree into minimal independent blocks (Paragraphs, Headings, Lists, etc.)
- * Flatten the tree structure into a linear list of "translate units".
+ * 改进：为每个 block 添加结构上下文信息
+ */
+function getStructuralContext(node, index, totalLength, parentType = null) {
+  return {
+    relativePosition: index / Math.max(totalLength - 1, 1), // 0-1 之间的相对位置
+    parentType,
+    depth: 0 // 可以扩展为计算嵌套深度
+  }
+}
+
+/**
+ * 改进版：Split AST into blocks with enhanced metadata
  */
 function splitIntoBlocks(tree, rawContent) {
   const blocks = []
 
-  // Helper to process nodes recursively or flatly
-  function processNode(node, pathKey, isLastInList = false, listSpread = false) {
+  function processNode(node, pathKey, isLastInList = false, listSpread = false, parentType = null, siblingIndex = 0, totalSiblings = 1) {
     if (node.type === 'list') {
-      // For Lists, iterate children (ListItems) and flatten them
       for (let i = 0; i < node.children.length; i++) {
         const item = node.children[i]
         const isLastItem = i === node.children.length - 1
-        processNode(item, `${pathKey}/listItem/${i}`, isLastItem, node.spread)
+        processNode(item, `${pathKey}/listItem/${i}`, isLastItem, node.spread, 'list', i, node.children.length)
       }
       return
     }
 
-    // Determine separator
-    // If it's a ListItem:
-    //   - If it's the last item in the list, use '\n\n' (to separate from next block)
-    //   - If list is loose (spread=true), use '\n\n'
-    //   - Otherwise (tight list), use '\n'
     let separator = '\n\n'
     if (node.type === 'listItem') {
       if (isLastInList) {
@@ -159,16 +152,17 @@ function splitIntoBlocks(tree, rawContent) {
       }
     }
 
-    // Generate normalized text for hashing
     const tempRoot = { type: 'root', children: [node] }
     const normalizedText = processor.stringify(tempRoot).trim()
 
-    // Get Raw Text for Output
-    let rawText = normalizedText // Fallback
+    let rawText = normalizedText
     if (rawContent && node.position) {
       rawText = rawContent.slice(node.position.start.offset, node.position.end.offset)
     }
     const textContent = extractTextFromBlock(rawText)
+
+    // 改进：添加结构上下文
+    const structuralContext = getStructuralContext(node, siblingIndex, totalSiblings, parentType)
 
     blocks.push({
       type: node.type,
@@ -180,74 +174,190 @@ function splitIntoBlocks(tree, rawContent) {
       textContent,
       start: node.position?.start?.offset ?? null,
       end: node.position?.end?.offset ?? null,
-      separator: separator
+      separator: separator,
+      // 新增字段
+      structuralContext,
+      headingLevel: node.type === 'heading' ? node.depth : null
     })
   }
 
   for (let i = 0; i < tree.children.length; i++) {
     const node = tree.children[i]
-    processNode(node, `root/${i}/${node.type}`)
+    processNode(node, `root/${i}/${node.type}`, false, false, 'root', i, tree.children.length)
   }
 
   return blocks
 }
 
+/**
+ * 改进版：使用 diff-sequences 收集匹配，但加入权重评分
+ */
+function collectLcsMatches(oldItems, newItems) {
+  const matches = []
+  if (oldItems.length === 0 || newItems.length === 0) return matches
+  if (typeof diffSequences !== 'function') {
+    throw new Error('diff-sequences export not resolved. Check dependency installation.')
+  }
+
+  diffSequences(
+    oldItems.length,
+    newItems.length,
+    (oldIndex, newIndex) => oldItems[oldIndex] === newItems[newIndex],
+    (nCommon, oldStart, newStart) => {
+      for (let i = 0; i < nCommon; i++) {
+        matches.push({
+          oldIndex: oldStart + i,
+          newIndex: newStart + i
+        })
+      }
+    }
+  )
+
+  return matches
+}
+
+/**
+ * 改进版：构建更智能的 block 匹配 key
+ * 策略：
+ * 1. 完全相同的 block（hash 相同）→ 使用 exact key
+ * 2. 内容相同但格式不同（textHash 相同）→ 使用 text key  
+ * 3. 位置信息作为辅助（避免重复内容混淆）
+ */
+function buildBlockMatchKey(block, index, mode = 'exact') {
+  const positionHint = Math.floor(block.structuralContext.relativePosition * 100)
+  
+  if (mode === 'exact') {
+    // 精确匹配：类型 + hash + 位置提示（避免重复段落混淆）
+    return `${block.type}:${block.hash}:${positionHint}`
+  } else if (mode === 'text') {
+    // 文本匹配：类型 + textHash + 位置提示
+    return `${block.type}:${block.textHash}:${positionHint}`
+  } else if (mode === 'structural') {
+    // 结构匹配：仅类型 + 标题层级 + 位置
+    const level = block.headingLevel !== null ? block.headingLevel : 'none'
+    return `${block.type}:${level}:${positionHint}`
+  }
+  
+  return `${block.type}:${block.textHash}`
+}
+
+/**
+ * 改进版：多层级 diff 匹配
+ * 第一层：精确匹配（hash 完全相同）
+ * 第二层：内容匹配（textHash 相同，格式可能变化）
+ * 第三层：结构匹配（类型和位置相似）
+ */
 function buildDiffMap(oldBlocks, newBlocks) {
-  const n = oldBlocks.length
-  const m = newBlocks.length
-  const dp = Array.from({ length: n + 1 }, () => new Array(m + 1).fill(0))
-
-  const oldKeys = oldBlocks.map(b => `${b.type}|${b.textHash}`)
-  const newKeys = newBlocks.map(b => `${b.type}|${b.textHash}`)
-
-  for (let i = 1; i <= n; i++) {
-    for (let j = 1; j <= m; j++) {
-      if (oldKeys[i - 1] === newKeys[j - 1]) {
-        dp[i][j] = dp[i - 1][j - 1] + 1
-      } else {
-        dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1])
+  // 第一层：精确匹配
+  const exactOldKeys = oldBlocks.map((b, i) => buildBlockMatchKey(b, i, 'exact'))
+  const exactNewKeys = newBlocks.map((b, i) => buildBlockMatchKey(b, i, 'exact'))
+  const exactMatches = collectLcsMatches(exactOldKeys, exactNewKeys)
+  
+  const mapNewToOld = new Array(newBlocks.length).fill(-1)
+  const mappedOld = new Set()
+  const mappedNew = new Set()
+  
+  // 应用精确匹配
+  for (const match of exactMatches) {
+    mapNewToOld[match.newIndex] = match.oldIndex
+    mappedOld.add(match.oldIndex)
+    mappedNew.add(match.newIndex)
+  }
+  
+  // 第二层：内容匹配（未匹配的 block）
+  const unmatchedOld = oldBlocks.map((b, i) => ({ block: b, index: i })).filter(x => !mappedOld.has(x.index))
+  const unmatchedNew = newBlocks.map((b, i) => ({ block: b, index: i })).filter(x => !mappedNew.has(x.index))
+  
+  if (unmatchedOld.length > 0 && unmatchedNew.length > 0) {
+    const textOldKeys = unmatchedOld.map(x => buildBlockMatchKey(x.block, x.index, 'text'))
+    const textNewKeys = unmatchedNew.map(x => buildBlockMatchKey(x.block, x.index, 'text'))
+    const textMatches = collectLcsMatches(textOldKeys, textNewKeys)
+    
+    for (const match of textMatches) {
+      const oldIdx = unmatchedOld[match.oldIndex].index
+      const newIdx = unmatchedNew[match.newIndex].index
+      mapNewToOld[newIdx] = oldIdx
+      mappedOld.add(oldIdx)
+      mappedNew.add(newIdx)
+    }
+  }
+  
+  // 第三层：结构位置匹配（用于内容完全变化但结构保留的情况）
+  // 这层匹配的置信度较低，只在内容相似度高时采用
+  const stillUnmatchedOld = oldBlocks.map((b, i) => ({ block: b, index: i })).filter(x => !mappedOld.has(x.index))
+  const stillUnmatchedNew = newBlocks.map((b, i) => ({ block: b, index: i })).filter(x => !mappedNew.has(x.index))
+  
+  if (stillUnmatchedOld.length > 0 && stillUnmatchedNew.length > 0) {
+    const structOldKeys = stillUnmatchedOld.map(x => buildBlockMatchKey(x.block, x.index, 'structural'))
+    const structNewKeys = stillUnmatchedNew.map(x => buildBlockMatchKey(x.block, x.index, 'structural'))
+    const structMatches = collectLcsMatches(structOldKeys, structNewKeys)
+    
+    // 只在内容有一定相似度时才使用结构匹配
+    for (const match of structMatches) {
+      const oldIdx = stillUnmatchedOld[match.oldIndex].index
+      const newIdx = stillUnmatchedNew[match.newIndex].index
+      const oldBlock = oldBlocks[oldIdx]
+      const newBlock = newBlocks[newIdx]
+      
+      // 检查内容相似度
+      const similarity = calculateTextSimilarity(oldBlock.textContent, newBlock.textContent)
+      if (similarity >= 0.5) { // 至少 50% 相似才使用结构匹配
+        mapNewToOld[newIdx] = oldIdx
+        mappedOld.add(oldIdx)
+        mappedNew.add(newIdx)
       }
     }
   }
-
+  
+  // 生成操作序列（用于调试和分析）
   const ops = []
-  let i = n
-  let j = m
-  while (i > 0 && j > 0) {
-    if (oldKeys[i - 1] === newKeys[j - 1]) {
-      ops.push({ type: 'equal', oldIndex: i - 1, newIndex: j - 1 })
-      i--
-      j--
-    } else if (dp[i - 1][j] >= dp[i][j - 1]) {
-      ops.push({ type: 'delete', oldIndex: i - 1 })
-      i--
+  let oldPos = 0
+  let newPos = 0
+  
+  for (let i = 0; i < newBlocks.length; i++) {
+    const oldIdx = mapNewToOld[i]
+    if (oldIdx === -1) {
+      ops.push({ type: 'insert', newIndex: i })
     } else {
-      ops.push({ type: 'insert', newIndex: j - 1 })
-      j--
+      while (oldPos < oldIdx) {
+        ops.push({ type: 'delete', oldIndex: oldPos })
+        oldPos++
+      }
+      ops.push({ type: 'equal', oldIndex: oldIdx, newIndex: i })
+      oldPos = oldIdx + 1
     }
   }
-  while (i > 0) {
-    ops.push({ type: 'delete', oldIndex: i - 1 })
-    i--
+  
+  while (oldPos < oldBlocks.length) {
+    ops.push({ type: 'delete', oldIndex: oldPos })
+    oldPos++
   }
-  while (j > 0) {
-    ops.push({ type: 'insert', newIndex: j - 1 })
-    j--
-  }
-  ops.reverse()
-
-  const mapNewToOld = new Array(m).fill(-1)
-  const equalOps = []
-  for (const op of ops) {
-    if (op.type === 'equal') {
-      mapNewToOld[op.newIndex] = op.oldIndex
-      equalOps.push(op)
-    }
-  }
-
+  
+  const equalOps = ops.filter(op => op.type === 'equal')
+  
   return { mapNewToOld, ops, equalOps }
 }
 
+/**
+ * 改进版：计算文本相似度（用于结构匹配的验证）
+ */
+function calculateTextSimilarity(text1, text2) {
+  if (!text1 || !text2) return 0
+  const norm1 = normalizeSegment(text1)
+  const norm2 = normalizeSegment(text2)
+  if (norm1 === norm2) return 1
+  
+  const distance = levenshtein(norm1, norm2)
+  const maxLen = Math.max(norm1.length, norm2.length)
+  if (maxLen === 0) return 0
+  
+  return 1 - distance / maxLen
+}
+
+/**
+ * 改进版：构建安全的文本复用映射
+ * 策略：只复用在结构上完全对齐且内容未变的文本
+ */
 function buildSafeTextMap(equalOps, oldBlocks, oldENBlocks) {
   if (!oldBlocks || !oldENBlocks) return new Map()
   const map = new Map()
@@ -257,17 +367,26 @@ function buildSafeTextMap(equalOps, oldBlocks, oldENBlocks) {
     const cnBlock = oldBlocks[oldIdx]
     const enBlock = oldENBlocks[oldIdx]
     if (!cnBlock || !enBlock) continue
+    
+    // 只在 hash 完全相同时才建立文本映射
+    if (cnBlock.hash !== enBlock.hash) continue
+    
     const cnTree = processor.parse(cnBlock.text)
     const enTree = processor.parse(enBlock.text)
     const cnNodes = collectTextNodes(cnTree, cnBlock.text)
     const enNodes = collectTextNodes(enTree, enBlock.text)
     const len = Math.min(cnNodes.length, enNodes.length)
+    
     for (let i = 0; i < len; i++) {
       const cnText = cnNodes[i]?.text
       const enText = enNodes[i]?.text
       if (cnText == null || enText == null) continue
-      if (!map.has(cnText)) map.set(cnText, [])
-      map.get(cnText).push(enText)
+      
+      // 改进：使用位置感知的 key
+      const contextKey = `${cnText}|${oldIdx}|${i}`
+      if (!map.has(contextKey)) {
+        map.set(contextKey, enText)
+      }
     }
   }
 
@@ -275,40 +394,13 @@ function buildSafeTextMap(equalOps, oldBlocks, oldENBlocks) {
 }
 
 function buildLcsIndexMap(oldItems, newItems) {
-  const n = oldItems.length
-  const m = newItems.length
-  const dp = Array.from({ length: n + 1 }, () => new Array(m + 1).fill(0))
-
-  for (let i = 1; i <= n; i++) {
-    for (let j = 1; j <= m; j++) {
-      if (oldItems[i - 1] === newItems[j - 1]) {
-        dp[i][j] = dp[i - 1][j - 1] + 1
-      } else {
-        dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1])
-      }
-    }
+  const mapNewToOld = new Array(newItems.length).fill(-1)
+  const matches = collectLcsMatches(oldItems, newItems)
+  for (const match of matches) {
+    mapNewToOld[match.newIndex] = match.oldIndex
   }
-
-  const mapNewToOld = new Array(m).fill(-1)
-  let i = n
-  let j = m
-  while (i > 0 && j > 0) {
-    if (oldItems[i - 1] === newItems[j - 1]) {
-      mapNewToOld[j - 1] = i - 1
-      i--
-      j--
-    } else if (dp[i - 1][j] >= dp[i][j - 1]) {
-      i--
-    } else {
-      j--
-    }
-  }
-
   return mapNewToOld
 }
-
-// NOTE: We intentionally avoid anchor-based or similarity-based block matching here.
-// Block alignment is driven by textHash to keep changes incremental and deterministic.
 
 // --- YAML Logic (Settings.yml) ---
 
@@ -328,10 +420,6 @@ function getYamlHeaderComments(source) {
   return comments.join('\n') + (comments.length > 0 ? '\n' : '')
 }
 
-/**
- * Build a map of CN key-path -> EN key from existing translations.
- * Traverses OldCN and OldEN in parallel by structure order.
- */
 function buildYamlPathMap(cnNode, enNode, map, basePath = '') {
   if (!cnNode || !enNode) return
 
@@ -355,10 +443,6 @@ function buildYamlPathMap(cnNode, enNode, map, basePath = '') {
   }
 }
 
-/**
- * Traverse NewCN and reconstruct NewEN using the path map.
- * Collects missing keys for translation.
- */
 function processYamlNode(node, map, collector, basePath = '') {
   if (Array.isArray(node)) {
     return node.map((item, i) => processYamlNode(item, map, collector, `${basePath}[${i}]`))
@@ -431,25 +515,23 @@ const EN_ABBREVIATIONS = new Set([
 
 function isSentenceBoundary(text, index) {
   const ch = text[index]
-  if (ch === '。' || ch === '！' || ch === '？' || ch === '；') return true
+  if (ch === '。' || ch === '!' || ch === '?' || ch === ';') return true
   if (ch === '!' || ch === '?' || ch === ';') return true
   if (ch !== '.') return false
   if (text[index - 1] === '.') return false
 
-  // Abbreviation check (e.g., "e.g.")
   let j = index - 1
   while (j >= 0 && /[A-Za-z]/.test(text[j])) j--
   const word = text.slice(j + 1, index)
   if (word && EN_ABBREVIATIONS.has(word.toLowerCase())) return false
 
-  // Look ahead for next non-space char
   let k = index + 1
   while (k < text.length && /\s/.test(text[k])) k++
   if (k >= text.length) return true
   const next = text[k]
 
   if (/[A-Z0-9]/.test(next)) return true
-  if (/["'“”‘’\(\[\{<\-]/.test(next)) return true
+  if (/["'""''\(\[\{<\-]/.test(next)) return true
   if (/[\u4e00-\u9fff]/.test(next)) return true
 
   return false
@@ -509,13 +591,43 @@ function levenshtein(a, b) {
   return dp[blen]
 }
 
+/**
+ * 改进版：动态相似度阈值
+ * 短文本需要更高的相似度，长文本可以容忍更多差异
+ */
 function similarityScore(a, b) {
   const na = normalizeSegment(a)
   const nb = normalizeSegment(b)
   if (!na || !nb) return 0
   if (na === nb) return 1
+  
   const distance = levenshtein(na, nb)
-  return 1 - distance / Math.max(na.length, nb.length)
+  const maxLen = Math.max(na.length, nb.length)
+  const minLen = Math.min(na.length, nb.length)
+  
+  // 基础相似度
+  const baseSimilarity = 1 - distance / maxLen
+  
+  // 长度惩罚：如果长度差异过大，降低相似度
+  const lengthRatio = minLen / maxLen
+  const lengthPenalty = lengthRatio < 0.7 ? lengthRatio : 1
+  
+  return baseSimilarity * lengthPenalty
+}
+
+/**
+ * 改进版：根据文本长度动态调整阈值
+ */
+function getAdaptiveThreshold(textLength) {
+  if (textLength < 20) {
+    return 0.85 // 短文本：要求 85% 相似
+  } else if (textLength < 50) {
+    return 0.80 // 中等文本：80%
+  } else if (textLength < 100) {
+    return 0.75 // 较长文本：75%
+  } else {
+    return 0.70 // 长文本：70%
+  }
 }
 
 function formatSegmentReplacement(segment, translatedCore) {
@@ -540,7 +652,7 @@ function coerceSingleString(content) {
         if (typeof candidate === 'string') return candidate.trim()
       }
     } catch {
-      // fall through to raw text
+      // fall through
     }
   }
   return text
@@ -929,36 +1041,6 @@ function applyReplacements(raw, replacements) {
   return result
 }
 
-function buildGlobalTextMap(oldBlocks, oldENBlocks) {
-  if (!oldBlocks || !oldENBlocks) return null
-  const map = new Map()
-  const len = Math.min(oldBlocks.length, oldENBlocks.length)
-
-  for (let i = 0; i < len; i++) {
-    const cnBlock = oldBlocks[i]
-    const enBlock = oldENBlocks[i]
-    if (!cnBlock || !enBlock) continue
-    if (cnBlock.type !== enBlock.type) continue
-    if (cnBlock.hash !== enBlock.hash) continue
-
-    const cnTree = processor.parse(cnBlock.text)
-    const enTree = processor.parse(enBlock.text)
-    const cnNodes = collectTextNodes(cnTree, cnBlock.text)
-    const enNodes = collectTextNodes(enTree, enBlock.text)
-    const nodeLen = Math.min(cnNodes.length, enNodes.length)
-
-    for (let j = 0; j < nodeLen; j++) {
-      const cnText = cnNodes[j]?.text
-      const enText = enNodes[j]?.text
-      if (cnText == null || enText == null) continue
-      if (!map.has(cnText)) map.set(cnText, [])
-      map.get(cnText).push(enText)
-    }
-  }
-
-  return map
-}
-
 async function translateMarkdownBlock(rawBlock, targetLang, cache) {
   const tree = processor.parse(rawBlock)
   const textNodes = collectTextNodes(tree, rawBlock)
@@ -983,6 +1065,13 @@ async function translateMarkdownBlock(rawBlock, targetLang, cache) {
   return applyReplacements(rawBlock, replacements)
 }
 
+/**
+ * 改进版：翻译 Markdown blocks
+ * 主要改进：
+ * 1. 更智能的句子匹配（使用动态阈值）
+ * 2. 避免全局文本映射的顺序问题
+ * 3. 更好的编辑检测策略
+ */
 async function translateMarkdownBlocks(blocks, indices, targetLang, cache, oldBlocks, oldENBlocks, mapNewToOld, safeTextMap, oldTextFreq, newTextFreq) {
   const translateTasks = []
   const editTasks = []
@@ -1027,6 +1116,7 @@ async function translateMarkdownBlocks(blocks, indices, targetLang, cache, oldBl
       const oldCNNode = oldNodeIndex !== -1 ? oldCNNodes[oldNodeIndex] : null
       const oldENNode = oldNodeIndex !== -1 ? oldENNodes[oldNodeIndex] : null
 
+      // 完全匹配：直接复用
       if (oldCNNode && oldENNode && oldCNNode.text === nodeText) {
         blockInfo.replacements.push({
           start: node.start,
@@ -1049,6 +1139,7 @@ async function translateMarkdownBlocks(blocks, indices, targetLang, cache, oldBl
         const core = seg.core || seg.text
         if (!core || !filterTranslatable(core)) continue
 
+        // 第一优先级：LCS 精确匹配
         const oldSegIndex = segMap?.[s] ?? -1
         if (oldSegIndex !== -1 && oldEnSegments[oldSegIndex]) {
           usedOld.add(oldSegIndex)
@@ -1061,35 +1152,39 @@ async function translateMarkdownBlocks(blocks, indices, targetLang, cache, oldBl
           continue
         }
 
-        if (
-          safeTextMap &&
-          oldTextFreq?.get(core) === 1 &&
-          newTextFreq?.get(core) === 1
-        ) {
-          const globalQueue = safeTextMap.get(core)
-          if (globalQueue && globalQueue.length > 0) {
+        // 第二优先级：安全文本映射（改进：使用位置感知的 key）
+        if (safeTextMap && oldTextFreq?.get(core) === 1 && newTextFreq?.get(core) === 1) {
+          // 使用位置感知的 key
+          const contextKey = `${core}|${oldIndex}|${oldNodeIndex}`
+          const mappedText = safeTextMap.get(contextKey)
+          if (mappedText) {
             blockInfo.replacements.push({
               start: node.start + seg.start,
               end: node.start + seg.end,
-              text: formatSegmentReplacement(seg, globalQueue.shift())
+              text: formatSegmentReplacement(seg, mappedText)
             })
             continue
           }
         }
 
+        // 第三优先级：编辑翻译（改进：使用动态阈值）
         if (ENABLE_EDIT_TRANSLATE && oldSegments.length > 0 && oldEnSegments.length > 0) {
           let bestIdx = -1
           let bestScore = 0
           for (let j = 0; j < oldSegments.length; j++) {
             if (usedOld.has(j)) continue
             if (!oldEnSegments[j]) continue
-            const score = similarityScore(core, oldSegments[j].core || oldSegments[j].text)
+            const oldCore = oldSegments[j].core || oldSegments[j].text
+            const score = similarityScore(core, oldCore)
             if (score > bestScore) {
               bestScore = score
               bestIdx = j
             }
           }
-          if (bestIdx !== -1 && bestScore >= EDIT_SIM_THRESHOLD) {
+          
+          // 改进：使用动态阈值
+          const threshold = getAdaptiveThreshold(core.length)
+          if (bestIdx !== -1 && bestScore >= threshold) {
             usedOld.add(bestIdx)
             editTasks.push({
               blockIndex: idx,
@@ -1104,6 +1199,7 @@ async function translateMarkdownBlocks(blocks, indices, targetLang, cache, oldBl
           }
         }
 
+        // 最后：全新翻译
         translateTasks.push({
           blockIndex: idx,
           start: node.start + seg.start,
@@ -1160,27 +1256,24 @@ async function processMarkdownFile(filePath) {
   const newCNRaw = fs.readFileSync(filePath, 'utf-8')
   const oldCNRaw = getGitContent('HEAD^', filePath)
 
-  // Parse AST
   const newTree = processor.parse(newCNRaw)
   const oldTree = oldCNRaw ? processor.parse(oldCNRaw) : { children: [] }
 
   const newBlocks = splitIntoBlocks(newTree, newCNRaw)
   const oldBlocks = splitIntoBlocks(oldTree, oldCNRaw)
+  
+  // 改进：使用新的多层级 diff
   const { mapNewToOld: mapNewToOldText, equalOps } = buildDiffMap(oldBlocks, newBlocks)
+  
+  // 精确匹配映射
   const mapNewToOldExact = mapNewToOldText.map((oldIndex, newIndex) => {
     if (oldIndex === -1) return -1
     if (!oldBlocks[oldIndex] || !newBlocks[newIndex]) return -1
     return oldBlocks[oldIndex].hash === newBlocks[newIndex].hash ? oldIndex : -1
   })
+  
   const newTextFreq = buildTextFreq(newTree, newCNRaw)
   const oldTextFreq = buildTextFreq(oldTree, oldCNRaw || '')
-
-  // --- Build Block Map (OldCN -> OldEN) ---
-  // We need to map OldCN blocks to OldEN blocks to enable reuse.
-  // Strategy: Assume sequential correspondence for identical blocks?
-  // Or better: Build a Map<Hash, EnText>.
-  // But Hash collision? (e.g. two "Note:" paragraphs).
-  // We can use a queue/list for each hash to handle duplicates sequentially.
 
   const cache = loadTranslationCache()
 
@@ -1234,21 +1327,17 @@ async function processMarkdownFile(filePath) {
     const targetDir = path.dirname(targetPath)
     if (!fs.existsSync(targetDir)) fs.mkdirSync(targetDir, { recursive: true })
 
-    // Join blocks with dynamic separators
     let finalContent = ''
     for (let i = 0; i < finalBlocks.length; i++) {
       const block = newBlocks[i]
       const content = finalBlocks[i]
-      // Use block.separator if available, default to '\n\n'
       const separator = block.separator || '\n\n'
 
       finalContent += content
-      // Don't add separator after the very last block?
-      // Usually Markdown files end with a newline, so adding it is fine/good.
       if (i < finalBlocks.length - 1) {
         finalContent += separator
       } else {
-        finalContent += '\n' // Ensure EOF newline
+        finalContent += '\n'
       }
     }
 
@@ -1272,7 +1361,6 @@ async function processYamlFile(filePath) {
   for (const lang of TARGET_LANGS) {
     const targetPath = filePath.replace(SOURCE_DIR, `content/${lang}`)
 
-    // 1. Build Map from OldCN + OldEN
     let finalObj = null
     const collector = []
 

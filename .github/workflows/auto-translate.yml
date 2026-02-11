@@ -30,7 +30,7 @@ jobs:
           node-version: 20
 
       - name: Install Script Dependencies
-        run: npm install node-fetch js-yaml unified remark-parse remark-stringify remark-frontmatter --no-save
+        run: npm install node-fetch js-yaml unified remark-parse remark-stringify remark-frontmatter diff-sequences --no-save
 
       - name: Run Auto Translate Script
         env:
