@@ -27,12 +27,8 @@ const OPENAI_API_BASE = process.env.OPENAI_API_BASE || 'https://api.deepseek.com
 const MODEL = process.env.OPENAI_MODEL || 'deepseek-chat'
 const SOURCE_DIR = 'content/cn'
 const TRANSLATE_BATCH_SIZE = Number(process.env.TRANSLATE_BATCH_SIZE || 50)
-<<<<<<< Updated upstream
-=======
 const ENABLE_EDIT_TRANSLATE = process.env.ENABLE_EDIT_TRANSLATE !== '0'
 const EDIT_SIM_THRESHOLD = Number(process.env.EDIT_SIM_THRESHOLD || 0.8)
-const BLOCK_SIM_THRESHOLD = Number(process.env.BLOCK_SIM_THRESHOLD || 0.6)
->>>>>>> Stashed changes
 
 // --- Helpers ---
 
@@ -311,63 +307,8 @@ function buildLcsIndexMap(oldItems, newItems) {
   return mapNewToOld
 }
 
-function augmentMapWithSimilarBlocks(oldBlocks, newBlocks, mapNewToOld) {
-  const usedOld = new Set(mapNewToOld.filter(i => i !== -1))
-  const prevOldIndex = new Array(newBlocks.length).fill(-1)
-  const nextOldIndex = new Array(newBlocks.length).fill(-1)
-
-  let last = -1
-  for (let i = 0; i < newBlocks.length; i++) {
-    if (mapNewToOld[i] !== -1) last = mapNewToOld[i]
-    prevOldIndex[i] = last
-  }
-
-  last = -1
-  for (let i = newBlocks.length - 1; i >= 0; i--) {
-    if (mapNewToOld[i] !== -1) last = mapNewToOld[i]
-    nextOldIndex[i] = last
-  }
-
-  for (let i = 0; i < newBlocks.length; i++) {
-    if (mapNewToOld[i] !== -1) continue
-    const newBlock = newBlocks[i]
-    if (!newBlock) continue
-
-    const start = prevOldIndex[i] !== -1 ? prevOldIndex[i] + 1 : 0
-    const end = nextOldIndex[i] !== -1 ? nextOldIndex[i] - 1 : oldBlocks.length - 1
-
-    let bestIdx = -1
-    let bestScore = 0
-    const newText = normalizeSegment(newBlock.textContent || '')
-    if (!newText) continue
-
-    for (let j = start; j <= end; j++) {
-      if (usedOld.has(j)) continue
-      const oldBlock = oldBlocks[j]
-      if (!oldBlock) continue
-      if (oldBlock.type !== newBlock.type) continue
-
-      const oldText = normalizeSegment(oldBlock.textContent || '')
-      if (!oldText) continue
-      const minLen = Math.min(oldText.length, newText.length)
-      const maxLen = Math.max(oldText.length, newText.length)
-      if (maxLen > 0 && minLen / maxLen < 0.5) continue
-
-      const score = similarityScore(newText, oldText)
-      if (score > bestScore) {
-        bestScore = score
-        bestIdx = j
-      }
-    }
-
-    if (bestIdx !== -1 && bestScore >= BLOCK_SIM_THRESHOLD) {
-      mapNewToOld[i] = bestIdx
-      usedOld.add(bestIdx)
-    }
-  }
-
-  return mapNewToOld
-}
+// NOTE: We intentionally avoid anchor-based or similarity-based block matching here.
+// Block alignment is driven by textHash to keep changes incremental and deterministic.
 
 // --- YAML Logic (Settings.yml) ---
 
@@ -471,8 +412,6 @@ function filterTranslatable(text) {
   return /[\u4e00-\u9fff]/.test(text)
 }
 
-<<<<<<< Updated upstream
-=======
 const EN_ABBREVIATIONS = new Set([
   'e.g',
   'i.e',
@@ -710,7 +649,6 @@ async function editTranslateSingleWithRetry(item, targetLang, retries = 2) {
   throw lastError
 }
 
->>>>>>> Stashed changes
 async function translateBatch(segments, targetLang) {
   if (segments.length === 0) return []
 
@@ -763,8 +701,6 @@ async function translateBatch(segments, targetLang) {
   }
 }
 
-<<<<<<< Updated upstream
-=======
 function shouldSplitBatch(error) {
   const message = error?.message || ''
   if (/mismatched array length/i.test(message)) return true
@@ -869,7 +805,6 @@ async function editTranslateBatchWithFallback(pairs, targetLang) {
   }
 }
 
->>>>>>> Stashed changes
 async function translateSegmentsWithCache(segments, targetLang, cache) {
   if (segments.length === 0) return []
   const results = new Array(segments.length).fill('')
@@ -890,12 +825,51 @@ async function translateSegmentsWithCache(segments, targetLang, cache) {
   if (missing.length > 0) {
     for (let i = 0; i < missing.length; i += TRANSLATE_BATCH_SIZE) {
       const chunk = missing.slice(i, i + TRANSLATE_BATCH_SIZE)
-      const translated = await translateBatch(chunk, targetLang)
+      const translated = await translateBatchWithFallback(chunk, targetLang)
       translated.forEach((trans, idx) => {
         const original = chunk[idx]
         const missingIndex = missingIndices[i + idx]
         const key = getCacheKey(targetLang, original)
         cache[key] = { text: original, trans }
+        results[missingIndex] = trans
+      })
+    }
+  }
+
+  return results
+}
+
+async function editSegmentsWithCache(items, targetLang, cache) {
+  if (items.length === 0) return []
+  const results = new Array(items.length).fill('')
+  const missing = []
+  const missingIndices = []
+
+  for (let i = 0; i < items.length; i++) {
+    const item = items[i]
+    const key = getCacheKey(targetLang, item.newCn)
+    if (cache[key] && cache[key].text === item.newCn) {
+      results[i] = cache[key].trans
+    } else {
+      missing.push(item)
+      missingIndices.push(i)
+    }
+  }
+
+  if (missing.length > 0) {
+    for (let i = 0; i < missing.length; i += TRANSLATE_BATCH_SIZE) {
+      const chunk = missing.slice(i, i + TRANSLATE_BATCH_SIZE)
+      const payload = chunk.map(item => ({
+        oldCn: item.oldCn,
+        newCn: item.newCn,
+        oldEn: item.oldEn
+      }))
+      const edited = await editTranslateBatchWithFallback(payload, targetLang)
+      edited.forEach((trans, idx) => {
+        const original = chunk[idx]
+        const missingIndex = missingIndices[i + idx]
+        const key = getCacheKey(targetLang, original.newCn)
+        cache[key] = { text: original.newCn, trans }
         results[missingIndex] = trans
       })
     }
@@ -1010,7 +984,8 @@ async function translateMarkdownBlock(rawBlock, targetLang, cache) {
 }
 
 async function translateMarkdownBlocks(blocks, indices, targetLang, cache, oldBlocks, oldENBlocks, mapNewToOld, safeTextMap, oldTextFreq, newTextFreq) {
-  const tasks = []
+  const translateTasks = []
+  const editTasks = []
   const perBlock = new Map()
 
   for (const idx of indices) {
@@ -1024,101 +999,150 @@ async function translateMarkdownBlocks(blocks, indices, targetLang, cache, oldBl
     const oldCNBlock = oldIndex !== -1 ? oldBlocks?.[oldIndex]?.text : null
     const oldENBlock = oldIndex !== -1 ? oldENBlocks?.[oldIndex]?.text : null
 
+    let oldCNNodes = []
+    let oldENNodes = []
+    let nodeMap = []
+    let sameNodeLength = false
     if (oldCNBlock && oldENBlock) {
       const oldCNTree = processor.parse(oldCNBlock)
       const oldENTree = processor.parse(oldENBlock)
-      const oldCNNodes = collectTextNodes(oldCNTree, oldCNBlock)
-      const oldENNodes = collectTextNodes(oldENTree, oldENBlock)
+      oldCNNodes = collectTextNodes(oldCNTree, oldCNBlock)
+      oldENNodes = collectTextNodes(oldENTree, oldENBlock)
+      const oldTexts = oldCNNodes.map(n => n.text)
+      const newTexts = textNodes.map(n => n.text)
+      nodeMap = buildLcsIndexMap(oldTexts, newTexts)
+      sameNodeLength = oldCNNodes.length === textNodes.length && oldENNodes.length === oldCNNodes.length
+    }
 
-      const cnToEnQueue = new Map()
-      for (let i = 0; i < oldCNNodes.length; i++) {
-        const cnText = oldCNNodes[i]?.text
-        const enText = oldENNodes[i]?.text
-        if (cnText == null || enText == null) continue
-        if (!cnToEnQueue.has(cnText)) cnToEnQueue.set(cnText, [])
-        cnToEnQueue.get(cnText).push(enText)
+    for (let i = 0; i < textNodes.length; i++) {
+      const node = textNodes[i]
+      const nodeText = node.text
+
+      let oldNodeIndex = -1
+      if (oldCNBlock && oldENBlock) {
+        oldNodeIndex = nodeMap?.[i] ?? -1
+        if (oldNodeIndex === -1 && sameNodeLength) oldNodeIndex = i
       }
 
-      for (const node of textNodes) {
-        const cnText = node.text
-        const queue = cnToEnQueue.get(cnText)
-        if (queue && queue.length > 0) {
+      const oldCNNode = oldNodeIndex !== -1 ? oldCNNodes[oldNodeIndex] : null
+      const oldENNode = oldNodeIndex !== -1 ? oldENNodes[oldNodeIndex] : null
+
+      if (oldCNNode && oldENNode && oldCNNode.text === nodeText) {
+        blockInfo.replacements.push({
+          start: node.start,
+          end: node.end,
+          text: oldENNode.text
+        })
+        continue
+      }
+
+      const newSegments = splitIntoSentences(nodeText)
+      const oldSegments = oldCNNode ? splitIntoSentences(oldCNNode.text) : []
+      const oldEnSegments = oldENNode ? splitIntoSentences(oldENNode.text) : []
+      const newSegKeys = newSegments.map(seg => normalizeSegment(seg.core || seg.text))
+      const oldSegKeys = oldSegments.map(seg => normalizeSegment(seg.core || seg.text))
+      const segMap = oldSegments.length > 0 ? buildLcsIndexMap(oldSegKeys, newSegKeys) : []
+      const usedOld = new Set()
+
+      for (let s = 0; s < newSegments.length; s++) {
+        const seg = newSegments[s]
+        const core = seg.core || seg.text
+        if (!core || !filterTranslatable(core)) continue
+
+        const oldSegIndex = segMap?.[s] ?? -1
+        if (oldSegIndex !== -1 && oldEnSegments[oldSegIndex]) {
+          usedOld.add(oldSegIndex)
+          const enCore = oldEnSegments[oldSegIndex].core || oldEnSegments[oldSegIndex].text
           blockInfo.replacements.push({
-            start: node.start,
-            end: node.end,
-            text: queue.shift()
+            start: node.start + seg.start,
+            end: node.start + seg.end,
+            text: formatSegmentReplacement(seg, enCore)
           })
           continue
         }
 
-        if (!filterTranslatable(cnText)) continue
         if (
           safeTextMap &&
-          oldTextFreq?.get(cnText) === 1 &&
-          newTextFreq?.get(cnText) === 1
+          oldTextFreq?.get(core) === 1 &&
+          newTextFreq?.get(core) === 1
         ) {
-          const globalQueue = safeTextMap.get(cnText)
+          const globalQueue = safeTextMap.get(core)
           if (globalQueue && globalQueue.length > 0) {
             blockInfo.replacements.push({
-              start: node.start,
-              end: node.end,
-              text: globalQueue.shift()
+              start: node.start + seg.start,
+              end: node.start + seg.end,
+              text: formatSegmentReplacement(seg, globalQueue.shift())
             })
             continue
           }
         }
-        tasks.push({
-          blockIndex: idx,
-          start: node.start,
-          end: node.end,
-          text: cnText
-        })
-      }
-    } else {
-      for (const node of textNodes) {
-        if (!filterTranslatable(node.text)) continue
-        if (
-          safeTextMap &&
-          oldTextFreq?.get(node.text) === 1 &&
-          newTextFreq?.get(node.text) === 1
-        ) {
-          const globalQueue = safeTextMap.get(node.text)
-          if (globalQueue && globalQueue.length > 0) {
-            blockInfo.replacements.push({
-              start: node.start,
-              end: node.end,
-              text: globalQueue.shift()
+
+        if (ENABLE_EDIT_TRANSLATE && oldSegments.length > 0 && oldEnSegments.length > 0) {
+          let bestIdx = -1
+          let bestScore = 0
+          for (let j = 0; j < oldSegments.length; j++) {
+            if (usedOld.has(j)) continue
+            if (!oldEnSegments[j]) continue
+            const score = similarityScore(core, oldSegments[j].core || oldSegments[j].text)
+            if (score > bestScore) {
+              bestScore = score
+              bestIdx = j
+            }
+          }
+          if (bestIdx !== -1 && bestScore >= EDIT_SIM_THRESHOLD) {
+            usedOld.add(bestIdx)
+            editTasks.push({
+              blockIndex: idx,
+              start: node.start + seg.start,
+              end: node.start + seg.end,
+              segment: seg,
+              oldCn: oldSegments[bestIdx].core || oldSegments[bestIdx].text,
+              newCn: core,
+              oldEn: oldEnSegments[bestIdx].core || oldEnSegments[bestIdx].text
             })
             continue
           }
         }
-        tasks.push({
+
+        translateTasks.push({
           blockIndex: idx,
-          start: node.start,
-          end: node.end,
-          text: node.text
+          start: node.start + seg.start,
+          end: node.start + seg.end,
+          segment: seg,
+          text: core
         })
       }
     }
   }
 
-  if (tasks.length === 0) {
-    const result = new Map()
-    for (const idx of indices) {
-      const info = perBlock.get(idx)
-      result.set(idx, info ? info.raw : blocks[idx].text)
+  if (editTasks.length > 0) {
+    const edited = await editSegmentsWithCache(editTasks, targetLang, cache)
+    for (let i = 0; i < editTasks.length; i++) {
+      const t = editTasks[i]
+      const info = perBlock.get(t.blockIndex)
+      if (!info) continue
+      info.replacements.push({
+        start: t.start,
+        end: t.end,
+        text: formatSegmentReplacement(t.segment, edited[i])
+      })
     }
-    return result
   }
 
-  const segments = tasks.map(t => t.text)
-  const translated = await translateSegmentsWithCache(segments, targetLang, cache)
+  if (translateTasks.length > 0) {
+    const segments = translateTasks.map(t => t.text)
+    const translated = await translateSegmentsWithCache(segments, targetLang, cache)
 
-  for (let i = 0; i < tasks.length; i++) {
-    const t = tasks[i]
-    const info = perBlock.get(t.blockIndex)
-    if (!info) continue
-    info.replacements.push({ start: t.start, end: t.end, text: translated[i] })
+    for (let i = 0; i < translateTasks.length; i++) {
+      const t = translateTasks[i]
+      const info = perBlock.get(t.blockIndex)
+      if (!info) continue
+      info.replacements.push({
+        start: t.start,
+        end: t.end,
+        text: formatSegmentReplacement(t.segment, translated[i])
+      })
+    }
   }
 
   const result = new Map()
@@ -1142,8 +1166,12 @@ async function processMarkdownFile(filePath) {
 
   const newBlocks = splitIntoBlocks(newTree, newCNRaw)
   const oldBlocks = splitIntoBlocks(oldTree, oldCNRaw)
-  const { mapNewToOld, equalOps } = buildDiffMap(oldBlocks, newBlocks)
-  augmentMapWithSimilarBlocks(oldBlocks, newBlocks, mapNewToOld)
+  const { mapNewToOld: mapNewToOldText, equalOps } = buildDiffMap(oldBlocks, newBlocks)
+  const mapNewToOldExact = mapNewToOldText.map((oldIndex, newIndex) => {
+    if (oldIndex === -1) return -1
+    if (!oldBlocks[oldIndex] || !newBlocks[newIndex]) return -1
+    return oldBlocks[oldIndex].hash === newBlocks[newIndex].hash ? oldIndex : -1
+  })
   const newTextFreq = buildTextFreq(newTree, newCNRaw)
   const oldTextFreq = buildTextFreq(oldTree, oldCNRaw || '')
 
@@ -1171,9 +1199,9 @@ async function processMarkdownFile(filePath) {
       safeTextMap = buildSafeTextMap(equalOps, oldBlocks, oldENBlocks)
 
       for (let i = 0; i < newBlocks.length; i++) {
-        const oldIndex = mapNewToOld[i]
-        if (oldIndex !== -1 && oldENBlocks[oldIndex]) {
-          finalBlocks[i] = oldENBlocks[oldIndex].text
+        const oldIndexExact = mapNewToOldExact[i]
+        if (oldIndexExact !== -1 && oldENBlocks[oldIndexExact]) {
+          finalBlocks[i] = oldENBlocks[oldIndexExact].text
         } else {
           blocksToTranslate.push(i)
         }
@@ -1191,7 +1219,7 @@ async function processMarkdownFile(filePath) {
         cache,
         oldBlocks,
         oldENBlocks,
-        mapNewToOld,
+        mapNewToOldText,
         safeTextMap,
         oldTextFreq,
         newTextFreq
