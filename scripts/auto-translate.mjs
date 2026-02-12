@@ -1,5 +1,6 @@
 import fs from 'fs'
 import path from 'path'
+import { fileURLToPath } from 'url'
 import { execSync } from 'child_process'
 import fetch from 'node-fetch'
 import yaml from 'js-yaml'
@@ -10,14 +11,16 @@ import remarkFrontmatter from 'remark-frontmatter'
 import crypto from 'crypto'
 import * as diffSequencesModule from 'diff-sequences'
 
+// 处理不同的导出格式（适配 pnpm、npm、yarn）
 const diffSequences =
-  diffSequencesModule.diffSequences
-  || diffSequencesModule.default
+  diffSequencesModule.diffSequences                    // 直接命名导出
+  || diffSequencesModule.default?.default              // pnpm 双层 default
+  || diffSequencesModule.default                       // 标准 default
+  || diffSequencesModule['module.exports']?.default    // CommonJS 兼容
   || diffSequencesModule
 
 // --- Configuration ---
 const languagesConfigPath = path.join(path.dirname(new URL(import.meta.url).pathname), 'languages.json')
-const translationCachePath = path.join(path.dirname(new URL(import.meta.url).pathname), 'translation-cache.json')
 let TARGET_LANGS = ['en']
 try {
   if (fs.existsSync(languagesConfigPath)) {
@@ -27,19 +30,44 @@ try {
   console.warn('⚠️ Failed to read languages.json, defaulting to ["en"]', e)
 }
 
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY || 'sk-74d716a32d544a6b8a522dfc9e8fde5a'
 const OPENAI_API_BASE = process.env.OPENAI_API_BASE || 'https://api.deepseek.com'
 const MODEL = process.env.OPENAI_MODEL || 'deepseek-chat'
 const SOURCE_DIR = 'content/cn'
 const TRANSLATE_BATCH_SIZE = Number(process.env.TRANSLATE_BATCH_SIZE || 50)
 const ENABLE_EDIT_TRANSLATE = process.env.ENABLE_EDIT_TRANSLATE !== '0'
-const EDIT_SIM_THRESHOLD = Number(process.env.EDIT_SIM_THRESHOLD || 0.75)
-
-// 新增配置：结构权重
-const STRUCTURAL_MATCH_WEIGHT = 0.3 // 结构匹配权重
-const CONTENT_MATCH_WEIGHT = 0.7    // 内容匹配权重
+const BLOCK_MODIFY_SIM_THRESHOLD = Number(process.env.BLOCK_MODIFY_SIM_THRESHOLD || 0.75)
 
 // --- Helpers ---
+
+async function callLLM(messages, temperature = 0.1) {
+  const response = await fetch(`${OPENAI_API_BASE}/chat/completions`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${OPENAI_API_KEY}`
+    },
+    body: JSON.stringify({
+      model: MODEL,
+      messages,
+      temperature
+    })
+  })
+
+  if (!response.ok) {
+    throw new Error(`API Error: ${response.status} ${response.statusText}`)
+  }
+
+  const data = await response.json()
+  return data.choices[0].message.content
+}
+
+function cleanJSONString(text) {
+  let content = String(text || '').trim()
+  if (content.startsWith('```json')) content = content.replace(/^```json\s*/, '').replace(/\s*```$/, '')
+  if (content.startsWith('```')) content = content.replace(/^```\s*/, '').replace(/\s*```$/, '')
+  return content
+}
 
 function exec(command) {
   try {
@@ -116,74 +144,128 @@ const processor = unified()
   .use(remarkStringify, { bullet: '*', fences: '`' })
   .use(remarkFrontmatter, ['yaml'])
 
-/**
- * 改进：为每个 block 添加结构上下文信息
- */
-function getStructuralContext(node, index, totalLength, parentType = null) {
-  return {
-    relativePosition: index / Math.max(totalLength - 1, 1), // 0-1 之间的相对位置
-    parentType,
-    depth: 0 // 可以扩展为计算嵌套深度
-  }
-}
-
-/**
- * 改进版：Split AST into blocks with enhanced metadata
- */
 function splitIntoBlocks(tree, rawContent) {
   const blocks = []
+  const headingStack = []
 
-  function processNode(node, pathKey, isLastInList = false, listSpread = false, parentType = null, siblingIndex = 0, totalSiblings = 1) {
-    if (node.type === 'list') {
-      for (let i = 0; i < node.children.length; i++) {
-        const item = node.children[i]
-        const isLastItem = i === node.children.length - 1
-        processNode(item, `${pathKey}/listItem/${i}`, isLastItem, node.spread, 'list', i, node.children.length)
-      }
-      return
-    }
+  function normalizeHeadingText(text) {
+    return String(text || '').replace(/\s+/g, ' ').trim()
+  }
 
-    let separator = '\n\n'
-    if (node.type === 'listItem') {
-      if (isLastInList) {
-        separator = '\n\n'
-      } else {
-        separator = listSpread ? '\n\n' : '\n'
-      }
-    }
+  function getHeadingPathKey() {
+    return headingStack.filter(Boolean).join(' > ')
+  }
 
-    const tempRoot = { type: 'root', children: [node] }
-    const normalizedText = processor.stringify(tempRoot).trim()
-
-    let rawText = normalizedText
+  function getRawText(node) {
     if (rawContent && node.position) {
-      rawText = rawContent.slice(node.position.start.offset, node.position.end.offset)
+      return rawContent.slice(node.position.start.offset, node.position.end.offset)
     }
-    const textContent = extractTextFromBlock(rawText)
+    const tempRoot = { type: 'root', children: [node] }
+    return processor.stringify(tempRoot).trim()
+  }
 
-    // 改进：添加结构上下文
-    const structuralContext = getStructuralContext(node, siblingIndex, totalSiblings, parentType)
+  function isBlockNode(node, parentType) {
+    if (node.type === 'heading') return true
+    if (node.type === 'listItem') return true
+    if (node.type === 'paragraph' && parentType !== 'listItem') return true
+    if (node.type === 'code') return true
+    if (node.type === 'html') return true
+    if (node.type === 'yaml') return true
+    if (node.type === 'blockquote') return true
+    if (node.type === 'thematicBreak') return true
+    if (node.type === 'table') return true
+    if (node.type === 'definition') return true
+    if (node.type === 'footnoteDefinition') return true
+    return false
+  }
 
-    blocks.push({
-      type: node.type,
-      path: pathKey,
-      text: rawText,
-      normalized: normalizedText,
-      hash: getHash(normalizedText.replace(/\s+/g, ' ').trim()),
-      textHash: getHash(textContent.replace(/\s+/g, ' ').trim()),
-      textContent,
-      start: node.position?.start?.offset ?? null,
-      end: node.position?.end?.offset ?? null,
-      separator: separator,
-      // 新增字段
-      structuralContext,
-      headingLevel: node.type === 'heading' ? node.depth : null
-    })
+  function shouldTraverseChildren(node) {
+    if (node.type === 'heading') return false
+    if (node.type === 'listItem') return false
+    if (node.type === 'paragraph') return false
+    if (node.type === 'code') return false
+    if (node.type === 'html') return false
+    if (node.type === 'yaml') return false
+    if (node.type === 'blockquote') return false
+    if (node.type === 'thematicBreak') return false
+    if (node.type === 'table') return false
+    if (node.type === 'definition') return false
+    if (node.type === 'footnoteDefinition') return false
+    return true
+  }
+
+  function visit(node, pathKey, parentPathKey, parentType, siblingIndex, totalSiblings) {
+    if (!node) return
+
+    if (node.type === 'heading') {
+      const rawText = getRawText(node)
+      const headingText = normalizeHeadingText(extractTextFromBlock(rawText))
+      const depth = node.depth || 1
+      headingStack.length = Math.max(0, depth - 1)
+      headingStack[depth - 1] = headingText
+    }
+
+    if (isBlockNode(node, parentType)) {
+      const rawText = getRawText(node)
+      const tempRoot = { type: 'root', children: [node] }
+      const normalizedText = processor.stringify(tempRoot).trim()
+      let textContent = extractTextFromBlock(rawText)
+      if (node.type === 'code' || node.type === 'html' || node.type === 'yaml' || !String(textContent).trim()) {
+        textContent = rawText
+      }
+      const headingPath = getHeadingPathKey()
+
+      blocks.push({
+        type: node.type,
+        path: pathKey,
+        parentKey: parentPathKey,
+        siblingIndex,
+        totalSiblings,
+        headingPath,
+        text: rawText,
+        normalized: normalizedText,
+        hash: getHash(normalizedText.replace(/\s+/g, ' ').trim()),
+        textHash: getHash(textContent.replace(/\s+/g, ' ').trim()),
+        textContent,
+        start: node.position?.start?.offset ?? null,
+        end: node.position?.end?.offset ?? null,
+        headingLevel: node.type === 'heading' ? node.depth : null
+      })
+    }
+
+    if (!node.children || node.children.length === 0) return
+    if (!shouldTraverseChildren(node)) return
+
+    for (let i = 0; i < node.children.length; i++) {
+      const child = node.children[i]
+      visit(child, `${pathKey}/${child.type}/${i}`, pathKey, node.type, i, node.children.length)
+    }
   }
 
   for (let i = 0; i < tree.children.length; i++) {
     const node = tree.children[i]
-    processNode(node, `root/${i}/${node.type}`, false, false, 'root', i, tree.children.length)
+    visit(node, `root/${i}/${node.type}`, 'root', 'root', i, tree.children.length)
+  }
+
+  blocks.sort((a, b) => {
+    const sa = a.start ?? 0
+    const sb = b.start ?? 0
+    if (sa !== sb) return sa - sb
+    return (a.end ?? 0) - (b.end ?? 0)
+  })
+
+  for (let i = 0; i < blocks.length; i++) {
+    const curr = blocks[i]
+    const next = blocks[i + 1]
+    if (rawContent && curr.end != null) {
+      if (next && next.start != null) {
+        curr.separator = rawContent.slice(curr.end, next.start)
+      } else {
+        curr.separator = '\n'
+      }
+    } else {
+      curr.separator = '\n\n'
+    }
   }
 
   return blocks
@@ -216,131 +298,6 @@ function collectLcsMatches(oldItems, newItems) {
   return matches
 }
 
-/**
- * 改进版：构建更智能的 block 匹配 key
- * 策略：
- * 1. 完全相同的 block（hash 相同）→ 使用 exact key
- * 2. 内容相同但格式不同（textHash 相同）→ 使用 text key  
- * 3. 位置信息作为辅助（避免重复内容混淆）
- */
-function buildBlockMatchKey(block, index, mode = 'exact') {
-  const positionHint = Math.floor(block.structuralContext.relativePosition * 100)
-  
-  if (mode === 'exact') {
-    // 精确匹配：类型 + hash + 位置提示（避免重复段落混淆）
-    return `${block.type}:${block.hash}:${positionHint}`
-  } else if (mode === 'text') {
-    // 文本匹配：类型 + textHash + 位置提示
-    return `${block.type}:${block.textHash}:${positionHint}`
-  } else if (mode === 'structural') {
-    // 结构匹配：仅类型 + 标题层级 + 位置
-    const level = block.headingLevel !== null ? block.headingLevel : 'none'
-    return `${block.type}:${level}:${positionHint}`
-  }
-  
-  return `${block.type}:${block.textHash}`
-}
-
-/**
- * 改进版：多层级 diff 匹配
- * 第一层：精确匹配（hash 完全相同）
- * 第二层：内容匹配（textHash 相同，格式可能变化）
- * 第三层：结构匹配（类型和位置相似）
- */
-function buildDiffMap(oldBlocks, newBlocks) {
-  // 第一层：精确匹配
-  const exactOldKeys = oldBlocks.map((b, i) => buildBlockMatchKey(b, i, 'exact'))
-  const exactNewKeys = newBlocks.map((b, i) => buildBlockMatchKey(b, i, 'exact'))
-  const exactMatches = collectLcsMatches(exactOldKeys, exactNewKeys)
-  
-  const mapNewToOld = new Array(newBlocks.length).fill(-1)
-  const mappedOld = new Set()
-  const mappedNew = new Set()
-  
-  // 应用精确匹配
-  for (const match of exactMatches) {
-    mapNewToOld[match.newIndex] = match.oldIndex
-    mappedOld.add(match.oldIndex)
-    mappedNew.add(match.newIndex)
-  }
-  
-  // 第二层：内容匹配（未匹配的 block）
-  const unmatchedOld = oldBlocks.map((b, i) => ({ block: b, index: i })).filter(x => !mappedOld.has(x.index))
-  const unmatchedNew = newBlocks.map((b, i) => ({ block: b, index: i })).filter(x => !mappedNew.has(x.index))
-  
-  if (unmatchedOld.length > 0 && unmatchedNew.length > 0) {
-    const textOldKeys = unmatchedOld.map(x => buildBlockMatchKey(x.block, x.index, 'text'))
-    const textNewKeys = unmatchedNew.map(x => buildBlockMatchKey(x.block, x.index, 'text'))
-    const textMatches = collectLcsMatches(textOldKeys, textNewKeys)
-    
-    for (const match of textMatches) {
-      const oldIdx = unmatchedOld[match.oldIndex].index
-      const newIdx = unmatchedNew[match.newIndex].index
-      mapNewToOld[newIdx] = oldIdx
-      mappedOld.add(oldIdx)
-      mappedNew.add(newIdx)
-    }
-  }
-  
-  // 第三层：结构位置匹配（用于内容完全变化但结构保留的情况）
-  // 这层匹配的置信度较低，只在内容相似度高时采用
-  const stillUnmatchedOld = oldBlocks.map((b, i) => ({ block: b, index: i })).filter(x => !mappedOld.has(x.index))
-  const stillUnmatchedNew = newBlocks.map((b, i) => ({ block: b, index: i })).filter(x => !mappedNew.has(x.index))
-  
-  if (stillUnmatchedOld.length > 0 && stillUnmatchedNew.length > 0) {
-    const structOldKeys = stillUnmatchedOld.map(x => buildBlockMatchKey(x.block, x.index, 'structural'))
-    const structNewKeys = stillUnmatchedNew.map(x => buildBlockMatchKey(x.block, x.index, 'structural'))
-    const structMatches = collectLcsMatches(structOldKeys, structNewKeys)
-    
-    // 只在内容有一定相似度时才使用结构匹配
-    for (const match of structMatches) {
-      const oldIdx = stillUnmatchedOld[match.oldIndex].index
-      const newIdx = stillUnmatchedNew[match.newIndex].index
-      const oldBlock = oldBlocks[oldIdx]
-      const newBlock = newBlocks[newIdx]
-      
-      // 检查内容相似度
-      const similarity = calculateTextSimilarity(oldBlock.textContent, newBlock.textContent)
-      if (similarity >= 0.5) { // 至少 50% 相似才使用结构匹配
-        mapNewToOld[newIdx] = oldIdx
-        mappedOld.add(oldIdx)
-        mappedNew.add(newIdx)
-      }
-    }
-  }
-  
-  // 生成操作序列（用于调试和分析）
-  const ops = []
-  let oldPos = 0
-  let newPos = 0
-  
-  for (let i = 0; i < newBlocks.length; i++) {
-    const oldIdx = mapNewToOld[i]
-    if (oldIdx === -1) {
-      ops.push({ type: 'insert', newIndex: i })
-    } else {
-      while (oldPos < oldIdx) {
-        ops.push({ type: 'delete', oldIndex: oldPos })
-        oldPos++
-      }
-      ops.push({ type: 'equal', oldIndex: oldIdx, newIndex: i })
-      oldPos = oldIdx + 1
-    }
-  }
-  
-  while (oldPos < oldBlocks.length) {
-    ops.push({ type: 'delete', oldIndex: oldPos })
-    oldPos++
-  }
-  
-  const equalOps = ops.filter(op => op.type === 'equal')
-  
-  return { mapNewToOld, ops, equalOps }
-}
-
-/**
- * 改进版：计算文本相似度（用于结构匹配的验证）
- */
 function calculateTextSimilarity(text1, text2) {
   if (!text1 || !text2) return 0
   const norm1 = normalizeSegment(text1)
@@ -354,44 +311,23 @@ function calculateTextSimilarity(text1, text2) {
   return 1 - distance / maxLen
 }
 
+function sentenceOverlapScore(text1, text2) {
+  const aSegs = splitIntoSentences(text1).map(seg => normalizeSegment(seg.core || seg.text)).filter(Boolean)
+  const bSegs = splitIntoSentences(text2).map(seg => normalizeSegment(seg.core || seg.text)).filter(Boolean)
+  if (aSegs.length === 0 || bSegs.length === 0) return 0
+  const map = buildLcsIndexMap(aSegs, bSegs)
+  let matches = 0
+  for (let i = 0; i < map.length; i++) {
+    const idx = map[i]
+    if (idx !== -1 && aSegs[idx] === bSegs[i]) matches++
+  }
+  return matches / Math.max(aSegs.length, bSegs.length)
+}
+
 /**
  * 改进版：构建安全的文本复用映射
  * 策略：只复用在结构上完全对齐且内容未变的文本
  */
-function buildSafeTextMap(equalOps, oldBlocks, oldENBlocks) {
-  if (!oldBlocks || !oldENBlocks) return new Map()
-  const map = new Map()
-
-  for (const op of equalOps) {
-    const oldIdx = op.oldIndex
-    const cnBlock = oldBlocks[oldIdx]
-    const enBlock = oldENBlocks[oldIdx]
-    if (!cnBlock || !enBlock) continue
-    
-    // 只在 hash 完全相同时才建立文本映射
-    if (cnBlock.hash !== enBlock.hash) continue
-    
-    const cnTree = processor.parse(cnBlock.text)
-    const enTree = processor.parse(enBlock.text)
-    const cnNodes = collectTextNodes(cnTree, cnBlock.text)
-    const enNodes = collectTextNodes(enTree, enBlock.text)
-    const len = Math.min(cnNodes.length, enNodes.length)
-    
-    for (let i = 0; i < len; i++) {
-      const cnText = cnNodes[i]?.text
-      const enText = enNodes[i]?.text
-      if (cnText == null || enText == null) continue
-      
-      // 改进：使用位置感知的 key
-      const contextKey = `${cnText}|${oldIdx}|${i}`
-      if (!map.has(contextKey)) {
-        map.set(contextKey, enText)
-      }
-    }
-  }
-
-  return map
-}
 
 function buildLcsIndexMap(oldItems, newItems) {
   const mapNewToOld = new Array(newItems.length).fill(-1)
@@ -401,6 +337,208 @@ function buildLcsIndexMap(oldItems, newItems) {
   }
   return mapNewToOld
 }
+
+function buildBlockKey(block) {
+  return `${block.type}:${block.textHash}`
+}
+
+function scoreBlockCandidate(newBlock, oldBlock) {
+  let score = 0
+  if (newBlock.parentKey && oldBlock.parentKey && newBlock.parentKey === oldBlock.parentKey) score += 2
+  if (newBlock.headingPath && oldBlock.headingPath && newBlock.headingPath === oldBlock.headingPath) score += 1
+  if (newBlock.siblingIndex != null && oldBlock.siblingIndex != null && newBlock.siblingIndex === oldBlock.siblingIndex) score += 0.5
+  return score
+}
+
+function findHeadingAnchors(oldBlocks, newBlocks) {
+  const oldHeadings = oldBlocks.map((b, i) => ({ ...b, originalIndex: i })).filter(b => b.type === 'heading')
+  const newHeadings = newBlocks.map((b, i) => ({ ...b, originalIndex: i })).filter(b => b.type === 'heading')
+
+  const oldKeys = oldHeadings.map(b => `${b.depth}:${b.textHash}`)
+  const newKeys = newHeadings.map(b => `${b.depth}:${b.textHash}`)
+
+  const matches = collectLcsMatches(oldKeys, newKeys)
+  return matches.map(m => ({
+    oldIndex: oldHeadings[m.oldIndex].originalIndex,
+    newIndex: newHeadings[m.newIndex].originalIndex
+  }))
+}
+
+function alignSegment(oldSegment, newSegment, oldOffset) {
+  const mapNewToOld = new Array(newSegment.length).fill(-1)
+  const oldMatched = new Set()
+
+  const oldKeys = oldSegment.map(buildBlockKey)
+  const newKeys = newSegment.map(buildBlockKey)
+  const lcsMatches = collectLcsMatches(oldKeys, newKeys)
+
+  for (const match of lcsMatches) {
+    mapNewToOld[match.newIndex] = match.oldIndex + oldOffset
+    oldMatched.add(match.oldIndex)
+  }
+
+  const unmatchedOldByKey = new Map()
+  for (let i = 0; i < oldSegment.length; i++) {
+    if (oldMatched.has(i)) continue
+    const key = oldKeys[i]
+    if (!unmatchedOldByKey.has(key)) unmatchedOldByKey.set(key, [])
+    unmatchedOldByKey.get(key).push(i)
+  }
+
+  for (let i = 0; i < newSegment.length; i++) {
+    if (mapNewToOld[i] !== -1) continue
+    const key = newKeys[i]
+    const candidates = unmatchedOldByKey.get(key)
+    
+    // Try to match by key (content hash) first
+    if (candidates && candidates.length > 0) {
+      let bestIdx = -1
+      let bestScore = -1
+      for (const oldIdx of candidates) {
+        const score = scoreBlockCandidate(newSegment[i], oldSegment[oldIdx])
+        if (score > bestScore) {
+          bestScore = score
+          bestIdx = oldIdx
+        }
+      }
+      if (bestIdx !== -1) {
+        mapNewToOld[i] = bestIdx + oldOffset
+        oldMatched.add(bestIdx)
+        continue
+      }
+    }
+    
+    // Fallback: Semantic/Structural matching for modified blocks
+    const relPos = i / newSegment.length
+    const targetOldIdx = Math.floor(relPos * oldSegment.length)
+    const searchRange = Math.max(5, Math.floor(oldSegment.length * 0.2))
+    
+    let bestSoftIdx = -1
+    let bestSoftScore = 0
+    let bestContext = -1
+    
+    for (let offset = -searchRange; offset <= searchRange; offset++) {
+        const checkIdx = targetOldIdx + offset
+        if (checkIdx < 0 || checkIdx >= oldSegment.length) continue
+        if (oldMatched.has(checkIdx)) continue
+        
+        const oldB = oldSegment[checkIdx]
+        const newB = newSegment[i]
+        
+        if (oldB.type !== newB.type) continue
+        
+        const sim = calculateTextSimilarity(oldB.textContent, newB.textContent)
+        const overlap = sentenceOverlapScore(oldB.textContent, newB.textContent)
+        const score = Math.max(sim, overlap)
+        const contextScore = scoreBlockCandidate(newB, oldB)
+
+        if (score > 0.4 && (score > bestSoftScore || (score === bestSoftScore && contextScore > bestContext))) {
+             bestSoftScore = score
+             bestContext = contextScore
+             bestSoftIdx = checkIdx
+        }
+    }
+    
+    if (bestSoftIdx !== -1 && bestSoftScore >= BLOCK_MODIFY_SIM_THRESHOLD) {
+         mapNewToOld[i] = bestSoftIdx + oldOffset
+         oldMatched.add(bestSoftIdx)
+    }
+  }
+
+  return mapNewToOld
+}
+
+function matchBlocks(oldBlocks, newBlocks) {
+  const mapNewToOld = new Array(newBlocks.length).fill(-1)
+  const matchType = new Array(newBlocks.length).fill('none')
+
+  // 1. Hard Anchors: Headings
+  const anchors = findHeadingAnchors(oldBlocks, newBlocks)
+
+  const fullAnchors = [
+    { oldIndex: -1, newIndex: -1 },
+    ...anchors,
+    { oldIndex: oldBlocks.length, newIndex: newBlocks.length }
+  ]
+
+  for (let i = 0; i < fullAnchors.length - 1; i++) {
+    const startAnchor = fullAnchors[i]
+    const endAnchor = fullAnchors[i+1]
+
+    const oldSegmentStart = startAnchor.oldIndex + 1
+    const oldSegmentEnd = endAnchor.oldIndex
+    const newSegmentStart = startAnchor.newIndex + 1
+    const newSegmentEnd = endAnchor.newIndex
+
+    if (newSegmentStart >= newSegmentEnd) continue 
+
+    const oldSegment = oldBlocks.slice(oldSegmentStart, oldSegmentEnd)
+    const newSegment = newBlocks.slice(newSegmentStart, newSegmentEnd)
+
+    // 2. Segmented Alignment
+    const segmentMap = alignSegment(oldSegment, newSegment, oldSegmentStart)
+
+    for (let j = 0; j < newSegment.length; j++) {
+      const globalNewIdx = newSegmentStart + j
+      const globalOldIdx = segmentMap[j]
+      
+      if (globalOldIdx !== -1) {
+        mapNewToOld[globalNewIdx] = globalOldIdx
+        if (oldBlocks[globalOldIdx].hash === newBlocks[globalNewIdx].hash) {
+          matchType[globalNewIdx] = 'exact'
+        } else {
+          matchType[globalNewIdx] = 'modified'
+        }
+      }
+    }
+  }
+  
+  // Map anchors
+  for (const anchor of anchors) {
+     mapNewToOld[anchor.newIndex] = anchor.oldIndex
+     matchType[anchor.newIndex] = 'exact'
+  }
+
+  return { mapNewToOld, matchType }
+}
+
+function mapOldCnToOldEn(oldCnBlocks, oldEnBlocks) {
+  const map = new Array(oldCnBlocks.length).fill(-1)
+  if (!oldEnBlocks || oldEnBlocks.length === 0) return map
+
+  const oldEnByPath = new Map()
+  for (let i = 0; i < oldEnBlocks.length; i++) {
+    oldEnByPath.set(oldEnBlocks[i].path, i)
+  }
+  for (let i = 0; i < oldCnBlocks.length; i++) {
+    const byPath = oldEnByPath.get(oldCnBlocks[i].path)
+    if (byPath != null) map[i] = byPath
+  }
+
+  const remainingCn = []
+  const remainingEn = []
+  for (let i = 0; i < oldCnBlocks.length; i++) {
+    if (map[i] === -1) remainingCn.push(i)
+  }
+  const usedEn = new Set(map.filter(idx => idx !== -1))
+  for (let i = 0; i < oldEnBlocks.length; i++) {
+    if (!usedEn.has(i)) remainingEn.push(i)
+  }
+
+  if (remainingCn.length > 0 && remainingEn.length > 0) {
+    const cnTypes = remainingCn.map(i => oldCnBlocks[i].type)
+    const enTypes = remainingEn.map(i => oldEnBlocks[i].type)
+    const matches = collectLcsMatches(cnTypes, enTypes)
+    for (const match of matches) {
+      const cnIdx = remainingCn[match.oldIndex]
+      const enIdx = remainingEn[match.newIndex]
+      if (map[cnIdx] === -1) map[cnIdx] = enIdx
+    }
+  }
+
+  return map
+}
+
 
 // --- YAML Logic (Settings.yml) ---
 
@@ -467,29 +605,6 @@ function processYamlNode(node, map, collector, basePath = '') {
   }
 }
 
-// --- Translation Service ---
-
-function loadTranslationCache() {
-  try {
-    if (!fs.existsSync(translationCachePath)) return {}
-    return JSON.parse(fs.readFileSync(translationCachePath, 'utf-8'))
-  } catch {
-    return {}
-  }
-}
-
-function saveTranslationCache(cache) {
-  try {
-    fs.writeFileSync(translationCachePath, JSON.stringify(cache, null, 2), 'utf-8')
-  } catch (e) {
-    console.warn('⚠️ Failed to write translation cache:', e.message)
-  }
-}
-
-function getCacheKey(lang, text) {
-  return `${lang}:${getHash(text)}`
-}
-
 function filterTranslatable(text) {
   if (!text) return false
   if (!text.trim()) return false
@@ -515,8 +630,17 @@ const EN_ABBREVIATIONS = new Set([
 
 function isSentenceBoundary(text, index) {
   const ch = text[index]
-  if (ch === '。' || ch === '!' || ch === '?' || ch === ';') return true
-  if (ch === '!' || ch === '?' || ch === ';') return true
+  if (ch === '。' || ch === '!' || ch === '?' || ch === ';' || ch === '！' || ch === '？' || ch === '；') return true
+  if (ch === '：') return true // Chinese colon
+
+  if (ch === ':') {
+    // English colon: avoid splitting URLs (http://) or time (12:30)
+    const next = text[index + 1]
+    if (next === '/') return false
+    if (/\d/.test(next)) return false
+    return true
+  }
+
   if (ch !== '.') return false
   if (text[index - 1] === '.') return false
 
@@ -537,9 +661,12 @@ function isSentenceBoundary(text, index) {
   return false
 }
 
+const sentenceCache = new Map()
+
 function splitIntoSentences(text) {
+  if (!text) return []
+  if (sentenceCache.has(text)) return sentenceCache.get(text)
   const segments = []
-  if (!text) return segments
   let start = 0
   for (let i = 0; i < text.length; i++) {
     if (isSentenceBoundary(text, i)) {
@@ -551,7 +678,181 @@ function splitIntoSentences(text) {
   if (start < text.length) {
     segments.push(buildSegment(text, start, text.length))
   }
+  sentenceCache.set(text, segments)
   return segments
+}
+
+function splitForIsolation(text) {
+  const segs = splitIntoSentences(text)
+  if (segs.length !== 1) return segs
+  const raw = segs[0].text
+  let colonIdx = raw.indexOf('：')
+  if (colonIdx === -1) colonIdx = raw.indexOf(':')
+  if (colonIdx <= 0 || colonIdx >= raw.length - 1) return segs
+  const leftCore = raw.slice(0, colonIdx).trim()
+  const rightCore = raw.slice(colonIdx + 1).trim()
+  if (!leftCore || !rightCore) return segs
+  if (leftCore.length > 60) return segs
+  const first = buildSegment(raw, 0, colonIdx + 1)
+  const second = buildSegment(raw, colonIdx + 1, raw.length)
+  return [first, second]
+}
+
+function lockUnchangedSentences(oldCn, newCn, oldEn, editedEn) {
+  if (!oldCn || !newCn || !oldEn || !editedEn) return editedEn
+
+  const oldCnSegs = splitIntoSentences(oldCn)
+  const newCnSegs = splitIntoSentences(newCn)
+  const oldEnSegs = splitIntoSentences(oldEn)
+  const editedEnSegs = splitIntoSentences(editedEn)
+
+  console.log('    🔒 Locking check:')
+  console.log(`      Old CN Segs: ${oldCnSegs.length}, New CN Segs: ${newCnSegs.length}`)
+  console.log(`      Old EN Segs: ${oldEnSegs.length}, Edited EN Segs: ${editedEnSegs.length}`)
+
+  if (oldCnSegs.length === 0 || newCnSegs.length === 0) return editedEn
+  if (oldEnSegs.length === 0 || editedEnSegs.length === 0) return editedEn
+
+  const maxLead = Math.min(oldCnSegs.length, newCnSegs.length)
+  let lead = 0
+  for (; lead < maxLead; lead++) {
+    const s1 = normalizeSegment(oldCnSegs[lead].core)
+    const s2 = normalizeSegment(newCnSegs[lead].core)
+    if (s1 !== s2) {
+      console.log(`      Lead mismatch at ${lead}:`)
+      console.log(`        Old: "${s1}"`)
+      console.log(`        New: "${s2}"`)
+      break
+    }
+    lead++
+  }
+  console.log(`      Lead count: ${lead}`)
+
+  const maxTail = Math.min(oldCnSegs.length, newCnSegs.length) - lead
+  let tail = 0
+  for (; tail < maxTail; tail++) {
+    const oldIdx = oldCnSegs.length - 1 - tail
+    const newIdx = newCnSegs.length - 1 - tail
+    if (oldIdx < lead || newIdx < lead) break
+    const s1 = normalizeSegment(oldCnSegs[oldIdx].core)
+    const s2 = normalizeSegment(newCnSegs[newIdx].core)
+    if (s1 !== s2) {
+      console.log(`      Tail mismatch at tail-index ${tail}:`)
+      console.log(`        Old: "${s1}"`)
+      console.log(`        New: "${s2}"`)
+      break
+    }
+    tail++
+  }
+  console.log(`      Tail count: ${tail}`)
+
+  if (lead === 0 && tail === 0) return editedEn
+
+  const maxReplace = Math.min(oldEnSegs.length, editedEnSegs.length)
+  if (lead > maxReplace) {
+    console.log('      ⚠️ Lead exceeds English segments, skipping lock.')
+    return editedEn
+  }
+  if (tail > maxReplace - lead) tail = Math.max(0, maxReplace - lead)
+
+  const nextSegs = editedEnSegs.slice()
+  for (let i = 0; i < lead; i++) {
+    if (!oldEnSegs[i]) break
+    console.log(`      🔒 Locking lead ${i}: "${oldEnSegs[i].text.substring(0, 20)}..."`)
+    nextSegs[i] = oldEnSegs[i]
+  }
+  for (let i = 0; i < tail; i++) {
+    const idx = nextSegs.length - 1 - i
+    const oldIdx = oldEnSegs.length - 1 - i
+    if (idx < 0 || oldIdx < 0) break
+    console.log(`      🔒 Locking tail ${i} (idx ${idx}): "${oldEnSegs[oldIdx].text.substring(0, 20)}..."`)
+    nextSegs[idx] = oldEnSegs[oldIdx]
+  }
+
+  return nextSegs.map(seg => seg.text).join('')
+}
+
+function shouldIsolateSentences(item) {
+  const oldCnCount = splitForIsolation(item.oldCn).length
+  const newCnCount = splitForIsolation(item.newCn).length
+  const oldEnCount = splitForIsolation(item.oldEn).length
+  return oldCnCount > 1 || newCnCount > 1 || oldEnCount > 1
+}
+
+async function editLongTextSentenceIsolated(item, targetLang) {
+  const newSegs = splitForIsolation(item.newCn)
+  if (newSegs.length <= 1) return null
+  const oldCnSegs = splitForIsolation(item.oldCn)
+  const oldEnSegs = splitForIsolation(item.oldEn)
+  const newKeys = newSegs.map(seg => normalizeSegment(seg.core || seg.text))
+  const oldKeys = oldCnSegs.map(seg => normalizeSegment(seg.core || seg.text))
+  const segMap = oldCnSegs.length > 0 ? buildLcsIndexMap(oldKeys, newKeys) : []
+  const usedOld = new Set()
+  const results = new Array(newSegs.length).fill('')
+  const editPayload = []
+  const editIndices = []
+  const translatePayload = []
+  const translateIndices = []
+
+  for (let i = 0; i < newSegs.length; i++) {
+    const seg = newSegs[i]
+    const core = seg.core || seg.text
+    if (!core || !filterTranslatable(core)) {
+      results[i] = seg.text
+      continue
+    }
+    const mapped = segMap?.[i] ?? -1
+    if (mapped !== -1 && oldEnSegs[mapped]) {
+      usedOld.add(mapped)
+      const enCore = oldEnSegs[mapped].core || oldEnSegs[mapped].text
+      results[i] = formatSegmentReplacement(seg, enCore)
+      continue
+    }
+    let bestIdx = -1
+    let bestScore = 0
+    for (let j = 0; j < oldCnSegs.length; j++) {
+      if (usedOld.has(j)) continue
+      const oldCore = oldCnSegs[j].core || oldCnSegs[j].text
+      const score = similarityScore(core, oldCore)
+      if (score > bestScore) {
+        bestScore = score
+        bestIdx = j
+      }
+    }
+    const threshold = getAdaptiveThreshold(core.length)
+    if (bestIdx !== -1 && bestScore >= threshold && oldEnSegs[bestIdx]) {
+      usedOld.add(bestIdx)
+      editPayload.push({
+        oldCn: oldCnSegs[bestIdx].core || oldCnSegs[bestIdx].text,
+        newCn: core,
+        oldEn: oldEnSegs[bestIdx].core || oldEnSegs[bestIdx].text
+      })
+      editIndices.push(i)
+    } else {
+      translatePayload.push(core)
+      translateIndices.push(i)
+    }
+  }
+
+  if (editPayload.length > 0) {
+    const edited = await editTranslateBatchWithFallback(editPayload, targetLang)
+    for (let i = 0; i < edited.length; i++) {
+      const idx = editIndices[i]
+      const seg = newSegs[idx]
+      results[idx] = formatSegmentReplacement(seg, edited[i])
+    }
+  }
+
+  if (translatePayload.length > 0) {
+    const translated = await translateSegmentsWithCache(translatePayload, targetLang)
+    for (let i = 0; i < translated.length; i++) {
+      const idx = translateIndices[i]
+      const seg = newSegs[idx]
+      results[idx] = formatSegmentReplacement(seg, translated[i])
+    }
+  }
+
+  return results.join('')
 }
 
 function buildSegment(text, start, end) {
@@ -566,8 +867,23 @@ function buildSegment(text, start, end) {
   return { start, end, text: raw, core, prefix, suffix }
 }
 
+const normalizeCache = new Map()
+
 function normalizeSegment(text) {
-  return (text || '').replace(/\s+/g, ' ').trim()
+  const raw = text == null ? '' : String(text)
+  if (normalizeCache.has(raw)) return normalizeCache.get(raw)
+  const normalized = raw.replace(/\s+/g, ' ').trim()
+  normalizeCache.set(raw, normalized)
+  return normalized
+}
+
+function normalizeForInsertion(text) {
+  return String(text || '')
+    .replace(/\u00A0/g, ' ')
+    .replace(/[\u2018\u2019]/g, "'")
+    .replace(/[\u201C\u201D]/g, '"')
+    .replace(/\s+/g, ' ')
+    .trim()
 }
 
 function levenshtein(a, b) {
@@ -636,11 +952,177 @@ function formatSegmentReplacement(segment, translatedCore) {
   return `${segment.prefix}${core}${segment.suffix}`
 }
 
+const LABEL_MAP = new Map([
+  ['提示', 'Tip'],
+  ['注意', 'Note'],
+  ['警告', 'Warning'],
+  ['警示', 'Warning'],
+  ['说明', 'Note']
+])
+
+function normalizeLabel(label) {
+  return String(label || '').replace(/[：:]/g, '').trim()
+}
+
+function extractLeadingBoldLabel(text) {
+  const m = String(text || '').match(/^\s*\*\*([^*]+)\*\*/)
+  return m ? m[1].trim() : null
+}
+
+function replaceLeadingBoldLabel(text, label) {
+  const raw = String(text || '')
+  const m = raw.match(/^(\s*)\*\*([^*]+)\*\*/)
+  if (m) {
+    return `${m[1]}**${label}**${raw.slice(m[0].length)}`
+  }
+  return `**${label}** ${raw}`
+}
+
+function enforceLeadingLabel(oldCn, newCn, oldEn, editedEn) {
+  const newLabel = extractLeadingBoldLabel(newCn)
+  if (!newLabel) return editedEn
+  const normNew = normalizeLabel(newLabel)
+  const mapped = LABEL_MAP.get(normNew)
+  if (mapped) return replaceLeadingBoldLabel(editedEn, mapped)
+
+  const oldLabelCn = extractLeadingBoldLabel(oldCn)
+  const oldLabelEn = extractLeadingBoldLabel(oldEn)
+  if (oldLabelCn && normalizeLabel(oldLabelCn) === normNew && oldLabelEn) {
+    return replaceLeadingBoldLabel(editedEn, oldLabelEn)
+  }
+
+  return editedEn
+}
+
+function detectInsertions(oldCn, newCn) {
+  if (!oldCn || !newCn) return null
+  let i = 0
+  const insertions = []
+  let buffer = ''
+  let insertPos = null
+
+  for (let j = 0; j < newCn.length; j++) {
+    const ch = newCn[j]
+    if (i < oldCn.length && ch === oldCn[i]) {
+      if (buffer) {
+        insertions.push({ pos: insertPos ?? i, text: buffer })
+        buffer = ''
+        insertPos = null
+      }
+      i++
+    } else {
+      if (!buffer) insertPos = i
+      buffer += ch
+    }
+  }
+
+  if (buffer) insertions.push({ pos: insertPos ?? i, text: buffer })
+  if (i !== oldCn.length) return null
+  return insertions.length > 0 ? insertions : []
+}
+
+function getInsertions(oldCn, newCn) {
+  const direct = detectInsertions(oldCn, newCn)
+  if (direct) return { insertions: direct, base: oldCn, normalized: false }
+  const normOld = normalizeForInsertion(oldCn)
+  const normNew = normalizeForInsertion(newCn)
+  const normalized = detectInsertions(normOld, normNew)
+  if (normalized) return { insertions: normalized, base: normOld, normalized: true }
+  return { insertions: null, base: oldCn, normalized: false }
+}
+
+function buildInsertionHints(oldCn, insertions, contextLen = 16) {
+  return insertions.map(ins => {
+    const left = oldCn.slice(Math.max(0, ins.pos - contextLen), ins.pos)
+    const right = oldCn.slice(ins.pos, Math.min(oldCn.length, ins.pos + contextLen))
+    return { text: ins.text, left, right, pos: ins.pos }
+  })
+}
+
+function mergeAppendSuffix(oldEn, suffixEn) {
+  let base = String(oldEn || '').replace(/\s+$/, '')
+  const tail = String(suffixEn || '').replace(/^\s+/, '')
+  if (!tail) return base
+  if (!base) return tail
+
+  // Smart punctuation handling:
+  // If base ends with period and tail starts with comma/semicolon, remove period
+  if (base.endsWith('.') && /^[,;]/.test(tail)) {
+    base = base.slice(0, -1)
+  }
+
+  if (/^[,.;:!?]/.test(tail)) return `${base}${tail}`
+  return `${base} ${tail}`
+}
+
+function mergePrependPrefix(oldEn, prefixEn) {
+  const head = String(prefixEn || '').replace(/\s+$/, '')
+  const base = String(oldEn || '').replace(/^\s+/, '')
+  if (!head) return base
+  if (!base) return head
+  if (/[("'\[]$/.test(head)) return `${head}${base}`
+  return `${head} ${base}`
+}
+
+function getTailIndex(text) {
+  const raw = String(text || '')
+  let i = raw.length
+
+  // trim trailing whitespace
+  while (i > 0 && /\s/.test(raw[i - 1])) i--
+
+  // trim trailing html tags like <br>, <br/>, </p>
+  while (i > 0 && raw[i - 1] === '>') {
+    const lt = raw.lastIndexOf('<', i - 1)
+    if (lt === -1) break
+    const tag = raw.slice(lt, i)
+    if (!/^<[^>]+>$/.test(tag)) break
+    i = lt
+    while (i > 0 && /\s/.test(raw[i - 1])) i--
+  }
+
+  // trim trailing punctuation
+  while (i > 0 && /[\s\.\,\!\?\;\:\uFF0C\u3002\uFF01\uFF1F\uFF1B\uFF1A"'\)\]\}]/.test(raw[i - 1])) {
+    i--
+  }
+
+  return i
+}
+
+function isHeadInsertion(insertions) {
+  return insertions.length > 0 && insertions.every(ins => ins.pos === 0)
+}
+
+function isTailInsertion(insertions, oldCn) {
+  if (insertions.length === 0) return false
+  const tailIndex = getTailIndex(oldCn)
+  return insertions.every(ins => ins.pos === tailIndex)
+}
+
+function shouldGuardEditDrift(oldCn, newCn, oldEn, editedEn) {
+  if (!oldEn || !editedEn) return false
+  const cnSim = similarityScore(oldCn || '', newCn || '')
+  const enThreshold = Math.min(0.95, getAdaptiveThreshold(String(oldEn).length) + 0.1)
+  const enSim = similarityScore(oldEn, editedEn)
+
+  const normOldCn = normalizeSegment(oldCn || '')
+  const normNewCn = normalizeSegment(newCn || '')
+  const normOldEn = normalizeSegment(oldEn || '')
+  const normEditedEn = normalizeSegment(editedEn || '')
+
+  const cnLen = Math.max(normOldCn.length, normNewCn.length)
+  const enLen = Math.max(normOldEn.length, normEditedEn.length)
+  const cnChangeRatio = cnLen ? (levenshtein(normOldCn, normNewCn) / cnLen) : 0
+  const enChangeRatio = enLen ? (levenshtein(normOldEn, normEditedEn) / enLen) : 0
+  const enDriftByRatio = cnChangeRatio <= 0.15 && enChangeRatio >= Math.max(0.08, cnChangeRatio * 2.5)
+
+  if (cnSim < 0.85) return enDriftByRatio
+  return enSim < enThreshold || enDriftByRatio
+}
+
 function coerceSingleString(content) {
   if (content == null) return ''
-  let text = String(content).trim()
-  if (text.startsWith('```json')) text = text.replace(/^```json\s*/, '').replace(/\s*```$/, '')
-  if (text.startsWith('```')) text = text.replace(/^```\s*/, '').replace(/\s*```$/, '')
+  let text = cleanJSONString(content)
   const firstChar = text[0]
   if (firstChar === '[' || firstChar === '"' || firstChar === '{') {
     try {
@@ -658,8 +1140,38 @@ function coerceSingleString(content) {
   return text
 }
 
+async function runLLMRequest({
+  label,
+  targetLang,
+  systemPrompt,
+  userContent,
+  parser = coerceSingleString
+}) {
+  if (label) {
+    console.log(`    ⏳ ${label}${targetLang ? ' to ' + targetLang : ''}...`)
+  }
+
+  const content = await callLLM([
+    { role: 'system', content: systemPrompt },
+    { role: 'user', content: userContent }
+  ])
+
+  return parser(content)
+}
+
+async function withRetry(fn, retries = 2) {
+  let lastError = null
+  for (let i = 0; i <= retries; i++) {
+    try {
+      return await fn()
+    } catch (error) {
+      lastError = error
+    }
+  }
+  throw lastError
+}
+
 async function translateSingle(segment, targetLang) {
-  console.log(`    ⏳ Translating 1 segment to ${targetLang}...`)
   const systemPrompt = `You are a professional technical documentation translator.
 Translate the following plain text from Chinese to ${targetLang}.
 
@@ -668,46 +1180,102 @@ Rules:
 2. PRESERVE icon prefixes like "(ri:xxx) " exactly. Only translate the text after it.
 3. Return ONLY the translated text, no JSON, no extra commentary.`
 
-  const userContent = String(segment)
-
-  const response = await fetch(`${OPENAI_API_BASE}/chat/completions`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${OPENAI_API_KEY}`
-    },
-    body: JSON.stringify({
-      model: MODEL,
-      messages: [
-        { role: 'system', content: systemPrompt },
-        { role: 'user', content: userContent }
-      ],
-      temperature: 0.1
-    })
+  return runLLMRequest({
+    label: 'Translating 1 segment',
+    targetLang,
+    systemPrompt,
+    userContent: String(segment)
   })
+}
 
-  if (!response.ok) {
-    throw new Error(`API Error: ${response.status} ${response.statusText}`)
-  }
+async function translateInsertFragmentSingle(segment, targetLang) {
+  const systemPrompt = `You are a professional technical documentation translator.
+Translate the following Chinese fragment so it can be inserted into an English sentence.
 
-  const data = await response.json()
-  return coerceSingleString(data.choices[0].message.content)
+Rules:
+1. Preserve leading/trailing punctuation or conjunctions if present (e.g. ", and ...").
+2. Do NOT add or remove formatting. Input is plain text.
+3. Return ONLY the translated fragment, no JSON, no extra commentary.`
+
+  return runLLMRequest({
+    label: 'Translating 1 fragment',
+    targetLang,
+    systemPrompt,
+    userContent: String(segment)
+  })
 }
 
 async function translateSingleWithRetry(segment, targetLang, retries = 2) {
-  let lastError = null
-  for (let i = 0; i <= retries; i++) {
-    try {
-      return await translateSingle(segment, targetLang)
-    } catch (error) {
-      lastError = error
-    }
+  return withRetry(() => translateSingle(segment, targetLang), retries)
+}
+
+async function checkSemanticChange(oldText, newText) {
+  if (!oldText || !newText) return true
+  
+  console.log('    🔍 Checking semantic change...')
+  const systemPrompt = `You are a translation quality assurance expert.
+Compare the Old and New Chinese text segments below.
+Determine if the difference between them is significant enough to require updating the English translation.
+Ignore minor formatting changes, whitespace, or capitalization if they don't affect the meaning.
+Ignore style changes that don't alter the core information.
+
+Return JSON: { "requiresUpdate": boolean, "reason": "short explanation" }`
+
+  const userContent = JSON.stringify({
+    old: oldText,
+    new: newText
+  })
+
+  try {
+    const content = await callLLM([
+      { role: 'system', content: systemPrompt },
+      { role: 'user', content: userContent }
+    ])
+    
+    const result = safeParseJSON(content)
+    return result.requiresUpdate === true
+  } catch (e) {
+    console.warn('    ⚠️ Semantic check failed, defaulting to update:', e.message)
+    return true
   }
-  throw lastError
+}
+
+async function translateInsertFragmentWithCache(segment, targetLang) {
+  return await translateInsertFragmentSingle(segment, targetLang)
+}
+
+async function editTranslateInsertionsSingle(item, targetLang) {
+  const systemPrompt = `You are a professional technical documentation translator and editor.
+You will receive a JSON object: {oldCn, newCn, oldEn, insertions}.
+newCn equals oldCn with extra fragments inserted.
+
+Task:
+Update oldEn by inserting the English translations of the inserted fragments ONLY.
+
+Rules:
+1. Do NOT rewrite or paraphrase oldEn. Keep it unchanged except for insertions.
+2. Use the provided left/right Chinese context in insertions to decide where to insert.
+3. Do NOT add or remove formatting. Input segments are plain text.
+4. Return ONLY the updated English text, no JSON, no extra commentary.`
+
+  return runLLMRequest({
+    label: 'Editing 1 segment (insertions)',
+    targetLang,
+    systemPrompt,
+    userContent: JSON.stringify({
+      oldCn: item.oldCn,
+      newCn: item.newCn,
+      oldEn: item.oldEn,
+      insertions: item.insertions
+    })
+  })
+}
+
+async function editTranslateInsertionsSingleWithRetry(item, targetLang, retries = 2) {
+  return withRetry(() => editTranslateInsertionsSingle(item, targetLang), retries)
 }
 
 async function editTranslateSingle(item, targetLang) {
-  console.log(`    ⏳ Editing 1 segment to ${targetLang}...`)
   const systemPrompt = `You are a professional technical documentation translator and editor.
 You will receive a JSON object: {oldCn, newCn, oldEn}.
 Your task is to update the English translation for newCn by making minimal edits to oldEn.
@@ -715,57 +1283,48 @@ Your task is to update the English translation for newCn by making minimal edits
 Rules:
 1. Keep terminology, tone, and structure from oldEn whenever possible.
 2. Only change parts needed to reflect the difference between oldCn and newCn.
-3. Do NOT add or remove formatting. Input segments are plain text.
-4. PRESERVE icon prefixes like "(ri:xxx) " exactly. Only edit the text after it.
-5. Return ONLY the updated English text, no JSON, no extra commentary.`
+3. Think like a careful human editor: keep the original wording unless it is clearly incorrect or missing new information.
+4. Avoid stylistic rewrites, synonym swaps, or casing changes if the meaning is already correct.
+5. Preserve Markdown/HTML formatting exactly (e.g. **bold**, links, inline code, <br>).
+6. Do NOT add or remove formatting tokens. Only edit the text content.
+7. PRESERVE icon prefixes like "(ri:xxx) " exactly. Only edit the text after it.
+8. Return ONLY the updated English text, no JSON, no extra commentary.`
 
-  const userContent = JSON.stringify({
-    oldCn: item.oldCn,
-    newCn: item.newCn,
-    oldEn: item.oldEn
-  })
-
-  const response = await fetch(`${OPENAI_API_BASE}/chat/completions`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${OPENAI_API_KEY}`
-    },
-    body: JSON.stringify({
-      model: MODEL,
-      messages: [
-        { role: 'system', content: systemPrompt },
-        { role: 'user', content: userContent }
-      ],
-      temperature: 0.1
+  return runLLMRequest({
+    label: 'Editing 1 segment',
+    targetLang,
+    systemPrompt,
+    userContent: JSON.stringify({
+      oldCn: item.oldCn,
+      newCn: item.newCn,
+      oldEn: item.oldEn
     })
   })
-
-  if (!response.ok) {
-    throw new Error(`API Error: ${response.status} ${response.statusText}`)
-  }
-
-  const data = await response.json()
-  return coerceSingleString(data.choices[0].message.content)
 }
 
 async function editTranslateSingleWithRetry(item, targetLang, retries = 2) {
-  let lastError = null
-  for (let i = 0; i <= retries; i++) {
-    try {
-      return await editTranslateSingle(item, targetLang)
-    } catch (error) {
-      lastError = error
+  return withRetry(() => editTranslateSingle(item, targetLang), retries)
+}
+
+async function processBatch(items, targetLang, systemPrompt, label) {
+  if (items.length === 0) return []
+  
+  return runLLMRequest({
+    label: `${label} ${items.length} segments`,
+    targetLang,
+    systemPrompt,
+    userContent: JSON.stringify(items),
+    parser: (content) => {
+      const parsed = safeParseJSON(content)
+      if (!Array.isArray(parsed) || parsed.length !== items.length) {
+        throw new Error('API returned mismatched array length')
+      }
+      return parsed
     }
-  }
-  throw lastError
+  })
 }
 
 async function translateBatch(segments, targetLang) {
-  if (segments.length === 0) return []
-
-  console.log(`    ⏳ Translating ${segments.length} segments to ${targetLang}...`)
-
   const systemPrompt = `You are a professional technical documentation translator.
   Translate the following plain text segments from Chinese to ${targetLang}.
 
@@ -775,42 +1334,7 @@ async function translateBatch(segments, targetLang) {
   3. Return the result as a JSON array of strings, strictly matching the order of input.
   4. The output must be valid JSON. Raw JSON string only.`
 
-  const userContent = JSON.stringify(segments)
-
-  try {
-    const response = await fetch(`${OPENAI_API_BASE}/chat/completions`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${OPENAI_API_KEY}`
-      },
-      body: JSON.stringify({
-        model: MODEL,
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: userContent }
-        ],
-        temperature: 0.1
-      })
-    })
-
-    if (!response.ok) {
-      throw new Error(`API Error: ${response.status} ${response.statusText}`)
-    }
-
-    const data = await response.json()
-    let content = data.choices[0].message.content.trim()
-    if (content.startsWith('```json')) content = content.replace(/^```json\s*/, '').replace(/\s*```$/, '')
-    if (content.startsWith('```')) content = content.replace(/^```\s*/, '').replace(/\s*```$/, '')
-
-    const parsed = JSON.parse(content)
-    if (!Array.isArray(parsed) || parsed.length !== segments.length) {
-      throw new Error('API returned mismatched array length')
-    }
-    return parsed
-  } catch (error) {
-    throw error
-  }
+  return processBatch(segments, targetLang, systemPrompt, 'Translating')
 }
 
 function shouldSplitBatch(error) {
@@ -822,168 +1346,265 @@ function shouldSplitBatch(error) {
   return false
 }
 
-async function translateBatchWithFallback(segments, targetLang) {
+async function batchWithFallback(items, targetLang, batchFn, singleFn, errorLabel, warnLabel) {
+  if (items.length === 0) return []
   try {
-    return await translateBatch(segments, targetLang)
+    return await batchFn(items, targetLang)
   } catch (error) {
-    if (segments.length <= 1) {
-      const single = await translateSingleWithRetry(segments[0], targetLang)
+    if (items.length <= 1) {
+      const single = await singleFn(items[0], targetLang)
       return [single]
     }
     if (!shouldSplitBatch(error)) {
-      console.error('    ❌ Translation failed:', error.message)
+      console.error(`    ❌ ${errorLabel} failed:`, error.message)
       throw error
     }
-    const mid = Math.ceil(segments.length / 2)
-    console.warn(`    ⚠️ Batch failed, splitting into ${mid} + ${segments.length - mid}`)
-    const left = await translateBatchWithFallback(segments.slice(0, mid), targetLang)
-    const right = await translateBatchWithFallback(segments.slice(mid), targetLang)
+    const mid = Math.ceil(items.length / 2)
+    console.warn(`    ⚠️ ${warnLabel} failed, splitting into ${mid} + ${items.length - mid}`)
+    const left = await batchWithFallback(items.slice(0, mid), targetLang, batchFn, singleFn, errorLabel, warnLabel)
+    const right = await batchWithFallback(items.slice(mid), targetLang, batchFn, singleFn, errorLabel, warnLabel)
     return left.concat(right)
   }
 }
 
+async function translateBatchWithFallback(segments, targetLang) {
+  return batchWithFallback(
+    segments,
+    targetLang,
+    translateBatch,
+    translateSingleWithRetry,
+    'Translation',
+    'Batch'
+  )
+}
+
 async function editTranslateBatch(pairs, targetLang) {
-  if (pairs.length === 0) return []
-
-  console.log(`    ⏳ Editing ${pairs.length} segments to ${targetLang}...`)
-
   const systemPrompt = `You are a professional technical documentation translator and editor.
 You will receive a JSON array of objects: {oldCn, newCn, oldEn}.
 Your task is to update the English translation for newCn by making minimal edits to oldEn.
 
 Rules:
-1. Keep terminology, tone, and structure from oldEn whenever possible.
-2. Only change parts needed to reflect the difference between oldCn and newCn.
-3. Do NOT add or remove formatting. Input segments are plain text.
-4. PRESERVE icon prefixes like "(ri:xxx) " exactly. Only edit the text after it.
-5. Return a JSON array of strings, strictly matching the input order.
-6. The output must be valid JSON. Raw JSON string only.`
+1. STRICTLY PRESERVE the original English sentence structure and vocabulary.
+2. ONLY translate the *specific parts* that changed in the Chinese source (oldCn vs newCn).
+3. DO NOT "improve", "polish", or "rewrite" the English text if the meaning hasn't changed.
+4. If a word was translated as "provides", KEEP "provides". DO NOT change it to "offers" or "gives".
+5. Preserve Markdown/HTML formatting exactly (e.g. **bold**, links, inline code, <br>).
+6. Do NOT add or remove formatting tokens. Only edit the text content.
+7. PRESERVE icon prefixes like "(ri:xxx) " exactly. Only edit the text after it.
+8. Return a JSON array of strings, strictly matching the input order.
+9. The output must be valid JSON. Raw JSON string only.`
 
-  const userContent = JSON.stringify(pairs)
-
-  try {
-    const response = await fetch(`${OPENAI_API_BASE}/chat/completions`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${OPENAI_API_KEY}`
-      },
-      body: JSON.stringify({
-        model: MODEL,
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: userContent }
-        ],
-        temperature: 0.1
-      })
-    })
-
-    if (!response.ok) {
-      throw new Error(`API Error: ${response.status} ${response.statusText}`)
-    }
-
-    const data = await response.json()
-    let content = data.choices[0].message.content.trim()
-    if (content.startsWith('```json')) content = content.replace(/^```json\s*/, '').replace(/\s*```$/, '')
-    if (content.startsWith('```')) content = content.replace(/^```\s*/, '').replace(/\s*```$/, '')
-
-    const parsed = JSON.parse(content)
-    if (!Array.isArray(parsed) || parsed.length !== pairs.length) {
-      throw new Error('API returned mismatched array length')
-    }
-    return parsed
-  } catch (error) {
-    throw error
-  }
+  return processBatch(pairs, targetLang, systemPrompt, 'Editing')
 }
 
 async function editTranslateBatchWithFallback(pairs, targetLang) {
-  try {
-    return await editTranslateBatch(pairs, targetLang)
-  } catch (error) {
-    if (pairs.length <= 1) {
-      const single = await editTranslateSingleWithRetry(pairs[0], targetLang)
-      return [single]
-    }
-    if (!shouldSplitBatch(error)) {
-      console.error('    ❌ Edit translation failed:', error.message)
-      throw error
-    }
-    const mid = Math.ceil(pairs.length / 2)
-    console.warn(`    ⚠️ Edit batch failed, splitting into ${mid} + ${pairs.length - mid}`)
-    const left = await editTranslateBatchWithFallback(pairs.slice(0, mid), targetLang)
-    const right = await editTranslateBatchWithFallback(pairs.slice(mid), targetLang)
-    return left.concat(right)
-  }
+  return batchWithFallback(
+    pairs,
+    targetLang,
+    editTranslateBatch,
+    editTranslateSingleWithRetry,
+    'Edit translation',
+    'Edit batch'
+  )
 }
 
-async function translateSegmentsWithCache(segments, targetLang, cache) {
+async function editTranslateInsertionsBatch(items, targetLang) {
+  const systemPrompt = `You are a professional technical documentation translator and editor.
+You will receive a JSON array of objects: {oldCn, newCn, oldEn, insertions}.
+newCn equals oldCn with extra fragments inserted.
+
+Task:
+Update oldEn by inserting the English translations of the inserted fragments ONLY.
+
+Rules:
+1. Do NOT rewrite or paraphrase oldEn. Keep it unchanged except for insertions.
+2. Use the provided left/right Chinese context in insertions to decide where to insert.
+3. Do NOT add or remove formatting. Input segments are plain text.
+4. Return a JSON array of strings, strictly matching the input order.
+5. The output must be valid JSON. Raw JSON string only.`
+
+  return processBatch(items, targetLang, systemPrompt, 'Editing (insertions)')
+}
+
+async function editTranslateInsertionsBatchWithFallback(items, targetLang) {
+  return batchWithFallback(
+    items,
+    targetLang,
+    editTranslateInsertionsBatch,
+    editTranslateInsertionsSingleWithRetry,
+    'Insertion edit batch',
+    'Insertion edit batch'
+  )
+}
+
+async function translateSegmentsWithCache(segments, targetLang) {
   if (segments.length === 0) return []
   const results = new Array(segments.length).fill('')
-  const missing = []
-  const missingIndices = []
-
-  for (let i = 0; i < segments.length; i++) {
-    const text = segments[i]
-    const key = getCacheKey(targetLang, text)
-    if (cache[key] && cache[key].text === text) {
-      results[i] = cache[key].trans
-    } else {
-      missing.push(text)
-      missingIndices.push(i)
-    }
+  for (let i = 0; i < segments.length; i += TRANSLATE_BATCH_SIZE) {
+    const chunk = segments.slice(i, i + TRANSLATE_BATCH_SIZE)
+    const translated = await translateBatchWithFallback(chunk, targetLang)
+    translated.forEach((trans, idx) => {
+      results[i + idx] = trans
+    })
   }
-
-  if (missing.length > 0) {
-    for (let i = 0; i < missing.length; i += TRANSLATE_BATCH_SIZE) {
-      const chunk = missing.slice(i, i + TRANSLATE_BATCH_SIZE)
-      const translated = await translateBatchWithFallback(chunk, targetLang)
-      translated.forEach((trans, idx) => {
-        const original = chunk[idx]
-        const missingIndex = missingIndices[i + idx]
-        const key = getCacheKey(targetLang, original)
-        cache[key] = { text: original, trans }
-        results[missingIndex] = trans
-      })
-    }
-  }
-
   return results
 }
 
-async function editSegmentsWithCache(items, targetLang, cache) {
+async function editSegmentsWithCache(items, targetLang) {
   if (items.length === 0) return []
   const results = new Array(items.length).fill('')
-  const missing = []
-  const missingIndices = []
+
+  // 1. 优先处理简单的插入/追加操作 (Deterministic Insertion First)
+  const pendingEdits = []
+  const pendingIndices = []
+  const pendingInsertions = []
+  const pendingInsertionsIndices = []
 
   for (let i = 0; i < items.length; i++) {
     const item = items[i]
-    const key = getCacheKey(targetLang, item.newCn)
-    if (cache[key] && cache[key].text === item.newCn) {
-      results[i] = cache[key].trans
-    } else {
-      missing.push(item)
-      missingIndices.push(i)
+    let handled = false
+
+    if (shouldIsolateSentences(item)) {
+      const isolated = await editLongTextSentenceIsolated(item, targetLang)
+      if (isolated != null) {
+        results[i] = isolated
+        handled = true
+      }
+    }
+    if (handled) continue
+
+    // 尝试检测插入
+    const insertionInfo = getInsertions(item.oldCn, item.newCn)
+    const insertions = insertionInfo.insertions || []
+
+    if (insertions.length > 0) {
+      const baseText = insertionInfo.base || item.oldCn
+      const onlyHead = isHeadInsertion(insertions)
+      const onlyTail = isTailInsertion(insertions, baseText)
+
+      // 仅处理纯粹的头部或尾部插入
+      if (onlyHead || onlyTail) {
+        const fragment = insertions.map(ins => ins.text).join('')
+        if (fragment && fragment.trim()) {
+          try {
+            const fragEn = await translateInsertFragmentWithCache(fragment, targetLang)
+            let trans = onlyHead
+              ? mergePrependPrefix(item.oldEn, fragEn)
+              : mergeAppendSuffix(item.oldEn, fragEn)
+
+            trans = enforceLeadingLabel(item.oldCn, item.newCn, item.oldEn, trans)
+            results[i] = trans
+            handled = true
+          } catch (e) {
+            console.warn(`    ⚠️ Fragment translation failed for item ${i}, falling back to full edit:`, e.message)
+          }
+        }
+      } else {
+        // 如果不是纯粹的头部或尾部插入，但确实是插入（例如中间插入），
+        // 我们将其加入到 pendingInsertions 中，使用更严格的 editTranslateInsertionsBatch
+        // 这样可以避免使用 editTranslateBatch 导致的重写风险
+        const hints = buildInsertionHints(item.oldCn, insertions)
+        pendingInsertions.push({
+          oldCn: item.oldCn,
+          newCn: item.newCn,
+          oldEn: item.oldEn,
+          insertions: hints
+        })
+        pendingInsertionsIndices.push(i)
+        handled = true
+      }
+    }
+
+    if (!handled) {
+      pendingEdits.push(item)
+      pendingIndices.push(i)
     }
   }
 
-  if (missing.length > 0) {
-    for (let i = 0; i < missing.length; i += TRANSLATE_BATCH_SIZE) {
-      const chunk = missing.slice(i, i + TRANSLATE_BATCH_SIZE)
+  // 2. 处理中间插入 (Strict Insertion Batch)
+  if (pendingInsertions.length > 0) {
+    for (let i = 0; i < pendingInsertions.length; i += TRANSLATE_BATCH_SIZE) {
+      const chunk = pendingInsertions.slice(i, i + TRANSLATE_BATCH_SIZE)
+      const chunkIndices = pendingInsertionsIndices.slice(i, i + TRANSLATE_BATCH_SIZE)
+
+      try {
+        const edited = await editTranslateInsertionsBatchWithFallback(chunk, targetLang)
+        for (let idx = 0; idx < edited.length; idx++) {
+          const trans = edited[idx]
+          const original = chunk[idx]
+          const locked = lockUnchangedSentences(original.oldCn, original.newCn, original.oldEn, trans)
+          const finalTrans = enforceLeadingLabel(original.oldCn, original.newCn, original.oldEn, locked)
+          results[chunkIndices[idx]] = finalTrans
+        }
+      } catch (e) {
+        console.error('    ❌ Insertion batch edit failed:', e)
+        // 回退到普通 edit batch
+        for (let idx = 0; idx < chunk.length; idx++) {
+          pendingEdits.push(chunk[idx])
+          pendingIndices.push(chunkIndices[idx])
+        }
+      }
+    }
+  }
+
+  // 3. 剩余的进行批量 Edit Translation
+    if (pendingEdits.length > 0) {
+      for (let i = 0; i < pendingEdits.length; i += TRANSLATE_BATCH_SIZE) {
+      const chunk = pendingEdits.slice(i, i + TRANSLATE_BATCH_SIZE)
+      const chunkIndices = pendingIndices.slice(i, i + TRANSLATE_BATCH_SIZE)
+
       const payload = chunk.map(item => ({
         oldCn: item.oldCn,
         newCn: item.newCn,
         oldEn: item.oldEn
       }))
-      const edited = await editTranslateBatchWithFallback(payload, targetLang)
-      edited.forEach((trans, idx) => {
-        const original = chunk[idx]
-        const missingIndex = missingIndices[i + idx]
-        const key = getCacheKey(targetLang, original.newCn)
-        cache[key] = { text: original.newCn, trans }
-        results[missingIndex] = trans
-      })
+
+      try {
+        const edited = await editTranslateBatchWithFallback(payload, targetLang)
+
+        for (let idx = 0; idx < edited.length; idx++) {
+          const original = chunk[idx]
+          const originalIndex = chunkIndices[idx]
+          let trans = edited[idx]
+
+          trans = lockUnchangedSentences(original.oldCn, original.newCn, original.oldEn, trans)
+
+          // 4. 漂移检查 (Drift Guard)
+          if (shouldGuardEditDrift(original.oldCn, original.newCn, original.oldEn, trans)) {
+            const insertionInfo = getInsertions(original.oldCn, original.newCn)
+            const insertions = insertionInfo.insertions || []
+
+            // 如果之前没能作为简单插入处理，这里尝试处理复杂插入
+            if (insertions.length > 0) {
+              try {
+                const hints = buildInsertionHints(original.oldCn, insertions)
+                trans = await editTranslateInsertionsSingleWithRetry({
+                  oldCn: original.oldCn,
+                  newCn: original.newCn,
+                  oldEn: original.oldEn,
+                  insertions: hints
+                }, targetLang)
+                trans = lockUnchangedSentences(original.oldCn, original.newCn, original.oldEn, trans)
+              } catch (e) {
+                console.warn('    ⚠️ Insertion edit failed, keeping oldEn to avoid drift:', e.message)
+                trans = original.oldEn
+              }
+            } else {
+              console.warn('    ⚠️ Edit drift detected, keeping oldEn to avoid large rewrite.')
+              trans = original.oldEn
+            }
+          }
+
+          trans = enforceLeadingLabel(original.oldCn, original.newCn, original.oldEn, trans)
+          results[originalIndex] = trans
+        }
+      } catch (e) {
+        console.error('    ❌ Batch edit failed:', e)
+        // 保持原样作为最后防线
+        for (let idx = 0; idx < chunk.length; idx++) {
+          results[chunkIndices[idx]] = chunk[idx].oldEn
+        }
+      }
     }
   }
 
@@ -992,12 +1613,26 @@ async function editSegmentsWithCache(items, targetLang, cache) {
 
 function collectTextNodes(tree, raw) {
   const nodes = []
-  const skipParents = new Set(['code', 'inlineCode', 'yaml', 'html'])
+  // Treat these blocks as atomic translation units (preserving inline formatting)
+  const atomicBlocks = new Set(['paragraph', 'heading', 'tableCell'])
+  // Skip these blocks entirely
+  const skipBlocks = new Set(['code', 'yaml', 'image'])
 
-  function walk(node, parentTypes) {
-    const nextParents = parentTypes.concat(node.type)
+  function walk(node) {
+    if (skipBlocks.has(node.type)) return
+
+    if (atomicBlocks.has(node.type)) {
+      if (node.position && node.position.start && node.position.end) {
+        const start = node.position.start.offset
+        const end = node.position.end.offset
+        // Slice from raw content to preserve markdown formatting
+        const text = raw.slice(start, end)
+        nodes.push({ start, end, text })
+      }
+      return // Do not traverse children
+    }
+
     if (node.type === 'text') {
-      if (parentTypes.some(t => skipParents.has(t))) return
       if (!node.position || node.position.start.offset == null || node.position.end.offset == null) return
       const start = node.position.start.offset
       const end = node.position.end.offset
@@ -1005,13 +1640,15 @@ function collectTextNodes(tree, raw) {
       nodes.push({ start, end, text })
       return
     }
-    if (!node.children || node.children.length === 0) return
-    for (const child of node.children) {
-      walk(child, nextParents)
+
+    if (node.children) {
+      for (const child of node.children) {
+        walk(child)
+      }
     }
   }
 
-  walk(tree, [])
+  walk(tree)
   return nodes
 }
 
@@ -1021,15 +1658,6 @@ function extractTextFromBlock(rawBlock) {
   return nodes.map(n => n.text).join('\n')
 }
 
-function buildTextFreq(tree, raw) {
-  const freq = new Map()
-  const nodes = collectTextNodes(tree, raw)
-  for (const n of nodes) {
-    const t = n.text
-    freq.set(t, (freq.get(t) || 0) + 1)
-  }
-  return freq
-}
 
 function applyReplacements(raw, replacements) {
   if (replacements.length === 0) return raw
@@ -1041,30 +1669,6 @@ function applyReplacements(raw, replacements) {
   return result
 }
 
-async function translateMarkdownBlock(rawBlock, targetLang, cache) {
-  const tree = processor.parse(rawBlock)
-  const textNodes = collectTextNodes(tree, rawBlock)
-  const segments = []
-  const segmentRefs = []
-
-  for (const node of textNodes) {
-    if (!filterTranslatable(node.text)) continue
-    segments.push(node.text)
-    segmentRefs.push(node)
-  }
-
-  if (segments.length === 0) return rawBlock
-  const translated = await translateSegmentsWithCache(segments, targetLang, cache)
-
-  const replacements = translated.map((text, idx) => ({
-    start: segmentRefs[idx].start,
-    end: segmentRefs[idx].end,
-    text
-  }))
-
-  return applyReplacements(rawBlock, replacements)
-}
-
 /**
  * 改进版：翻译 Markdown blocks
  * 主要改进：
@@ -1072,7 +1676,7 @@ async function translateMarkdownBlock(rawBlock, targetLang, cache) {
  * 2. 避免全局文本映射的顺序问题
  * 3. 更好的编辑检测策略
  */
-async function translateMarkdownBlocks(blocks, indices, targetLang, cache, oldBlocks, oldENBlocks, mapNewToOld, safeTextMap, oldTextFreq, newTextFreq) {
+async function translateMarkdownBlocks(blocks, indices, targetLang, oldBlocks, oldENBlocks, mapNewToOld) {
   const translateTasks = []
   const editTasks = []
   const perBlock = new Map()
@@ -1152,55 +1756,40 @@ async function translateMarkdownBlocks(blocks, indices, targetLang, cache, oldBl
           continue
         }
 
-        // 第二优先级：安全文本映射（改进：使用位置感知的 key）
-        if (safeTextMap && oldTextFreq?.get(core) === 1 && newTextFreq?.get(core) === 1) {
-          // 使用位置感知的 key
-          const contextKey = `${core}|${oldIndex}|${oldNodeIndex}`
-          const mappedText = safeTextMap.get(contextKey)
-          if (mappedText) {
-            blockInfo.replacements.push({
-              start: node.start + seg.start,
-              end: node.start + seg.end,
-              text: formatSegmentReplacement(seg, mappedText)
-            })
-            continue
-          }
-        }
-
         // 第三优先级：编辑翻译（改进：使用动态阈值）
-        if (ENABLE_EDIT_TRANSLATE && oldSegments.length > 0 && oldEnSegments.length > 0) {
-          let bestIdx = -1
-          let bestScore = 0
-          for (let j = 0; j < oldSegments.length; j++) {
-            if (usedOld.has(j)) continue
-            if (!oldEnSegments[j]) continue
-            const oldCore = oldSegments[j].core || oldSegments[j].text
-            const score = similarityScore(core, oldCore)
-            if (score > bestScore) {
-              bestScore = score
-              bestIdx = j
-            }
-          }
-          
-          // 改进：使用动态阈值
-          const threshold = getAdaptiveThreshold(core.length)
-          if (bestIdx !== -1 && bestScore >= threshold) {
-            usedOld.add(bestIdx)
-            editTasks.push({
-              blockIndex: idx,
-              start: node.start + seg.start,
-              end: node.start + seg.end,
-              segment: seg,
-              oldCn: oldSegments[bestIdx].core || oldSegments[bestIdx].text,
-              newCn: core,
-              oldEn: oldEnSegments[bestIdx].core || oldEnSegments[bestIdx].text
-            })
-            continue
+      if (ENABLE_EDIT_TRANSLATE && oldSegments.length > 0 && oldEnSegments.length > 0) {
+        let bestIdx = -1
+        let bestScore = 0
+        for (let j = 0; j < oldSegments.length; j++) {
+          if (usedOld.has(j)) continue
+          if (!oldEnSegments[j]) continue
+          const oldCore = oldSegments[j].core || oldSegments[j].text
+          const score = similarityScore(core, oldCore)
+          if (score > bestScore) {
+            bestScore = score
+            bestIdx = j
           }
         }
+        
+        // 改进：使用动态阈值
+        const threshold = getAdaptiveThreshold(core.length)
+        if (bestIdx !== -1 && bestScore >= threshold) {
+          usedOld.add(bestIdx)
+          editTasks.push({
+            blockIndex: idx,
+            start: node.start + seg.start,
+            end: node.start + seg.end,
+            segment: seg,
+            oldCn: oldSegments[bestIdx].core || oldSegments[bestIdx].text,
+            newCn: core,
+            oldEn: oldEnSegments[bestIdx].core || oldEnSegments[bestIdx].text
+          })
+          continue
+        }
+      }
 
-        // 最后：全新翻译
-        translateTasks.push({
+      // 最后：全新翻译
+      translateTasks.push({
           blockIndex: idx,
           start: node.start + seg.start,
           end: node.start + seg.end,
@@ -1212,7 +1801,7 @@ async function translateMarkdownBlocks(blocks, indices, targetLang, cache, oldBl
   }
 
   if (editTasks.length > 0) {
-    const edited = await editSegmentsWithCache(editTasks, targetLang, cache)
+    const edited = await editSegmentsWithCache(editTasks, targetLang)
     for (let i = 0; i < editTasks.length; i++) {
       const t = editTasks[i]
       const info = perBlock.get(t.blockIndex)
@@ -1227,7 +1816,7 @@ async function translateMarkdownBlocks(blocks, indices, targetLang, cache, oldBl
 
   if (translateTasks.length > 0) {
     const segments = translateTasks.map(t => t.text)
-    const translated = await translateSegmentsWithCache(segments, targetLang, cache)
+    const translated = await translateSegmentsWithCache(segments, targetLang)
 
     for (let i = 0; i < translateTasks.length; i++) {
       const t = translateTasks[i]
@@ -1249,7 +1838,122 @@ async function translateMarkdownBlocks(blocks, indices, targetLang, cache, oldBl
   return result
 }
 
-// --- Main Processors ---
+async function processMarkdownForLang(filePath, lang, newBlocks, oldBlocks, mapNewToOld) {
+  const targetPath = filePath.replace(SOURCE_DIR, `content/${lang}`)
+
+  const finalBlocks = new Array(newBlocks.length).fill(null)
+  let oldENBlocks = null
+  let oldCnToOldEnMap = null
+
+  let oldENRaw = getGitContent('HEAD^', targetPath)
+  if (!oldENRaw && fs.existsSync(targetPath)) {
+    oldENRaw = fs.readFileSync(targetPath, 'utf-8')
+  }
+  if (oldENRaw) {
+    const oldENTree = processor.parse(oldENRaw)
+    oldENBlocks = splitIntoBlocks(oldENTree, oldENRaw)
+    oldCnToOldEnMap = mapOldCnToOldEn(oldBlocks, oldENBlocks)
+  }
+
+  // Identify text blocks for batch processing vs special blocks
+  const textIndices = []
+  
+  for (let i = 0; i < newBlocks.length; i++) {
+    const newBlock = newBlocks[i]
+    const oldIdx = mapNewToOld[i]
+    const oldEnIdx = oldIdx !== -1 && oldCnToOldEnMap ? oldCnToOldEnMap[oldIdx] : -1
+    const oldEnBlock = oldEnIdx !== -1 && oldENBlocks ? oldENBlocks[oldEnIdx] : null
+
+    // Handle non-text blocks directly
+    if (newBlock.type === 'yaml') {
+      finalBlocks[i] = oldEnBlock?.text || newBlock.text
+      continue
+    }
+    if (newBlock.type === 'code' || newBlock.type === 'html') {
+      finalBlocks[i] = newBlock.text
+      continue
+    }
+
+    // Collect text blocks for batch processing
+    textIndices.push(i)
+  }
+
+  // Process text blocks in batch using sentence-level isolation
+  if (textIndices.length > 0) {
+    console.log(`    🚀 Batch processing ${textIndices.length} text blocks for ${lang}...`)
+    // Optional: Compute safe text map for better consistency (omitted for now to save time)
+    const results = await translateMarkdownBlocks(
+      newBlocks, 
+      textIndices, 
+      lang, 
+      oldBlocks, 
+      oldENBlocks, 
+      mapNewToOld
+    )
+    
+    for (const [idx, content] of results) {
+      finalBlocks[idx] = content
+    }
+  }
+
+  const targetDir = path.dirname(targetPath)
+  if (!fs.existsSync(targetDir)) fs.mkdirSync(targetDir, { recursive: true })
+
+  let finalContent = ''
+  for (let i = 0; i < finalBlocks.length; i++) {
+    const block = newBlocks[i]
+    const content = finalBlocks[i]
+    const separator = block.separator || '\n\n'
+
+    finalContent += content
+    if (i < finalBlocks.length - 1) {
+      finalContent += separator
+    } else {
+      finalContent += '\n'
+    }
+  }
+
+  fs.writeFileSync(targetPath, finalContent, 'utf-8')
+  console.log(`    ✅ Updated: ${targetPath}`)
+}
+
+async function processYamlForLang(filePath, lang, newCN, oldCN, headerComments) {
+  const targetPath = filePath.replace(SOURCE_DIR, `content/${lang}`)
+
+  let finalObj = null
+  const collector = []
+
+  if (oldCN && fs.existsSync(targetPath)) {
+    const oldEN = yaml.load(fs.readFileSync(targetPath, 'utf-8'))
+    const translationMap = new Map()
+    buildYamlPathMap(oldCN, oldEN, translationMap)
+    finalObj = processYamlNode(newCN, translationMap, collector)
+  } else {
+    finalObj = processYamlNode(newCN, new Map(), collector)
+  }
+
+  if (collector.length > 0) {
+    console.log(`    Need to translate ${collector.length} keys for [${lang}]`)
+    const textsToTranslate = collector.map(item => item.originalKey)
+    const translatedTexts = await translateSegmentsWithCache(textsToTranslate, lang)
+
+    collector.forEach((item, idx) => {
+      const transKey = translatedTexts[idx]
+      const val = item.targetObj[item.originalKey]
+      delete item.targetObj[item.originalKey]
+      item.targetObj[transKey] = val
+    })
+  } else {
+    console.log(`    ✨ No changes for [${lang}]`)
+  }
+
+  const targetDir = path.dirname(targetPath)
+  if (!fs.existsSync(targetDir)) fs.mkdirSync(targetDir, { recursive: true })
+
+  const yamlStr = yaml.dump(finalObj, { lineWidth: -1, noRefs: true })
+  fs.writeFileSync(targetPath, headerComments + yamlStr, 'utf-8')
+  console.log(`    ✅ Updated: ${targetPath}`)
+}
 
 async function processMarkdownFile(filePath) {
   console.log(`\n📄 Processing Markdown: ${filePath}`)
@@ -1261,91 +1965,11 @@ async function processMarkdownFile(filePath) {
 
   const newBlocks = splitIntoBlocks(newTree, newCNRaw)
   const oldBlocks = splitIntoBlocks(oldTree, oldCNRaw)
-  
-  // 改进：使用新的多层级 diff
-  const { mapNewToOld: mapNewToOldText, equalOps } = buildDiffMap(oldBlocks, newBlocks)
-  
-  // 精确匹配映射
-  const mapNewToOldExact = mapNewToOldText.map((oldIndex, newIndex) => {
-    if (oldIndex === -1) return -1
-    if (!oldBlocks[oldIndex] || !newBlocks[newIndex]) return -1
-    return oldBlocks[oldIndex].hash === newBlocks[newIndex].hash ? oldIndex : -1
-  })
-  
-  const newTextFreq = buildTextFreq(newTree, newCNRaw)
-  const oldTextFreq = buildTextFreq(oldTree, oldCNRaw || '')
+  const { mapNewToOld } = matchBlocks(oldBlocks, newBlocks)
 
-  const cache = loadTranslationCache()
-
-  for (const lang of TARGET_LANGS) {
-    const targetPath = filePath.replace(SOURCE_DIR, `content/${lang}`)
-
-    const finalBlocks = new Array(newBlocks.length).fill(null)
-    const blocksToTranslate = []
-    let oldENBlocks = null
-    let safeTextMap = null
-
-    if (fs.existsSync(targetPath)) {
-      const oldENRaw = fs.readFileSync(targetPath, 'utf-8')
-      const oldENTree = processor.parse(oldENRaw)
-      oldENBlocks = splitIntoBlocks(oldENTree, oldENRaw)
-      safeTextMap = buildSafeTextMap(equalOps, oldBlocks, oldENBlocks)
-
-      for (let i = 0; i < newBlocks.length; i++) {
-        const oldIndexExact = mapNewToOldExact[i]
-        if (oldIndexExact !== -1 && oldENBlocks[oldIndexExact]) {
-          finalBlocks[i] = oldENBlocks[oldIndexExact].text
-        } else {
-          blocksToTranslate.push(i)
-        }
-      }
-    } else {
-      for (let i = 0; i < newBlocks.length; i++) blocksToTranslate.push(i)
-    }
-
-    if (blocksToTranslate.length > 0) {
-      console.log(`    Need to translate ${blocksToTranslate.length} blocks for [${lang}]`)
-      const translatedMap = await translateMarkdownBlocks(
-        newBlocks,
-        blocksToTranslate,
-        lang,
-        cache,
-        oldBlocks,
-        oldENBlocks,
-        mapNewToOldText,
-        safeTextMap,
-        oldTextFreq,
-        newTextFreq
-      )
-      for (const idx of blocksToTranslate) {
-        finalBlocks[idx] = translatedMap.get(idx) || newBlocks[idx].text
-      }
-    } else {
-      console.log(`    ✨ No changes for [${lang}]`)
-    }
-
-    const targetDir = path.dirname(targetPath)
-    if (!fs.existsSync(targetDir)) fs.mkdirSync(targetDir, { recursive: true })
-
-    let finalContent = ''
-    for (let i = 0; i < finalBlocks.length; i++) {
-      const block = newBlocks[i]
-      const content = finalBlocks[i]
-      const separator = block.separator || '\n\n'
-
-      finalContent += content
-      if (i < finalBlocks.length - 1) {
-        finalContent += separator
-      } else {
-        finalContent += '\n'
-      }
-    }
-
-    fs.writeFileSync(targetPath, finalContent, 'utf-8')
-    console.log(`    ✅ Updated: ${targetPath}`)
-  }
-
-  saveTranslationCache(cache)
+  await Promise.all(TARGET_LANGS.map(lang => 
+    processMarkdownForLang(filePath, lang, newBlocks, oldBlocks, mapNewToOld)
+  ))
 }
 
 async function processYamlFile(filePath) {
@@ -1356,47 +1980,10 @@ async function processYamlFile(filePath) {
   const newCN = yaml.load(newCNRaw)
   const oldCN = oldCNRaw ? yaml.load(oldCNRaw) : null
   const headerComments = getYamlHeaderComments(newCNRaw)
-  const cache = loadTranslationCache()
 
-  for (const lang of TARGET_LANGS) {
-    const targetPath = filePath.replace(SOURCE_DIR, `content/${lang}`)
-
-    let finalObj = null
-    const collector = []
-
-    if (oldCN && fs.existsSync(targetPath)) {
-      const oldEN = yaml.load(fs.readFileSync(targetPath, 'utf-8'))
-      const translationMap = new Map()
-      buildYamlPathMap(oldCN, oldEN, translationMap)
-      finalObj = processYamlNode(newCN, translationMap, collector)
-    } else {
-      finalObj = processYamlNode(newCN, new Map(), collector)
-    }
-
-    if (collector.length > 0) {
-      console.log(`    Need to translate ${collector.length} keys for [${lang}]`)
-      const textsToTranslate = collector.map(item => item.originalKey)
-      const translatedTexts = await translateSegmentsWithCache(textsToTranslate, lang, cache)
-
-      collector.forEach((item, idx) => {
-        const transKey = translatedTexts[idx]
-        const val = item.targetObj[item.originalKey]
-        delete item.targetObj[item.originalKey]
-        item.targetObj[transKey] = val
-      })
-    } else {
-      console.log(`    ✨ No changes for [${lang}]`)
-    }
-
-    const targetDir = path.dirname(targetPath)
-    if (!fs.existsSync(targetDir)) fs.mkdirSync(targetDir, { recursive: true })
-
-    const yamlStr = yaml.dump(finalObj, { lineWidth: -1, noRefs: true })
-    fs.writeFileSync(targetPath, headerComments + yamlStr, 'utf-8')
-    console.log(`    ✅ Updated: ${targetPath}`)
-  }
-
-  saveTranslationCache(cache)
+  await Promise.all(TARGET_LANGS.map(lang => 
+    processYamlForLang(filePath, lang, newCN, oldCN, headerComments)
+  ))
 }
 
 async function main() {
@@ -1435,4 +2022,13 @@ async function main() {
   }
 }
 
-main()
+export {
+  matchBlocks,
+  findHeadingAnchors,
+  alignSegment,
+  checkSemanticChange
+}
+
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  main()
+}
