@@ -30,7 +30,7 @@ try {
   console.warn('⚠️ Failed to read languages.json, defaulting to ["en"]', e)
 }
 
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY || 'sk-74d716a32d544a6b8a522dfc9e8fde5a'
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY
 const OPENAI_API_BASE = process.env.OPENAI_API_BASE || 'https://api.deepseek.com'
 const MODEL = process.env.OPENAI_MODEL || 'deepseek-chat'
 const SOURCE_DIR = 'content/cn'
