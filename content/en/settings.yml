@@ -45,7 +45,7 @@ nav:
       - "(ri:file-code-line) REST API Server": open_source/getting_started/rest_api_server.md
       - "(ri:code-line) MemOS Examples": open_source/getting_started/examples.md
 
-    - "(ri:cpu-line) MOS":
+    - "(ri:cpu-line) MemOS":
       - "(ri:eye-line) API Development Guide": open_source/modules/mos/overview.md
       - "(ri:checkbox-multiple-blank-line) MemCube": open_source/modules/mem_cube.md
       - "(ri:book-open-line) MemReader": open_source/modules/mem_reader.md
@@ -83,21 +83,27 @@ nav:
     - "(ri:file-code-line) API Reference": api-reference/search-memories
 
   - "(ri:robot-line) Openclaw":
-    - "(ri:book-open-line) Cloud Plugin vs Local Plugin": openclaw/plugin_compare.md
-    - "(ri:file-list-3-line) Changelog": openclaw/changes.md
-    - "(ri:download-line) Installation Guide": 
-      - "(ri:cloud-line) OpenClaw Cloud Plugin": openclaw/guide.md
-      - "(ri:computer-line) OpenClaw Local Plugin": openclaw/local_plugin.md
-    - "(ri:flask-line) Usage Examples": 
-      - "(ri:team-line) Multi-Agent Memory Isolation": openclaw/examples/multi_agent.md
-      - "(ri:filter-3-line) Secondary Filtering for Memory Recall": openclaw/examples/recall_filter.md
+    - "(ri:book-open-line) Cloud Plugin vs Local Plugin":
+      - "(ri:file-code-line) Usage Examples": self_developed_model/extraction_usage_example.md
 
-  - "(ri:puzzle-line) MCP and Agent Framework Support":
-    - "(ri:tools-line) MCP Services":
+  - "(ri:robot-line) Openclaw":
+    - "(ri:book-open-line) Cloud Plugin vs Local Plugin":
       - "(ri:book-open-line) Guide": mcp_agent/mcp/guide.md
 
-    - "(ri:robot-line) Agent Development":
+    - "(ri:file-list-3-line) Changelog":
       - "(ri:book-open-line) Guide": mcp_agent/agent/guide.md
+
+  - "(ri:robot-line) Agent":
+    - "(ri:tools-line) MCP Services": openclaw/plugin_compare.md
+    - "(ri:robot-line) Agent Development": openclaw/changes.md
+    - "(ri:chat-1-line) Messages":
+      - "(ri:file-list-line) Get Message": openclaw/guide.md
+      - "(ri:task-line) Get Task Status": openclaw/local_plugin.md
+      - "(ri:server-line) Hermes Local Plugin": openclaw/hermes_local_plugin.md
+    - "(ri:chat-smile-2-line) Chat":
+      - "(ri:chat-4-line) Chat": openclaw/examples/multi_agent.md
+      - "(ri:filter-3-line) Secondary Filtering for Memory Recall": openclaw/examples/recall_filter.md
+      - "(ri:terminal-box-line) Using the Hermes Local Plugin": openclaw/examples/hermes_usage.md
 
   - "(ri:file-code-line) API Documentation":
     - "(ri:rocket-line) Get Started":
@@ -110,6 +116,9 @@ nav:
       - "(ri:file-list-line) Get Memory": api_docs/core/get_memory.md
       - "(ri:delete-bin-line) Delete Memory": api_docs/core/delete_memory.md
       - "(ri:feedback-line) Add Feedback": api_docs/message/add_feedback.md
+
+    - "(ri:cpu-line) Self-Developed Model":
+      - "(ri:flask-line) Extract Memory": api_docs/core/extract_memory.md
 
     - "(ri:chat-1-line) Messages":
       - "(ri:file-list-line) Get Message": api_docs/message/get_message.md
@@ -134,9 +143,9 @@ nav:
       - "(ri:money-dollar-circle-line) Financial Assistant": usecase/financial_assistant.md
       - "(ri:edit-line) Writing Assistant": usecase/writting_assistant.md
       - "(ri:heart-line) Life Assistant": usecase/home_assistant.md
-      # - "(ri:customer-service-2-line) WeCom Customer Service": usecase/wecom_customer_service.md
+      # - "(ri:customer-service-2-line) 企微客服": usecase/wecom_customer_service.md
 
     - "(ri:layout-grid-line) Frameworks & Platforms":
-      # - "(ri:chrome-line) Browser Extension": usecase/frameworks/browser_extension.md
+      # - "(ri:chrome-line) 浏览器插件": usecase/frameworks/browser_extension.md
       - "(ri:brain-line) Claude MCP": usecase/frameworks/claude_mcp.md
       - "(ri:puzzle-2-line) Coze Plugin Tools": usecase/frameworks/coze_plugin.md
