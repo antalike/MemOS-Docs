@@ -1,4 +1,54 @@
 versions:
+  - name: v2.0.13
+    date: 2026-04-09
+    changedInfo:
+      Improvements:
+        - type: PolarDB Database
+          changedInfo:
+            - PolarDB optimization and upgrade. Optimized execution paths for queries with multiple filter conditions, leveraging new kernel capabilities to improve CPU and memory usage, achieving several-fold query acceleration and reducing system pressure.
+        - type: Memory Version Service
+          changedInfo:
+            - Memory version plugin-based architecture.
+        - type: Service Optimization
+          changedInfo:
+            - Optimized scheduling tasks to improve memory usage.
+
+  - name: v2.0.12
+    date: 2026-04-02
+    changedInfo:
+      Improvements:
+        - type: Service Optimization
+          changedInfo:
+            - When Feedback updates a node, it follows the memory version logic, updates the original node, and pushes the previous content into the history field.
+
+  - name: v2.0.11
+    date: 2026-03-26
+    changedInfo:
+      New Features:
+        - type: New Features
+          changedInfo:
+            - When adding memories, conflicting/duplicate memories are automatically detected, merged, and archived. The latest memory content is retained, while the old memory content is placed in the history field.
+            - Added Tavily as a pluggable internet search backend. Enable real-time web search via Tavily API configuration, providing external knowledge supplementation capabilities for the memory system.
+        - type: Deployment and Operations 
+          changedInfo:
+            - Added health check API endpoint for service status monitoring. Supports container orchestration (e.g., Kubernetes liveness/readiness probes) and load balancer health probes.
+            - Added production-grade Dockerfile (multi-stage build) and Kubernetes Helm Chart, including orchestration configurations for the MemOS API service, Neo4j graph database, Qdrant vector database, as well as Ingress and example values files, supporting one-click deployment to K8s clusters.
+        - type: Interface Capability Expansion
+          changedInfo:
+            - Previously, the delete_memory interface only supported deletion by memory_id. This update extends deletion filter conditions, supporting batch deletion of memories by user_id and conversation_id, adds filter parameter validation at the API layer, and implements the delete_node_by_params method for the PostgreSQL backend.
+      Bug Fixes:
+        - type: Preference memories migrated to graph database
+          changedInfo:
+            - Preference memories have been migrated to the graph database, unifying them with other memory types.
+            - Fixed the issue where get_further_suggestion could not handle string-type input parameters.
+        - type: memory versioning optimization
+          changedInfo:
+            - Memory retrieval reduces redundant calls to get_by_metadata, decreasing retrieval latency.
+        - type: Neo4j 
+          changedInfo:
+            - Implemented fine-grained concurrent rate limiting using semaphores, combined with automatic faulty connection removal and thread lifecycle management, to enhance system stability under high concurrency.
+            - Optimized log levels and content, retaining key execution traces while reducing the impact of log writing on database performance.
+
   - name: v2.0.10
     date: 2026-03-19
     changedInfo:
@@ -43,7 +93,7 @@ versions:
         - type: Preference memories migrated to graph database
           changedInfo:
             - Preference memories have been migrated to the graph database, unifying them with other memory types.
-        - type: memory versioning optimization
+        - type: Memory version optimization
           changedInfo:
             - Memory retrieval reduces redundant calls to get_by_metadata, decreasing retrieval latency.
         - type: database optimization
@@ -131,7 +181,7 @@ versions:
           changedInfo:
             - Reduced duplication between factual and preference memories during retrieval.
       Bug Fixes:
-        - type: Bug Fixes
+        - type: Fixes
           changedInfo:
             - Fixed bug for new users in Playground.
             - Fixed occasional latency when adding memories in cloud service.
@@ -185,6 +235,7 @@ versions:
         - type: Get Memory Interface
           changedInfo:
             - Fixed call error in get memory interface when parameter include_preference=False.
+
   - name: v2.0.1
     date: 2026-01-08
     changedInfo:
@@ -215,6 +266,7 @@ versions:
         - type: Scheduling Module Issue Fix
           changedInfo:
             - Fixed error when scheduling enables local mode due to missing redis configuration
+
   - name: v2.0.0
     date: 2025-12-24
     changedInfo:
@@ -266,7 +318,7 @@ versions:
           changedInfo:
             - Modularized API scheduler
             - Redis ORM optimized for history sync & hybrid search
-        - type: Data & Infra
+        - type: Data & Infrastructure
           changedInfo:
             - PolarDB graph backend connection pool/timeout & fixes
             - Unified graph factory (Neo4j/PolarDB/Nebula)
@@ -313,7 +365,7 @@ versions:
     date: 2025-09-10
     changedInfo:
       New Features:
-        - type: Group Q&A Bot
+        - type: Enterprise Group Q&A bot
           changedInfo:
             - Launched group Q&A bot based on MemOS Cube
         - type: KV-Cache Performance Optimization
@@ -323,7 +375,7 @@ versions:
         - type: Plaintext Memory Enhancement
           changedInfo:
             - Added Reranker sorting functionality for plaintext memory
-        - type: Playground Updates
+        - type: Playground Update
           changedInfo:
             - Updated Playground version with all the above new features
       Improvements:
@@ -360,7 +412,7 @@ versions:
     date: 2025-07-29
     changedInfo:
       New Features:
-        - type: Explicit Memory
+        - type: Plaintext Memory
           changedInfo:
             - Implemented internet search integration with Nebula database support
             - Enhanced contextual understanding for memory extraction
@@ -383,7 +435,7 @@ versions:
           changedInfo:
             - Performed code refactoring and functionality improvements
             - Refactored functional modules including monitor, dispatcher and retriever
-            - Added major code categories: schemas and utils
+            - Added schemas and utils major code categories
             - Enhanced network logging functionality
             - Improved scheduler robustness with new exception-catching decorators
             - Implemented locking for shared resources
@@ -407,7 +459,7 @@ versions:
         - type: System Integration
           changedInfo:
             - Aligned MOSProduct._build_system_prompt signature with MOSCore
-        - type: Explicit Memory
+        - type: Plaintext Memory
           changedInfo:
             - Fixed general text memory processing logic
             - Fixed memreader component issues
