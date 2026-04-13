@@ -83,7 +83,7 @@ jobs:
       - name: Create Pull Request
         if: steps.changes.outputs.has_changes == 'true'
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           BRANCH="${{ steps.commit.outputs.branch }}"
           BASE_BRANCH="${{ github.ref_name }}"
