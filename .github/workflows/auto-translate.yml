@@ -83,13 +83,16 @@ jobs:
       - name: Create Pull Request
         if: steps.changes.outputs.has_changes == 'true'
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           BRANCH="${{ steps.commit.outputs.branch }}"
           BASE_BRANCH="${{ github.ref_name }}"
 
           # Collect list of changed translation files
           CHANGED_FILES=$(git diff origin/${BASE_BRANCH}...HEAD --name-only | grep -v '^content/cn/' | head -20 | sed 's/^/- /' || true)
+
+          # Ensure the 'translation' label exists
+          gh label create "translation" --color "0075ca" --description "Auto-translated documentation" 2>/dev/null || true
 
           gh pr create \
             --title "docs: auto-translate $(date +%Y-%m-%d)" \
