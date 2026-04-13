@@ -45,7 +45,7 @@ nav:
       - "(ri:file-code-line) REST API Server": open_source/getting_started/rest_api_server.md
       - "(ri:code-line) MemOS Examples": open_source/getting_started/examples.md
 
-    - "(ri:cpu-line) MOS":
+    - "(ri:cpu-line) MemOS":
       - "(ri:eye-line) API Development Guide": open_source/modules/mos/overview.md
       - "(ri:checkbox-multiple-blank-line) MemCube": open_source/modules/mem_cube.md
       - "(ri:book-open-line) MemReader": open_source/modules/mem_reader.md
@@ -82,8 +82,15 @@ nav:
 
     - "(ri:file-code-line) API Reference": api-reference/search-memories
 
+  - "(ri:puzzle-line) MCP and Agent Framework Support":
+    - "(ri:tools-line) MCP Services":
+      - "(ri:book-open-line) Guide": mcp_agent/mcp/guide.md
+
+    - "(ri:robot-line) Agent Development":
+      - "(ri:book-open-line) Guide": mcp_agent/agent/guide.md
+
   - "(ri:robot-line) Openclaw":
-    - "(ri:book-open-line) Cloud Plugin vs Local Plugin": openclaw/plugin_compare.md
+    - "(ri:book-open-line) Cloud Plugins vs Local Plugins": openclaw/plugin_compare.md
     - "(ri:file-list-3-line) Changelog": openclaw/changes.md
     - "(ri:download-line) Installation Guide": 
       - "(ri:cloud-line) OpenClaw Cloud Plugin": openclaw/guide.md
@@ -91,13 +98,6 @@ nav:
     - "(ri:flask-line) Usage Examples": 
       - "(ri:team-line) Multi-Agent Memory Isolation": openclaw/examples/multi_agent.md
       - "(ri:filter-3-line) Secondary Filtering for Memory Recall": openclaw/examples/recall_filter.md
-
-  - "(ri:puzzle-line) MCP and Agent Framework Support":
-    - "(ri:tools-line) MCP Services":
-      - "(ri:book-open-line) Guide": mcp_agent/mcp/guide.md
-
-    - "(ri:robot-line) Agent Development":
-      - "(ri:book-open-line) Guide": mcp_agent/agent/guide.md
 
   - "(ri:file-code-line) API Documentation":
     - "(ri:rocket-line) Get Started":
