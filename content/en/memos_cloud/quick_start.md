@@ -1,9 +1,9 @@
 ---
 title: Quick Start
-desc: Welcome to MemOS Cloud Platform. Refer to this guide to quickly integrate memory capabilities.
+desc: 欢迎访问 MemOS 云平台，参考本新手指南即可在几分钟内接入记忆能力。
 ---
 
-When building applications with large models, a common question is: **How to make AI remember user's long-term preferences?**
+在使用大模型构建应用时，一个常见问题是：**如何让 AI 稳定记住用户的长期偏好？**  
 MemOS provides two core interfaces to help you achieve this:
 
 - `addMessage` —— Hand over the original conversation to us, and we will automatically process and store memories [(Click for detailed API documentation)](/api_docs/core/add_message)
@@ -16,9 +16,11 @@ MemOS provides two core interfaces to help you achieve this:
 
 * Register and log in to MemOS Cloud Platform [(Click to Register)](https://memos-dashboard.openmem.net/quickstart);
 
-* Get API Key [(Click to Get)](https://memos-dashboard.openmem.net/apikeys);
+* 准备一个可发送 HTTP 请求的环境（Python 或 cURL 均可）；
 
-* Prepare an environment capable of sending HTTP requests, such as Python or cURL.
+* 获取 API Key[（点击获取）](https://memos-dashboard.openmem.net/apikeys) 并配置到环境变量；
+
+* 准备一个可用于测试的 `conversation_id`（建议按日期命名，如 `20260413-demo`）。
 
 
 ## 2. Code Configuration
@@ -44,9 +46,9 @@ You only need to provide the `original conversation records` to MemOS, and MemOS
 ### 2.3 Call MemOS to Search Relevant Memories in Session (searchMemory)
 
 ::note
-**Session B: Occurred on 2025-09-28**<br>
+**会话 B：2025-09-28 发生**<br>
 
-In a new session, the user asks the AI to recommend travel destinations and hotels for the National Day holiday. MemOS automatically recalls [Factual Memory: Where they have been] and [Preference Memory: Hotel booking preferences] for AI reference, thereby recommending a more personalized travel plan.
+用户在一个新的会话中提出“推荐国庆旅游地点和酒店”，MemOS 会自动召回【事实记忆：曾去过哪里】和【偏好记忆：订酒店的偏好】供 AI 参考，从而生成更个性化的旅游计划。
 ::
 
 ::code-snippet{name=search_memory}
@@ -63,8 +65,13 @@ In a new session, the user asks the AI to recommend travel destinations and hote
     {
       "preference_type": "implicit_preference",  # Implicit Preference
       "preference": "User may prefer hotels with higher cost-performance ratio.",
-      "reasoning": "7 Days Inn is usually known for being economical. The user's choice of 7 Days Inn may indicate a preference for cost-effective options in accommodation. Although the user did not explicitly mention budget constraints or specific hotel preferences, choosing 7 Days among the provided options may reflect an emphasis on price and practicality.",
+      "confidence": 0.82,
       "conversation_id": "0610"
+    },
+    {
+      "preference_type": "explicit_preference",  #显性偏好
+      "preference": "用户希望酒店评分不低于4.5分。",
+      "conversation_id": "0928"
     }
   ],
 
@@ -74,6 +81,7 @@ In a new session, the user asks the AI to recommend travel destinations and hote
       "memory_key": "Summer Guangzhou Travel Plan",
       "memory_value": "User plans to travel to Guangzhou during the summer vacation and chose 7 Days Inn as accommodation.",
       "conversation_id": "0610",
+      "memory_time": "2025-06-10 20:15:00",
       "tags": [
         "Travel",
         "Guangzhou",
@@ -150,15 +158,18 @@ I want to travel during the National Day holiday. Please recommend a city I have
 
 ```
 
+
 ## 3. Next Steps
 
-Now that you can run MemOS, you can explore more cloud platform features:
+现在你已经可以运行 MemOS，建议继续探索更多云平台功能：
 
 * [**Core Memory Operations**](/memos_cloud/mem_operations/add_message): Learn fully how to add, retrieve, and delete memories;
 
 * [**Feature Introduction**](/memos_cloud/features/basic/filters): Explore more cloud platform features, such as memory filtering, multi-modal messages, knowledge bases, etc.;
 
-* [**API Documentation**](/api_docs/start/overview): View complete API documentation and call examples.
+* [**API 接口文档**](/api_docs/start/overview)：查看完整的 API 文档与调用示例；
+
+* [**SDK 接入说明**](/api_docs/start/quickstart)：按语言查看初始化、鉴权和错误处理方式。
 
 
 ## 4. More Resources
@@ -197,12 +208,11 @@ MemOS provides rich project examples. Depending on your specific project, you ca
   - Through MemOS, user writing preferences, commonly used information, and context instructions can be remembered.
   - No need to emphasize repeatedly when writing summaries or emails next time, achieving a coherent and personalized creation experience.
 
-- [MindDock Browser Extension](https://alidocs.dingtalk.com/i/p/e3ZxX84Z5KM6X7dRZxX8v66wA7xaBG7d?dontjump=true)
-  - MemOS-MindDock creates a unified cross-platform AI memory layer for users.
-  - It automatically records, organizes, and injects personal information and preferences, allowing all AIs to continuously and stably "know you".
-
 - [Coze × MemOS Plugin Tool](/usecase/frameworks/coze_plugin)
   - Use the MemOS plugin tool listed on the Coze platform to directly access cloud service interfaces in the workflow, quickly adding long-term memory capabilities to your Agent.
     
 - [Claude MCP](/usecase/frameworks/claude_mcp)
   - MemOS provides a way to interact with the cloud platform through MCP, directly accessing cloud service interfaces in the Claude client.
+
+- [LangChain × MemOS 集成](/usecase/frameworks/langchain)
+  - 在 LangChain 工作流中将 `searchMemory` 作为检索工具接入，支持多轮对话上下文增强。
