@@ -45,7 +45,8 @@ export function createTranslator(config) {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${config.openaiApiKey}`
         },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
+        signal: AbortSignal.timeout(120000)
       })
 
       if (!response.ok) {

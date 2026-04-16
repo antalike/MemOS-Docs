@@ -125,9 +125,9 @@ async function run() {
     await processFiles(files, config, translator, diffBase, config.targetLangs, summary)
   }
 
-  // 输出汇总；存在失败时设置非 0 退出码给 CI
+  // 输出汇总；存在失败时以非 0 退出码退出
   console.log(`Done. success=${summary.fileSuccess}, failed=${summary.fileFailed}, translated=${summary.translatedBlocks}, outputs_updated=${summary.changedOutputs}`)
-  if (summary.fileFailed > 0) process.exitCode = 1
+  process.exit(summary.fileFailed > 0 ? 1 : 0)
 }
 
 run().catch((error) => {
