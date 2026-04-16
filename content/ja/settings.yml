@@ -1,0 +1,151 @@
+nav:
+  # You can include icons using the syntax `(ri:icon-name)`.
+  # The frontend will render these as actual icons.
+  # You can find available icons at https://icones.js.org/
+  - "(ri:cloud-line) MemOS Cloud":
+    - "(ri:book-line) はじめに":
+      - "(ri:eye-line) 概要": memos_cloud/overview.md
+      - "(ri:rocket-line) クイックスタート": memos_cloud/quick_start.md
+      - "(ri:home-line) コアコンセプト":
+        - "(ri:add-line) メモリ生成": memos_cloud/introduction/mem_production.md
+        - "(ri:calendar-line) メモリスケジューリング": memos_cloud/introduction/mem_schedule.md
+        - "(ri:search-line) メモリ呼び出し": memos_cloud/introduction/mem_recall.md
+        - "(ri:refresh-line) メモリライフサイクル管理": memos_cloud/introduction/mem_lifecycle.md
+        - "(ri:cpu-line) アルゴリズム原理概要": memos_cloud/introduction/algorithm.md
+      - "(ri:dashboard-line) クラウドプラットフォームとオープンソース方案": memos_cloud/cloud_and_opensource.md
+      - "(ri:shield-line) クォータと制限": memos_cloud/limit.md
+
+    - "(ri:question-line) サポートとトラブルシューティング":
+      - "(ri:question-line) FAQs よくある質問": memos_cloud/faq.md
+
+    - "(ri:edit-box-line) メモリ操作":
+      - "(ri:message-3-line) Add Message": memos_cloud/mem_operations/add_message.md
+      - "(ri:search-2-line) Search Memory": memos_cloud/mem_operations/search_memory.md
+      - "(ri:delete-bin-line) Delete Memory": memos_cloud/mem_operations/delete_memory.md
+      - "(ri:feedback-line)Add Feedback": memos_cloud/mem_operations/add_feedback.md
+
+    - "(ri:function-line) 機能紹介":
+      - "(ri:flag-line) 基本機能":
+        - "(ri:filter-3-line) メモリフィルタFilter": memos_cloud/features/basic/filters.md
+        - "(ri:timer-flash-line) 非同期モードAsyncMode": memos_cloud/features/basic/async_mode.md
+        - "(ri:image-add-line) マルチモーダルメッセージ": memos_cloud/features/basic/multimodal.md
+        - "(ri:price-tag-3-line) カスタムタグTags": memos_cloud/features/basic/custom_tags.md
+      - "(ri:vip-diamond-line) 高度な機能":
+        - "(ri:function-line) スキルSkills": memos_cloud/features/advanced/skill.md
+        - "(ri:book-read-line) ナレッジベースKnowledgebase": memos_cloud/features/advanced/knowledge_base.md
+        - "(ri:tools-line) ツール呼び出しTool Call": memos_cloud/features/advanced/tool_calling.md
+        - "(ri:chat-history-line) 継続対話Chat": memos_cloud/features/advanced/continuous_dialogue.md
+
+  - "(ri:github-line) オープンソースプロジェクト":
+    - "(ri:rocket-line) クイックスタート":
+      - "(ri:install-line) インストールガイド": open_source/getting_started/installation.md
+      - "(ri:bookmark-line) あなたの最初のメモリを作成": open_source/getting_started/your_first_memory.md
+      - "(ri:lightbulb-line) コアコンセプト": open_source/home/core_concepts.md
+      - "(ri:building-2-line) アーキテクチャ設計": open_source/home/architecture.md
+      - "(ri:file-code-line) REST API サービス": open_source/getting_started/rest_api_server.md
+      - "(ri:code-line) MemOS サンプル": open_source/getting_started/examples.md
+
+    - "(ri:cpu-line) MemOS":
+      - "(ri:eye-line) API 開発ガイド": open_source/modules/mos/overview.md
+      - "(ri:checkbox-multiple-blank-line) MemCubeメモリキューブ": open_source/modules/mem_cube.md
+      - "(ri:book-open-line) MemReader メモリ読み取り": open_source/modules/mem_reader.md
+      - "(ri:calendar-line) MemScheduler メモリスケジューリング": open_source/modules/mem_scheduler.md
+      - "(ri:calendar-line) MemChat メモリを使用してチャット": open_source/modules/mem_chat.md
+      - "(ri:feedback-line) MemFeedback メモリフィードバック": open_source/modules/mem_feedback.md
+
+
+    - "(ri:brain-line) メモリシステム":
+      - "(ri:database-2-line) メモリモジュール概要": open_source/modules/memories/overview.md
+      - "(ri:book-2-line) プレーンテキストメモリ":
+        - "(ri:file-text-line) シンプルなプレーンテキストメモリ": open_source/modules/memories/naive_textual_memory.md
+        - "(ri:file-text-line) 汎用プレーンテキストメモリ": open_source/modules/memories/general_textual_memory.md
+        - "(ri:user-heart-line) 嗜好プレーンテキストメモリ": open_source/modules/memories/preference_textual_memory.md
+        - "(ri:tree-line) ツリー型プレーンテキストメモリ": open_source/modules/memories/tree_textual_memory.md
+        - "(ri:database-line) Neo4j グラフデータベース": open_source/modules/memories/neo4j_graph_db.md
+        - "(ri:database-line) PolarDB グラフデータベース": open_source/modules/memories/polardb_graph_db.md
+      - "(ri:database-2-line) KVCache メモリ": open_source/modules/memories/kv_cache_memory.md
+      - "(ri:cpu-line) パラメータメモリ (開発中)": open_source/modules/memories/parametric_memory.md
+
+    - "(ri:star-line) ベストプラクティス":
+      - "(ri:speed-line) パフォーマンスチューニング": open_source/best_practice/performance_tuning.md
+      - "(ri:wifi-line) ネットワーク問題の解決方案": open_source/best_practice/network_workarounds.md
+      - "(ri:error-warning-line) よくあるエラーと解決方案": open_source/best_practice/common_errors_solutions.md
+      - "(ri:tools-line) MemOS MCP統合ガイド": open_source/best_practice/mcp_for_cozespace_and_tools.md
+
+    - "(ri:heart-line) 貢献ガイド":
+      - "(ri:eye-line) MemOS 開発への参加": open_source/contribution/overview.md
+      - "(ri:tools-line) 開発環境の設定": open_source/contribution/setting_up.md
+      - "(ri:git-branch-line) 開発フロー": open_source/contribution/development_workflow.md
+      - "(ri:git-commit-line) コミット規範": open_source/contribution/commit_guidelines.md
+      - "(ri:article-line) ドキュメント作成ガイド": open_source/contribution/writing_docs.md
+      - "(ri:flask-line) テストの書き方": open_source/contribution/writing_tests.md
+
+    - "(ri:file-code-line) API リファレンス": api-reference/search-memories
+
+  - "(ri:cpu-line) 自社開発モデルの説明":
+    - "(ri:flask-line) 抽出モデル":
+      - "(ri:file-code-line) 使用例": self_developed_model/extraction_usage_example.md
+
+  - "(ri:puzzle-line) MCPとAgentフレームワーク対応":
+    - "(ri:tools-line) MCP サービス":
+      - "(ri:book-open-line) 使用ガイド": mcp_agent/mcp/guide.md
+
+    - "(ri:robot-line) Agent開発":
+      - "(ri:book-open-line) 使用ガイド": mcp_agent/agent/guide.md
+
+  - "(ri:robot-line) Agent":
+    - "(ri:book-open-line) クラウドプラグイン vs ローカルプラグイン": openclaw/plugin_compare.md
+    - "(ri:file-list-3-line) 更新履歴": openclaw/changes.md
+    - "(ri:download-line) インストールガイド": 
+      - "(ri:cloud-line) OpenClaw クラウドプラグイン": openclaw/guide.md
+      - "(ri:computer-line) OpenClaw ローカルプラグイン": openclaw/local_plugin.md
+      - "(ri:server-line) Hermes ローカルプラグイン": openclaw/hermes_local_plugin.md
+    - "(ri:flask-line) 使用例": 
+      - "(ri:team-line) マルチエージェント記憶分離": openclaw/examples/multi_agent.md
+      - "(ri:filter-3-line) 記憶リコールの二次フィルタリング": openclaw/examples/recall_filter.md
+      - "(ri:terminal-box-line) Hermes ローカルプラグインの使用": openclaw/examples/hermes_usage.md
+
+  - "(ri:file-code-line) APIドキュメント":
+    - "(ri:rocket-line) はじめに":
+      - "(ri:eye-line) 概要": api_docs/start/overview.md
+      - "(ri:settings-3-line) プロジェクト設定": api_docs/start/configuration.md
+
+    - "(ri:edit-box-line) コア操作":
+      - "(ri:message-3-line) Add Message": api_docs/core/add_message.md
+      - "(ri:search-2-line) Search Memory": api_docs/core/search_memory.md
+      - "(ri:file-list-line) Get Memory": api_docs/core/get_memory.md
+      - "(ri:delete-bin-line) Delete Memory": api_docs/core/delete_memory.md
+      - "(ri:feedback-line) Add Feedback": api_docs/message/add_feedback.md
+
+    - "(ri:cpu-line) 自社開発モデル":
+      - "(ri:flask-line) Extract Memory": api_docs/core/extract_memory.md
+
+    - "(ri:chat-1-line) メッセージ":
+      - "(ri:file-list-line) Get Message": api_docs/message/get_message.md
+      - "(ri:task-line) Get Task Status": api_docs/message/get_status.md
+
+    - "(ri:chat-smile-2-line) 会話":
+      - "(ri:chat-4-line) Chat": api_docs/chat/chat.md
+
+    - "(ri:book-read-line) ナレッジベース":
+      - "(ri:add-box-line) ナレッジベースの作成": api_docs/knowledge/create_kb.md
+      - "(ri:delete-back-2-line) ナレッジベースの削除": api_docs/knowledge/remove_kb.md
+      - "(ri:file-add-line) ナレッジベース文書の追加": api_docs/knowledge/add_kb_doc.md
+      - "(ri:file-search-line) ナレッジベース文書の取得": api_docs/knowledge/get_kb_doc.md
+      - "(ri:file-reduce-line) ナレッジベース文書の削除": api_docs/knowledge/delete_kb_doc.md
+
+    - "(ri:customer-service-line) ヘルプとサポート":
+      - "(ri:error-warning-line) エラーコード": api_docs/help/error_codes.md
+
+  - "(ri:projector-line) サンプルプロジェクト":
+    - "(ri:lightbulb-line) ベストプラクティス":
+      - "(ri:customer-service-2-line) Q&Aアシスタント": usecase/knowledge_qa_assistant.md
+      - "(ri:money-dollar-circle-line) 資産運用アシスタント": usecase/financial_assistant.md
+      - "(ri:edit-line) ライティングアシスタント": usecase/writting_assistant.md
+      - "(ri:heart-line) 家庭生活アシスタント": usecase/home_assistant.md
+      # - "(ri:customer-service-2-line) 企業WeChatカスタマーサービス": usecase/wecom_customer_service.md
+
+    - "(ri:layout-grid-line) フレームワークとプラットフォーム":
+      # - "(ri:chrome-line) ブラウザプラグイン": usecase/frameworks/browser_extension.md
+      - "(ri:brain-line) Claude MCP": usecase/frameworks/claude_mcp.md
+      - "(ri:puzzle-2-line) Coze プラグインツール": usecase/frameworks/coze_plugin.md
