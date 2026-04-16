@@ -24,19 +24,25 @@ async function processFiles(files, config, translator, diffBase, langs, summary)
   if (files.length === 0 || langs.length === 0) return
   const langConfig = { ...config, targetLangs: langs }
   const limit = pLimit(15)
+  let done = 0
+  const total = files.length
   await Promise.all(files.map(filePath => limit(async () => {
+    const startTs = new Date().toISOString().slice(11, 19)
+    console.log(`[${startTs}] Processing: ${filePath}`)
     try {
-      console.log(`Processing: ${filePath}`)
       const outputResults = await processFile(filePath, langConfig, translator, diffBase)
+      done += 1
       summary.fileSuccess += 1
       for (const result of outputResults) {
         summary.translatedBlocks += result.translatedCount
         if (result.changed) summary.changedOutputs += 1
         console.log(`  [${result.lang}] ${result.changed ? 'updated' : 'unchanged'} ${result.targetPath}`)
       }
+      console.log(`  [${done}/${total}] Done: ${filePath}`)
     } catch (error) {
+      done += 1
       summary.fileFailed += 1
-      console.error(`Failed: ${filePath}`)
+      console.error(`  [${done}/${total}] Failed: ${filePath}`)
       console.error(error)
     }
   })))

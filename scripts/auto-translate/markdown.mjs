@@ -40,7 +40,8 @@ function splitIntoBlocks(tree, rawContent) {
       hash: md5(normalizedText),
       separator,
       startLine: node.position?.start.line ?? null, // 1-based
-      endLine: node.position?.end.line ?? null
+      endLine: node.position?.end.line ?? null,
+      isCode: node.type === 'code'
     })
   }
   return blocks
@@ -217,22 +218,51 @@ export async function buildMarkdownTarget({ filePath, sourceDir, targetLang, dif
   const { blockMap, lineMap } = buildReuseMaps(oldCNBlocks, existingENBlocks)
   const changedLineNumbers = diffBase ? getChangedLineNumbers(diffBase, filePath) : null
 
-  // 新文件快速路径：目标文件不存在时，整块翻译，跳过行级拆分流程
+  // 新文件快速路径：目标文件不存在时，跳过行级拆分流程
+  // 普通块整块翻译（translateBlocksBatch），代码块仅提取中文行翻译后原位替换
   if (!existingEnRaw) {
-    const chineseBlocks = newBlocks.filter(b => hasHan(b.text))
-    const translatedTexts = await translator.translateBlocksBatch(
-      chineseBlocks.map(b => b.text),
-      targetLang,
-      `${filePath} → ${targetLang}`
-    )
-    const blockTransMap = new Map(chineseBlocks.map((b, i) => [b.text, translatedTexts[i]]))
+    const regularChineseBlocks = newBlocks.filter(b => hasHan(b.text) && !b.isCode)
+    const codeChineseBlocks = newBlocks.filter(b => hasHan(b.text) && b.isCode)
+
+    // 同步收集代码块内所有唯一中文行
+    const codeLineDict = new Map() // lineText → translation
+    for (const block of codeChineseBlocks) {
+      for (const line of block.text.split('\n')) {
+        if (hasHan(line) && !codeLineDict.has(line)) codeLineDict.set(line, null)
+      }
+    }
+    const uniqueCodeLines = [...codeLineDict.keys()]
+
+    // 普通块整块翻译 与 代码块中文行翻译 并发执行
+    const [regularTranslated, codeLineTranslated] = await Promise.all([
+      regularChineseBlocks.length > 0
+        ? translator.translateBlocksBatch(regularChineseBlocks.map(b => b.text), targetLang, `${filePath} → ${targetLang}`)
+        : Promise.resolve([]),
+      uniqueCodeLines.length > 0
+        ? translator.translateLinesBatch(uniqueCodeLines, targetLang, `${filePath} code → ${targetLang}`)
+        : Promise.resolve([])
+    ])
+
+    const blockTransMap = new Map(regularChineseBlocks.map((b, i) => [b.text, regularTranslated[i]]))
+    uniqueCodeLines.forEach((line, i) => codeLineDict.set(line, codeLineTranslated[i]))
+
+    // 将翻译后的中文行替换回代码块原文
+    const codeBlockTransMap = new Map()
+    for (const block of codeChineseBlocks) {
+      const translatedText = block.text.split('\n')
+        .map(line => hasHan(line) ? (codeLineDict.get(line) ?? line) : line)
+        .join('\n')
+      codeBlockTransMap.set(block.text, translatedText)
+    }
 
     let content = ''
     let translatedCount = 0
-    for (let i = 0; i < newBlocks.length; i++) {
-      const block = newBlocks[i]
+    for (const block of newBlocks) {
       if (blockTransMap.has(block.text)) {
         content += blockTransMap.get(block.text)
+        translatedCount++
+      } else if (codeBlockTransMap.has(block.text)) {
+        content += codeBlockTransMap.get(block.text)
         translatedCount++
       } else {
         content += block.text
