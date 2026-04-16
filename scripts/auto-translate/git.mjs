@@ -1,4 +1,9 @@
+import fs from 'fs'
+import path from 'path'
+import { fileURLToPath } from 'url'
 import { execSync } from 'child_process'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 const EMPTY_TREE_HASH = '4b825dc642cb6eb9a060e54bf8d69288fbee4904'
 
@@ -62,10 +67,6 @@ export function listAllSourceFiles(sourceDir) {
 
 export function getChangedFiles(sourceDir, diffBase) {
   if (!diffBase) return { files: [], deletedFiles: [] }
-  const changedFiles = exec(`git diff --name-only ${diffBase} HEAD`).split('\n').filter(Boolean)
-  if (changedFiles.includes('scripts/languages.json') || changedFiles.includes('scripts/auto-translate/languages.json')) {
-    return { files: listAllSourceFiles(sourceDir), deletedFiles: [] }
-  }
 
   const diffOutput = exec(`git diff --name-status --find-renames ${diffBase} HEAD -- ${sourceDir}`)
   const files = new Set()
@@ -93,6 +94,49 @@ export function getGitContent(revision, filePath) {
   if (!revision) return null
   const content = exec(`git show ${revision}:${filePath}`)
   return content || null
+}
+
+// 判断 languages.json 是否在本次 diff 中发生了变更
+export function didLanguagesFileChange(diffBase) {
+  if (!diffBase) return false
+  const changedFiles = exec(`git diff --name-only ${diffBase} HEAD`).split('\n').filter(Boolean)
+  return changedFiles.includes('scripts/languages.json') || changedFiles.includes('scripts/auto-translate/languages.json')
+}
+
+// 读取 languages.json 列表的工具函数（当前版本 vs diffBase 版本）
+function readLangsFromFile() {
+  for (const p of [path.join(__dirname, 'languages.json'), path.join(__dirname, '..', 'languages.json')]) {
+    if (!fs.existsSync(p)) continue
+    try {
+      const parsed = JSON.parse(fs.readFileSync(p, 'utf-8'))
+      if (Array.isArray(parsed)) return parsed.map(l => String(l).trim()).filter(Boolean)
+    } catch {}
+  }
+  return []
+}
+
+function readLangsFromGit(diffBase) {
+  for (const gitPath of ['scripts/auto-translate/languages.json', 'scripts/languages.json']) {
+    const content = exec(`git show ${diffBase}:${gitPath}`)
+    if (!content) continue
+    try {
+      const parsed = JSON.parse(content)
+      if (Array.isArray(parsed)) return parsed.map(l => String(l).trim()).filter(Boolean)
+    } catch {}
+  }
+  return []
+}
+
+// 比较 languages.json 在 diffBase 前后的差异，返回新增和删除的语言列表
+export function getLanguageChanges(diffBase) {
+  const currentLangs = readLangsFromFile()
+  const oldLangs = diffBase ? readLangsFromGit(diffBase) : []
+  const oldSet = new Set(oldLangs)
+  const currentSet = new Set(currentLangs)
+  return {
+    addedLangs: currentLangs.filter(l => !oldSet.has(l)),
+    removedLangs: oldLangs.filter(l => !currentSet.has(l))
+  }
 }
 
 // 解析 git diff 的 unified=0 格式，返回新文件中被修改/新增的行号集合（1-based）

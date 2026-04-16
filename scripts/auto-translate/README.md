@@ -69,7 +69,10 @@ node scripts/auto-translate/index.mjs run --source=content/cn --target=en,ja
 ["en", "ja"]
 ```
 
-当 `languages.json` 本身发生变更时，脚本会自动触发全量翻译。
+当 `languages.json` 发生变更时，脚本按语言差异处理：
+- 新增语言：对 `sourceDir` 下文件做全量补齐翻译。
+- 删除语言：删除对应语言目录下的已生成译文文件。
+- 保留语言：仅处理本次 Git diff 命中的变更文件。
 
 ---
 
@@ -80,9 +83,18 @@ CLI 参数解析
     ↓
 Git diff 基线解析（resolveDiffBase）
     ↓
-计算待处理文件列表
-  ├─ full=true    → git ls-files 全量
-  └─ changed-only → git diff 增量（含删除文件处理）
+判断运行模式
+  ├─ full=true
+  │    └─ 全量：git ls-files 所有源文件 × 所有目标语言
+  │
+  ├─ languages.json 有变更
+  │    ├─ 比较新旧语言列表（getLanguageChanges）
+  │    ├─ 已删除语言 → 删除 content/<lang>/ 整个目录
+  │    ├─ 新增语言   → git ls-files 全量 × 仅新增语言
+  │    └─ 保留语言   → git diff 增量（含删除文件清理）× 仅保留语言
+  │
+  └─ 常规增量
+       └─ git diff 增量（含删除文件清理）× 所有目标语言
     ↓
 并发处理文件（最多 5 个）
     ↓
@@ -114,12 +126,23 @@ Git diff 基线解析（resolveDiffBase）
 git diff --name-status --find-renames <diffBase> HEAD -- <sourceDir>
 ```
 
-- **`languages.json` 有变更** → 忽略文件粒度，直接触发全量翻译（`git ls-files`）。
 - **`R`（重命名）/ `C`（复制）**：取新路径加入待处理列表。
 - **`D`（删除）**：加入 `deletedFiles`，翻译开始前先删除对应目标语言文件；若目录为空则一并清理。
 - **其他（`A` 新增 / `M` 修改）**：加入待处理列表。
 
 只处理以 `.md`、`.yml`、`.yaml` 结尾且位于 `sourceDir` 下的文件。
+
+### 语言列表变更检测（`didLanguagesFileChange` / `getLanguageChanges`）
+
+`didLanguagesFileChange` 通过 `git diff --name-only` 判断本次提交是否修改了 `languages.json`。
+
+`getLanguageChanges` 在检测到变更后，用 `git show <diffBase>:scripts/auto-translate/languages.json` 读取旧版本，与磁盘当前版本对比，返回：
+
+```js
+{ addedLangs: [...], removedLangs: [...] }
+```
+
+`index.mjs` 根据结果分三路处理（见上方流程图），而非笼统触发全量翻译。
 
 ### 变更行号提取（`getChangedLineNumbers`）
 
