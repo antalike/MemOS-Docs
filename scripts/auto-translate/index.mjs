@@ -23,7 +23,7 @@ function printUsage() {
 async function processFiles(files, config, translator, diffBase, langs, summary) {
   if (files.length === 0 || langs.length === 0) return
   const langConfig = { ...config, targetLangs: langs }
-  const limit = pLimit(5)
+  const limit = pLimit(15)
   await Promise.all(files.map(filePath => limit(async () => {
     try {
       console.log(`Processing: ${filePath}`)

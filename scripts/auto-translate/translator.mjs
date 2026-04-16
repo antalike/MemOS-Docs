@@ -156,7 +156,7 @@ Return ONLY a JSON array of strings, same length and order as input. No other te
   async function translateBlocksBatch(blocks, targetLang, context = '') {
     if (blocks.length === 0) return []
 
-    const CHUNK_SIZE = 25
+    const CHUNK_SIZE = 50
     const systemPrompt = `Translate Chinese markdown blocks to ${targetLang} for technical docs.
 Do NOT translate: MemOS, MemCube, MOS, KV Cache, LoRA, LLM, API, SDK, NLI. Translate faithfully — no rephrasing.
 Preserve ALL markdown syntax exactly (**, *, \`, #, [], (), ---, MDC components).
