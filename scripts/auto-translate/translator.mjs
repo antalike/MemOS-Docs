@@ -62,28 +62,37 @@ function normalizeModelOutput(content) {
     value = value.replace(/^```\s*/, '').replace(/\s*```$/, '')
   }
 
-  // If it's expected to be a JSON array, extract it from possible prefixes/suffixes
-  // (e.g. LLM outputs "Here is the result: [...] .")
-  const firstBracket = value.indexOf('[')
-  const lastBracket = value.lastIndexOf(']')
-  if (firstBracket !== -1 && lastBracket !== -1 && lastBracket > firstBracket) {
-    const candidateArray = value.substring(firstBracket, lastBracket + 1)
+  // 1. Try direct parsing first
+  try {
+    const directParsed = JSON.parse(value)
+    // If OpenAI wraps the array in an object (e.g. {"items": [...]}), extract it
+    if (!Array.isArray(directParsed) && typeof directParsed === 'object' && directParsed !== null) {
+      const arrays = Object.values(directParsed).filter(v => Array.isArray(v))
+      if (arrays.length === 1) return JSON.stringify(arrays[0])
+    }
+    return value
+  } catch {
+    // Ignore direct parse failure, proceed to robust extraction
+  }
+
+  // 2. Robust regex extraction: Find the outermost valid JSON array
+  // This avoids indexOf('[') being broken by markdown links like [text](url)
+  const arrayMatch = value.match(/\[\s*\{[\s\S]*\}\s*\]/)
+  if (arrayMatch) {
     try {
-      JSON.parse(candidateArray)
-      return candidateArray
+      JSON.parse(arrayMatch[0])
+      return arrayMatch[0]
     } catch {
-      // Ignore if it's not valid JSON
+      // Ignore
     }
   }
 
-  // Same for JSON objects
-  const firstBrace = value.indexOf('{')
-  const lastBrace = value.lastIndexOf('}')
-  if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
-    const candidateObject = value.substring(firstBrace, lastBrace + 1)
+  // 3. Fallback object extraction
+  const objectMatch = value.match(/\{[\s\S]*\}/)
+  if (objectMatch) {
     try {
-      JSON.parse(candidateObject)
-      return candidateObject
+      JSON.parse(objectMatch[0])
+      return objectMatch[0]
     } catch {
       // Ignore
     }
@@ -94,16 +103,15 @@ function normalizeModelOutput(content) {
 
 export function createTranslator(config) {
   async function requestLLM(systemPrompt, userContent) {
+    // response_format: json_object forces an object wrapper, breaking array responses on strict models (e.g. gpt-3.5-turbo).
+    // Rely on prompt-level instructions instead, which works across all models.
     const payload = {
       model: config.model,
       messages: [
         { role: 'system', content: systemPrompt },
         { role: 'user', content: userContent }
       ],
-      temperature: 0.1,
-      response_format: {
-        type: 'json_object'
-      }
+      temperature: 0.1
     }
 
     return withRetry(async () => {
@@ -152,7 +160,11 @@ Return ONLY the translated line. No explanation, no extra text, no wrapping.`
   async function translateLinesBatch(lines, targetLang, context = '') {
     if (lines.length === 0) return []
 
-    const CHUNK_SIZE = 80
+    // gpt-3.5-turbo has limited output tokens; use token-based chunking to prevent truncated JSON.
+    // TOKEN_BUDGET bounds input tokens; MAX_ITEMS caps line count independently because many short
+    // lines can still produce large output (Russian/Cyrillic output is 1.5-2x longer than Chinese input).
+    const TOKEN_BUDGET = config.model?.includes('gpt-3.5') ? 400 : 2000
+    const MAX_ITEMS = config.model?.includes('gpt-3.5') ? 15 : 50
     const systemPrompt = `Translate the Chinese lines to ${langName(targetLang)} for technical docs.
 Do NOT translate: MemOS, MemCube, MOS, KV Cache, LoRA, LLM, API, SDK. Do not rephrase English-only portions.
 Preserve: Markdown syntax (**, *, \`, [], ()), icon prefixes (ri:xxx), quoted text as plain text (never bold).
@@ -162,10 +174,7 @@ YAML lines (key: value): if the translated value needs quotes, include them INSI
 Input: JSON array of {id, text} objects. Output MUST be a valid JSON array of {id, text} objects, using double quotes for JSON syntax, same count and order as input. No other text.
 IMPORTANT: You must properly escape all internal double quotes (\\") and newlines (\\n) within the text values.`
 
-    const chunks = []
-    for (let i = 0; i < lines.length; i += CHUNK_SIZE) {
-      chunks.push(lines.slice(i, i + CHUNK_SIZE))
-    }
+    const chunks = chunkByTokenBudget(lines, TOKEN_BUDGET, MAX_ITEMS)
 
     const results = await Promise.all(
       chunks.map(async (chunk) => {
@@ -272,7 +281,8 @@ Return ONLY the translated block. No explanation, no extra text, no wrapping.`
   async function translateBlocksBatch(blocks, targetLang, context = '') {
     if (blocks.length === 0) return []
 
-    const TOKEN_BUDGET = 2000
+    // gpt-3.5-turbo has limited output tokens; use a smaller budget to avoid truncated JSON
+    const TOKEN_BUDGET = config.model?.includes('gpt-3.5') ? 800 : 2000
     const systemPrompt = `Translate Chinese markdown blocks to ${langName(targetLang)} for technical docs.
 Do NOT translate: MemOS, MemCube, MOS, KV Cache, LoRA, LLM, API, SDK, NLI. Translate faithfully — no rephrasing.
 Preserve ALL markdown syntax exactly (**, *, \`, #, [], (), ---, MDC components).
