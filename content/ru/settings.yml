@@ -1,0 +1,151 @@
+nav:
+  # You can include icons using the syntax `(ri:icon-name)`.
+  # The frontend will render these as actual icons.
+  # You can find available icons at https://icones.js.org/
+  - "(ri:cloud-line) MemOS Cloud":
+    - "(ri:book-line) Начало Использования":
+      - "(ri:eye-line) Обзор": memos_cloud/overview.md
+      - "(ri:rocket-line) Быстрый Старт": memos_cloud/quick_start.md
+      - "(ri:home-line) Основные Понятия":
+        - "(ri:add-line) Производство Памяти": memos_cloud/introduction/mem_production.md
+        - "(ri:calendar-line) Расписание Памяти": memos_cloud/introduction/mem_schedule.md
+        - "(ri:search-line) Восстановление Памяти": memos_cloud/introduction/mem_recall.md
+        - "(ri:refresh-line) Управление Жизненным Циклом Памяти": memos_cloud/introduction/mem_lifecycle.md
+        - "(ri:cpu-line) Обзор Принципов Алгоритма": memos_cloud/introduction/algorithm.md
+      - "(ri:dashboard-line) Облачная Платформа и Открытые Решения": memos_cloud/cloud_and_opensource.md
+      - "(ri:shield-line) Квоты и Ограничения": memos_cloud/limit.md
+
+    - "(ri:question-line) Поддержка и Устранение Проблем":
+      - "(ri:question-line) FAQs Часто Задаваемые Вопросы": memos_cloud/faq.md
+
+    - "(ri:edit-box-line) Операции с Памятью":
+      - "(ri:message-3-line) Add Message": memos_cloud/mem_operations/add_message.md
+      - "(ri:search-2-line) Search Memory": memos_cloud/mem_operations/search_memory.md
+      - "(ri:delete-bin-line) Delete Memory": memos_cloud/mem_operations/delete_memory.md
+      - "(ri:feedback-line)Add Feedback": memos_cloud/mem_operations/add_feedback.md
+
+    - "(ri:function-line) Введение в Функции":
+      - "(ri:flag-line) Основные Функции":
+        - "(ri:filter-3-line) Фильтрация Памяти": memos_cloud/features/basic/filters.md
+        - "(ri:timer-flash-line) Асинхронный Режим": memos_cloud/features/basic/async_mode.md
+        - "(ri:image-add-line) Мультимодальные Сообщения": memos_cloud/features/basic/multimodal.md
+        - "(ri:price-tag-3-line) Пользовательские Метки": memos_cloud/features/basic/custom_tags.md
+      - "(ri:vip-diamond-line) Расширенные Функции":
+        - "(ri:function-line) Навыки": memos_cloud/features/advanced/skill.md
+        - "(ri:book-read-line) База Знаний": memos_cloud/features/advanced/knowledge_base.md
+        - "(ri:tools-line) Вызов Инструментов": memos_cloud/features/advanced/tool_calling.md
+        - "(ri:chat-history-line) Непрерывный Диалог": memos_cloud/features/advanced/continuous_dialogue.md
+
+  - "(ri:github-line) Открытые Проекты":
+    - "(ri:rocket-line) Быстрый Ввод":
+      - "(ri:install-line) Руководство по Установке": open_source/getting_started/installation.md
+      - "(ri:bookmark-line) Создайте Вашу Первую Память": open_source/getting_started/your_first_memory.md
+      - "(ri:lightbulb-line) Основные Понятия": open_source/home/core_concepts.md
+      - "(ri:building-2-line) Архитектурный Дизайн": open_source/home/architecture.md
+      - "(ri:file-code-line) REST API Сервис": open_source/getting_started/rest_api_server.md
+      - "(ri:code-line) Пример MemOS": open_source/getting_started/examples.md
+
+    - "(ri:cpu-line) MemOS":
+      - "(ri:eye-line) Руководство по Разработке API": open_source/modules/mos/overview.md
+      - "(ri:checkbox-multiple-blank-line) MemCube Память": open_source/modules/mem_cube.md
+      - "(ri:book-open-line) MemReader Чтение Памяти": open_source/modules/mem_reader.md
+      - "(ri:calendar-line) MemScheduler Расписание Памяти": open_source/modules/mem_scheduler.md
+      - "(ri:calendar-line) MemChat Чат с Использованием Памяти": open_source/modules/mem_chat.md
+      - "(ri:feedback-line) MemFeedback Обратная Связь по Памяти": open_source/modules/mem_feedback.md
+
+
+    - "(ri:brain-line) Система Памяти":
+      - "(ri:database-2-line) Обзор Модулей Памяти": open_source/modules/memories/overview.md
+      - "(ri:book-2-line) Открытая Память":
+        - "(ri:file-text-line) Простая Открытая Память": open_source/modules/memories/naive_textual_memory.md
+        - "(ri:file-text-line) Универсальная Открытая Память": open_source/modules/memories/general_textual_memory.md
+        - "(ri:user-heart-line) Предпочтительная Открытая Память": open_source/modules/memories/preference_textual_memory.md
+        - "(ri:tree-line) Деревовидная Открытая Память": open_source/modules/memories/tree_textual_memory.md
+        - "(ri:database-line) Neo4j Графовая База Данных": open_source/modules/memories/neo4j_graph_db.md
+        - "(ri:database-line) PolarDB Графовая База Данных": open_source/modules/memories/polardb_graph_db.md
+      - "(ri:database-2-line) KVCache Память": open_source/modules/memories/kv_cache_memory.md
+      - "(ri:cpu-line) Параметрическая Память (в Разработке)": open_source/modules/memories/parametric_memory.md
+
+    - "(ri:star-line) Лучшие Практики":
+      - "(ri:speed-line) Оптимизация Производительности": open_source/best_practice/performance_tuning.md
+      - "(ri:wifi-line) Решение Сетевых Проблем": open_source/best_practice/network_workarounds.md
+      - "(ri:error-warning-line) Распространенные Ошибки и Решения": open_source/best_practice/common_errors_solutions.md
+      - "(ri:tools-line) Руководство по Интеграции MemOS MCP": open_source/best_practice/mcp_for_cozespace_and_tools.md
+
+    - "(ri:heart-line) Руководство по Вкладу":
+      - "(ri:eye-line) Участие в Разработке MemOS": open_source/contribution/overview.md
+      - "(ri:tools-line) Настройка Разработческой Среды": open_source/contribution/setting_up.md
+      - "(ri:git-branch-line) Процесс Разработки": open_source/contribution/development_workflow.md
+      - "(ri:git-commit-line) Стандарты Коммитов": open_source/contribution/commit_guidelines.md
+      - "(ri:article-line) Руководство по Написанию Документации": open_source/contribution/writing_docs.md
+      - "(ri:flask-line) Как Писать Тесты": open_source/contribution/writing_tests.md
+
+    - "(ri:file-code-line) Документация API": api-reference/search-memories
+
+  - "(ri:cpu-line) Описание Собственных Моделей":
+    - "(ri:flask-line) Извлечение Моделей":
+      - "(ri:file-code-line) Примеры Использования": self_developed_model/extraction_usage_example.md
+
+  - "(ri:puzzle-line) Поддержка MCP и Agent Фреймов":
+    - "(ri:tools-line) MCP Сервис":
+      - "(ri:book-open-line) Руководство по Использованию": mcp_agent/mcp/guide.md
+
+    - "(ri:robot-line) Разработка Agent":
+      - "(ri:book-open-line) Руководство по Использованию": mcp_agent/agent/guide.md
+
+  - "(ri:robot-line) Agent":
+    - "(ri:book-open-line) Облачные Плагины vs Локальные Плагины": openclaw/plugin_compare.md
+    - "(ri:file-list-3-line) Журнал Изменений": openclaw/changes.md
+    - "(ri:download-line) Руководство по Установке": 
+      - "(ri:cloud-line) Облачный Плагин OpenClaw": openclaw/guide.md
+      - "(ri:computer-line) Локальный Плагин OpenClaw": openclaw/local_plugin.md
+      - "(ri:server-line) Локальный Плагин Hermes": openclaw/hermes_local_plugin.md
+    - "(ri:flask-line) Примеры Использования": 
+      - "(ri:team-line) Изоляция Памяти Мультиагентов": openclaw/examples/multi_agent.md
+      - "(ri:filter-3-line) Вторичная Фильтрация Вызова Памяти": openclaw/examples/recall_filter.md
+      - "(ri:terminal-box-line) Использование Локального Плагина Hermes": openclaw/examples/hermes_usage.md
+
+  - "(ri:file-code-line) Документация API":
+    - "(ri:rocket-line) Начало Использования":
+      - "(ri:eye-line) Обзор": api_docs/start/overview.md
+      - "(ri:settings-3-line) Конфигурация Проекта": api_docs/start/configuration.md
+
+    - "(ri:edit-box-line) Основные Операции":
+      - "(ri:message-3-line) Add Message": api_docs/core/add_message.md
+      - "(ri:search-2-line) Search Memory": api_docs/core/search_memory.md
+      - "(ri:file-list-line) Get Memory": api_docs/core/get_memory.md
+      - "(ri:delete-bin-line) Delete Memory": api_docs/core/delete_memory.md
+      - "(ri:feedback-line) Add Feedback": api_docs/message/add_feedback.md
+
+    - "(ri:cpu-line) Собственные Модели":
+      - "(ri:flask-line) Extract Memory": api_docs/core/extract_memory.md
+
+    - "(ri:chat-1-line) Сообщения":
+      - "(ri:file-list-line) Get Message": api_docs/message/get_message.md
+      - "(ri:task-line) Get Task Status": api_docs/message/get_status.md
+
+    - "(ri:chat-smile-2-line) Диалоги":
+      - "(ri:chat-4-line) Chat": api_docs/chat/chat.md
+
+    - "(ri:book-read-line) База Знаний":
+      - "(ri:add-box-line) Создание Базы Знаний": api_docs/knowledge/create_kb.md
+      - "(ri:delete-back-2-line) Удаление Базы Знаний": api_docs/knowledge/remove_kb.md
+      - "(ri:file-add-line) Добавление Документа в Базу Знаний": api_docs/knowledge/add_kb_doc.md
+      - "(ri:file-search-line) Получение Документа из Базы Знаний": api_docs/knowledge/get_kb_doc.md
+      - "(ri:file-reduce-line) Удаление Документа из Базы Знаний": api_docs/knowledge/delete_kb_doc.md
+
+    - "(ri:customer-service-line) Помощь и Поддержка":
+      - "(ri:error-warning-line) Код Ошибки": api_docs/help/error_codes.md
+
+  - "(ri:projector-line) Пример Проекта":
+    - "(ri:lightbulb-line) Лучшие Практики":
+      - "(ri:customer-service-2-line) Помощник по Вопросам и Ответам": usecase/knowledge_qa_assistant.md
+      - "(ri:money-dollar-circle-line) Помощник по Финансам": usecase/financial_assistant.md
+      - "(ri:edit-line) Помощник По Написанию": usecase/writting_assistant.md
+      - "(ri:heart-line) Помощник По Семейной Жизни": usecase/home_assistant.md
+      # - "(ri:customer-service-2-line) Корпоративный Сервис Поддержки WeChat": usecase/wecom_customer_service.md
+
+    - "(ri:layout-grid-line) Фреймы И Платформы":
+      # - "(ri:chrome-line) Плагин Для Браузера": usecase/frameworks/browser_extension.md
+      - "(ri:brain-line) Claude MCP": usecase/frameworks/claude_mcp.md
+      - "(ri:puzzle-2-line) Инструменты Плагина Coze": usecase/frameworks/coze_plugin.md
