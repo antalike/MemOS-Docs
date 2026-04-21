@@ -82,9 +82,9 @@ export function loadConfigFromCli(argv = process.argv.slice(2)) {
     targetLangs,
     changedOnly,
     full,
-    openaiApiKey: process.env.OPENAI_API_KEY || 'sk-e9af19bc51c94db2b0705bc58018808c',
-    openaiApiBase: process.env.OPENAI_API_BASE || 'https://api.deepseek.com',
-    model: process.env.OPENAI_MODEL || 'deepseek-chat',
+    openaiApiKey: process.env.OPENAI_API_KEY || 'sk-3d99098b5fa240f1a55d528a993f34e8',
+    openaiApiBase: process.env.OPENAI_API_BASE || 'https://dashscope.aliyuncs.com/compatible-mode/v1',
+    model: process.env.OPENAI_MODEL || 'qwen-plus',
     retryAttempts: Number(process.env.TRANSLATE_RETRY_ATTEMPTS || 3),
     retryBaseDelayMs: Number(process.env.TRANSLATE_RETRY_BASE_DELAY_MS || 1000)
   }

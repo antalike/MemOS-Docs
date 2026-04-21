@@ -13,7 +13,8 @@
     "publish": "node scripts/generate.mjs",
     "preview": "nuxt preview",
     "lint": "eslint .",
-    "typecheck": "nuxt typecheck"
+    "typecheck": "nuxt typecheck",
+    "docs:translate": "GITHUB_EVENT_BEFORE=$(git rev-parse HEAD^) node scripts/auto-translate/index.mjs run --changed-only=true"
   },
   "dependencies": {
     "@iconify-json/lucide": "^1.2.47",

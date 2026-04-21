@@ -18,6 +18,23 @@ function isTranslatable(str) {
   return typeof str === 'string' && /[\u4e00-\u9fff]/.test(str)
 }
 
+// 检验字符串是否符合目标语言特征，防止把错误语言的旧译文当作有效缓存复用
+// 对有明确 Unicode 字符集的语言（如韩文、日文）做精确校验；其余语言仅排除汉字
+function containsTargetLang(str, targetLang) {
+  if (typeof str !== 'string') return false
+  const lang = targetLang.toLowerCase()
+  if (lang === 'ko' || lang.startsWith('ko-')) {
+    // 朝鲜文音节块 AC00-D7A3，兼容字母 1100-11FF 及兼容字母 3130-318F
+    return /[\uAC00-\uD7A3\u1100-\u11FF\u3130-\u318F]/.test(str)
+  }
+  if (lang === 'ja' || lang.startsWith('ja-')) {
+    // 平假名 3040-309F，片假名 30A0-30FF
+    return /[\u3040-\u30FF]/.test(str)
+  }
+  // 其他语言（如 en）：只要不含汉字即视为合法
+  return !isTranslatable(str)
+}
+
 // 提取 key 中的 icon 名，如 "(ri:cpu-line) 标题" → "ri:cpu-line"
 // 用于防止位置错位时将不同 icon 的条目错误映射
 function extractIcon(str) {
@@ -179,20 +196,20 @@ export async function buildYamlTarget({ filePath, sourceDir, targetLang, diffBas
   const newSource = yamlToObject(newSourceRaw)
 
   const oldCnRaw = diffBase ? getGitContent(diffBase, filePath) : null
-  const existingEnRaw = fs.existsSync(targetPath) ? fs.readFileSync(targetPath, 'utf-8') : null
+  const existingTargetRaw = fs.existsSync(targetPath) ? fs.readFileSync(targetPath, 'utf-8') : null
 
   // --- 复用映射：双重来源，防止 diffBase 太远导致 reuseMap 不全 ---
 
-  // 来源 1：oldCN ↔ existingEN（diffBase 版本，结构一定对齐，最可靠）
-  const reuseMap = (oldCnRaw && existingEnRaw)
-    ? buildStringReuseMap(yamlToObject(oldCnRaw), yamlToObject(existingEnRaw))
+  // 来源 1：oldCN ↔ existingTarget（diffBase 版本，结构一定对齐，最可靠）
+  const reuseMap = (oldCnRaw && existingTargetRaw)
+    ? buildStringReuseMap(yamlToObject(oldCnRaw), yamlToObject(existingTargetRaw))
     : new Map()
 
-  // 来源 2：newCN ↔ existingEN（直接对齐当前 CN 与现有 EN）
+  // 来源 2：newCN ↔ existingTarget（直接对齐当前 CN 与现有目标文件）
   // 当 diffBase 很远时，reuseMap 可能不全；directMap 作为补充
-  // 注意：新增条目插入中间时可能错位，需要校验映射值确实是英文
-  const directMap = existingEnRaw
-    ? buildStringReuseMap(newSource, yamlToObject(existingEnRaw))
+  // 注意：新增条目插入中间时可能错位，需要校验映射值符合目标语言
+  const directMap = existingTargetRaw
+    ? buildStringReuseMap(newSource, yamlToObject(existingTargetRaw))
     : new Map()
 
   // 收集所有中文字符串（含注释行）
@@ -202,16 +219,17 @@ export async function buildYamlTarget({ filePath, sourceDir, targetLang, diffBas
   const toTranslate = []
 
   for (const str of allStrings) {
-    // 优先用 reuseMap（oldCN↔existingEN 对齐，最可靠）
+    // 优先用 reuseMap（oldCN↔existingTarget 对齐，最可靠）
+    // 额外校验：复用值必须符合目标语言特征，防止旧文件中错误语言的译文被永久复用
     const fromReuse = reuseMap.get(str)
-    if (fromReuse !== undefined) {
+    if (fromReuse !== undefined && containsTargetLang(fromReuse, targetLang)) {
       translationMap.set(str, fromReuse)
       continue
     }
-    // 其次用 directMap（newCN↔existingEN 对齐，可能因新增条目错位）
-    // 校验：映射值必须不含汉字（确认确实是英文翻译，而非错位到了中文）
+    // 其次用 directMap（newCN↔existingTarget 对齐，可能因新增条目错位）
+    // 校验：映射值必须不含汉字，且符合目标语言特征
     const fromDirect = directMap.get(str)
-    if (fromDirect !== undefined && !isTranslatable(fromDirect)) {
+    if (fromDirect !== undefined && containsTargetLang(fromDirect, targetLang)) {
       translationMap.set(str, fromDirect)
       continue
     }
@@ -230,7 +248,7 @@ export async function buildYamlTarget({ filePath, sourceDir, targetLang, diffBas
   const generated = applyTranslationsToRaw(newSourceRaw, translationMap)
 
   // 与现有 EN 文件合并：内容相同的行保留现有格式（引号等）
-  const content = mergeWithExisting(generated, existingEnRaw)
+  const content = mergeWithExisting(generated, existingTargetRaw)
 
   return { targetPath, content, translatedCount: toTranslate.length }
 }

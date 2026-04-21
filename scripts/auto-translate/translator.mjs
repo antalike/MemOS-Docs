@@ -1,7 +1,44 @@
 import fetch from 'node-fetch'
 
+// 将语言代码转为 LLM 能明确理解的全名，降低模型输出错误语言的概率
+const LANG_NAMES = {
+  en: 'English', zh: 'Chinese', ko: 'Korean', ja: 'Japanese',
+  fr: 'French',  de: 'German',  es: 'Spanish', pt: 'Portuguese',
+  ru: 'Russian', ar: 'Arabic',  hi: 'Hindi',   it: 'Italian',
+}
+function langName(code) {
+  return LANG_NAMES[code?.toLowerCase()] ?? code
+}
+
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms))
+}
+
+// 粗略估算文本 token 数：汉字约 1.5 chars/token，其余约 4 chars/token
+function estimateTokens(text) {
+  const hanCount = (text.match(/[\u4e00-\u9fff]/g) ?? []).length
+  return Math.ceil(hanCount / 1.5 + (text.length - hanCount) / 4)
+}
+
+// 按 token 预算 + 条数上限分块，两个条件任一触发即换块
+// token 预算：防止单个超大块成为并发瓶颈
+// 条数上限：防止小块堆积导致 JSON 体积过大，LLM 返回格式错误概率上升
+// 单块超出 token 预算时单独成一块，不强制拆分块内容
+function chunkByTokenBudget(items, budget, maxItems = 50, getText = (x) => x) {
+  const chunks = []
+  let cur = [], curTokens = 0
+  for (const item of items) {
+    const t = estimateTokens(getText(item))
+    if (cur.length > 0 && (curTokens + t > budget || cur.length >= maxItems)) {
+      chunks.push(cur)
+      cur = []
+      curTokens = 0
+    }
+    cur.push(item)
+    curTokens += t
+  }
+  if (cur.length > 0) chunks.push(cur)
+  return chunks
 }
 
 async function withRetry(fn, attempts, baseDelayMs) {
@@ -24,6 +61,34 @@ function normalizeModelOutput(content) {
   } else if (value.startsWith('```')) {
     value = value.replace(/^```\s*/, '').replace(/\s*```$/, '')
   }
+
+  // If it's expected to be a JSON array, extract it from possible prefixes/suffixes
+  // (e.g. LLM outputs "Here is the result: [...] .")
+  const firstBracket = value.indexOf('[')
+  const lastBracket = value.lastIndexOf(']')
+  if (firstBracket !== -1 && lastBracket !== -1 && lastBracket > firstBracket) {
+    const candidateArray = value.substring(firstBracket, lastBracket + 1)
+    try {
+      JSON.parse(candidateArray)
+      return candidateArray
+    } catch {
+      // Ignore if it's not valid JSON
+    }
+  }
+
+  // Same for JSON objects
+  const firstBrace = value.indexOf('{')
+  const lastBrace = value.lastIndexOf('}')
+  if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
+    const candidateObject = value.substring(firstBrace, lastBrace + 1)
+    try {
+      JSON.parse(candidateObject)
+      return candidateObject
+    } catch {
+      // Ignore
+    }
+  }
+
   return value
 }
 
@@ -35,7 +100,10 @@ export function createTranslator(config) {
         { role: 'system', content: systemPrompt },
         { role: 'user', content: userContent }
       ],
-      temperature: 0.1
+      temperature: 0.1,
+      response_format: {
+        type: 'json_object'
+      }
     }
 
     return withRetry(async () => {
@@ -60,19 +128,39 @@ export function createTranslator(config) {
     }, config.retryAttempts, config.retryBaseDelayMs)
   }
 
+  // 单行降级翻译：不要求 JSON array，直接返回翻译后的纯文本
+  // 用于 translateLinesBatch 批量失败后的逐行兜底，避免原文残留
+  async function translateSingleLine(line, targetLang) {
+    const systemPrompt = `Translate the Chinese text in the following line to ${langName(targetLang)} for technical docs.
+Do NOT translate: MemOS, MemCube, MOS, KV Cache, LoRA, LLM, API, SDK. Do not rephrase English-only portions.
+Preserve ALL non-Chinese content exactly as-is (JSON keys, code syntax, punctuation, escape sequences like \\n).
+Return ONLY the translated line. No explanation, no extra text, no wrapping.`
+
+    try {
+      return await withRetry(async () => {
+        return await requestLLM(systemPrompt, line)
+      }, config.retryAttempts, config.retryBaseDelayMs)
+    } catch (err) {
+      console.warn(`    ⚠️  translateSingleLine: all retries failed, keeping original. Error: ${err?.message ?? err}`)
+      return line
+    }
+  }
+
   // 文件级批量行翻译：一次调用翻译整个文件中所有唯一的待翻译行
   // 超过 CHUNK_SIZE 时自动分块并发，保证大文件不超出上下文窗口
+  // 批量失败（长度不匹配）时降级为逐行翻译，保证每行都能翻译
   async function translateLinesBatch(lines, targetLang, context = '') {
     if (lines.length === 0) return []
 
     const CHUNK_SIZE = 80
-    const systemPrompt = `Translate the Chinese lines to ${targetLang} for technical docs.
+    const systemPrompt = `Translate the Chinese lines to ${langName(targetLang)} for technical docs.
 Do NOT translate: MemOS, MemCube, MOS, KV Cache, LoRA, LLM, API, SDK. Do not rephrase English-only portions.
 Preserve: Markdown syntax (**, *, \`, [], ()), icon prefixes (ri:xxx), quoted text as plain text (never bold).
 Capitalization: use Title Case for headings; preserve English term casing consistently.
 Completeness: translate every Chinese character — never leave Chinese in output.
-YAML lines (key: value): wrap translated value in single quotes; use double quotes if it contains a single quote.
-Output: JSON array of strings, same count and order as input. No other text.`
+YAML lines (key: value): if the translated value needs quotes, include them INSIDE the JSON string (e.g., {"id": 0, "text": "key: 'value'"}).
+Input: JSON array of {id, text} objects. Output MUST be a valid JSON array of {id, text} objects, using double quotes for JSON syntax, same count and order as input. No other text.
+IMPORTANT: You must properly escape all internal double quotes (\\") and newlines (\\n) within the text values.`
 
     const chunks = []
     for (let i = 0; i < lines.length; i += CHUNK_SIZE) {
@@ -81,22 +169,27 @@ Output: JSON array of strings, same count and order as input. No other text.`
 
     const results = await Promise.all(
       chunks.map(async (chunk) => {
-        let lastResult = null
+        const payload = chunk.map((text, i) => ({ id: i, text }))
         try {
-          return await withRetry(async () => {
-            const raw = await requestLLM(systemPrompt, JSON.stringify(chunk))
+          const idMap = await withRetry(async () => {
+            const raw = await requestLLM(systemPrompt, JSON.stringify(payload))
             const parsed = JSON.parse(raw)
             if (!Array.isArray(parsed)) throw new Error('Response is not an array')
-            if (parsed.length === chunk.length) return parsed
-            lastResult = parsed
-            throw new Error(`Expected ${chunk.length} results, got ${parsed.length}`)
+            return new Map(parsed.map(item => [item.id, item.text]))
           }, config.retryAttempts, config.retryBaseDelayMs)
-        } catch {
-          console.warn(`    ⚠️  translateLinesBatch: length mismatch, falling back${context ? ` [${context}]` : ''}`)
-          if (lastResult && Array.isArray(lastResult)) {
-            return chunk.map((src, i) => lastResult[i] ?? src)
+
+          // 按 id 回填；缺失的 id 逐条降级翻译，不保留原文
+          const missingIds = chunk.map((_, i) => i).filter(i => !idMap.has(i))
+          if (missingIds.length > 0) {
+            console.warn(`    ⚠️  translateLinesBatch: ${missingIds.length} item(s) missing, retrying individually${context ? ` [${context}]` : ''}`)
+            await Promise.all(missingIds.map(async (i) => {
+              idMap.set(i, await translateSingleLine(chunk[i], targetLang))
+            }))
           }
-          return chunk
+          return chunk.map((src, i) => idMap.get(i) ?? src)
+        } catch (err) {
+          console.warn(`    ⚠️  translateLinesBatch: batch failed (${err?.message || err}), falling back to line-by-line${context ? ` [${context}]` : ''}`)
+          return Promise.all(chunk.map(line => translateSingleLine(line, targetLang)))
         }
       })
     )
@@ -118,33 +211,38 @@ Output: JSON array of strings, same count and order as input. No other text.`
     }
 
     const yamlQuoteRule = options.yamlMode
-      ? `\nWrap each string in YAML quotes: single quotes by default; double quotes if the string contains a single quote.\nPreserve icon prefixes like "(ri:xxx-line)" at the start of strings — keep them exactly as-is, only translate the Chinese text that follows.`
+      ? `\nIf the string is a YAML value, you may wrap the translated value in quotes INSIDE the JSON string (e.g., {"id": 0, "text": "'translated'"}).\nPreserve icon prefixes like "(ri:xxx-line)" at the start of strings — keep them exactly as-is, only translate the Chinese text that follows.`
       : ''
 
-    const systemPrompt = `Translate Chinese strings to ${targetLang} for technical docs.
+    const systemPrompt = `Translate Chinese strings to ${langName(targetLang)} for technical docs.
 Do NOT translate: MemOS, MemCube, MOS, KV Cache, LoRA, LLM, API, SDK, NLI. Translate faithfully — no rephrasing.
 Preserve capitalization of embedded English; use Title Case for multi-word titles.
-Return ONLY a JSON array of strings, same length and order as input. No other text.${yamlQuoteRule}`
+Output MUST be a valid JSON array of {id, text} objects, using double quotes for JSON syntax, same order as input. No other text.${yamlQuoteRule}`
 
     const results = await Promise.all(
       chunks.map(async (chunk) => {
-        let lastResult = null
+        const payload = chunk.map((text, i) => ({ id: i, text }))
         try {
-          return await withRetry(async () => {
-            const raw = await requestLLM(systemPrompt, JSON.stringify(chunk))
+          const idMap = await withRetry(async () => {
+            const raw = await requestLLM(systemPrompt, JSON.stringify(payload))
             const parsed = JSON.parse(raw)
             if (!Array.isArray(parsed)) throw new Error('Response is not an array')
-            if (parsed.length === chunk.length) return parsed
-            lastResult = parsed
-            throw new Error(`Expected ${chunk.length} results, got ${parsed.length}`)
+            return new Map(parsed.map(item => [item.id, item.text]))
           }, config.retryAttempts, config.retryBaseDelayMs)
-        } catch {
-          // 降级：多了截断，少了用原文补齐
-          console.warn(`    ⚠️  translateStrings: length mismatch, falling back${context ? ` [${context}]` : ''}`)
-          if (lastResult && Array.isArray(lastResult)) {
-            return chunk.map((src, i) => lastResult[i] ?? src)
+
+          // 按 id 回填；缺失的 id 逐条降级翻译，不保留原文
+          const missingIds = chunk.map((_, i) => i).filter(i => !idMap.has(i))
+          if (missingIds.length > 0) {
+            console.warn(`    ⚠️  translateStrings: ${missingIds.length} item(s) missing, retrying individually${context ? ` [${context}]` : ''}`)
+            await Promise.all(missingIds.map(async (i) => {
+              idMap.set(i, await translateSingleLine(chunk[i], targetLang))
+            }))
           }
-          return chunk // 完全失败则返回原文
+          return chunk.map((src, i) => idMap.get(i) ?? src)
+        } catch {
+          // 整批失败：逐条降级翻译
+          console.warn(`    ⚠️  translateStrings: batch failed, falling back to line-by-line${context ? ` [${context}]` : ''}`)
+          return Promise.all(chunk.map(line => translateSingleLine(line, targetLang)))
         }
       })
     )
@@ -152,22 +250,38 @@ Return ONLY a JSON array of strings, same length and order as input. No other te
     return results.flat()
   }
 
+  // 单块降级翻译：translateBlocksBatch 批量失败后的逐块兜底
+  async function translateSingleBlock(block, targetLang) {
+    const systemPrompt = `Translate the following Chinese markdown block to ${langName(targetLang)} for technical docs.
+Do NOT translate: MemOS, MemCube, MOS, KV Cache, LoRA, LLM, API, SDK, NLI. Translate faithfully — no rephrasing.
+Preserve ALL markdown syntax exactly (**, *, \`, #, [], (), ---, MDC components).
+Return ONLY the translated block. No explanation, no extra text, no wrapping.`
+    try {
+      return await withRetry(async () => {
+        return await requestLLM(systemPrompt, block)
+      }, config.retryAttempts, config.retryBaseDelayMs)
+    } catch (err) {
+      console.warn(`    ⚠️  translateSingleBlock: all retries failed, keeping original. Error: ${err?.message ?? err}`)
+      return block
+    }
+  }
+
   // 新文件快速路径：整块（段落）翻译，保留完整 Markdown 上下文
   // 使用 {id, text} 格式请求，按 id 回填结果，LLM 多返或少返时仍可逐块恢复
+  // 按 token 预算分块而非固定条数，避免超大块成为并发瓶颈
   async function translateBlocksBatch(blocks, targetLang, context = '') {
     if (blocks.length === 0) return []
 
-    const CHUNK_SIZE = 50
-    const systemPrompt = `Translate Chinese markdown blocks to ${targetLang} for technical docs.
+    const TOKEN_BUDGET = 2000
+    const systemPrompt = `Translate Chinese markdown blocks to ${langName(targetLang)} for technical docs.
 Do NOT translate: MemOS, MemCube, MOS, KV Cache, LoRA, LLM, API, SDK, NLI. Translate faithfully — no rephrasing.
 Preserve ALL markdown syntax exactly (**, *, \`, #, [], (), ---, MDC components).
 Capitalization: use Title Case for headings; preserve English term casing consistently.
 Completeness: translate every Chinese character — never leave Chinese in output.
-Input: JSON array of {id, text} objects. Output: JSON array of {id, text} objects, same count and order, no other text.`
+Output MUST be a strictly valid JSON array of {id, text} objects, same count and order as input.
+IMPORTANT: You must properly escape all internal double quotes (\\") and newlines (\\n) within the text values to ensure valid JSON syntax.`
 
-    const chunks = []
-    for (let i = 0; i < blocks.length; i += CHUNK_SIZE)
-      chunks.push(blocks.slice(i, i + CHUNK_SIZE))
+    const chunks = chunkByTokenBudget(blocks, TOKEN_BUDGET)
 
     const results = await Promise.all(
       chunks.map(async (chunk) => {
@@ -183,9 +297,9 @@ Input: JSON array of {id, text} objects. Output: JSON array of {id, text} object
             if (missing.length > 0) console.warn(`    ⚠️  translateBlocksBatch: ${missing.length} block(s) missing in response, using original${context ? ` [${context}]` : ''}`)
             return chunk.map((src, i) => idMap.has(i) ? idMap.get(i) : src)
           }, config.retryAttempts, config.retryBaseDelayMs)
-        } catch {
-          console.warn(`    ⚠️  translateBlocksBatch: failed, using original${context ? ` [${context}]` : ''}`)
-          return chunk
+        } catch (err) {
+          console.warn(`    ⚠️  translateBlocksBatch: failed (${err?.message || err}), falling back to block-by-block${context ? ` [${context}]` : ''}`)
+          return Promise.all(chunk.map(block => translateSingleBlock(block, targetLang)))
         }
       })
     )

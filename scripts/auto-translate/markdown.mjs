@@ -15,6 +15,13 @@ function parseMarkdown(content) {
   return processor.parse(content)
 }
 
+function isMarkdownTable(text) {
+  const lines = text.trim().split('\n')
+  if (lines.length < 2) return false
+  const separatorLine = lines[1].trim()
+  return /^\|?[\s\-:]+\|[\s\-:|]+\|?$/.test(separatorLine)
+}
+
 function splitIntoBlocks(tree, rawContent) {
   const blocks = []
   const nodes = tree.children || []
@@ -41,7 +48,8 @@ function splitIntoBlocks(tree, rawContent) {
       separator,
       startLine: node.position?.start.line ?? null, // 1-based
       endLine: node.position?.end.line ?? null,
-      isCode: node.type === 'code'
+      isCode: node.type === 'code',
+      isTable: isMarkdownTable(rawText)
     })
   }
   return blocks
@@ -55,27 +63,29 @@ function splitIntoBlocks(tree, rawContent) {
 //   把所有 oldCN 块的行和所有 existingEN 块的行按顺序拍平后逐行对应。
 //   这样即使 remark 对 CN/EN 两个文件产生不同的块边界（MDC、特殊语法等），
 //   行级对应关系依然正确，不受块结构差异影响。
-function buildReuseMaps(oldCNBlocks, existingENBlocks) {
+function buildReuseMaps(oldCNBlocks, existingTargetBlocks, targetLang) {
   const blockMap = new Map()
   const lineMap = new Map()
 
-  // 块级映射：仍按位置对齐（EN 由 CN 翻译生成，块结构相同）
-  const blockLimit = Math.min(oldCNBlocks.length, existingENBlocks.length)
+  // 块级映射：按位置对齐，同时校验块内容符合目标语言
+  const blockLimit = Math.min(oldCNBlocks.length, existingTargetBlocks.length)
   for (let i = 0; i < blockLimit; i++) {
-    if (!blockMap.has(oldCNBlocks[i].hash)) {
-      blockMap.set(oldCNBlocks[i].hash, existingENBlocks[i].text)
+    const targetText = existingTargetBlocks[i].text
+    if (!blockMap.has(oldCNBlocks[i].hash) && containsTargetLang(targetText, targetLang)) {
+      blockMap.set(oldCNBlocks[i].hash, targetText)
     }
   }
 
   // 行级映射：文档级拍平后按行位置对齐
   // trimEnd 用于消除编辑器保存时可能引入的尾部空格差异
   const allOldCNLines = oldCNBlocks.flatMap(b => b.text.split('\n'))
-  const allExistingENLines = existingENBlocks.flatMap(b => b.text.split('\n'))
-  const lineLimit = Math.min(allOldCNLines.length, allExistingENLines.length)
+  const allExistingTargetLines = existingTargetBlocks.flatMap(b => b.text.split('\n'))
+  const lineLimit = Math.min(allOldCNLines.length, allExistingTargetLines.length)
   for (let i = 0; i < lineLimit; i++) {
     const cnLine = allOldCNLines[i].trimEnd()
-    if (hasHan(cnLine) && !lineMap.has(cnLine)) {
-      lineMap.set(cnLine, allExistingENLines[i])
+    const targetLine = allExistingTargetLines[i]
+    if (hasHan(cnLine) && !lineMap.has(cnLine) && containsTargetLang(targetLine, targetLang)) {
+      lineMap.set(cnLine, targetLine)
     }
   }
 
@@ -84,6 +94,19 @@ function buildReuseMaps(oldCNBlocks, existingENBlocks) {
 
 function hasHan(text) {
   return /[\p{Script=Han}]/u.test(text)
+}
+
+// 检验字符串是否符合目标语言特征，防止把错误语言的旧译文当作有效缓存复用
+function containsTargetLang(str, targetLang) {
+  if (typeof str !== 'string') return false
+  const lang = targetLang.toLowerCase()
+  if (lang === 'ko' || lang.startsWith('ko-')) {
+    return /[\uAC00-\uD7A3\u1100-\u11FF\u3130-\u318F]/.test(str)
+  }
+  if (lang === 'ja' || lang.startsWith('ja-')) {
+    return /[\u3040-\u30FF]/.test(str)
+  }
+  return !hasHan(str)
 }
 
 // 将字符串按汉字/非汉字边界分段，返回交替数组（偶数索引为非汉字段，奇数索引为汉字段）
@@ -212,43 +235,52 @@ export async function buildMarkdownTarget({ filePath, sourceDir, targetLang, dif
 
   // 从 git 历史取旧 CN，从磁盘取现有 EN，构建复用映射
   const oldSourceRaw = diffBase ? getGitContent(diffBase, filePath) : null
-  const existingEnRaw = fs.existsSync(targetPath) ? fs.readFileSync(targetPath, 'utf-8') : null
+  const existingTargetRaw = fs.existsSync(targetPath) ? fs.readFileSync(targetPath, 'utf-8') : null
   const oldCNBlocks = splitIntoBlocks(parseMarkdown(oldSourceRaw), oldSourceRaw)
-  const existingENBlocks = splitIntoBlocks(parseMarkdown(existingEnRaw), existingEnRaw)
-  const { blockMap, lineMap } = buildReuseMaps(oldCNBlocks, existingENBlocks)
+  const existingTargetBlocks = splitIntoBlocks(parseMarkdown(existingTargetRaw), existingTargetRaw)
+  const { blockMap, lineMap } = buildReuseMaps(oldCNBlocks, existingTargetBlocks, targetLang)
   const changedLineNumbers = diffBase ? getChangedLineNumbers(diffBase, filePath) : null
 
   // 新文件快速路径：目标文件不存在时，跳过行级拆分流程
-  // 普通块整块翻译（translateBlocksBatch），代码块仅提取中文行翻译后原位替换
-  if (!existingEnRaw) {
-    const regularChineseBlocks = newBlocks.filter(b => hasHan(b.text) && !b.isCode)
-    const codeChineseBlocks = newBlocks.filter(b => hasHan(b.text) && b.isCode)
+  // 普通块整块翻译（translateBlocksBatch），代码块或表格仅提取中文行翻译后原位替换
+  // 中文占比过低的普通块（如夹在代码块间的 JSON 模板）也走行提取，避免发送大量英文冗余内容
+  if (!existingTargetRaw) {
+    // 中文字符占总字符数的比例（按字符数，非字节数）
+    const hanRatio = (text) => {
+      const hanCount = (text.match(/[\p{Script=Han}]/gu) ?? []).length
+      return text.length > 0 ? hanCount / text.length : 0
+    }
+    // 低于此比例的普通块改走行提取，而非整块发送（节省英文内容的 token 消耗）
+    const HAN_RATIO_THRESHOLD = 0.15
 
-    // 同步收集代码块内所有唯一中文行
+    const narrativeBlocks = newBlocks.filter(b => hasHan(b.text) && !b.isCode && !b.isTable && hanRatio(b.text) >= HAN_RATIO_THRESHOLD)
+    const lineExtractBlocks = newBlocks.filter(b => hasHan(b.text) && (b.isCode || b.isTable || hanRatio(b.text) < HAN_RATIO_THRESHOLD))
+
+    // 同步收集所有需要行级提取的块的唯一中文行
     const codeLineDict = new Map() // lineText → translation
-    for (const block of codeChineseBlocks) {
+    for (const block of lineExtractBlocks) {
       for (const line of block.text.split('\n')) {
         if (hasHan(line) && !codeLineDict.has(line)) codeLineDict.set(line, null)
       }
     }
     const uniqueCodeLines = [...codeLineDict.keys()]
 
-    // 普通块整块翻译 与 代码块中文行翻译 并发执行
+    // 普通块整块翻译 与 行级提取翻译 并发执行
     const [regularTranslated, codeLineTranslated] = await Promise.all([
-      regularChineseBlocks.length > 0
-        ? translator.translateBlocksBatch(regularChineseBlocks.map(b => b.text), targetLang, `${filePath} → ${targetLang}`)
+      narrativeBlocks.length > 0
+        ? translator.translateBlocksBatch(narrativeBlocks.map(b => b.text), targetLang, `${filePath} → ${targetLang}`)
         : Promise.resolve([]),
       uniqueCodeLines.length > 0
         ? translator.translateLinesBatch(uniqueCodeLines, targetLang, `${filePath} code → ${targetLang}`)
         : Promise.resolve([])
     ])
 
-    const blockTransMap = new Map(regularChineseBlocks.map((b, i) => [b.text, regularTranslated[i]]))
+    const blockTransMap = new Map(narrativeBlocks.map((b, i) => [b.text, regularTranslated[i]]))
     uniqueCodeLines.forEach((line, i) => codeLineDict.set(line, codeLineTranslated[i]))
 
-    // 将翻译后的中文行替换回代码块原文
+    // 将翻译后的中文行替换回各块原文
     const codeBlockTransMap = new Map()
-    for (const block of codeChineseBlocks) {
+    for (const block of lineExtractBlocks) {
       const translatedText = block.text.split('\n')
         .map(line => hasHan(line) ? (codeLineDict.get(line) ?? line) : line)
         .join('\n')
