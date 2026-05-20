@@ -82,9 +82,9 @@ export function loadConfigFromCli(argv = process.argv.slice(2)) {
     targetLangs,
     changedOnly,
     full,
-    openaiApiKey: process.env.OPENAI_API_KEY || 'sk-3d99098b5fa240f1a55d528a993f34e8',
-    openaiApiBase: process.env.OPENAI_API_BASE || 'https://dashscope.aliyuncs.com/compatible-mode/v1',
-    model: process.env.OPENAI_MODEL || 'qwen-plus',
+    openaiApiKey: process.env.OPENAI_API_KEY,
+    openaiApiBase: process.env.OPENAI_API_BASE || 'https://api-int.memtensor.cn/v1',
+    model: process.env.OPENAI_MODEL || 'gpt-4o',
     retryAttempts: Number(process.env.TRANSLATE_RETRY_ATTEMPTS || 3),
     retryBaseDelayMs: Number(process.env.TRANSLATE_RETRY_BASE_DELAY_MS || 1000)
   }
