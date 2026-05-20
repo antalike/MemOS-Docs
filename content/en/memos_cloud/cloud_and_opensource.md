@@ -15,23 +15,20 @@ desc: Choose the MemOS "Memory" solution that best suits your needs.
 👉 [Try Playground Now](https://memos-playground.openmem.net/)
 ::
 
-
 ## 1. The MemOS Solution Best Suited for You
 
-MemOS provides two "Memory" solutions for AI applications. You can choose:
 
-*   **MemOS Cloud Platform** — Simplify development, manage with ease: Use cloud services with one click in under 5 minutes, suitable for rapid AI application building and iteration.
+## 1. Find The Most Suitable MemOS Architecture Solution
 
-*   **MemOS Open Source** — Self-hosted, fully controllable: Deploy to your own environment, develop secondarily, and integrate deeply according to business needs.
+MemOS Provides **Three** Flexible "Memory" Solutions For AI Applications, Meeting The Full Range Of Needs From Rapid Validation To Production-Level Deployment:
 
 > _Whether it's Cloud Service or Open Source Framework, MemOS allows your AI to easily gain persistent memory._
-
-> _You can start with the cloud service for a quick experience, then switch to localized deployment based on business needs._
 
 
 ## 2. Selection Guide
 
 ### Choose MemOS Cloud Platform
+
 
 *   **Rapid Implementation**: Enable your AI application with built-in memory in just a few minutes. Focus on business logic and feature implementation without spending time maintaining complex storage and memory management systems.
 
@@ -49,9 +46,52 @@ MemOS provides two "Memory" solutions for AI applications. You can choose:
 
 *   **Code Extension**: Modify the codebase directly, extend custom features as needed, and contribute improvements back to the community.
 
-
 ## 3. Still Undecided?
 
 *   [Try Free Platform](/memos_cloud/quick_start): Register and log in to [MemOS Cloud Platform](https://memos-dashboard.openmem.net/quickstart) to try all features for free.
 
 *   [Explore Open Source](/open_source/getting_started/quick_start): Clone the project repository and run it directly locally. And don't forget to give us a Star!
+
+### Scenarios Not Suitable For Open Source Solutions
+
+> _If Your Team Does Not Have Dedicated Operations Personnel, Or The Project Is In The Early Validation Stage, It Is Recommended To Use Cloud Platforms First._
+
+
+## 4. Quick Access Example
+
+Accessing The Cloud Platform Only Requires Three Steps:
+
+```python
+from memos import MemOSClient
+
+# 1. Initialize Client
+client = MemOSClient(api_key="your_api_key")
+
+# 2. Create User Memory
+client.memory.add(
+    user_id="user_123",
+    content="User Preference: Prefers Concise Answer Style"
+)
+
+# 3. Recall Related Memory
+memories = client.memory.search(
+    user_id="user_123",
+    query="User's Answer Preference"
+)
+```
+
+
+## 5. Not Sure Yet?
+
+*   [Try The Free Platform](/memos_cloud/quick_start): Register And Log In To [MemOS Cloud Platform](https://memos-dashboard.openmem.net/quickstart) To Try All Features For Free.
+
+*   [Explore Open Source Solutions](/open_source/getting_started/quick_start): Clone The Project Repository And Run It Locally For A Trial.
+
+*   [Join The Community](https://discord.gg/memos): Communicate With Other Developers About Selection Experiences In The Discord Community.
+
+::tip
+**Small Suggestion**: Not Sure How To Choose? You Can First Use The Cloud Platform To Do POC Verification, Confirm The Solution Is Feasible, And Then Migrate To Local Deployment As Needed. The API Interfaces Of Both Solutions Remain Compatible, And The Migration Cost Is Extremely Low.
+::
+
+---
+*Note: Some Content In This Document Is Used For Incremental Translation Testing.*
