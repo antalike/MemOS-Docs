@@ -95,7 +95,7 @@
     "/search/memory": {
       "post": {
         "summary": "Search Memory",
-        "description": "This API allows you to query a user’s memory and returns the fragments most relevant to the input. These can serve as references for the model when generating responses. As shown in the examples bellow, You can retrieve memory in real time during a user’s conversation with the AI, or perform a global search across their entire memory to create user profiles or support personalized recommendations, improving both dialogue coherence and personalization.<br><br>In the latest update, in addition to “Fact Memory”, the system now supports “Preference Memory”, enabling LLM to respond in a way that better understands the user.",
+        "description": "This API queries a user’s memory and returns the fragments most relevant to the input for the Agent to use. Returned memory can include Fact Memory, Preference Memory, Tool Memory, and Skill. Skills can be auto-generated from user conversations or uploaded as custom Skill files in a Knowledge Base.",
         "operationId": "search_memory",
         "requestBody": {
           "required": true,
@@ -105,9 +105,40 @@
                 "$ref": "#/components/schemas/SearchMemoryRequest"
               },
               "example": {
-                "query": "Any suggestions for where to go during National Day?",
+                "query": "Summarize my memories related to reading this year",
                 "user_id": "memos_user_123",
-                "conversation_id": "0928"
+                "conversation_id": "0928",
+                "knowledgebase_ids": [
+                  "kb_xxx"
+                ],
+                "filter": {
+                  "knowledgebase": {
+                    "and": [
+                      {
+                        "tags": {
+                          "contains": "reading"
+                        }
+                      },
+                      {
+                        "create_time": {
+                          "gte": "2025-01-01"
+                        }
+                      },
+                      {
+                        "create_time": {
+                          "lte": "2025-12-31"
+                        }
+                      }
+                    ]
+                  },
+                  "user": {
+                    "and": [
+                      {
+                        "scene": "chat"
+                      }
+                    ]
+                  }
+                }
               }
             }
           }
@@ -277,6 +308,99 @@
         }
       }
     },
+    "/extract/memory": {
+      "post": {
+        "summary": "Extract Memory",
+        "description": "Uses MemOS’s self-developed extraction model to extract and return fact and preference memories directly from conversation messages.",
+        "operationId": "extract_memory",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExtractMemoryRequest"
+              },
+              "example": {
+                "messages": [
+                  {
+                    "role": "user",
+                    "content": "I’ve planned a summer trip to Guangzhou. What chain hotels can you recommend for accommodation?"
+                  },
+                  {
+                    "role": "assistant",
+                    "content": "You can consider options like 7 Days Inn, All Seasons, Hilton, and others."
+                  },
+                  {
+                    "role": "user",
+                    "content": "I’ll go with 7 Days Inn."
+                  },
+                  {
+                    "role": "assistant",
+                    "content": "Alright—ask me anytime if you have more questions."
+                  }
+                ],
+                "extraction_types": [
+                  "memory",
+                  "preference"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExtractMemoryResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/rerank": {
+      "post": {
+        "summary": "Rerank Memory",
+        "description": "Provides a memory reranking API based on the memos-reranker small model. It takes a user query and a list of candidate memories and completes memory relevance reranking with a single call.",
+        "operationId": "rerank",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RerankRequest"
+              },
+              "example": {
+                "model": "memos-reranker-0.6b",
+                "query": "What are the user's hobbies?",
+                "documents": [
+                  "User likes playing badminton.",
+                  "User is a backend developer in Hangzhou.",
+                  "User prefers concise replies.",
+                  "User prefers Jiangxiang-flavored baijiu.",
+                  "User is going on a business trip to Beijing next Wednesday."
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RerankResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/get/status": {
       "post": {
         "summary": "Get Task Status",
@@ -367,7 +491,7 @@
     "/add/knowledgebase-file": {
       "post": {
         "summary": "Create Knowledgebase File",
-        "description": "Upload a document to a specified knowledgebase.",
+        "description": "Upload files to a specified Knowledge Base. By default, files are uploaded as documents. When file[].type is skill, upload a Markdown Skill file or ZIP Skill package.",
         "operationId": "add_knowledgebase-file",
         "requestBody": {
           "required": true,
@@ -396,7 +520,7 @@
     "/get/knowledgebase-file": {
       "post": {
         "summary": "Get Knowledgebase File",
-        "description": "Get information about a specified document.",
+        "description": "Get file information in one of two ways: pass file_ids to retrieve specific file details, or pass knowledgebase_id to list files under a Knowledge Base. Choose only one mode; passing both knowledgebase_id and file_ids returns an error.",
         "operationId": "get_knowledgebase-file",
         "requestBody": {
           "required": true,
@@ -425,7 +549,7 @@
     "/delete/knowledgebase-file": {
       "post": {
         "summary": "Delete Knowledgebase File",
-        "description": "Delete a document from a specified knowledgebase.",
+        "description": "Delete files from a specified Knowledge Base. When a Skill file is deleted, the associated Skill is deleted as well.",
         "operationId": "delete_knowledgebase-file",
         "requestBody": {
           "required": true,
@@ -497,7 +621,7 @@
               "type": "string"
             },
             "title": "Knowledgebase IDs",
-            "description": "Specifies the scope of knowledge bases accessible for the current search. Defaults to empty, meaning no knowledge bases are searched.Pass specific Knowledgebase IDs to search within that designated repository; pass \"all\" to search across all associated knowledgebases within the project."
+            "description": "Specifies the scope of Knowledge Bases accessible for the current search. Defaults to empty, meaning no Knowledge Bases are searched. Pass specific Knowledge Base IDs to search ordinary documents and uploaded Skills in those Knowledge Bases; pass \"all\" to search across all associated Knowledge Bases within the project."
           },
           "memory_limit_number": {
             "type": "integer",
@@ -556,13 +680,13 @@
           "temperature": {
             "type": "number",
             "title": "Temperature",
-            "description": "Controls generation randomness. Range: 0 <= x <= 2.",
+            "description": "Controls generation randomness. Range: 0 ≤ x ≤ 2.",
             "default": 0.7
           },          
           "top_p": {
             "type": "number",
             "title": "Top P",
-            "description": "Nucleus sampling parameter. Range: 0 <= x <= 1.",
+            "description": "Nucleus sampling parameter. Range: 0 ≤ x ≤ 1.",
             "default": 0.95
           },
          "add_message_on_answer": {
@@ -699,7 +823,7 @@
           "messages": {
             "type": "array",
             "title": "Messages",
-            "description": "Array of message objects representing the memory content. The total token limit for the message array is 8k. Each object contains:",
+            "description": "Array of message objects representing the memory content. The total token limit for the message array is 20k. Each object contains:",
             "items": {
               "$ref": "#/components/schemas/MessageInput"
             }
@@ -1056,8 +1180,8 @@
           "filter": {
             "type": "object",
             "title": "Filter",
-            "description": "Filter conditions, used to precisely limit the memory scope before retrieval.Available fields include: \"agent_id\", \"app_id\", \"create_time\", \"update_time\", and specific fields in \"info\". Supports logical operators (and, or) and comparison operators (gte, lte, gt, lt). For the \"info\" field, supports filtering by \"business_type\", \"biz_id\", \"scene\", and other custom fields.",
-            "example": "{\"and\": [{\"create_time\":{\"gte\":\"...\"}}]}"
+            "description": "Memory filter conditions used to precisely limit candidate memories before retrieval. Supports two formats: pass a global filter condition composed of and/or directly, or pass source-specific filters under knowledgebase, user, and public. Available fields include agent_id, app_id, tags, create_time, update_time, and custom fields written through info when adding messages, such as business_type, biz_id, and scene. Fields in info are used directly by field name in filter, for example {\"scene\":\"chat\"}; do not wrap them in another info object. Supports comparison operators gte, lte, gt, lt, and tags.contains.",
+            "example": "{\"knowledgebase\":{\"and\":[{\"tags\":{\"contains\":\"reading\"}},{\"create_time\":{\"gte\":\"2025-01-01\"}},{\"create_time\":{\"lte\":\"2025-12-31\"}}]},\"user\":{\"and\":[{\"scene\":\"chat\"}]}}"
           },
           "knowledgebase_ids": {
             "type": "array",
@@ -1102,11 +1226,12 @@
           "include_skill": {
             "type": "boolean",
             "title": "Include Skill",
-            "description": "Whether to enable Skill recall. When enabled, the system will intelligently recall memories related to tools based on the query content. Default is disabled if not provided."
+            "description": "Whether to enable Skill recall. When enabled, the system recalls relevant Skills based on the query, including personalized Skills auto-generated from user conversations and custom Skills uploaded within the knowledgebase_ids scope. Default is disabled if not provided."
           },
           "skill_limit_number": {
-            "type": "number",
-            "title": "Include Skill",
+            "type": "integer",
+            "format": "int32",
+            "title": "Skill Limit Number",
             "description": "Limits the number of returned Skills, controlling the count of recalled skills. Effective only when `include_skill=true`. Default is 6 if not provided, max is 25."
           },
          "relativity": {
@@ -1181,7 +1306,7 @@
           "skill_detail_list": {
             "type": "array",
             "title": "Skill Detail List",
-            "description": "List of skill details returned.",
+            "description": "List of Skill details returned when include_skill is enabled. Sources include Skills auto-generated from user conversations and custom Skills uploaded to Knowledge Bases.",
             "items": {
               "$ref": "#/components/schemas/SkillDetail"
             }
@@ -1490,7 +1615,7 @@
           "skill_value": {
             "type": "object",
             "title": "Skill Value",
-            "description": "The specific content of the Skill.",
+            "description": "Structured Skill content. You can convert it to a string and inject it into the Agent prompt.",
             "items": {
               "$ref": "#/components/schemas/SkillValue"
             }
@@ -1498,7 +1623,7 @@
           "skill_url": {
             "type": "string",
             "title": "Skill Url",
-            "description": "The download link for the Skill, downloaded as reusable skill implementations or configuration files."
+            "description": "Download link for the Skill. A Markdown Skill can be downloaded as SKILL.md; a ZIP Skill package can include SKILL.md, scripts, references, assets, and other attachments."
           },
           "skill_type": {
             "type": "string",
@@ -2151,19 +2276,29 @@
           "file": {
             "type": "array",
             "title": "File",
-            "description": "List of documents to upload",
+            "description": "List of files to upload. Ordinary documents follow the document parsing pipeline; Skill files follow the Skill validation and parsing pipeline.",
             "items": {
               "type": "object",
               "properties": {
                 "name": {
                   "type": "string",
                   "title": "Name",
-                  "description": "File name."
+                  "description": "File name. Recommended when uploading Base64 content; optional when uploading by URL."
+                },
+                "type": {
+                  "type": "string",
+                  "title": "Type",
+                  "enum": [
+                    "document",
+                    "skill"
+                  ],
+                  "default": "document",
+                  "description": "Uploaded file type. document means ordinary Knowledge Base document; skill means Skill file, supporting a .md single file or .zip Skill package."
                 },
                 "content": {
                   "type": "string",
                   "title": "Content",
-                  "description": "The file content input supports URL or Base64 encoding, and the supported document types include PDF, DOCX, DOC, TXT, JSON, MD and XML.Supports uploading up to 20 documents at a time; each document must be no larger than 100 MB, 500 pages, or 20,000 tokens."
+                  "description": "File content. Supports URL or Base64 encoding. For supported formats, size limits, and quantity limits for ordinary documents and Skill files, see <a href=\"/memos_cloud/features/advanced/knowledge_base\" class=\"text-primary border-b border-transparent hover:border-primary font-medium focus-visible:outline-primary [&amp;&gt;code]:border-dashed hover:[&amp;&gt;code]:border-primary hover:[&amp;&gt;code]:text-primary transition-colors [&amp;&gt;code]:transition-colors\">Knowledge Base requirements</a>."
                 }
               }
             }
@@ -2184,33 +2319,46 @@
             "description": "API status code. See <a href=\"/api_docs/help/error_codes\" class=\"text-primary border-b border-transparent hover:border-primary font-medium focus-visible:outline-primary [&amp;&gt;code]:border-dashed hover:[&amp;&gt;code]:border-primary hover:[&amp;&gt;code]:text-primary transition-colors [&amp;&gt;code]:transition-colors\">Error Code</a> for details."
           },
           "data": {
-            "type": "object",
+            "type": "array",
             "title": "Data",
-            "properties": {
-              "id": {
-                "type": "string",
-                "title": "ID",
-                "description": "Document ID"
-              },
-              "name": {
-                "type": "string",
-                "title": "Name",
-                "description": "Document Name"
-              },
-              "sizeMB": {
-                "type": "integer",
-                "title": "Size MB",
-                "description": "Document Size"
-              },
-              "status": {
-                "type": "string",
-                "title": "Status",
-                "description": "Document processing status",
-                "enum":[
-                  "running",
-                  "completed",
-                  "failed"
-                ]
+            "description": "Processing results for uploaded files.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "title": "ID",
+                  "description": "File ID"
+                },
+                "type": {
+                  "type": "string",
+                  "title": "Type",
+                  "enum": [
+                    "document",
+                    "skill"
+                  ],
+                  "description": "File type. document means ordinary document; skill means Skill file."
+                },
+                "name": {
+                  "type": "string",
+                  "title": "Name",
+                  "description": "File name"
+                },
+                "sizeMB": {
+                  "type": "number",
+                  "title": "Size MB",
+                  "description": "File size in MB"
+                },
+                "status": {
+                  "type": "string",
+                  "title": "Status",
+                  "description": "File processing status",
+                  "enum":[
+                    "running",
+                    "completed",
+                    "failed"
+                  ]
+                }
               }
             }
           },
@@ -2224,17 +2372,43 @@
       },
       "GetFileRequest": {
         "type": "object",
-        "required": [
-          "file_ids"
-        ],
+        "description": "Supports two query modes: pass file_ids to retrieve specific file details; or pass knowledgebase_id to list files under a Knowledge Base, optionally with type, page, and page_size for filtering and pagination. Choose exactly one mode. Passing both knowledgebase_id and file_ids returns an error; passing neither also returns an error.",
         "properties": {
+          "knowledgebase_id": {
+            "type": "string",
+            "title": "Knowledgebase ID",
+            "description": "Query mode 1: target Knowledge Base ID. Returns files under the Knowledge Base and can be used with type, page, and page_size. Do not pass it together with file_ids."
+          },
+          "type": {
+            "type": "string",
+            "title": "Type",
+            "enum": [
+              "document",
+              "skill"
+            ],
+            "description": "File type filter, effective only when querying by knowledgebase_id. document returns only ordinary documents; skill returns only Skill files; omit this field to return all files. Do not use it with the file_ids query mode."
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32",
+            "title": "Page",
+            "description": "Page number, effective only when querying by knowledgebase_id. Do not use it with the file_ids query mode.",
+            "default": 1
+          },
+          "page_size": {
+            "type": "integer",
+            "format": "int32",
+            "title": "Page Size",
+            "description": "Items per page, effective only when querying by knowledgebase_id. Do not use it with the file_ids query mode.",
+            "default": 20
+          },
           "file_ids": {
             "type": "array",
             "items": {
               "type": "string"
             },
             "title": "File IDs",
-            "description": "List of file IDs"
+            "description": "Query mode 2: file ID list. Returns details for the specified files. When using this mode, pass only file_ids and do not pass knowledgebase_id, type, page, or page_size."
           }
         },
         "title": "GetFileRequest"
@@ -2255,6 +2429,24 @@
             "type": "object",
             "title": "Data",
             "properties": {
+              "total": {
+                "type": "integer",
+                "format": "int32",
+                "title": "Total",
+                "description": "Total number of matched files"
+              },
+              "page": {
+                "type": "integer",
+                "format": "int32",
+                "title": "Page",
+                "description": "Current page number"
+              },
+              "page_size": {
+                "type": "integer",
+                "format": "int32",
+                "title": "Page Size",
+                "description": "Items per page"
+              },
               "file_detail_list": {
                 "type": "array",
                 "items": {
@@ -2263,22 +2455,31 @@
                     "id": {
                       "type": "string",
                       "title": "ID",
-                      "description": "Document ID"
+                      "description": "File ID"
+                    },
+                    "type": {
+                      "type": "string",
+                      "title": "Type",
+                      "enum": [
+                        "document",
+                        "skill"
+                      ],
+                      "description": "File type. document means ordinary document; skill means Skill file."
                     },
                     "name": {
                       "type": "string",
                       "title": "Name",
-                      "description": "Document Name"
+                      "description": "File name"
                     },
                     "size": {
                       "type": "string",
                       "title": "Size",
-                      "description": "Document Size"
+                      "description": "File size"
                     },
                     "status": {
                       "type": "string",
                       "title": "Status",
-                      "description": "Document processing status",
+                      "description": "File processing status",
                       "enum":[
                         "running",
                         "completed",
@@ -2311,7 +2512,7 @@
               "type": "string"
             },
             "title": "File IDs",
-            "description": "List of document IDs to delete"
+            "description": "List of file IDs to delete. You can pass ordinary document IDs or Skill file IDs."
           }
         },
         "title": "DeleteFileRequest"
@@ -2346,6 +2547,302 @@
           }
         },
         "title": "DeleteFileResponse"
+      },
+      "ExtractMemoryItem": {
+        "type": "object",
+        "title": "ExtractMemoryItem",
+        "properties": {
+          "memory_key": {
+            "type": "string",
+            "title": "Memory Key",
+            "description": "High-level topic or title summarizing the extracted factual memory.",
+            "example": "User profile basics"
+          },
+          "memory_value": {
+            "type": "string",
+            "title": "Memory Value",
+            "description": "Detailed content of the extracted factual memory.",
+            "example": "User Zhang San, 28, backend developer in Hangzhou, enjoys badminton."
+          },
+          "memory_type": {
+            "type": "string",
+            "title": "Memory Type",
+            "description": "Memory type classifier.<br>Examples: UserMemory, LongTermMemory.",
+            "example": "UserMemory"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "title": "Tags",
+            "description": "Tags for categorizing the memory content.",
+            "example": [
+              "person",
+              "job",
+              "hobby"
+            ]
+          }
+        }
+      },
+      "ExtractPreferenceItem": {
+        "type": "object",
+        "title": "ExtractPreferenceItem",
+        "properties": {
+          "preference": {
+            "type": "string",
+            "title": "Preference",
+            "description": "Concrete preference text extracted from the dialogue.",
+            "example": "The user asked for replies to stay concise."
+          },
+          "reasoning": {
+            "type": "string",
+            "title": "Reasoning",
+            "description": "How this preference was inferred from the conversation.",
+            "example": "The user stated this preference explicitly in the chat."
+          },
+          "preference_type": {
+            "type": "string",
+            "title": "Preference Type",
+            "description": "explicit_preference: clearly stated by the user; implicit_preference: inferred from behavior or context.",
+            "enum": [
+              "explicit_preference",
+              "implicit_preference"
+            ],
+            "example": "explicit_preference"
+          }
+        }
+      },
+      "ExtractMemoryResponseData": {
+        "type": "object",
+        "title": "ExtractMemoryResponseData",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "title": "Success",
+            "description": "Whether extraction succeeded."
+          },
+          "memory_detail_list": {
+            "type": "array",
+            "title": "Memory Detail List",
+            "description": "Factual memories. Returned when the request includes memory in extraction_types, or when extraction_types is omitted.",
+            "items": {
+              "$ref": "#/components/schemas/ExtractMemoryItem"
+            }
+          },
+          "preference_detail_list": {
+            "type": "array",
+            "title": "Preference Detail List",
+            "description": "Preference memories. Returned when the request includes preference in extraction_types, or when extraction_types is omitted; may mix explicit and implicit preferences.",
+            "items": {
+              "$ref": "#/components/schemas/ExtractPreferenceItem"
+            }
+          }
+        }
+      },
+      "RerankRequest": {
+        "type": "object",
+        "required": [
+          "query",
+          "documents"
+        ],
+        "title": "RerankRequest",
+        "properties": {
+          "model": {
+            "type": "string",
+            "title": "Model",
+            "description": "Model name to use.",
+            "enum": [
+              "memos-reranker-0.6b",
+              "memos-reranker-4b"
+            ]
+          },
+          "query": {
+            "type": "string",
+            "title": "Query",
+            "description": "The user query."
+          },
+          "documents": {
+            "type": "array",
+            "title": "Documents",
+            "description": "A list of document texts to rerank.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "top_n": {
+            "type": "integer",
+            "title": "Top N",
+            "description": "Return the top N most relevant results. If omitted, returns all results by default."
+          }
+        }
+      },
+      "RerankResult": {
+        "type": "object",
+        "required": [
+          "index",
+          "document",
+          "relevance_score"
+        ],
+        "title": "RerankResult",
+        "properties": {
+          "index": {
+            "type": "integer",
+            "title": "Index",
+            "description": "The index position of this document in the original documents list."
+          },
+          "document": {
+            "type": "object",
+            "title": "Document",
+            "description": "Document object.",
+            "required": [
+              "text"
+            ],
+            "properties": {
+              "text": {
+                "type": "string",
+                "title": "Text",
+                "description": "The original text content of the document."
+              }
+            }
+          },
+          "relevance_score": {
+            "type": "number",
+            "title": "Relevance Score",
+            "description": "Relevance score, ranging from 0 to 1, higher indicates more relevant to the query."
+          }
+        }
+      },
+      "RerankResponse": {
+        "type": "object",
+        "required": [
+          "id",
+          "model",
+          "usage",
+          "results"
+        ],
+        "title": "RerankResponse",
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id",
+            "description": "Unique identifier for this request."
+          },
+          "model": {
+            "type": "string",
+            "title": "Model",
+            "description": "Model name used."
+          },
+          "usage": {
+            "type": "object",
+            "title": "Usage",
+            "description": "Token usage statistics.",
+            "required": [
+              "prompt_tokens",
+              "total_tokens"
+            ],
+            "properties": {
+              "prompt_tokens": {
+                "type": "integer",
+                "title": "Prompt Tokens",
+                "description": "Number of tokens consumed by the prompt."
+              },
+              "total_tokens": {
+                "type": "integer",
+                "title": "Total Tokens",
+                "description": "Total number of tokens consumed."
+              }
+            }
+          },
+          "results": {
+            "type": "array",
+            "title": "Results",
+            "description": "List of reranked results, sorted in descending order by relevance_score.",
+            "items": {
+              "$ref": "#/components/schemas/RerankResult"
+            }
+          }
+        }
+      },
+      "ExtractMemoryMessage": {
+        "type": "object",
+        "required": [
+          "role",
+          "content"
+        ],
+        "title": "ExtractMemoryMessage",
+        "properties": {
+          "role": {
+            "type": "string",
+            "title": "Role",
+            "enum": [
+              "user",
+              "assistant",
+              "system"
+            ],
+            "description": "Creator role of the message."
+          },
+          "content": {
+            "type": "string",
+            "title": "Content",
+            "description": "Message body text."
+          }
+        }
+      },
+      "ExtractMemoryRequest": {
+        "type": "object",
+        "required": [
+          "messages"
+        ],
+        "title": "ExtractMemoryRequest",
+        "properties": {
+          "messages": {
+            "type": "array",
+            "title": "Messages",
+            "description": "Array of message objects from which to extract memories. The combined Token count of all messages must not exceed 8k.",
+            "items": {
+              "$ref": "#/components/schemas/ExtractMemoryMessage"
+            }
+          },
+          "extraction_types": {
+            "type": "array",
+            "title": "Extraction Types",
+            "description": "<p>Limits which memory types to extract; omit to extract all supported types.</p><ul><li><code>memory</code>: factual memories—user-related factual information extracted from the dialogue.</li><li><code>preference</code>: preference memories—user preferences from the dialogue, including explicit preferences (clearly stated) and implicit preferences (inferred from behavior).</li></ul>",
+            "items": {
+              "type": "string",
+              "enum": [
+                "memory",
+                "preference"
+              ]
+            }
+          }
+        }
+      },
+      "ExtractMemoryResponse": {
+        "type": "object",
+        "required": [
+          "code",
+          "message"
+        ],
+        "title": "ExtractMemoryResponse",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32",
+            "title": "Code",
+            "description": "API status code. See <a href=\"/api_docs/help/error_codes\" class=\"text-primary border-b border-transparent hover:border-primary font-medium focus-visible:outline-primary [&amp;&gt;code]:border-dashed hover:[&amp;&gt;code]:border-primary hover:[&amp;&gt;code]:text-primary transition-colors [&amp;&gt;code]:transition-colors\">Error Code</a> for details.",
+            "example": 0
+          },
+          "data": {
+            "$ref": "#/components/schemas/ExtractMemoryResponseData"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "description": "API response message.",
+            "example": "ok"
+          }
+        }
       }
     }
   }

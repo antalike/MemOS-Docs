@@ -2,7 +2,7 @@ nav:
   # You can include icons using the syntax `(ri:icon-name)`.
   # The frontend will render these as actual icons.
   # You can find available icons at https://icones.js.org/
-  - "(ri:cloud-line) MemOS Cloud":
+  - "(ri:cloud-line) MemOS 云服务":
     - "(ri:book-line) 开始使用":
       - "(ri:eye-line) 概览": memos_cloud/overview.md
       - "(ri:rocket-line) 快速开始": memos_cloud/quick_start.md
@@ -83,8 +83,10 @@ nav:
     - "(ri:file-code-line) API 参考文档": api-reference/search-memories
 
   - "(ri:cpu-line) 自研模型说明":
-    - "(ri:flask-line) 抽取模型":
-      - "(ri:file-code-line) 使用示例": self_developed_model/extraction_usage_example.md
+    - "(ri:filter-3-line) 抽取模型":
+      - "(ri:book-open-line) 使用示例": self_developed_model/extraction_usage_example.md
+    - "(ri:sort-desc) 重排模型":
+      - "(ri:book-open-line) 使用示例": self_developed_model/reranker_usage_example.md
 
   - "(ri:puzzle-line) MCP与Agent框架支持":
     - "(ri:tools-line) MCP 服务":
@@ -98,12 +100,11 @@ nav:
     - "(ri:file-list-3-line) 更新日志": openclaw/changes.md
     - "(ri:download-line) 安装指南": 
       - "(ri:cloud-line) OpenClaw 云插件": openclaw/guide.md
-      - "(ri:computer-line) OpenClaw 本地插件": openclaw/local_plugin.md
-      - "(ri:server-line) Hermes 本地插件": openclaw/hermes_local_plugin.md
+      - "(ri:computer-line) 本地插件": openclaw/local_plugin.md
     - "(ri:flask-line) 使用示例": 
       - "(ri:team-line) 多智能体记忆隔离": openclaw/examples/multi_agent.md
       - "(ri:filter-3-line) 记忆召回的二次过滤": openclaw/examples/recall_filter.md
-      - "(ri:terminal-box-line) Hermes 本地插件使用": openclaw/examples/hermes_usage.md
+      - "(ri:terminal-box-line) 本地插件使用": openclaw/examples/hermes_usage.md
 
   - "(ri:file-code-line) API文档":
     - "(ri:rocket-line) 开始使用":
@@ -118,7 +119,8 @@ nav:
       - "(ri:feedback-line) Add Feedback": api_docs/message/add_feedback.md
 
     - "(ri:cpu-line) 自研模型":
-      - "(ri:flask-line) Extract Memory": api_docs/core/extract_memory.md
+      - "(ri:filter-3-line) Extract Memory": api_docs/core/extract_memory.md
+      - "(ri:sort-desc) Rerank Memory": api_docs/core/rerank.md
 
     - "(ri:chat-1-line) 消息":
       - "(ri:file-list-line) Get Message": api_docs/message/get_message.md
@@ -130,9 +132,9 @@ nav:
     - "(ri:book-read-line) 知识库":
       - "(ri:add-box-line) 创建知识库": api_docs/knowledge/create_kb.md
       - "(ri:delete-back-2-line) 移除知识库": api_docs/knowledge/remove_kb.md
-      - "(ri:file-add-line) 添加知识库文档": api_docs/knowledge/add_kb_doc.md
-      - "(ri:file-search-line) 获取知识库文档": api_docs/knowledge/get_kb_doc.md
-      - "(ri:file-reduce-line) 删除知识库文档": api_docs/knowledge/delete_kb_doc.md
+      - "(ri:file-add-line) 添加知识库文件": api_docs/knowledge/add_kb_doc.md
+      - "(ri:file-search-line) 获取知识库文件": api_docs/knowledge/get_kb_doc.md
+      - "(ri:file-reduce-line) 删除知识库文件": api_docs/knowledge/delete_kb_doc.md
 
     - "(ri:customer-service-line) 帮助与支持":
       - "(ri:error-warning-line) 错误码": api_docs/help/error_codes.md
