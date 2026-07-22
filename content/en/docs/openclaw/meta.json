@@ -1,0 +1,17 @@
+{
+  "title": "Agent",
+  "icon": "ri:robot-line",
+  "root": true,
+  "pages": [
+    "plugin_compare",
+    "changes",
+    "---[ri:download-line]Installation Guide---",
+    "guide",
+    "local_plugin",
+    "---[ri:flask-line]Examples---",
+    "examples/knowledge_base",
+    "examples/multi_agent",
+    "examples/recall_filter",
+    "examples/hermes_usage"
+  ]
+}

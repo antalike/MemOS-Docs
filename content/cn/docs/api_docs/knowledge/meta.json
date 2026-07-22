@@ -1,0 +1,5 @@
+{
+  "title": "知识库",
+  "icon": "ri:book-read-line",
+  "pages": ["create_kb", "remove_kb", "add_kb_doc", "get_kb_doc", "delete_kb_doc"]
+}

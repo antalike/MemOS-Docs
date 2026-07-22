@@ -1,0 +1,5 @@
+{
+  "title": "Support and Troubleshooting",
+  "icon": "ri:question-line",
+  "pages": ["faq", "limit"]
+}

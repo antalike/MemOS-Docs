@@ -1,0 +1,5 @@
+{
+  "title": "Get Started",
+  "icon": "ri:rocket-line",
+  "pages": ["overview", "configuration"]
+}

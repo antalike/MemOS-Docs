@@ -1,0 +1,5 @@
+{
+  "title": "框架与平台",
+  "icon": "ri:layout-grid-line",
+  "pages": ["claude_mcp", "coze_plugin"]
+}

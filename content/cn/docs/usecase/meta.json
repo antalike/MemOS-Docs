@@ -1,0 +1,15 @@
+{
+  "title": "示例项目",
+  "icon": "ri:projector-line",
+  "root": true,
+  "pages": [
+    "---[ri:lightbulb-line]最佳实践---",
+    "knowledge_qa_assistant",
+    "financial_assistant",
+    "writting_assistant",
+    "home_assistant",
+    "---[ri:layout-grid-line]框架与平台---",
+    "frameworks/claude_mcp",
+    "frameworks/coze_plugin"
+  ]
+}

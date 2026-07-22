@@ -1,0 +1,5 @@
+{
+  "title": "支持与问题排查",
+  "icon": "ri:question-line",
+  "pages": ["faq", "limit"]
+}

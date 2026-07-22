@@ -1,66 +1,57 @@
 {
   "name": "memos-docs",
-  "version": "1.0.6",
+  "version": "0.0.0",
   "private": true,
-  "type": "module",
   "scripts": {
-    "build": "nuxt build",
-    "dev": "nuxt dev",
-    "dev:pre": "NUXT_ENV_CONFIG=dev nuxt dev",
-    "sync-api": "node scripts/fetch-api.mjs",
-    "sync-releases": "node scripts/fetch-releases.mjs",
-    "generate": "npm run sync-releases && node scripts/generate.mjs",
-    "generate:pre": "node scripts/generate.mjs --env=pre",
-    "publish": "node scripts/generate.mjs",
-    "preview": "nuxt preview",
-    "lint": "eslint .",
-    "typecheck": "nuxt typecheck"
+    "build": "next build && node scripts/export-page-markdown.mjs",
+    "build:pre": "dotenv -e .env.pre -- next build && node scripts/export-page-markdown.mjs",
+    "translate": "node scripts/auto-translate/auto-translate.mjs",
+    "translate:all": "node scripts/auto-translate/auto-translate.mjs --all",
+    "eval:translate": "node scripts/auto-translate/eval-translation.mjs",
+    "eval:translate:all": "node scripts/auto-translate/eval-translation.mjs --all",
+    "compare:models": "node scripts/auto-translate/compare-models.mjs",
+    "test:translate": "node --test \"scripts/auto-translate/__tests__/**/*.test.mjs\"",
+    "test:translate:coverage": "node --test --experimental-test-coverage \"scripts/auto-translate/__tests__/**/*.test.mjs\"",
+    "dev": "next dev",
+    "dev:pre": "dotenv -e .env.pre -- next dev",
+    "start": "serve out",
+    "types:check": "fumadocs-mdx && next typegen && tsc --noEmit",
+    "postinstall": "fumadocs-mdx",
+    "lint": "eslint"
   },
   "dependencies": {
-    "@iconify-json/lucide": "^1.2.47",
-    "@iconify-json/ri": "^1.2.10",
-    "@iconify-json/simple-icons": "^1.2.38",
-    "@iconify-json/vscode-icons": "^1.2.22",
-    "@nuxt/content": "^3.5.1",
-    "@nuxt/image": "^1.10.0",
-    "@nuxt/ui-pro": "^3.3.7",
-    "@nuxtjs/i18n": "^9.5.6",
-    "@nuxtjs/mdc": "^0.19.2",
-    "@rollup/plugin-yaml": "^4.1.2",
-    "better-sqlite3": "^12.6.2",
-    "defu": "^6.1.4",
-    "devalue": "^5.3.2",
-    "node-fetch": "^3.3.2",
-    "nuxt": "^3.17.5",
-    "nuxt-llms": "0.1.3",
-    "nuxt-og-image": "^5.1.6",
-    "openapi-types": "^12.1.3",
-    "scule": "^1.3.0"
+    "@iconify/react": "^6.0.2",
+    "@orama/orama": "^3.1.18",
+    "cnfast": "^0.0.8",
+    "fumadocs-core": "16.10.7",
+    "fumadocs-mdx": "15.0.13",
+    "fumadocs-openapi": "^11.0.6",
+    "fumadocs-ui": "16.10.7",
+    "hast-util-to-jsx-runtime": "^2.3.6",
+    "lucide-react": "^1.21.0",
+    "next": "16.2.9",
+    "next-themes": "0.4.6",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "remark": "^15.0.1",
+    "remark-gfm": "^4.0.1",
+    "remark-mdx": "^3.1.1",
+    "remark-rehype": "^11.1.2",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@nuxt/eslint": "^1.4.1",
-    "eslint": "^9.28.0",
-    "js-yaml": "^4.1.1",
-    "typescript": "^5.8.3",
-    "vue-tsc": "^2.2.10"
-  },
-  "resolutions": {
-    "unimport": "4.1.1",
-    "oxc-parser": "0.70.0"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "better-sqlite3"
-    ],
-    "ignoredBuiltDependencies": [
-      "vue-demi"
-    ],
-    "overrides": {
-      "h3": "1.15.5",
-      "node-forge": "1.3.2",
-      "mdast-util-to-hast": "13.2.1",
-      "lodash": "4.17.23"
-    }
-  },
-  "packageManager": "pnpm@10.12.1"
+    "@tailwindcss/postcss": "^4.3.1",
+    "@types/mdx": "^2.0.14",
+    "@types/node": "^26.0.0",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "dotenv-cli": "^11.0.0",
+    "eslint": "^9.39.4",
+    "eslint-config-next": "16.2.9",
+    "js-yaml": "^5.2.0",
+    "postcss": "^8.5.15",
+    "serve": "^14.2.6",
+    "tailwindcss": "^4.3.1",
+    "typescript": "^6.0.3"
+  }
 }

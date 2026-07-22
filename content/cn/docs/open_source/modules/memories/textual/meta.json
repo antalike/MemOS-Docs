@@ -1,0 +1,13 @@
+{
+  "title": "明文记忆",
+  "icon": "ri:book-2-line",
+  "pages": [
+    "naive_textual_memory",
+    "general_textual_memory",
+    "preference_textual_memory",
+    "tree_textual_memory",
+    "neo4j_graph_db",
+    "polardb_graph_db",
+    "nebula_graph_db"
+  ]
+}

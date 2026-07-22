@@ -1,0 +1,5 @@
+{
+  "title": "Usage Examples",
+  "icon": "ri:flask-line",
+  "pages": ["knowledge_base", "multi_agent", "recall_filter", "hermes_usage"]
+}

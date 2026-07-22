@@ -1,0 +1,16 @@
+{
+  "title": "Concepts",
+  "icon": "ri:home-line",
+  "pages": [
+    "mem_production",
+    "mem_schedule",
+    "mem_recall",
+    "mem_lifecycle",
+    "algorithm",
+    "raw_inputs",
+    "memory_types",
+    "isolation_filters",
+    "time_awareness",
+    "faq"
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "title": "Use Cases",
+  "icon": "ri:projector-line",
+  "root": true,
+  "pages": [
+    "---[ri:lightbulb-line]Best Practice---",
+    "knowledge_qa_assistant",
+    "financial_assistant",
+    "writting_assistant",
+    "home_assistant",
+    "---[ri:layout-grid-line]Frameworks & Platforms---",
+    "frameworks/claude_mcp",
+    "frameworks/coze_plugin"
+  ]
+}

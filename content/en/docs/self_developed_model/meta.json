@@ -1,0 +1,11 @@
+{
+  "title": "Self-developed Models Overview",
+  "icon": "ri:cpu-line",
+  "root": true,
+  "pages": [
+    "---[ri:filter-3-line]Extraction Model---",
+    "extraction_usage_example",
+    "---[ri:sort-desc]Reranker Model---",
+    "reranker_usage_example"
+  ]
+}

@@ -1,0 +1,5 @@
+{
+  "title": "核心操作",
+  "icon": "ri:edit-box-line",
+  "pages": ["add_message", "search_memory", "delete_memory", "add_feedback", "chat"]
+}

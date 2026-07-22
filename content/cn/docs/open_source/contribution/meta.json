@@ -1,0 +1,5 @@
+{
+  "title": "贡献指南",
+  "icon": "ri:heart-line",
+  "pages": ["overview", "setting_up", "development_workflow", "commit_guidelines", "writing_docs", "writing_tests"]
+}

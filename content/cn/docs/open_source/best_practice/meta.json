@@ -1,0 +1,5 @@
+{
+  "title": "最佳实践",
+  "icon": "ri:star-line",
+  "pages": ["performance_tuning", "network_workarounds", "common_errors_solutions", "mcp_for_cozespace_and_tools"]
+}

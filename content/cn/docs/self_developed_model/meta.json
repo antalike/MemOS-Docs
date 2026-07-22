@@ -1,0 +1,11 @@
+{
+  "title": "自研模型说明",
+  "icon": "ri:cpu-line",
+  "root": true,
+  "pages": [
+    "---[ri:filter-3-line]抽取模型---",
+    "extraction_usage_example",
+    "---[ri:sort-desc]重排模型---",
+    "reranker_usage_example"
+  ]
+}

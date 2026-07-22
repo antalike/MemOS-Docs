@@ -1,0 +1,529 @@
+@import 'tailwindcss';
+@import 'fumadocs-ui/css/neutral.css';
+@import 'fumadocs-ui/css/preset.css';
+@import 'fumadocs-openapi/css/preset.css';
+
+/* Match legacy Nuxt `@theme static` + `main.css` font stack exactly.
+   Public Sans is NOT self-hosted or fetched from Google Fonts on the original
+   site — the name is declared but every glyph falls through to `sans-serif`
+   (PingFang SC / system UI on macOS). Do not load Public Sans here. */
+@theme static {
+  --font-sans: 'Public Sans', sans-serif;
+}
+
+/* Brand colors — match the legacy Nuxt site (`--ui-primary`, linear gradient). */
+:root {
+  --color-fd-primary: #4044ed;
+  --color-fd-primary-foreground: #ffffff;
+  --color-fd-ring: #4044ed;
+  --color-linear-primary: #4044ed;
+  --color-primary-light: #aa75ef;
+  --font-sans: 'Public Sans', sans-serif;
+}
+
+/* Legacy used a pure-white surface (`--ui-bg: var(--color-white)`), but the
+   fumadocs neutral preset defaults to a light grey (`hsl(0 0% 96%)`). Override
+   the page + card surfaces back to white for the LIGHT theme only. Scoped with
+   `:not(.dark)` so these never leak into dark mode (a plain `:root` rule would
+   otherwise beat the preset's unlayered `.dark { … }` block by source order and
+   blow out the dark surfaces). */
+:root:not(.dark) {
+  --color-fd-background: #ffffff;
+  --color-fd-card: #ffffff;
+  /* Legacy Nuxt `ring-default` in light mode (slate-200). */
+  --color-fd-border: #e2e8f0;
+}
+
+.dark {
+  --color-fd-primary: #7275f7;
+  --color-fd-primary-foreground: #ffffff;
+  --color-fd-ring: #7275f7;
+  --color-linear-primary: #5d60f3;
+  --color-primary-light: #9f80f5;
+}
+
+html {
+  scrollbar-gutter: stable;
+  font-family: var(--font-sans);
+}
+
+/* Match legacy Nuxt UI body typography — antialiased rendering reads lighter on
+   macOS than the browser default (`auto`), which otherwise makes the whole site
+   look one step bolder than the original. */
+body {
+  overflow-x: clip;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* OpenAPI two-column layout: fumadocs pins the sticky code/response panel at
+   `top: calc(var(--fd-docs-row-1) + 1rem)`. That assumes the header lives in
+   row-1, but our top-mode notebook header occupies row-2 (row-1 is just the
+   banner, here 0px) — so the panel would stick under the header and clip its
+   first lines while scrolling. Re-pin it below the full header height. */
+[class*="top-[calc(var(--fd-docs-row-1"] {
+  top: calc(var(--fd-docs-row-2) + 1rem);
+}
+
+/* Code-block scrollbars: keep them out of sight until the reader actually
+   interacts with the block. The thumb stays transparent by default and only
+   gets a color on hover / keyboard focus (native overlay scrollbars still
+   auto-hide when idle after a scroll). Targets the shiki <pre> used by both
+   the MDX code blocks and the fumadocs-openapi request/response viewers. */
+.shiki,
+figure[data-rehype-pretty-code-figure] pre {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+.shiki::-webkit-scrollbar,
+figure[data-rehype-pretty-code-figure] pre::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+.shiki::-webkit-scrollbar-thumb,
+figure[data-rehype-pretty-code-figure] pre::-webkit-scrollbar-thumb {
+  border-radius: 9999px;
+  background-color: transparent;
+  transition: background-color 0.2s ease;
+}
+.shiki::-webkit-scrollbar-track,
+figure[data-rehype-pretty-code-figure] pre::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.shiki:hover,
+.shiki:focus-within,
+figure[data-rehype-pretty-code-figure]:hover pre,
+figure[data-rehype-pretty-code-figure]:focus-within pre {
+  scrollbar-color: color-mix(in srgb, var(--color-fd-border) 90%, transparent) transparent;
+}
+.shiki:hover::-webkit-scrollbar-thumb,
+.shiki:focus-within::-webkit-scrollbar-thumb,
+figure[data-rehype-pretty-code-figure]:hover pre::-webkit-scrollbar-thumb,
+figure[data-rehype-pretty-code-figure]:focus-within pre::-webkit-scrollbar-thumb {
+  background-color: color-mix(in srgb, var(--color-fd-border) 90%, transparent);
+}
+.shiki::-webkit-scrollbar-thumb:hover,
+figure[data-rehype-pretty-code-figure] pre::-webkit-scrollbar-thumb:hover {
+  background-color: color-mix(in srgb, var(--color-fd-muted-foreground) 60%, transparent);
+}
+
+/* Inline icons (`<Icon>`): the Iconify SVG renders at `1em`, so the inner
+   <svg> must fill the wrapper for `size-*` classes to apply. Defined in the
+   `base` layer so Tailwind size utilities (utilities layer) win the cascade. */
+@layer base {
+  [data-icon] {
+    display: inline-flex;
+    width: 1em;
+    height: 1em;
+  }
+  [data-icon] > svg {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+/* Hide the Callout's left accent strip (the `role="none"` divider Fumadocs
+   renders as the first child of the callout container). */
+[style*='--callout-color'] > [role='none'] {
+  display: none;
+}
+
+/* Fumadocs <Tabs>: the tab-list header shows the container's `bg-fd-secondary`
+   (the content panel covers the rest with `bg-fd-background`). Lighten that
+   header by mixing the secondary grey toward the page background. */
+div:has(> [role='tablist']) {
+  background-color: color-mix(in srgb, var(--color-fd-secondary) 45%, var(--color-fd-background));
+}
+
+html > body[data-scroll-locked] {
+  margin-right: 0px !important;
+  --removed-body-scroll-bar-size: 0px !important;
+}
+
+/* Align the article's first line (parent-section label / title) with the
+   sidebar's first group label. The sidebar's first item sits ~40px below the
+   two-row header (16px viewport padding + the item's own 24px top margin), but
+   fumadocs' default article top padding (`md:pt-8` = 32px, `xl:pt-14` = 56px)
+   drops the content lower. In the md–xl range a 40px TOC popover bar already
+   pushes the article down by that amount, so it needs almost no extra padding
+   there; from xl up (bar hidden) the article starts flush under the header and
+   needs ~40px to reach the same baseline. Scoped to `#nd-page` (the article) so
+   it wins over the utility classes. */
+@media (min-width: 768px) {
+  #nd-page {
+    padding-top: 0.25rem;
+  }
+}
+@media (min-width: 1280px) {
+  #nd-page {
+    padding-top: 2.75rem;
+  }
+}
+
+/* ===== Markdown (prose) rendering — match the legacy Nuxt UI Pro typography =====
+   The fumadocs prose defaults render body text larger (18px) and lighter
+   (neutral-500), with heavier line-heights and lighter (600) near-black
+   headings. The legacy docs used Nuxt UI Pro prose: 16px slate-700 body,
+   tighter heading line-heights, negative heading tracking, and specific
+   variable-font weights (650/760/680) on a slate heading palette. Values below
+   are measured 1:1 from the live pre-migration site. Colors are scoped to the
+   light theme (`:not(.dark)`) so dark mode keeps the existing fd tokens; sizes,
+   weights, spacing and tracking are theme-independent. Fumadocs prose selectors
+   are low specificity, so `#nd-page` scoping wins the cascade. */
+
+/* Page title (rendered by DocsTitle, above the .prose body) */
+#nd-page h1 {
+  font-size: 2.15rem; /* 34.4px */
+  font-weight: 650;
+  line-height: 1.14;
+  letter-spacing: -0.02em;
+}
+
+/* Description subtitle (rendered by DocsDescription) */
+#nd-page .border-b p {
+  font-size: 1rem; /* 16px */
+  line-height: 1.75;
+}
+
+/* Prose headings. Guarded with `:not([data-card] *)` so these never leak into
+   fumadocs component cards — a Card renders its title as a `not-prose` <h3>
+   that lives inside .prose, and without the guard it would inherit the prose
+   heading size/weight/color and (worst of all) the 2rem top margin, opening a
+   large gap between the card icon and its title. */
+#nd-page .prose h2:not([data-card] *):not(.not-prose) {
+  font-size: 1.35rem; /* 21.6px */
+  font-weight: 760;
+  line-height: 1.28;
+  letter-spacing: -0.015em;
+  margin-top: 2.6rem;
+  margin-bottom: 0.75rem;
+}
+#nd-page .prose h3:not([data-card] *):not(.not-prose) {
+  font-size: 1.18rem; /* 18.88px */
+  font-weight: 680;
+  line-height: 1.4;
+  margin-top: 2rem;
+  margin-bottom: 0.6rem;
+}
+
+/* Prose body text + list items */
+#nd-page .prose p:not([data-card] *),
+#nd-page .prose li:not([data-card] *) {
+  font-size: 1rem; /* 16px */
+  line-height: 1.75;
+}
+#nd-page .prose strong:not([data-card] *) {
+  font-weight: 700;
+  color: inherit;
+}
+/* Inline body links use the brand indigo (heading anchor links inherit the
+   heading color, so scope this to paragraph/list links only). */
+#nd-page .prose :is(p, li) a:not([data-card] *) {
+  color: var(--color-fd-primary);
+  font-weight: 500;
+}
+
+/* Legacy light-theme slate palette (headings darker than body). */
+html:not(.dark) #nd-page h1,
+html:not(.dark) #nd-page .prose h2:not([data-card] *):not(.not-prose) {
+  color: #0f172a; /* slate-900 */
+}
+html:not(.dark) #nd-page .prose h3:not([data-card] *):not(.not-prose) {
+  color: #1e293b; /* slate-800 */
+}
+html:not(.dark) #nd-page .border-b p,
+html:not(.dark) #nd-page .prose p:not([data-card] *),
+html:not(.dark) #nd-page .prose li:not([data-card] *) {
+  color: #334155; /* slate-700 */
+}
+
+/* Site header — mirror legacy `AppHeader` + `AppMenus` layout tokens. */
+#nd-nav {
+  --site-topbar-height: 60px;
+  --site-header-height: 100px;
+}
+/* Fumadocs' notebook grid places the header in the `. header header header .`
+   area, so at viewports wider than the layout the header bar (and its bottom
+   border) stops short of the outer gutter columns. Spanning the header across
+   the flexible `1fr` gutter tracks would inflate them and starve the main
+   column, so instead full-bleed just the header's background/border wrapper
+   with the standard `margin-inline: calc(50% - 50vw)` trick. The inner content
+   stays centered via `.site-header-inner`, so only the bar + border widen. */
+#nd-notebook-layout > #nd-nav > div {
+  margin-inline: calc(50% - 50vw);
+}
+#nd-nav .site-header-inner {
+  width: calc(100% - 40px);
+  max-width: 90rem;
+  margin-inline: auto;
+  padding-inline: 0;
+}
+/* Match legacy UHeader / AppMenus font weights (measured on docs-pre). */
+#nd-nav [data-search-full] {
+  font-weight: 500;
+}
+
+/* Legacy UHeader dashboard button gradient (`bg-linear-270`). */
+.site-dashboard-btn {
+  background: linear-gradient(
+    270deg,
+    var(--color-linear-primary) 15%,
+    var(--color-primary-light) 118%
+  );
+}
+
+/* Fumadocs <Cards> icons: render in the brand indigo instead of the default
+   muted grey, matching the legacy card design (blue rocket etc.). Theme-aware
+   via --color-fd-primary. Scoped to the card icon box so it never affects
+   inline content icons. */
+[data-card] [data-icon] {
+  color: var(--color-fd-primary);
+  width: 1.5rem;
+  height: 1.5rem;
+}
+/* Override the Card's default `[&_svg]:size-4` so the icon matches the enlarged
+   wrapper. */
+[data-card] [data-icon] > svg {
+  width: 100%;
+  height: 100%;
+}
+/* Drop the default grey icon chip (bg/border/shadow/padding) so only the
+   colored icon shows. */
+[data-card] :where(div):has(> [data-icon]) {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  padding: 0;
+}
+/* Card hover: tint with the theme primary color at low opacity (overrides the
+   default `hover:bg-fd-accent`). Unlayered so it beats Tailwind utilities. */
+a[data-card]:hover {
+  background-color: color-mix(in srgb, var(--color-fd-primary) 8%, transparent);
+}
+
+/* Accordions (`<Accordions>`) — align with the legacy Nuxt `<details>` disclosure:
+   a subtle grey surface with `rounded-md` corners and a compact 14px summary,
+   instead of fumadocs' white card with an oversized (prose-inherited) heading. */
+.memos-accordions {
+  border-radius: 6px; /* rounded-md, legacy used 6px (fumadocs default rounded-lg = 8px) */
+  background-color: color-mix(in srgb, var(--color-fd-muted) 45%, var(--color-fd-background));
+  margin-block: 1.25rem; /* legacy my-5 */
+}
+/* The trigger header renders as a `not-prose` <h3>; keep it flush (the prose
+   heading guards already stop the size/color leak, this drops any stray margin). */
+.memos-accordions :is(h1, h2, h3, h4) {
+  margin: 0;
+}
+/* Summary text: legacy `text-sm font-medium` slate-900. */
+.memos-accordions button[aria-expanded] {
+  font-size: 0.875rem; /* 14px */
+  font-weight: 500;
+  line-height: 1.4;
+}
+html:not(.dark) .memos-accordions button[aria-expanded] {
+  color: #0f172a; /* slate-900 */
+}
+/* Swap fumadocs' outline chevron for the legacy filled disclosure triangle
+   (▶ collapsed → ▼ open). */
+.memos-accordions button[aria-expanded] > svg {
+  display: none;
+}
+.memos-accordions button[aria-expanded]::before {
+  content: '';
+  flex-shrink: 0;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 5px 0 5px 7px;
+  border-color: transparent transparent transparent currentColor;
+  color: var(--color-fd-muted-foreground);
+  transition: transform 0.2s ease;
+}
+.memos-accordions button[aria-expanded='true']::before {
+  transform: rotate(90deg);
+}
+/* Expanded content: fumadocs ships `pb-2` (0.5rem) but keeps `px-4` (1rem);
+   bump the bottom padding to match the horizontal inset for a balanced box. */
+.memos-accordions .prose-no-margin {
+  padding-bottom: 1rem;
+}
+
+/* Homepage card icon area: subtle grid overlay + brand-gradient icon fill. */
+.home-card-icon {
+  position: relative;
+}
+.home-card-icon::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, rgb(148 163 184 / 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(148 163 184 / 0.06) 1px, transparent 1px);
+  background-size: 24px 24px;
+  pointer-events: none;
+}
+.dark .home-card-icon::before {
+  background-image:
+    linear-gradient(to right, rgb(255 255 255 / 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(255 255 255 / 0.02) 1px, transparent 1px);
+}
+.home-card-icon svg path {
+  fill: url(#memos-icon-grad);
+}
+
+/* Changelog hero star field (ported from the legacy Nuxt `StarsBg.vue`): the
+   layers scroll upward on a loop and the whole field fades in/out top-to-bottom
+   via a vertical mask. */
+.stars-bg {
+  -webkit-mask-image: linear-gradient(
+    180deg,
+    rgba(217, 217, 217, 0) 0%,
+    rgba(217, 217, 217, 0.8) 25%,
+    #d9d9d9 50%,
+    rgba(217, 217, 217, 0.8) 75%,
+    rgba(217, 217, 217, 0) 100%
+  );
+  mask-image: linear-gradient(
+    180deg,
+    rgba(217, 217, 217, 0) 0%,
+    rgba(217, 217, 217, 0.8) 25%,
+    #d9d9d9 50%,
+    rgba(217, 217, 217, 0.8) 75%,
+    rgba(217, 217, 217, 0) 100%
+  );
+  -webkit-mask-size: cover;
+  mask-size: cover;
+}
+.stars-bg-layer {
+  animation: risingStarsAnimation linear infinite;
+  animation-duration: var(--star-duration);
+  will-change: transform;
+}
+@keyframes risingStarsAnimation {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-2000px);
+  }
+}
+
+/* Sidebar page-tree items use Fumadocs' `items-center`, which vertically centers
+   icons when link text wraps. Top-align so icons sit with the first line. */
+#nd-sidebar :is(a, button).rounded-lg,
+#nd-sidebar-mobile :is(a, button).rounded-lg,
+#nd-sidebar p.inline-flex.gap-2,
+#nd-sidebar-mobile p.inline-flex.gap-2 {
+  align-items: flex-start;
+}
+/* But top-aligning leaves the icon (1em) sitting above the text's optical
+   center on single-line items. Nudge it down to the center of the FIRST line
+   (`(line-height - icon)/2`), which keeps it aligned with line 1 when the label
+   wraps and vertically centered when it doesn't. */
+#nd-sidebar :is(a, button).rounded-lg > [data-icon],
+#nd-sidebar-mobile :is(a, button).rounded-lg > [data-icon],
+#nd-sidebar p.inline-flex.gap-2 > [data-icon],
+#nd-sidebar-mobile p.inline-flex.gap-2 > [data-icon] {
+  margin-top: calc((1.25rem - 1em) / 2);
+}
+
+/* Bold the active sidebar item's label. Fumadocs marks the current page link
+   with `data-active="true"`; the legacy Nuxt sidebar rendered the selected
+   entry in a heavier weight, so match that here. */
+#nd-sidebar :is(a, button)[data-active='true'],
+#nd-sidebar-mobile :is(a, button)[data-active='true'] {
+  font-weight: 600;
+}
+
+/* Fumadocs only adds `border-e` in `nav.mode: auto`; our docs layout uses
+   `nav.mode: top`, so draw the sidebar's right edge separator here. */
+#nd-sidebar {
+  border-inline-end: 1px solid var(--color-fd-border);
+}
+
+/* Hide the sidebar scroll indicator: the page tree scrolls inside a Radix
+   ScrollArea viewport (`overflow-y: scroll`), which surfaces a native/overlay
+   scrollbar (and, on hover, Radix's custom bar). Hide both across engines while
+   keeping the scroll functionality. */
+#nd-sidebar [data-radix-scroll-area-viewport],
+#nd-sidebar-mobile [data-radix-scroll-area-viewport] {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  /* Align page-tree items with the logo: fumadocs' viewport adds 16px inline
+     padding that pushes every item (and its highlight box) right of the logo.
+     The legacy site flushes the item box to the logo's left edge (keeping only
+     a right-side gap + the item's own inner padding), so drop the left padding
+     while keeping the right.
+
+     This 0 is correct only at viewports >= --fd-layout-width (90rem), where the
+     sidebar inherits its left gutter from the notebook grid centering — which
+     happens to equal the header logo's gutter. See the media query below for
+     narrower widths. */
+  padding-left: 0;
+}
+/* Below --fd-layout-width (90rem) the notebook grid is full-width, so its
+   centering gutter collapses to 0 and the sidebar content sits flush at the
+   viewport edge. The header, however, keeps a fixed 20px gutter
+   (`.site-header-inner { width: calc(100% - 40px) }`), so the logo stays 20px
+   in and the page tree no longer lines up with it. Restore the matching 20px
+   inset in this range. */
+@media (max-width: 90rem) {
+  #nd-sidebar [data-radix-scroll-area-viewport],
+  #nd-sidebar-mobile [data-radix-scroll-area-viewport] {
+    padding-left: 20px;
+  }
+}
+#nd-sidebar [data-radix-scroll-area-viewport]::-webkit-scrollbar,
+#nd-sidebar-mobile [data-radix-scroll-area-viewport]::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+/* Radix ScrollArea renders its own ~6px scrollbar (a `data-orientation`
+   sibling of the viewport, thumb = `bg-fd-border`) that appears on scroll — it
+   is NOT `[data-radix-scroll-area-scrollbar]`, so match the orientation sibling
+   directly. Scoped to siblings of the viewport so nav items (inside it) are
+   never hidden. */
+#nd-sidebar [data-radix-scroll-area-viewport] ~ [data-orientation],
+#nd-sidebar-mobile [data-radix-scroll-area-viewport] ~ [data-orientation] {
+  display: none !important;
+}
+
+/* Legacy Nuxt `html.dark` surfaces (`--ui-bg`, `--ui-bg-muted`, `--ui-border-muted`).
+   Placed last + `html.dark` so Tailwind v4 does not strip these `--color-fd-*`
+   overrides when merging the fumadocs `@theme` block (defaults to ~#121212). */
+html.dark {
+  --color-fd-background: #02020b;
+  --color-fd-card: #02020b;
+  --color-fd-muted: #0e1219;
+  --color-fd-secondary: #0e1219;
+  --color-fd-popover: #0e1219;
+  --color-fd-border: #222a35;
+  --color-fd-accent: #0e1219;
+  --color-fd-foreground: #ebebeb;
+  --color-fd-muted-foreground: #94a3b8;
+  --color-fd-card-foreground: #f8fafc;
+  --color-fd-popover-foreground: #e2e8f0;
+  --color-fd-secondary-foreground: #ebebeb;
+  --color-fd-accent-foreground: #e2e8f0;
+}
+
+html.dark #nd-sidebar,
+html.dark #nd-sidebar-mobile {
+  --color-fd-muted: #0e1219;
+  --color-fd-secondary: #0e1219;
+}
+
+html.dark body {
+  background-color: #02020b;
+}
+
+/* Light-theme surface tokens — same `html:not(.dark)` + file-end placement as
+   `html.dark` above so Tailwind v4 / fumadocs `@theme` cannot override them. */
+html:not(.dark) {
+  --color-fd-background: #ffffff;
+  --color-fd-card: #ffffff;
+  --color-fd-border: #e2e8f0;
+}

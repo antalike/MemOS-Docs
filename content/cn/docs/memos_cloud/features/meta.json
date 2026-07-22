@@ -1,0 +1,5 @@
+{
+  "title": "更多功能",
+  "icon": "ri:function-line",
+  "pages": ["filters", "async_mode", "multimodal", "custom_tags", "self-evolving", "knowledge_base", "tool_calling"]
+}

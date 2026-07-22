@@ -1,0 +1,5 @@
+{
+  "title": "Chat",
+  "icon": "ri:chat-smile-2-line",
+  "pages": ["chat"]
+}

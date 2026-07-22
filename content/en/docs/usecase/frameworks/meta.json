@@ -1,0 +1,5 @@
+{
+  "title": "Frameworks & Platforms",
+  "icon": "ri:layout-grid-line",
+  "pages": ["claude_mcp", "coze_plugin"]
+}

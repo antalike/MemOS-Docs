@@ -1,0 +1,32 @@
+{
+  "title": "API文档",
+  "icon": "ri:file-code-line",
+  "root": true,
+  "pages": [
+    "---[ri:rocket-line]开始使用---",
+    "start/overview",
+    "start/configuration",
+    "---[ri:edit-box-line]核心操作---",
+    "core/add_message",
+    "core/search_memory",
+    "core/get_memory",
+    "core/delete_memory",
+    "message/add_feedback",
+    "---[ri:cpu-line]自研模型---",
+    "core/extract_memory",
+    "core/rerank",
+    "---[ri:chat-1-line]消息---",
+    "message/get_message",
+    "message/get_status",
+    "---[ri:chat-smile-2-line]对话---",
+    "chat/chat",
+    "---[ri:book-read-line]知识库---",
+    "knowledge/create_kb",
+    "knowledge/remove_kb",
+    "knowledge/add_kb_doc",
+    "knowledge/get_kb_doc",
+    "knowledge/delete_kb_doc",
+    "---[ri:customer-service-line]帮助与支持---",
+    "help/error_codes"
+  ]
+}

@@ -1,0 +1,5 @@
+{
+  "title": "MemOS 工作原理",
+  "icon": "ri:brain-line",
+  "pages": ["mem_production", "mem_schedule", "mem_recall", "mem_lifecycle", "algorithm"]
+}

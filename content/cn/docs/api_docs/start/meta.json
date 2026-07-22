@@ -1,0 +1,5 @@
+{
+  "title": "开始使用",
+  "icon": "ri:rocket-line",
+  "pages": ["overview", "configuration"]
+}

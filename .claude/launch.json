@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "fuma-dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "fuma", "run", "dev"],
+      "port": 3000
+    }
+  ]
+}

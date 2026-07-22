@@ -1,0 +1,13 @@
+{
+  "title": "Agent框架支持",
+  "icon": "ri:puzzle-line",
+  "root": true,
+  "pages": [
+    "---[ri:tools-line]MCP 服务---",
+    "mcp/guide",
+    "---[ri:command-line]CLI---",
+    "cli/guide",
+    "---[ri:robot-line]Agent开发---",
+    "agent/guide"
+  ]
+}

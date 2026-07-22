@@ -1,0 +1,13 @@
+{
+  "title": "Agent Framework Support",
+  "icon": "ri:puzzle-line",
+  "root": true,
+  "pages": [
+    "---[ri:tools-line]MCP Service---",
+    "mcp/guide",
+    "---[ri:command-line]CLI---",
+    "cli/guide",
+    "---[ri:robot-line]Agent Development---",
+    "agent/guide"
+  ]
+}
