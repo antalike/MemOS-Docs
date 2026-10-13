@@ -315,7 +315,7 @@ This is a `callout` with full **markdown** support.
     Basic note content
     ::::
 
-    ::::note{.w-full.my-0 to="/open_source/getting_started/quick_start"}
+    ::::note{.w-full.my-0 to="/memos_cloud/getting_started/quick_start"}
     Note with link - click to navigate to quick start guide
     ::::
 
@@ -342,7 +342,7 @@ This is a `callout` with full **markdown** support.
 Basic note content
 ::
 
-::note{to="/open_source/getting_started/quick_start"}
+::note{to="/memos_cloud/getting_started/quick_start"}
 Note with link - click to navigate to quick start guide
 ::
 

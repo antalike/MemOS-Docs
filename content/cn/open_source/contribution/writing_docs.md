@@ -322,7 +322,7 @@ class: "[&>div]:*:my-0 [&>div]:*:w-full"
     基础备注内容
     ::::
 
-    ::::note{.w-full.my-0 to="/open_source/getting_started/quick_start"}
+    ::::note{.w-full.my-0 to="/cn/memos_cloud/getting_started/quick_start"}
     带链接的备注 —— 点击跳转到快速开始指南
     ::::
     
@@ -349,7 +349,7 @@ class: "[&>div]:*:my-0 [&>div]:*:w-full"
 基础备注内容
 ::
 
-::note{to="/open_source/getting_started/quick_start"}
+::note{to="/cn/memos_cloud/getting_started/quick_start"}
 带链接的备注 —— 点击跳转到快速开始指南
 ::
 

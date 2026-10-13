@@ -107,11 +107,22 @@ useHead({
   link: [
     { rel: 'icon', href: '/icon.svg' },
     { rel: 'author', type: 'text/plain', href: '/llms.txt' }
+  ]
+})
+
+// 正式入口固定为 memos-docs.openmem.net：同一份代码会部署到多个域名
+// （如灰度域 docs-gray.openmem.net），canonical 统一指向正式域的同路径页面，
+// 避免搜索引擎把重复页面分开收录。
+// html lang 之前固定为 en，中文页面也标成英文；改为跟随当前语言。
+const CANONICAL_ORIGIN = 'https://memos-docs.openmem.net'
+useHead(() => ({
+  link: [
+    { rel: 'canonical', href: `${CANONICAL_ORIGIN}${route.path.endsWith('/') ? route.path : `${route.path}/`}` }
   ],
   htmlAttrs: {
-    lang: 'en'
+    lang: locale.value === 'cn' ? 'zh-CN' : 'en'
   }
-})
+}))
 
 function showContentNavigation() {
   const path = normalizedPath.value

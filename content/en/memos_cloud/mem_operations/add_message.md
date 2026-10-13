@@ -290,7 +290,7 @@ Supported keys fall into two categories:
 
 | Category | Values | Stage |
 | --- | --- | --- |
-| Memory category | `detail_factual`, `preference`, `skill`, `profile`, `event`, `tool_memory` | Extraction of the corresponding [memory category](/en/memos_cloud/introduction/memory_types) |
+| Memory category | `detail_factual`, `preference`, `skill`, `profile`, `event`, `tool_memory` | Extraction of the corresponding [memory category](/memos_cloud/introduction/memory_types) |
 | Input modality | `image`, `document` | Extraction of image content and file content |
 
 Note the following when using this field:
