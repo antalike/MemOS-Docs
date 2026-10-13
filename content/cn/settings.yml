@@ -168,6 +168,7 @@ nav:
 
   - "(ri:projector-line) 最佳实践":
     - "(ri:book-open-line) 技术教程":
+      # - "(ri:book-2-line) 用 MemOS 为 AI 应用构建共享知识库": usecase/shared_knowledge_base.md
       - "(ri:customer-service-2-line) 让知识库成为懂你的专属顾问": usecase/knowledge_qa_assistant.md
       - "(ri:customer-service-2-line) 构建拥有长期记忆的智能客服": usecase/customer_service_assistant.md
       - "(ri:money-dollar-circle-line) 让理财助手读懂客户偏好": usecase/financial_assistant.md

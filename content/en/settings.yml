@@ -167,6 +167,7 @@ nav:
 
   - "(ri:projector-line) Best Practices":
     - "(ri:book-open-line) Tutorials":
+      - "(ri:book-2-line) Build a Shared Knowledge Base for AI Apps": usecase/shared_knowledge_base.md
       - "(ri:customer-service-2-line) Knowledge Q&A Assistant": usecase/knowledge_qa_assistant.md
       - "(ri:customer-service-2-line) Customer Service Agent with Long-Term Memory": usecase/customer_service_assistant.md
       - "(ri:money-dollar-circle-line) Financial Assistant": usecase/financial_assistant.md
@@ -181,3 +182,6 @@ nav:
       - "Agent Memory Is Not RAG: A 2026 Production Field Guide": usecase/blog/agent_memory_is_not_rag.md
       - "Claude Made Memory Editable. Production Agents Still Need a Governed Memory Layer": usecase/blog/claude_editable_memory_governed_layer.md
       - "How to Keep Bad Assumptions Out of Agent Memory": usecase/blog/keep_bad_assumptions_out_of_agent_memory.md
+      - "Choosing a MemOS Integration for Your AI Agent": usecase/blog/choosing_memos_integration.md
+      - "Persistent Agent Memory Should Make the Next Task Easier": usecase/blog/persistent_agent_memory_next_task.md
+      - "Agent Memory Observability: 12 Measures That Matter After Launch": usecase/blog/agent_memory_observability_12_measures.md
