@@ -183,3 +183,6 @@ nav:
       - "企业 Agent 需要独立的长期记忆基础设施": usecase/blog/chatgpt_dreaming_long_term_memory.md
       - "Memory Poisoning：企业 Agent 必须建立的六道长期记忆控制": usecase/blog/memory_poisoning_controls.md
       - "长任务 Agent 的记忆管理，从会话恢复到经验复用": usecase/blog/long_task_agent_memory_management.md
+      - "从数据归属到记忆删除：企业自托管 Agent 记忆的四个关键问题": usecase/blog/self_hosted_agent_memory_four_questions.md
+      - "100 万 Token 上下文，为什么还需要长期记忆？": usecase/blog/million_token_context_long_term_memory.md
+      - "有了向量库，Agent 为什么还需要记忆管理？": usecase/blog/vector_database_memory_management.md
