@@ -161,6 +161,8 @@ nav:
       - "(ri:delete-back-2-line) 删除知识库": api_docs/knowledge/remove_kb.md
       - "(ri:file-add-line) 添加知识库文件": api_docs/knowledge/add_kb_doc.md
       - "(ri:file-search-line) 获取知识库文件": api_docs/knowledge/get_kb_doc.md
+      - "(ri:download-line) 下载知识库文件": api_docs/knowledge/download_kb_doc.md
+      - "(ri:edit-line) 更新知识库文件": api_docs/knowledge/update_kb_doc.md
       - "(ri:file-reduce-line) 删除知识库文件": api_docs/knowledge/delete_kb_doc.md
 
     - "(ri:customer-service-line) 帮助与支持":

@@ -160,6 +160,8 @@ nav:
       - "(ri:delete-back-2-line) Delete Knowledgebase": api_docs/knowledge/remove_kb.md
       - "(ri:file-add-line) Create Knowledgebase File": api_docs/knowledge/add_kb_doc.md
       - "(ri:file-search-line) Get Knowledgebase File": api_docs/knowledge/get_kb_doc.md
+      - "(ri:download-line) Download Knowledgebase File": api_docs/knowledge/download_kb_doc.md
+      - "(ri:edit-line) Update Knowledgebase File": api_docs/knowledge/update_kb_doc.md
       - "(ri:file-reduce-line) Delete Knowledgebase File": api_docs/knowledge/delete_kb_doc.md
 
     - "(ri:customer-service-line) Help & Support":

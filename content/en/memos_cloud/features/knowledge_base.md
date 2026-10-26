@@ -268,6 +268,19 @@ print(f"result: {res.json()}")
 ```
 ::
 
+### Update or Download a Document
+
+A document keeps the same file ID across versions: submit new content to update it, or download the current version for preview and editing.
+
+| Operation | API | Notes |
+| --- | --- | --- |
+| Update a document | [Update Knowledgebase File](/api_docs/knowledge/update_kb_doc) | Creates the next version of an existing file. Only files whose current version has finished processing can be updated, and the file type cannot be changed. |
+| Download a document | [Download Knowledgebase File](/api_docs/knowledge/download_kb_doc) | Returns the raw content of the current version; the file name is provided in the `Content-Disposition` header. |
+
+::note
+A successful update switches the file list to the new name, size, and version immediately, while parsing and indexing continue in the background. Track progress with `POST /get/status` using the returned `task_id`, or with `POST /get/knowledgebase-file`, before submitting the next update.
+::
+
 ### Add User Conversation
 
 ::note{icon="websymbol:chat"}

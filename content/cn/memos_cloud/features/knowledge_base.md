@@ -267,6 +267,19 @@ print(f"result: {res.json()}")
 ```
 ::
 
+### 更新或下载文档
+
+文档更新与下载都沿用同一个文件 ID：提交新内容即可生成新版本，下载可获取当前版本的原始内容用于预览或编辑。
+
+| 操作 | 接口 | 说明 |
+| --- | --- | --- |
+| 更新文档 | [更新知识库文件](/api_docs/knowledge/update_kb_doc) | 为已有文件生成下一个版本。仅当前版本处理完成的文件可以更新，且不能修改文件类型。 |
+| 下载文档 | [下载知识库文件](/api_docs/knowledge/download_kb_doc) | 返回当前版本的原始文件内容，文件名通过 `Content-Disposition` 响应头返回。 |
+
+::note
+更新成功后，文件列表会立即显示新的文件名、大小和版本号，解析与索引在后台继续执行。可先用返回的 `task_id` 调用 `POST /get/status`，或调用 `POST /get/knowledgebase-file` 查看进度，再进行下一次更新。
+::
+
 ### 添加用户对话
 
 ::note{icon="websymbol:chat"}

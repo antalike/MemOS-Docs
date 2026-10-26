@@ -646,6 +646,119 @@
         }
       }
     },
+    "/download/knowledgebase-file": {
+      "post": {
+        "summary": "下载知识库文件",
+        "description": "下载知识库文件当前版本的原始内容，响应直接返回文件本体。",
+        "operationId": "download_knowledgebase-file",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DownloadFileRequest"
+              },
+              "example": {
+                "file_id": "1f35642253606ed1e9dd8cd8113a8998"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "二进制文件流。",
+            "headers": {
+              "Content-Type": {
+                "description": "Stored media type of the file, such as application/pdf or text/markdown. Falls back to application/octet-stream.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Content-Disposition": {
+                "description": "Attachment header with the UTF-8 encoded file name (RFC 5987).",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Content-Length": {
+                "description": "Size of the returned content in bytes.",
+                "schema": {
+                  "type": "integer"
+                }
+              },
+              "Cache-Control": {
+                "description": "Always no-store, private.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                },
+                "example": "(二进制文件内容)"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/update/knowledgebase-file": {
+      "post": {
+        "summary": "更新知识库文件",
+        "description": "为已有知识库文件提交新内容，生成下一个版本。",
+        "operationId": "update_knowledgebase-file",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateFileRequest"
+              },
+              "example": {
+                "file_id": "1f35642253606ed1e9dd8cd8113a8998",
+                "file": {
+                  "name": "Software_Procurement_Reimbursement_Policy.pdf",
+                  "content": "https://cdn.memtensor.com.cn/file/Software_Procurement_Reimbursement_Policy_v2.pdf"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "请求成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateFileResponse"
+                },
+                "examples": {
+                  "processing": {
+                    "summary": "PROCESSING",
+                    "value": {
+                      "code": 0,
+                      "message": "ok",
+                      "data": {
+                        "file_id": "1f35642253606ed1e9dd8cd8113a8998",
+                        "version": 2,
+                        "current_version": 2,
+                        "version_id": "1958123456789012345",
+                        "task_id": "1958123456789012345",
+                        "status": "PROCESSING"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/bind/profile_template": {
       "post": {
         "summary": "绑定属性记忆模板",
@@ -3598,6 +3711,112 @@
           }
         },
         "title": "DeleteFileResponse"
+      },
+      "DownloadFileRequest": {
+        "type": "object",
+        "required": [
+          "file_id"
+        ],
+        "properties": {
+          "file_id": {
+            "type": "string",
+            "title": "File ID",
+            "description": "知识库文件 ID。"
+          }
+        },
+        "title": "DownloadFileRequest"
+      },
+      "UpdateFileRequest": {
+        "type": "object",
+        "required": [
+          "file_id",
+          "file"
+        ],
+        "properties": {
+          "file_id": {
+            "type": "string",
+            "title": "File ID",
+            "description": "要更新的知识库文件 ID。"
+          },
+          "file": {
+            "type": "object",
+            "required": [
+              "content"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "title": "Name",
+                "description": "新版本文件名，Base64 内容时用于确定扩展名。"
+              },
+              "content": {
+                "type": "string",
+                "title": "Content",
+                "description": "新版本的文件内容，支持 URL 或 Base64 编码。"
+              }
+            },
+            "description": "新版本文件。"
+          }
+        },
+        "title": "UpdateFileRequest"
+      },
+      "UpdateFileResponse": {
+        "type": "object",
+        "required": [
+          "code",
+          "message"
+        ],
+        "properties": {
+          "code": {
+            "type": "integer",
+            "title": "Code",
+            "description": "API 状态码，详见<a href=\"/api_docs/help/error_codes\" class=\"text-primary border-b border-transparent hover:border-primary font-medium focus-visible:outline-primary [&amp;&gt;code]:border-dashed hover:[&amp;&gt;code]:border-primary hover:[&amp;&gt;code]:text-primary transition-colors [&amp;&gt;code]:transition-colors\">Error Code</a>。"
+          },
+          "data": {
+            "type": "object",
+            "title": "Data",
+            "properties": {
+              "file_id": {
+                "type": "string",
+                "title": "File ID",
+                "description": "逻辑文件 ID，后续更新与下载继续使用该 ID。"
+              },
+              "version": {
+                "type": "integer",
+                "format": "int32",
+                "title": "Version",
+                "description": "本次更新生成的版本号。"
+              },
+              "current_version": {
+                "type": "integer",
+                "format": "int32",
+                "title": "Current Version",
+                "description": "文件当前版本号。"
+              },
+              "version_id": {
+                "type": "string",
+                "title": "Version ID",
+                "description": "版本记录 ID。"
+              },
+              "task_id": {
+                "type": "string",
+                "title": "Task ID",
+                "description": "版本处理任务 ID，可用于查询进度。"
+              },
+              "status": {
+                "type": "string",
+                "title": "Status",
+                "description": "版本状态，提交后为 PROCESSING。"
+              }
+            }
+          },
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "description": "API 响应消息"
+          }
+        },
+        "title": "UpdateFileResponse"
       },
       "ExtractMemoryItem": {
         "type": "object",

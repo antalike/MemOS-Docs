@@ -646,6 +646,119 @@
         }
       }
     },
+    "/download/knowledgebase-file": {
+      "post": {
+        "summary": "Download Knowledgebase File",
+        "description": "Download the current version of a Knowledge Base file. The response body is the file itself.",
+        "operationId": "download_knowledgebase-file",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DownloadFileRequest"
+              },
+              "example": {
+                "file_id": "1f35642253606ed1e9dd8cd8113a8998"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Binary file stream.",
+            "headers": {
+              "Content-Type": {
+                "description": "Stored media type of the file, such as application/pdf or text/markdown. Falls back to application/octet-stream.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Content-Disposition": {
+                "description": "Attachment header with the UTF-8 encoded file name (RFC 5987).",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Content-Length": {
+                "description": "Size of the returned content in bytes.",
+                "schema": {
+                  "type": "integer"
+                }
+              },
+              "Cache-Control": {
+                "description": "Always no-store, private.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                },
+                "example": "(binary file content)"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/update/knowledgebase-file": {
+      "post": {
+        "summary": "Update Knowledgebase File",
+        "description": "Submit new content for an existing Knowledge Base file to create its next version.",
+        "operationId": "update_knowledgebase-file",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateFileRequest"
+              },
+              "example": {
+                "file_id": "1f35642253606ed1e9dd8cd8113a8998",
+                "file": {
+                  "name": "Software_Procurement_Reimbursement_Policy.pdf",
+                  "content": "https://cdn.memtensor.com.cn/file/Software_Procurement_Reimbursement_Policy_v2.pdf"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateFileResponse"
+                },
+                "examples": {
+                  "processing": {
+                    "summary": "PROCESSING",
+                    "value": {
+                      "code": 0,
+                      "message": "ok",
+                      "data": {
+                        "file_id": "1f35642253606ed1e9dd8cd8113a8998",
+                        "version": 2,
+                        "current_version": 2,
+                        "version_id": "1958123456789012345",
+                        "task_id": "1958123456789012345",
+                        "status": "PROCESSING"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/bind/profile_template": {
       "post": {
         "summary": "Bind Profile Template",
@@ -3312,6 +3425,112 @@
           }
         },
         "title": "DeleteFileResponse"
+      },
+      "DownloadFileRequest": {
+        "type": "object",
+        "required": [
+          "file_id"
+        ],
+        "properties": {
+          "file_id": {
+            "type": "string",
+            "title": "File ID",
+            "description": "Knowledge Base file ID."
+          }
+        },
+        "title": "DownloadFileRequest"
+      },
+      "UpdateFileRequest": {
+        "type": "object",
+        "required": [
+          "file_id",
+          "file"
+        ],
+        "properties": {
+          "file_id": {
+            "type": "string",
+            "title": "File ID",
+            "description": "ID of the Knowledge Base file to update."
+          },
+          "file": {
+            "type": "object",
+            "required": [
+              "content"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "title": "Name",
+                "description": "File name of the new version. Required for Base64 content to determine the extension."
+              },
+              "content": {
+                "type": "string",
+                "title": "Content",
+                "description": "New file content, as a URL or Base64-encoded string."
+              }
+            },
+            "description": "New version of the file."
+          }
+        },
+        "title": "UpdateFileRequest"
+      },
+      "UpdateFileResponse": {
+        "type": "object",
+        "required": [
+          "code",
+          "message"
+        ],
+        "properties": {
+          "code": {
+            "type": "integer",
+            "title": "Code",
+            "description": "API status code. See <a href=\"/api_docs/help/error_codes\" class=\"text-primary border-b border-transparent hover:border-primary font-medium focus-visible:outline-primary [&amp;&gt;code]:border-dashed hover:[&amp;&gt;code]:border-primary hover:[&amp;&gt;code]:text-primary transition-colors [&amp;&gt;code]:transition-colors\">Error Code</a> for details."
+          },
+          "data": {
+            "type": "object",
+            "title": "Data",
+            "properties": {
+              "file_id": {
+                "type": "string",
+                "title": "File ID",
+                "description": "Logical file ID. Reuse it in later updates and downloads."
+              },
+              "version": {
+                "type": "integer",
+                "format": "int32",
+                "title": "Version",
+                "description": "Version number created by this update."
+              },
+              "current_version": {
+                "type": "integer",
+                "format": "int32",
+                "title": "Current Version",
+                "description": "Current version of the file."
+              },
+              "version_id": {
+                "type": "string",
+                "title": "Version ID",
+                "description": "Version record ID."
+              },
+              "task_id": {
+                "type": "string",
+                "title": "Task ID",
+                "description": "Processing task ID of the new version, used to query progress."
+              },
+              "status": {
+                "type": "string",
+                "title": "Status",
+                "description": "Version status, PROCESSING after submission."
+              }
+            }
+          },
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "description": "API response message"
+          }
+        },
+        "title": "UpdateFileResponse"
       },
       "ExtractMemoryItem": {
         "type": "object",
