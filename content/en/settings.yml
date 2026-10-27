@@ -169,6 +169,7 @@ nav:
 
   - "(ri:projector-line) Best Practices":
     - "(ri:book-open-line) Tutorials":
+      - "(ri:device-line) Edge–Cloud Collaboration: Long-Term Memory for Smart Devices": usecase/edge_cloud_terminal_memory.md
       - "(ri:book-2-line) Build a Shared Knowledge Base for AI Apps": usecase/shared_knowledge_base.md
       - "(ri:customer-service-2-line) Knowledge Q&A Assistant": usecase/knowledge_qa_assistant.md
       - "(ri:customer-service-2-line) Customer Service Agent with Long-Term Memory": usecase/customer_service_assistant.md
