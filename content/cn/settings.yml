@@ -180,6 +180,7 @@ nav:
       # - "(ri:chrome-line) 浏览器插件": usecase/frameworks/browser_extension.md
       - "(ri:brain-line) Claude MCP": usecase/frameworks/claude_mcp.md
       - "(ri:puzzle-2-line) Coze 插件工具": usecase/frameworks/coze_plugin.md
+      - "(ri:device-line) 端云协同：为智能终端构建长期记忆": usecase/edge_cloud_terminal_memory.md
 
     - "(ri:article-line) 博客":
       - "企业 Agent 需要独立的长期记忆基础设施": usecase/blog/chatgpt_dreaming_long_term_memory.md
