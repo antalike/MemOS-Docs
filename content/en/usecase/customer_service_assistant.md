@@ -1,90 +1,87 @@
 ---
-title: "Help Your Customer Service Agent Remember Users: Cross-Session Memory with MemOS"
-desc: Separate user memories, Agent Skills, and policy knowledge so a customer service Agent can continue user cases across sessions and reuse general workflows.
+title: "Help a Support Agent Remember Users: Cross-Session Customer Service with MemOS"
+desc: Separate user memories, Agent Skills, and a policy knowledge base so support agents can continue customer cases across sessions and reuse general workflows.
 ---
 
-A user reports a faulty headset through web chat. The next day, they follow up by email, only to be asked for their order number and a description of the issue all over again. To the user, this feels like a break in service. The system-level cause is usually simple: the new session does not have the information that was already confirmed.
+A customer reports a faulty headset in web chat, then follows up by email the next day—only to be asked for the order number and problem description again. For the customer, service continuity has broken. The system often has a straightforward gap: the new conversation did not receive previously confirmed information.
 
-A customer service Agent needs to remember two different types of information. One belongs to the current user, such as orders, open cases, and notification preferences. The other belongs to the Agent, such as reusable tool workflows for handling similar requests. After-sales policies remain centrally managed in a knowledge base.
+Support agents need two kinds of memory. Customer-specific information includes orders, pending work, and notification preferences. Agent-level information includes reusable tool workflows for similar problems. Formal after-sales policies remain in a centrally maintained knowledge base.
 
-This guide uses Python snippets to show how these three types of information work together in a complete customer service memory architecture.
+This article combines all three through Python examples.
 
-## Key Ideas
+## Key ideas
 
-- Write user facts and preferences to user memory, and use a stable `user_id` to retrieve them across sessions.
-- Submit each task record to the customer service Agent's independent memory, and let MemOS decide whether to create or update a Skill.
-- Store after-sales policies in a policy knowledge base, and retrieve them together with Agent Skills from the Agent's perspective.
-- Before generating a response, run two retrievals: one for user facts and preferences, and another for Agent Skills and policies.
-- Let the Agent manage the current session history while MemOS manages cross-session memory.
+- Write user facts and preferences with both `user_id` and `agent_id`; use `related_id` to select the current user's memories during retrieval.
+- Submit each complete task trace to the support agent's independent memory, requesting Skill generation only. MemOS decides whether to create or update a Skill.
+- Store policies in a knowledge base and include them in the same search using `knowledgebase_ids`.
+- Call `/search/memory` once before answering to retrieve user facts, preferences, Agent Skills, and policies together.
+- The agent maintains current conversation history; MemOS handles cross-session memory.
 
-## What You Will Build
+## What you will build
 
-The example covers three stages of a customer service case:
+The example has three stages:
 
 ```text
 DAY 1 · Web chat
-customer_001 submits a headset exchange request. The customer service Agent
-looks up the order, checks the policy, creates a ticket, and records the requested
-delivery time, address, and SMS notification preference.
+customer_001 requests a headset exchange. The agent queries the order,
+checks policy, creates a ticket, and records delivery timing, address,
+and SMS notification requirements.
 
 DAY 4 · Email ticket
-customer_001 follows up on the exchange in a new conversation_id.
+customer_001 follows up using a new conversation_id.
 
 DAY 7 · Web chat
-customer_002 reports a similar headset noise issue. The customer service Agent
-tries to reuse a Skill learned from the earlier case.
+customer_002 reports a similar buzzing issue. The agent tries to reuse
+a Skill derived from the earlier task.
 ```
 
-DAY 4 verifies that user facts and preferences persist across sessions. DAY 7 uses a different customer to verify that user information remains isolated while the customer service Agent can still reuse a general Skill.
+DAY 4 checks continuity of user facts and preferences across sessions. DAY 7 switches customers to check isolation while testing reuse of general Agent Skills.
 
-## Separate the Three Information Scopes
+## Separate the three information scopes
 
-The architecture divides customer service context into three scopes:
+1. **User memory:** orders, faults, ticket status, addresses, and notification preferences belonging to the current `user_id`.
+2. **Agent Skills:** general workflows derived from complete task traces and associated with a stable `agent_id`.
+3. **Policy knowledge base:** formal returns, warranty, shipping, and invoice rules maintained by the business.
 
-1. **User memory** stores orders, product issues, ticket status, addresses, and notification preferences. It belongs only to the current `user_id`.
-2. **Agent Skills** store general workflows distilled from complete task traces. They belong to a stable `agent_id`.
-3. **Policy knowledge base** stores official rules for returns, exchanges, warranties, shipping, and invoices. It is centrally maintained by the business.
+Policies determine what the rules require, user memories show the customer's progress, and Agent Skills supply the usual steps for completing that type of task.
 
-Put simply, the policy knowledge base answers "What should we do according to policy?" User memory answers "How far have we progressed with this customer?" An Agent Skill answers "What steps usually complete this type of task?"
-
-## End-to-End Flow
-
-Each customer service request follows this flow:
+## End-to-end flow
 
 ```text
-User request
-  │
-  ├─ Agent reads the current session history from the business application
-  │
-  ├─ Retrieval 1: user_id → user facts and preferences
-  │
-  ├─ Retrieval 2: agent_id → general Skills + policy knowledge base
-  │
-  ├─ Merge context and call order, ticket, and notification tools
-  │
-  ├─ LLM generates the final response from the tool results
-  │
-  ├─ Write 1: user_id → facts and preferences
-  │
-  └─ Write 2: agent_id → request Skill creation or update
+Customer request
+  |
+  +-- Agent reads current conversation history from the application
+  |
+  +-- One combined search: agent_id + knowledgebase_ids
+  |   filter selects the current user's memories (related_id)
+  |   and Agent Skills (SkillMemory)
+  |   -> user facts, preferences, Skills, policies
+  |
+  +-- Assemble context and execute order, ticket, and notification tools
+  |
+  +-- Model generates a final response based on tool results
+  |
+  +-- Write 1: user_id + agent_id -> facts and preferences
+  |
+  +-- Write 2: agent_id -> request Skill generation or updates
 ```
 
-Both writes use the same task record, but `allow_memory_view` assigns a different set of memory types to each one. The user perspective does not generate Skills, and the Agent perspective does not duplicate user facts or preferences.
+Both writes submit the same task record but select different types through `allow_memory_view`. The user write supplies both IDs, assigning memory to the user and associating it with the support agent's memory space. The Skill write supplies only `agent_id`. The user view does not generate Skills; the Agent view does not duplicate user facts and preferences.
+
+Retrieval uses one `/search/memory` call. `related_id` limits facts and preferences to the current user, `SkillMemory` allows Agent Skills to return across users, and `knowledgebase_ids` includes policy material in the same search.
 
 ## Prerequisites
 
-You can find a runnable [complete demo](#complete-demo) at the end of this guide. Expand the code block, copy everything with one click, and save it locally for verification.
+The [complete Demo](#complete-demo) below can be copied and run locally.
 
-You need a MemOS API key and access to OpenAI or an OpenAI-compatible model endpoint.
-
-Create a Python environment in your project and install the dependencies:
+You need a MemOS API key and an OpenAI or OpenAI-compatible model endpoint. Create a Python environment and install dependencies:
 
 ```bash
 python3 -m venv .venv
 ./.venv/bin/python -m pip install openai requests
 ```
 
-Configure these values in your integration:
+Configure these values:
 
 ```python
 MEMOS_API_KEY = "YOUR_MEMOS_API_KEY"
@@ -95,13 +92,13 @@ OPENAI_BASE_URL = "YOUR_OPENAI_BASE_URL"
 AGENT_ID = "YOUR_AGENT_ID"
 ```
 
-Derive `user_id` from the user's authenticated identity or CRM record. Use a stable `agent_id` for the same customer service Agent across users and sessions.
+Derive `user_id` from authentication or your CRM. Keep `agent_id` stable for the same support agent across customers and conversations.
 
-In the console, enable **Create Independent Memory for an Agent** for the current project. This option is disabled by default. When it is disabled, `agent_id` can only tag and filter memories; it cannot act as an independent subject for writing or retrieving Agent Skills. See [Multi-Agent Isolation](/memos_cloud/introduction/isolation_filters#create-independent-memory-for-an-agent) for details.
+Enable **Create Independent Memory for Agent** in the project console. It is off by default. Without it, `agent_id` provides tagging and filtering, rather than an independent subject for Agent Skill writes or retrieval. See [multi-agent isolation](/memos_cloud/introduction/isolation_filters).
 
-## Step 1: Prepare the Policy Knowledge Base
+## Prepare the policy knowledge base
 
-During initialization, create a policy knowledge base, upload the after-sales policy document, and wait until processing is complete:
+During initialization, create a policy knowledge base, upload the policy document, and wait for processing:
 
 ```python
 def create_policy_knowledge_base():
@@ -109,152 +106,108 @@ def create_policy_knowledge_base():
         "Content-Type": "application/json",
         "Authorization": f"Token {MEMOS_API_KEY}",
     }
-    policy_kb_id = _create_kb(
-        headers,
-        "Consumer After-Sales Policy",
-        "Policies for returns, exchanges, warranties, shipping, and invoices",
+
+    # 1. Create knowledge base: POST /create/knowledgebase
+    res = requests.post(
+        f"{MEMOS_BASE_URL}/create/knowledgebase",
+        headers=headers,
+        json={
+            "knowledgebase_name": "Consumer After-Sales Policy Knowledge Base",
+            "knowledgebase_description": "Consumer returns, exchanges, warranty, shipping, and invoice policies",
+        },
     )
-    _upload_file(
-        headers,
-        policy_kb_id,
-        "consumer-after-sale-policy.md",
-        POLICY_DOC_MD,
+    body = res.json()
+    if body.get("code") != 0:
+        sys.exit(f"Failed to create knowledge base: {body.get('message')}")
+    policy_kb_id = body["data"]["id"]
+
+    # 2. Upload policy: POST /add/knowledgebase-file
+    # Encode file content as base64 and pass a data URL
+    encoded = base64.b64encode(POLICY_DOC_MD.encode("utf-8")).decode("utf-8")
+    res = requests.post(
+        f"{MEMOS_BASE_URL}/add/knowledgebase-file",
+        headers=headers,
+        json={
+            "knowledgebase_id": policy_kb_id,
+            "file": [{
+                "type": "document",
+                "name": "consumer-after-sale-policy.md",
+                "content": f"data:text/markdown;base64,{encoded}",
+            }],
+        },
     )
-    print("Policy document uploaded. Waiting for processing...")
-    _wait_kb_ready(headers, policy_kb_id)
-    print(f"Policy knowledge base is ready: {policy_kb_id}")
+    if res.json().get("code") != 0:
+        sys.exit(f"Failed to upload policy: {res.json().get('message')}")
+
+    # 3. Poll parsing status: POST /get/knowledgebase-file
+    print("Policy document uploaded; waiting for parsing...")
+    for _ in range(40):
+        time.sleep(3)
+        res = requests.post(
+            f"{MEMOS_BASE_URL}/get/knowledgebase-file",
+            headers=headers,
+            json={"knowledgebase_id": policy_kb_id, "page": 1, "page_size": 20},
+        )
+        files = res.json().get("data", {}).get("file_detail_list", [])
+        statuses = {str(item.get("status", "")).lower() for item in files}
+        if files and statuses <= {"completed", "available", "failed"}:
+            if "failed" in statuses:
+                sys.exit("Policy parsing failed")
+            break
+    print(f"Policy knowledge base ready: {policy_kb_id}")
     return policy_kb_id
 ```
 
-Use the knowledge base ID returned by the create API to initialize the customer service assistant:
+Use the ID returned by the creation API to initialize the assistant:
 
 ```python
 policy_kb_id = create_policy_knowledge_base()
 assistant = CustomerServiceAssistant(policy_kb_id)
 ```
 
-## Step 2: Separate the Write Types
+## Write back the complete task trace
 
-Use different write views for the user and the Agent:
-
-```python
-USER_WRITE_VIEWS = ["detail_factual", "preference"]
-AGENT_SKILL_WRITE_VIEWS = ["skill"]
-USER_CONTEXT_VIEWS = ["detail_factual", "preference"]
-AGENT_CONTEXT_VIEWS = ["detail_factual", "skill"]
-```
-
-This lets the same task record enter two memory spaces without generating duplicate memory types.
-
-### Write User Facts and Preferences
-
-The first `/add/message` request passes only `user_id`:
+Each message uses `role_id` to identify the actual speaker. User messages use `user_id`; support responses and tool calls use `agent_id`:
 
 ```python
-def add_user_memories(self, messages, user_id, conversation_id, channel):
-    """First write: generate only facts and preferences from the user's perspective."""
-    user_data = {
-        "user_id": user_id,
-        "conversation_id": conversation_id,
-        "info": {"channel": channel, "scene": "consumer_support"},
-        "allow_memory_view": USER_WRITE_VIEWS,
-        "messages": messages,
-    }
-    self._post_memory(user_data, "User facts and preferences", timeout_seconds=120)
-```
-
-MemOS decides whether the conversation contains a fact or preference worth storing. If a turn does not express a stable preference, it may generate only facts.
-
-### Write Agent Skills
-
-The second `/add/message` request passes only `agent_id` and allows only Skill generation:
-
-```python
-def add_agent_skill(self, messages, conversation_id, channel):
-    """Second write: request Skill creation or update from the Agent's perspective."""
-    skill_data = {
-        "agent_id": AGENT_ID,
-        "conversation_id": conversation_id,
-        "info": {"channel": channel, "scene": "consumer_support"},
-        "allow_memory_view": AGENT_SKILL_WRITE_VIEWS,
-        "custom_extract_prompt": {"skill": SKILL_EXTRACT_PROMPT},
-        "messages": messages,
-    }
-    self._post_memory(skill_data, "Agent Skill", timeout_seconds=300)
-```
-
-Run this write after every response. The caller only declares that the request may generate a Skill and does not try to predict whether the current conversation should produce one. MemOS evaluates the task trace and existing Skills, then decides whether to create, update, or skip a Skill.
-
-## Step 3: Keep Skills General
-
-MemOS handles Skill extraction. Use `custom_extract_prompt.skill` to add generalization requirements for the customer service scenario:
-
-- Compare Skills by business goal, trigger conditions, core tool sequence, and success criteria.
-- Merge into an existing Skill when the workflow is equivalent, and avoid duplicates when there is no new reusable information.
-- Remove names, addresses, user IDs, order numbers, ticket numbers, and specific dates.
-- Replace instance values with parameters such as `order_id`, `ticket_id`, and `shipping_address`.
-- Do not turn personal preferences or one-time timing requirements into general rules.
-- Keep only execution steps supported by tool results.
-
-MemOS compares the new task with existing Skills and handles similarity and updates. The caller does not need to manage Skill IDs or implement merge logic.
-
-## Step 4: Run Two Retrievals
-
-Before generating a response, retrieve user context separately from Agent Skills and policy knowledge.
-
-### Retrieve User Facts and Preferences
-
-Use `user_id` as the subject for the first retrieval, and request only the current user's facts and preferences:
-
-```python
-context_data = {
-    "query": query,
-    "user_id": user_id,
-    "conversation_id": conversation_id,
-    "include_memory_view": USER_CONTEXT_VIEWS,
-    "memory_limit_number": 9,
-    "preference_limit_number": 6,
-}
-```
-
-The response contains only facts and preferences for the current user.
-
-### Retrieve Agent Skills and Policies
-
-Use the stable `agent_id` as the subject for the second retrieval, and include the policy knowledge base in the same search:
-
-```python
-agent_data = {
-    "query": f"General methods needed to handle this customer service request: {query}",
-    "agent_id": AGENT_ID,
-    "knowledgebase_ids": self.knowledgebase_ids,
-    "include_memory_view": AGENT_CONTEXT_VIEWS,
-    "memory_limit_number": 9,
-}
-```
-
-This keeps user facts and preferences in the user perspective while making general Skills and official policies available to the customer service Agent. Different users can reuse the same Agent Skills, and policy responses remain consistent.
-
-## Step 5: Write Back the Complete Task Trace
-
-Use `role_id` on each message to identify the actual speaker. User messages use `user_id`; customer service responses and tool calls use `agent_id`:
-
-```python
+# Complete message list written to MemOS for the DAY 1 exchange request
 memory_messages = [
-    {"role": "user", "role_id": user_id, "content": query}
+    # 1. User message: role_id identifies the current user
+    {
+        "role": "user",
+        "role_id": user_id,  # For example, customer_001
+        "content": "The left ear of my noise-canceling headphones buzzes; I want an exchange",
+    },
+    # 2. Tool call: the support Agent queries the order; role_id is agent_id
+    {
+        "role": "assistant",
+        "role_id": AGENT_ID,
+        "content": "",
+        "tool_calls": [{
+            "id": "call_1",
+            "type": "function",
+            "function": {
+                "name": "query_order",
+                "arguments": '{"order_id": "20260820-88"}',
+            },
+        }],
+    },
+    # 3. Tool result: tool_call_id links to the call above; no role_id is needed
+    {
+        "role": "tool",
+        "tool_call_id": "call_1",
+        "content": '{"order_id": "20260820-88", "status": "delivered"}',
+    },
+    # 4. Final response: also attributed to the support Agent
+    {
+        "role": "assistant",
+        "role_id": AGENT_ID,
+        "content": "Exchange ticket EX20260821-03 has been created, with free shipping both ways...",
+    },
 ]
-
-# Tool-call messages use role_id=AGENT_ID
-# Tool results are linked to their calls through tool_call_id
-
-memory_messages.append({
-    "role": "assistant",
-    "role_id": AGENT_ID,
-    "content": reply,
-})
 ```
 
-The customer service Agent maintains the current session history in the business application. When writing to MemOS, combine the user request, tool calls, tool results, and final response into a complete task record:
+The agent maintains current conversation history in the application. For MemOS writes, the user request, tool calls, tool results, and final response form a complete task record:
 
 ```text
 user
@@ -263,53 +216,170 @@ user
 → assistant
 ```
 
-The complete trace is used for Skill extraction. User facts and preferences are generated from the same record.
+MemOS derives Skills and user facts/preferences from the same trace.
 
-## Step 6: Verify the Memory Behavior
+### Separate the write types
 
-After completing the integration, verify reads, writes, and isolation across the three stages:
+Users and agents use different write views, while retrieval includes all three types:
 
-1. After the DAY 1 exchange task, confirm that user facts and preferences are written to the User Cube and that the same task record is submitted to the Agent Cube for Skill evaluation.
-2. On DAY 4, use a new `conversation_id` and confirm that `customer_001` still retrieves the earlier order, product issue, and notification preference.
-3. On DAY 7, use `customer_002` and confirm that it does not receive the first customer's personal facts but can retrieve general Skills from the current customer service Agent.
+```python
+USER_WRITE_VIEWS = ["detail_factual", "preference"]
+AGENT_SKILL_WRITE_VIEWS = ["skill"]
+CONTEXT_VIEWS = ["detail_factual", "preference", "skill"]
+```
 
-When user memory, Agent Skills, and the policy knowledge base have clear boundaries, the customer service Agent can remember the current user, follow consistent policies, and turn completed tasks into reusable workflows.
+The same trace can enter both memory spaces without generating the same memory types twice.
+
+### Write user facts and preferences
+
+The first `/add/message` request supplies both `user_id` and `agent_id`:
+
+```python
+def add_user_memories(self, messages, user_id, conversation_id, channel):
+    """First write: generate only user facts and preferences."""
+    user_data = {
+        "user_id": user_id,
+        "agent_id": AGENT_ID,
+        "conversation_id": conversation_id,
+        "info": {"channel": channel, "scene": "consumer_support"},
+        "allow_memory_view": USER_WRITE_VIEWS,
+        "messages": messages,
+    }
+    # POST /add/message: writes run asynchronously; after receiving task_id,
+    # poll /get/status until completed (see the full Demo below)
+    res = requests.post(
+        f"{MEMOS_BASE_URL}/add/message",
+        headers=self.headers,
+        json=user_data,
+    )
+    if res.json().get("code") != 0:
+        print(f"  [MemOS] Failed to write user facts/preferences: {res.json().get('message')}")
+```
+
+The memory belongs to the current user and is associated with the support agent's memory space, so the agent-scoped combined search can select it through `related_id`. MemOS decides whether the conversation produces facts or preferences. A turn without a stable preference can produce only facts.
+
+### Write Agent Skills
+
+The second `/add/message` request supplies only `agent_id` and permits only Skill generation:
+
+```python
+def add_agent_skill(self, messages, conversation_id, channel):
+    """Second write: request only Agent Skill generation or updates."""
+    skill_data = {
+        "agent_id": AGENT_ID,
+        "conversation_id": conversation_id,
+        "info": {"channel": channel, "scene": "consumer_support"},
+        "allow_memory_view": AGENT_SKILL_WRITE_VIEWS,
+        "custom_extract_prompt": {"skill": SKILL_EXTRACT_PROMPT},
+        "messages": messages,
+    }
+    # Also POST /add/message, without user_id and with only skill in allow_memory_view
+    res = requests.post(
+        f"{MEMOS_BASE_URL}/add/message",
+        headers=self.headers,
+        json=skill_data,
+    )
+    if res.json().get("code") != 0:
+        print(f"  [MemOS] Failed to write Agent Skill: {res.json().get('message')}")
+```
+
+Skills belong to the Agent view and are reusable across users. Submit this write after every response. The caller declares the allowed memory type; MemOS compares the task trace with existing Skills and decides whether to generate, update, or skip.
+
+## Keep Skills general
+
+MemOS performs Skill extraction. Use `custom_extract_prompt.skill` to add customer-service generalization requirements:
+
+- Identify a Skill by its business goal, trigger conditions, core tool chain, and success criteria.
+- Prefer merging the same workflow into an existing Skill; skip duplicates when no new general information is added.
+- Remove names, addresses, user IDs, order and ticket numbers, and specific dates.
+- Replace instance values with parameters such as `order_id`, `ticket_id`, and `shipping_address`.
+- Keep personal preferences and one customer's deadlines out of general rules.
+- Retain only executed steps evidenced by tool results.
+
+MemOS compares and updates existing Skills; callers do not need to manage Skill IDs or implement merging.
+
+## Run one combined retrieval
+
+Before generating a response, the assistant makes one `/search/memory` call for user facts, preferences, Agent Skills, and policy knowledge:
+
+```python
+def search_memory(self, query, user_id):
+    """One combined retrieval: user facts/preferences + Agent Skills + policy knowledge."""
+    context_data = {
+        "query": query,
+        "agent_id": AGENT_ID,
+        "knowledgebase_ids": self.knowledgebase_ids,
+        "include_memory_view": CONTEXT_VIEWS,
+        "memory_limit_number": 9,
+        "preference_limit_number": 6,
+        "filter": {
+            "user": {
+                "or": [
+                    {"related_id": [user_id]},
+                    {"memory_type": "SkillMemory"},
+                ]
+            }
+        },
+    }
+    # POST /search/memory: retrieve user facts, preferences, Agent Skills, and policies in one call
+    res = requests.post(
+        f"{MEMOS_BASE_URL}/search/memory",
+        headers=self.headers,
+        json=context_data,
+    )
+    result = res.json().get("data") or {}
+    return (
+        result.get("memory_detail_list", []),   # User facts
+        result.get("preference_detail_list", []),  # User preferences
+        result.get("skill_detail_list", []),    # Agent Skill
+    )
+```
+
+The two `filter` conditions are joined by OR: `related_id` selects the current user's memories, keeping personal facts and preferences isolated; `memory_type: "SkillMemory"` returns Agent Skills across users. `knowledgebase_ids` includes policy material without a separate search.
+
+Together, policies explain the rules, user memories supply case progress, and Agent Skills provide reusable task steps.
+
+## Verify memory behavior
+
+Check all three stages:
+
+1. After DAY 1, confirm that facts and preferences enter the User Cube and the same trace is submitted to the Agent Cube for Skill evaluation.
+2. On DAY 4, use a new `conversation_id` and confirm that `customer_001` can still retrieve the earlier order, fault, and notification requirements.
+3. On DAY 7, use `customer_002` and confirm that the first customer's facts remain absent while general Skills belonging to the support agent can be retrieved.
+
+Clear boundaries let the agent remember the current customer, follow common policies, and turn completed work into reusable capability.
 
 ## Complete Demo
 
-Expand the code block below and use the copy button in the upper-right corner to copy everything. Save it as `app.py`, fill in the values under **Demo configuration**, and run it locally.
+Expand the block, use its copy button, and save the code as `app.py`. Fill in Demo configuration before running.
 
 <details class="not-prose my-5 rounded-md border border-default bg-muted/30 px-4 py-3">
   <summary class="cursor-pointer select-none text-sm font-medium text-highlighted">
-    Expand and copy the complete Python demo
+    Expand and copy the complete Python Demo
   </summary>
   <div class="mt-4">
 
 ```python
 # -*- coding: utf-8 -*-
 """
-MemOS customer service best practice: a cross-channel, memory-enhanced
-customer service Agent.
+MemOS customer service best practice: a cross-channel memory-enabled support assistant
 
-Scenario: consumer after-sales support. MemOS provides the customer service
-Agent with three capabilities:
+Scenario: after-sales support. MemOS supplies memory infrastructure for the support agent
+with three capabilities:
 
-1. Each turn requests separate writes for user facts/preferences and Agent
-   Skills. MemOS decides what should actually be stored.
-2. After-sales policies are stored in a policy knowledge base and retrieved
-   together with Agent memory.
-3. Facts and preferences are retrieved by user_id, while Skills are retrieved
-   from the Agent perspective and reused across users.
+1. Request user fact/preference and Agent Skill writes separately each turn; MemOS decides what to retain
+2. Store after-sales policies in a knowledge base and retrieve them alongside memory
+3. One combined /search/memory call: related_id selects the current user's memories;
+   SkillMemory returns Agent Skills across users
 
-The demo enables only three memory types: facts, preferences, and Skills.
-MemOS automatically distills Skills from complete task traces
-(user → assistant.tool_calls → tool → assistant). Skill generation is
-asynchronous and does not require a pre-uploaded Skill.
+Enable only the three types needed here: factual, preference, and skill memory.
+MemOS asynchronously derives skills from submitted task traces (user -> assistant.tool_calls -> tool ->
+assistant), without requiring a skill upload in advance.
 
 Run:
     pip install openai requests
 
-    # Fill in each value under "Demo configuration" below.
+    # Fill in the parameters under Demo configuration below
     python app.py
 """
 
@@ -336,43 +406,31 @@ OPENAI_MODEL = "YOUR_MODEL_NAME"
 OPENAI_BASE_URL = "YOUR_OPENAI_BASE_URL"
 AGENT_ID = "YOUR_AGENT_ID"
 
-# The user and Agent write different memory types; retrieval also uses two paths.
+# Users and the Agent write different memory types; retrieval uses one combined search
 USER_WRITE_VIEWS = ["detail_factual", "preference"]
 AGENT_SKILL_WRITE_VIEWS = ["skill"]
-USER_CONTEXT_VIEWS = ["detail_factual", "preference"]
-AGENT_CONTEXT_VIEWS = ["detail_factual", "skill"]
+CONTEXT_VIEWS = ["detail_factual", "preference", "skill"]
 
-SKILL_EXTRACT_PROMPT = """Distill a reusable, cross-user Skill from the complete
-customer service task trace.
+SKILL_EXTRACT_PROMPT = """Extract Skills reusable across users from complete customer service task traces.
 
-Define Skill identity by its business goal, trigger conditions, core tool
-sequence, and success criteria. Compare against existing Skills before
-extracting a new one:
-- If an existing Skill covers the same goal, trigger conditions, and core tool
-  sequence, merge the new information into that Skill instead of creating a
-  duplicate.
-- If this trace adds no reusable steps, decision branches, or supporting
-  evidence, do not generate a Skill.
-- Create a new Skill only when the business goal or core workflow is
-  materially different.
+A Skill is identified by its business objective, trigger conditions, core tool chain, and success criteria.
+Compare existing Skills before extraction:
+- If an existing Skill covers the same objective, triggers, and core tool chain, merge new information into it;
+  avoid creating a duplicate Skill.
+- Skip generation when the trace adds no new general steps, decision branches, or verification evidence.
+- Create a new Skill only when the business objective or core workflow materially differs.
 
-Generalize all Skill content:
-- Remove names, contact details, addresses, user IDs, Agent IDs, conversation
-  IDs, order numbers, ticket numbers, and specific dates.
-- Replace instance values with parameters such as order_id, ticket_id, and
-  shipping_address.
-- Do not retain personal preferences or turn one user's timing or notification
-  requirements into general rules.
-- Do not copy specific policy conclusions. Describe only that the current
-  policy must be queried and validated.
-- Keep only steps supported by tool results. Do not present model suggestions
-  or unexecuted actions as verified experience.
+Generalize the Skill content:
+- Remove names, contact details, addresses, user/Agent/conversation IDs, order and ticket numbers, and specific dates.
+- Replace instance values with parameters such as order_id, ticket_id, and shipping_address.
+- Exclude personal preferences and avoid turning one user's deadlines or notification choices into general rules.
+- Do not copy specific policy conclusions; describe the step as checking and validating the current policy.
+- Retain steps evidenced by tool results; do not describe suggestions or unexecuted actions as verified experience.
 
-Use a stable, concise Skill name based on the issue type and handling goal.
-Do not include user or case information in the name.
+Use stable, concise Skill names based on the issue type and resolution goal, excluding user or case details.
 """
 
-# Memories below this relevance score are not added to the prompt.
+# Relevance threshold: exclude lower-scoring memories from the prompt to reduce noise
 RELATIVITY_THRESHOLD = 0.5
 
 # ---------------------------------------------------------------------------
@@ -382,31 +440,25 @@ RELATIVITY_THRESHOLD = 0.5
 POLICY_DOC_MD = """# Consumer After-Sales Policy (Example)
 
 ## Returns and exchanges
-- Unopened products that remain fit for resale can be returned within seven
-  days after delivery.
-- Products with performance defects can be exchanged within 15 days, with
-  shipping covered in both directions.
-- Customized products are not eligible for no-reason returns or exchanges.
+- Unopened, resalable products may be returned within 7 days starting the day after delivery.
+- Products with functional faults may be exchanged within 15 days, with free shipping both ways.
+- Customized products are excluded from no-fault returns and exchanges.
 
 ## Warranty
-- The main device is covered for 12 months, and included accessories for six
-  months.
-- Non-human-caused damage is repaired free of charge during the warranty.
-  Human-caused damage is repaired at cost.
+- The main product has a 12-month warranty; included accessories have a 6-month warranty.
+- Non-user-caused damage is repaired free during warranty; user-caused damage is charged at cost.
 
 ## Shipping
-- SF Express is the default carrier. The system sends the tracking number by
-  SMS after the replacement ships.
-- The delivery address can be changed once before the replacement ships.
+- SF Express is used by default; an SMS with tracking details is sent when a replacement ships.
+- The delivery address may be changed once before the replacement ships.
 
 ## Invoices
-- Electronic standard invoices are issued by default and can be requested
-  from the order page after the order is completed.
+- Standard electronic invoices are available by self-service on the order page after completion.
 """
 
 
 # ---------------------------------------------------------------------------
-# Customer service Agent: retrieve memory -> build prompt -> generate -> write
+# Support assistant: combined retrieval -> prompt -> response -> two writes
 # ---------------------------------------------------------------------------
 
 class CustomerServiceAssistant:
@@ -420,48 +472,28 @@ class CustomerServiceAssistant:
             "Authorization": f"Token {MEMOS_API_KEY}",
         }
         self.knowledgebase_ids = [policy_kb_id]
-        # The Agent owns current-session history; MemOS handles long-term memory.
+        # The Agent maintains current conversation history without MemOS message reads
         self.conversation_histories = {}
 
     # ---- MemOS reads and writes ----
 
-    def search_memory(self, query, user_id, conversation_id):
-        """Retrieve user facts/preferences and Agent Skills/policies separately."""
-        agent_data = {
-            "query": f"General methods needed for this support request: {query}",
-            "agent_id": AGENT_ID,
-            "knowledgebase_ids": self.knowledgebase_ids,
-            "include_memory_view": AGENT_CONTEXT_VIEWS,
-            "memory_limit_number": 9,
-        }
-        agent_res = requests.post(
-            f"{MEMOS_BASE_URL}/search/memory",
-            headers=self.headers,
-            json=agent_data,
-        )
-        agent_body = agent_res.json()
-        if agent_body.get("code") == 0:
-            agent_result = agent_body.get("data") or {}
-            policy_memories = [
-                item for item in agent_result.get("memory_detail_list", [])
-                if item.get("relativity", 0) >= RELATIVITY_THRESHOLD
-            ]
-            skills = agent_result.get("skill_detail_list", [])
-        else:
-            print(
-                "  [MemOS] Failed to retrieve Agent Skills and policies: "
-                f"{agent_body.get('message')}"
-            )
-            policy_memories = []
-            skills = []
-
+    def search_memory(self, query, user_id):
+        """One combined retrieval: user facts/preferences + Agent Skills + policy knowledge."""
         context_data = {
             "query": query,
-            "user_id": user_id,
-            "conversation_id": conversation_id,
-            "include_memory_view": USER_CONTEXT_VIEWS,
+            "agent_id": AGENT_ID,
+            "knowledgebase_ids": self.knowledgebase_ids,
+            "include_memory_view": CONTEXT_VIEWS,
             "memory_limit_number": 9,
             "preference_limit_number": 6,
+            "filter": {
+                "user": {
+                    "or": [
+                        {"related_id": [user_id]},
+                        {"memory_type": "SkillMemory"},
+                    ]
+                }
+            },
         }
         context_res = requests.post(
             f"{MEMOS_BASE_URL}/search/memory",
@@ -469,26 +501,24 @@ class CustomerServiceAssistant:
             json=context_data,
         )
         context_body = context_res.json()
-        if context_body.get("code") == 0:
-            context_result = context_body.get("data", {})
-        else:
-            print(
-                "  [MemOS] Failed to retrieve user context: "
-                f"{context_body.get('message')}"
-            )
-            context_result = {}
+        if context_body.get("code") != 0:
+            print(f"  [MemOS] Combined retrieval failed: {context_body.get('message')}")
+            return [], [], []
 
-        user_memories = [
-            item for item in context_result.get("memory_detail_list", [])
-            if item.get("relativity", 0) >= RELATIVITY_THRESHOLD
+        context_result = context_body.get("data") or {}
+        memories = [
+            m for m in context_result.get("memory_detail_list", [])
+            if m.get("relativity", 0) >= RELATIVITY_THRESHOLD
         ]
         preferences = context_result.get("preference_detail_list", [])
-        return [*user_memories, *policy_memories], preferences, skills
+        skills = context_result.get("skill_detail_list", [])
+        return memories, preferences, skills
 
     def add_user_memories(self, messages, user_id, conversation_id, channel):
-        """First write: generate only facts and preferences for the user."""
+        """First write: generate only user facts and preferences."""
         user_data = {
             "user_id": user_id,
+            "agent_id": AGENT_ID,
             "conversation_id": conversation_id,
             "info": {"channel": channel, "scene": "consumer_support"},
             "allow_memory_view": USER_WRITE_VIEWS,
@@ -497,7 +527,7 @@ class CustomerServiceAssistant:
         self._post_memory(user_data, "user facts and preferences", timeout_seconds=120)
 
     def add_agent_skill(self, messages, conversation_id, channel):
-        """Second write: request a Skill create or update for the Agent."""
+        """Second write: request only Agent Skill generation or updates."""
         skill_data = {
             "agent_id": AGENT_ID,
             "conversation_id": conversation_id,
@@ -522,7 +552,7 @@ class CustomerServiceAssistant:
             self._wait_for_task(details["task_id"], label, timeout_seconds)
 
     def _wait_for_task(self, task_id, label, timeout_seconds):
-        """Wait for an asynchronous memory task to finish."""
+        """Wait for the asynchronous memory task to complete."""
         deadline = time.time() + timeout_seconds
         while time.time() < deadline:
             time.sleep(2)
@@ -536,49 +566,40 @@ class CustomerServiceAssistant:
                 sys.exit(f"Failed to query memory task: {body.get('message')}")
             status = (body.get("data") or {}).get("status")
             if status == "completed":
-                print(f"  [MemOS] Finished writing {label}")
+                print(f"  [MemOS] {label} write completed")
                 return
             if status in {"failed", "error", "cancelled", "canceled"}:
                 sys.exit(f"Memory task failed: {task_id} -> {status}")
-        sys.exit(f"Timed out waiting for {label}: {task_id}")
+        sys.exit(f"Timed out waiting for {label} task: {task_id}")
 
     # ---- Prompt and generation ----
 
     def build_system_prompt(self, channel, memories, preferences, skills):
-        channel_name = {
-            "webchat": "web chat",
-            "email": "email ticket",
-        }.get(channel, channel)
+        channel_name = {"webchat": "Web chat", "email": "Email ticket"}.get(channel, channel)
 
         memory_text = "\n".join(
-            f"{i}. {item.get('memory_value')}"
-            for i, item in enumerate(memories, 1)
-        ) or "(No relevant memories)"
+            f"{i}. {m.get('memory_value')}" for i, m in enumerate(memories, 1)
+        ) or "(No related memories)"
         preference_text = "\n".join(
-            f"{i}. {item.get('preference')}"
-            for i, item in enumerate(preferences, 1)
-        ) or "(No preference records)"
-        # Inject only Skills with structured content.
+            f"{i}. {p.get('preference')}" for i, p in enumerate(preferences, 1)
+        ) or "(No preferences)"
+        # Inject only Skills with structured content; skip matches without returned content
         valid_skills = [
-            item for item in skills
-            if isinstance(item.get("skill_value"), dict)
-            and item["skill_value"].get("name")
+            s for s in skills
+            if isinstance(s.get("skill_value"), dict) and s["skill_value"].get("name")
         ]
         skill_text = "\n".join(
-            f"{i}. {item['skill_value']}"
-            for i, item in enumerate(valid_skills, 1)
+            f"{i}. {s['skill_value']}" for i, s in enumerate(valid_skills, 1)
         ) or "(No matching Skills)"
 
         return f"""# Role
-You are the brand's official customer service Agent, currently helping a
-consumer through {channel_name}.
-Use the retrieved memories, preferences, after-sales policies, and Skills to
-give an accurate, personalized, and actionable response.
+You are the brand's official support assistant, serving a customer through {channel_name}.
+Use retrieved memories, preferences, after-sales policies, and Skills to give accurate, personalized, actionable answers.
 
 # Current time
 {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 
-# Retrieved user memories, policies, and Agent Skills
+# Retrieved user memories, after-sales policies, and Agent Skills
 <agent_memories>
 {memory_text}
 </agent_memories>
@@ -591,24 +612,17 @@ give an accurate, personalized, and actionable response.
 {skill_text}
 </skills>
 
-# Memory safety rules
-1. Distinguish the consumer's direct statements from system inferences. Treat
-   inferences only as supporting context and give direct statements priority.
-2. Confirm that a memory describes the current consumer, not another user or
-   a historical example. Never mix information between users.
-3. Use only memories directly relevant to the current request. Ignore keyword
-   matches from a different context.
-4. If a memory conflicts with the consumer's latest message, follow the latest
-   message.
-5. For policies, timelines, and monetary amounts, follow the policy knowledge
-   base.
+# Memory usage rules
+1. Distinguish direct customer statements from system inferences; give inferences less weight.
+2. Confirm that each memory concerns the current customer, rather than another user or a historical case.
+3. Use only directly relevant memories; ignore keyword matches from a different context.
+4. When memory conflicts with the customer's current input, follow the current input.
+5. Use the policy knowledge base as the authority for policies, deadlines, and amounts.
 
 # Response requirements
-1. Answer directly. Do not mention internal concepts such as memory or
-   retrieval to the consumer.
-2. Proactively continue open cases without asking the consumer to repeat
-   information they already provided.
-3. Respond in the same language as the consumer."""
+1. Answer directly without exposing internal memory or retrieval implementation details.
+2. Continue pending work without asking customers to repeat information already provided.
+3. Reply in the language used by the customer."""
 
     def generate_reply(self, system_prompt, messages):
         response = self.openai_client.chat.completions.create(
@@ -619,20 +633,18 @@ give an accurate, personalized, and actionable response.
         )
         return response.choices[0].message.content
 
-    # ---- Main flow ----
+    # ---- Main workflow ----
 
     def chat(self, query, user_id, conversation_id, channel, tool_steps=None):
-        # 1. Read current-session history from the Agent's own state.
+        # 1. Read current conversation history from the Agent's local state
         history_key = (user_id, conversation_id)
         history = self.conversation_histories.get(history_key, [])
 
-        # 2. Retrieve facts/preferences and Agent Skills/policies separately.
-        memories, preferences, skills = self.search_memory(
-            query, user_id, conversation_id
-        )
+        # 2. One combined retrieval: user facts/preferences, Agent Skills, and policies
+        memories, preferences, skills = self.search_memory(query, user_id)
         self._print_retrieved(memories, preferences, skills)
 
-        # 3. Build the task trace and generate a response from tool results.
+        # 3. Assemble the current task trace so the model answers from tool results
         llm_turn = [{"role": "user", "content": query}]
         memory_messages = [{"role": "user", "role_id": user_id, "content": query}]
         for step in tool_steps or []:
@@ -659,12 +671,10 @@ give an accurate, personalized, and actionable response.
                 tool_result,
             ])
 
-        system_prompt = self.build_system_prompt(
-            channel, memories, preferences, skills
-        )
+        system_prompt = self.build_system_prompt(channel, memories, preferences, skills)
         reply = self.generate_reply(system_prompt, [*history, *llm_turn])
 
-        # 4. Save the session locally and write user context and Agent Skills.
+        # 4. Save conversation locally; write user context and general Skills separately to MemOS
         self.conversation_histories.setdefault(history_key, []).extend([
             {"role": "user", "content": query},
             {"role": "assistant", "content": reply},
@@ -680,18 +690,18 @@ give an accurate, personalized, and actionable response.
 
     @staticmethod
     def _print_retrieved(memories, preferences, skills):
-        print("  ---- Retrieved MemOS Agent memory ----")
-        for item in memories:
-            value = str(item.get("memory_value", "")).replace("\n", " ")
-            print(f"  [Memory {item.get('relativity', 0):.2f}] {value[:80]}")
-        for item in preferences:
-            print(f"  [Preference] {item.get('preference')}")
-        for item in skills:
-            value = item.get("skill_value") or {}
-            label = value.get("name") or f"id={item.get('id')}"
-            print(f"  [Skill {item.get('relativity', 0):.2f}] {label}")
+        print("  ---- MemOS Agent retrieval results ----")
+        for m in memories:
+            value = str(m.get("memory_value", "")).replace("\n", " ")
+            print(f"  [Memory {m.get('relativity', 0):.2f}] {value[:80]}")
+        for p in preferences:
+            print(f"  [Preference] {p.get('preference')}")
+        for s in skills:
+            value = s.get("skill_value") or {}
+            label = value.get("name") or f"id={s.get('id')}"
+            print(f"  [Skill {s.get('relativity', 0):.2f}] {label}")
             print(f"  [Skill details] {value}")
-        print("  --------------------------------------")
+        print("  ------------------------")
 
 
 # ---------------------------------------------------------------------------
@@ -712,12 +722,9 @@ def _create_kb(headers, name, description):
     body = res.json()
     if body.get("code") != 0:
         sys.exit(f"Failed to create knowledge base: {body.get('message')}")
-    kb_id = (
-        body.get("data", {}).get("id")
-        or body.get("data", {}).get("knowledgebase_id")
-    )
+    kb_id = body.get("data", {}).get("id") or body.get("data", {}).get("knowledgebase_id")
     if not kb_id:
-        sys.exit(f"Knowledge base created, but no ID was returned: {name}")
+        sys.exit(f"Knowledge base created, but no ID returned: {name}")
     print(f"Knowledge base created: {name} -> {kb_id}")
     return kb_id
 
@@ -732,7 +739,7 @@ def _upload_file(headers, kb_id, name, text):
         },
     )
     if res.json().get("code") != 0:
-        sys.exit(f"Failed to upload policy: {res.json().get('message')}")
+        sys.exit(f"Failed to upload file: {res.json().get('message')}")
 
 
 def _wait_kb_ready(headers, kb_id):
@@ -747,7 +754,7 @@ def _wait_kb_ready(headers, kb_id):
         statuses = {str(item.get("status", "")).lower() for item in files}
         if files and statuses <= {"completed", "available", "failed"}:
             if "failed" in statuses:
-                sys.exit(f"Policy processing failed for knowledge base {kb_id}")
+                sys.exit(f"File parsing failed in policy knowledge base {kb_id}")
             return
     sys.exit(f"Timed out waiting for policy knowledge base {kb_id}")
 
@@ -759,8 +766,8 @@ def create_policy_knowledge_base():
     }
     policy_kb_id = _create_kb(
         headers,
-        "Consumer After-Sales Policy",
-        "Policies for returns, exchanges, warranties, shipping, and invoices",
+        "Consumer After-Sales Policy Knowledge Base",
+        "Consumer returns, exchanges, warranty, shipping, and invoice policies",
     )
     _upload_file(
         headers,
@@ -768,18 +775,18 @@ def create_policy_knowledge_base():
         "consumer-after-sale-policy.md",
         POLICY_DOC_MD,
     )
-    print("Policy uploaded. Waiting for processing...")
+    print("Policy document uploaded; waiting for parsing...")
     _wait_kb_ready(headers, policy_kb_id)
-    print(f"Policy knowledge base is ready: {policy_kb_id}")
+    print(f"Policy knowledge base ready: {policy_kb_id}")
     return policy_kb_id
 
 
 # ---------------------------------------------------------------------------
-# Demo: isolate user context and reuse Agent Skills across users
+# Demo: user context isolation and Agent Skill reuse across users
 # ---------------------------------------------------------------------------
 
-CUSTOMER_ID = "customer_001"    # Use a stable authenticated user ID in production.
-CUSTOMER_ID_2 = "customer_002"  # Verifies Skill reuse and user isolation.
+CUSTOMER_ID = "customer_001"    # Use a stable authenticated user ID in production
+CUSTOMER_ID_2 = "customer_002"  # Second customer for testing Skill reuse and user isolation
 
 
 def run_demo():
@@ -787,113 +794,65 @@ def run_demo():
     assistant = CustomerServiceAssistant(policy_kb_id)
 
     print("=" * 64)
-    print("DAY 1 · Web chat: exchange request with delivery preferences")
+    print("DAY 1 · Web chat: a customer reports headphone noise, requests an exchange, and gives timing and notification preferences")
     print("=" * 64)
     chat_conv = "conv_chat_0821"
 
-    q1 = (
-        "Hi, I received order 20260820-88 on August 20. The left side of the "
-        "noise-canceling headset has a strong buzzing noise, and I want to "
-        "exchange it."
-    )
-    print(f"\n[Consumer] {q1}")
-    # The Agent's actual work in order, ticket, and notification systems is
-    # written to MemOS as task-trace material for Skill extraction.
+    q1 = ("Hi, I received order 20260820-88 on August 20. The left ear of the noise-canceling headphones has "
+          "a constant, noticeable buzzing sound. I would like an exchange.")
+    print(f"\n[Customer] {q1}")
+    # The support Agent's business-system workflow (orders, tickets, notifications),
+    # written with the conversation as a task trace for automatic Skill extraction
     tool_steps = [
-        {
-            "id": "call_1",
-            "name": "query_order",
-            "arguments": '{"order_id": "20260820-88"}',
-            "result": (
-                '{"order_id": "20260820-88", "product": '
-                '"noise-canceling headset", "sign_date": "2026-08-20", '
-                '"status": "delivered"}'
-            ),
-        },
-        {
-            "id": "call_2",
-            "name": "check_exchange_policy",
-            "arguments": (
-                '{"order_id": "20260820-88", '
-                '"issue": "buzzing noise in left side"}'
-            ),
-            "result": (
-                '{"eligible": true, "policy": "15-day exchange for performance '
-                'defects", "shipping": "covered both ways"}'
-            ),
-        },
-        {
-            "id": "call_3",
-            "name": "create_exchange_ticket",
-            "arguments": (
-                '{"order_id": "20260820-88", '
-                '"reason": "buzzing noise in left side", '
-                '"type": "defective product exchange"}'
-            ),
-            "result": (
-                '{"ticket_id": "EX20260821-03", "status": "created"}'
-            ),
-        },
-        {
-            "id": "call_4",
-            "name": "update_ticket",
-            "arguments": (
-                '{"ticket_id": "EX20260821-03", '
-                '"address": "100 Century Avenue, Pudong, Shanghai", '
-                '"deliver_before": "Friday", "notify": "sms"}'
-            ),
-            "result": '{"ticket_id": "EX20260821-03", "updated": true}',
-        },
-        {
-            "id": "call_5",
-            "name": "schedule_notification",
-            "arguments": (
-                '{"ticket_id": "EX20260821-03", "channel": "sms", '
-                '"events": ["shipped", "out for delivery"]}'
-            ),
-            "result": '{"scheduled": true, "channel": "sms"}',
-        },
+        {"id": "call_1", "name": "query_order",
+         "arguments": '{"order_id": "20260820-88"}',
+         "result": '{"order_id": "20260820-88", "product": "noise-canceling headphones", "sign_date": "2026-08-20", "status": "delivered"}'},
+        {"id": "call_2", "name": "check_exchange_policy",
+         "arguments": '{"order_id": "20260820-88", "issue": "buzzing in the left ear"}',
+         "result": '{"eligible": true, "policy": "exchange within 15 days for functional faults", "shipping": "free shipping both ways"}'},
+        {"id": "call_3", "name": "create_exchange_ticket",
+         "arguments": '{"order_id": "20260820-88", "reason": "buzzing in the left ear", "type": "exchange for a quality issue"}',
+         "result": '{"ticket_id": "EX20260821-03", "status": "created"}'},
+        {"id": "call_4", "name": "update_ticket",
+         "arguments": '{"ticket_id": "EX20260821-03", "address": "100 Century Avenue, Pudong, Shanghai", "deliver_before": "this Friday", "notify": "sms"}',
+         "result": '{"ticket_id": "EX20260821-03", "updated": true}'},
+        {"id": "call_5", "name": "schedule_notification",
+         "arguments": '{"ticket_id": "EX20260821-03", "channel": "sms", "events": ["shipped", "out for delivery"]}',
+         "result": '{"scheduled": true, "channel": "sms"}'},
     ]
-    print(
-        f"[Customer Service] "
-        f"{assistant.chat(q1, CUSTOMER_ID, chat_conv, 'webchat', tool_steps=tool_steps)}"
-    )
+    print(f"[Support assistant] {assistant.chat(q1, CUSTOMER_ID, chat_conv, 'webchat', tool_steps=tool_steps)}")
 
-    q2 = (
-        "One more thing: I am traveling next week. Please send the replacement "
-        "to my office at 100 Century Avenue, Pudong, Shanghai by Friday, and "
-        "send progress updates by SMS."
-    )
-    print(f"\n[Consumer] {q2}")
-    print(f"[Customer Service] {assistant.chat(q2, CUSTOMER_ID, chat_conv, 'webchat')}")
+    q2 = ("I'm traveling next week. Please deliver the replacement to my office by this Friday: "
+          "100 Century Avenue, Pudong, Shanghai. Please send progress updates by SMS.")
+    print(f"\n[Customer] {q2}")
+    print(f"[Support assistant] {assistant.chat(q2, CUSTOMER_ID, chat_conv, 'webchat')}")
 
     print()
     print("=" * 64)
-    print("DAY 4 · Email ticket: same consumer, new session and channel")
+    print("DAY 4 · Email ticket: the same customer asks for progress in a new conversation and channel")
     print("=" * 64)
     mail_conv = "conv_mail_0824"
 
-    q3 = "Hi, what is the status of the headset exchange I reported earlier?"
-    print(f"\n[Consumer] {q3}")
-    print(f"[Customer Service] {assistant.chat(q3, CUSTOMER_ID, mail_conv, 'email')}")
+    q3 = "Hi, what is the status of the headphone exchange I requested?"
+    print(f"\n[Customer] {q3}")
+    print(f"[Support assistant] {assistant.chat(q3, CUSTOMER_ID, mail_conv, 'email')}")
 
     print()
     print("=" * 64)
-    print("DAY 7 · Web chat: another consumer with a similar issue")
+    print("DAY 7 · Web chat: another customer has a similar issue (Agent Skill reuse)")
     print("=" * 64)
     conv_2 = "conv_chat_0828"
 
-    q4 = "Hi, my new noise-canceling headset has a buzzing noise. What should I do?"
-    print(f"\n[Consumer] {q4}")
-    print(f"[Customer Service] {assistant.chat(q4, CUSTOMER_ID_2, conv_2, 'webchat')}")
+    q4 = "Hi, my new noise-canceling headphones make a buzzing sound. What should I do?"
+    print(f"\n[Customer] {q4}")
+    print(f"[Support assistant] {assistant.chat(q4, CUSTOMER_ID_2, conv_2, 'webchat')}")
 
     print()
-    print("Demo complete. Verify these three points:")
-    print("1. The User Cube generates only facts and preferences; the Agent Cube")
-    print("   generates only Skills.")
-    print("2. DAY 4 retrieves facts and preferences from customer_001 memory.")
-    print("3. DAY 7 does not expose facts or preferences from customer_001, but")
-    print(f"   it can retrieve generalized Skills from {AGENT_ID}.")
+    print("Demo complete. Check three things:")
+    print("1. The User Cube generates facts/preferences; the Agent Cube generates Skills only.")
+    print("2. DAY 4 combined retrieval returns customer_001's order, issue, and notification preferences.")
+    print("3. DAY 7 excludes customer_001's facts/preferences but can retrieve")
+    print(f"   generalized Skills belonging to {AGENT_ID}.")
 
 
 if __name__ == "__main__":
@@ -905,15 +864,11 @@ if __name__ == "__main__":
         "OPENAI_BASE_URL": OPENAI_BASE_URL,
         "AGENT_ID": AGENT_ID,
     }
-    missing = [
-        name
-        for name, value in config.items()
-        if not value or value.startswith("YOUR_")
-    ]
+    missing = [name for name, value in config.items() if not value or value.startswith("YOUR_")]
     if missing:
-        sys.exit(f"Configure these values at the top of the file: {', '.join(missing)}")
+        sys.exit(f"Configure these values at the top of the file first: {', '.join(missing)}")
     if OpenAI is None:
-        sys.exit("Install the OpenAI SDK first: pip install openai")
+        sys.exit("Install openai first: pip install openai")
     run_demo()
 ```
 

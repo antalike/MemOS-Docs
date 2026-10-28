@@ -26,7 +26,7 @@ The core value of the MemOS memory layer is: **it gives AI applications long-ter
 
 Let’s look at one real business scenario to clearly see the difference between RAG and MemOS:
 
-```python
+```text
 DAY 1 Employee asks: My computer is a MacBook Pro 13-inch with an Intel chip. How do I install the company intranet proxy?
 DAY 1 The assistant provides Intel-version installation steps.
 DAY 20 Employee asks: The intranet proxy stopped working—what version should I reinstall?
@@ -34,7 +34,7 @@ DAY 20 Employee asks: The intranet proxy stopped working—what version should I
 
 #### The Problem with a RAG Approach
 
-```python
+```text
 # Retrieve content related to "intranet proxy" and "not working",
 # but cannot recall "the user's device model"
 Retrieved knowledge:
@@ -49,7 +49,7 @@ Retrieved knowledge:
 
 #### The Advantage of MemOS
 
-```python
+```text
 # Retrieve memories related to "intranet proxy" and "not working",
 # and automatically identify the employee's device model
 Retrieved memories:
@@ -94,15 +94,17 @@ On this foundation, MemOS 2.0 provides knowledge base and multimodal capabilitie
 
 #### Create a knowledge base
 
-Create a knowledge base via the [Console](https://memos-dashboard.openmem.net/cn/knowledgeBase/) or API. This article categorizes documents based on [MemOS official docs](https://github.com/MemTensor/MemOS-Docs), MemTensor’s past announcements, and release notes to make future updates and management easier. In this example, you can create just **one** knowledge base and upload a subset of documents for testing.
+Create a knowledge base via the [Console](https://memos-dashboard.openmem.net/knowledgeBase/) or API. This article categorizes documents based on [MemOS official docs](https://github.com/MemTensor/MemOS-Docs), MemTensor’s past announcements, and release notes to make future updates and management easier. In this example, you can create just **one** knowledge base and upload a subset of documents for testing.
 
-![image.png](https://cdn.memtensor.com.cn/img/1768481403940_o97qz4_compressed.png)
+*The interface images below are localized illustrations of the Chinese UI.*
+
+![Create a knowledge base](https://cdn.memtensor.com.cn/img/memos-best-practices-kb-create-en-20261028_compressed.png)
 
 #### Upload documents
 
 Enter the knowledge base and upload your documents. Note the document requirements: MemOS-Docs are in MD format; you can use an AI tool to convert them to TXT format with one click, then upload them. When uploading, pay attention to the requirements. The rest—**storage, parsing, chunking, and memory generation**—is handled by MemOS. Just wait until processing finishes and the status shows “Available.”
 
-![image.png](https://cdn.memtensor.com.cn/img/1768481436752_31pl0b_compressed.png)
+![image.png](https://cdn.memtensor.com.cn/img/memos-best-practices-kb-upload-en-20261028_compressed.png)
 
 ### 2.2 Run the Code (5 min)
 
@@ -178,7 +180,7 @@ class KnowledgeBaseAssistant:
           # Memory Data
           Below is information retrieved by MemOS, divided into “Facts” and “Preferences”.
           - **Facts**: may include user attributes, conversation history, or third-party info.
-            - **Important**: content marked as `[assistant观点]` or `[模型总结]` represents **past AI inference** and is **not** the user’s original statement.
+            - **Important**: content marked as `[assistant opinion]` or `[model summary]` represents **past AI inference** and is **not** the user’s original statement.
           - **Preferences**: explicit/implicit user requirements for style, format, or logic.
 
           <memories>
@@ -195,8 +197,8 @@ class KnowledgeBaseAssistant:
 
           1. **Source Verification**
             - **Core**: distinguish “the user’s original words” from “AI speculation.”
-            - If a memory carries labels like `[assistant观点]`, it only indicates the AI’s past **assumption** and must **not** be treated as a definitive user fact.
-            - *Counterexample*: a memory says `[assistant观点] The user loves mangoes`. If the user never said it, do not assume they like mangoes—avoid self-reinforcing hallucinations.
+            - If a memory carries labels like `[assistant opinion]`, it only indicates the AI’s past **assumption** and must **not** be treated as a definitive user fact.
+            - *Counterexample*: a memory says `[assistant opinion] The user loves mangoes`. If the user never said it, do not assume they like mangoes—avoid self-reinforcing hallucinations.
             - **Principle**: AI summaries are for reference only and have far lower weight than the user’s direct statements.
 
           2. **Attribution Check**
@@ -224,7 +226,7 @@ class KnowledgeBaseAssistant:
           # Markdown-to-Plain-Text Conversion Rules
           - When you need to convert provided Markdown (MD) text into plain text, you must strictly follow these rules to ensure readability and avoid formatting errors:
           - Core formatting: WeChat does not support native MD syntax (e.g., # headings, bold text, code blocks, tables). You must simulate hierarchy using “symbols + newline + spaces”, and avoid unsupported markers.
-          - Heading hierarchy: First check whether the original contains MD headings (lines starting with #). If yes: Level-1 headings use Chinese numerals like ' 一. ', ' 二. ', ' 三. ' (use '.' not '、'); Level-2 headings use Arabic numerals like '1. ', '2. ', '3. '; Level-3 and below use the '・' bullet. Numbers must auto-increment to match document structure. If the original has no MD headings: do not add heading numbering; keep the original paragraph structure. Examples: '### Title 1' → ' 一. Title 1'; '#### Title 2' → '1. Title 2'; '##### Title 3' → '・Title 3'. If no MD headings exist, keep 'Title 1' as 'Title 1'.
+          - Heading hierarchy: First check whether the original contains MD headings (lines starting with #). If yes: Level-1 headings use Roman numerals like 'I. ', 'II. ', 'III. '; Level-2 headings use Arabic numerals like '1. ', '2. ', '3. '; Level-3 and below use the '・' bullet. Numbers must auto-increment to match document structure. If the original has no MD headings: do not add heading numbering; keep the original paragraph structure. Examples: '### Title 1' → 'I. Title 1'; '#### Title 2' → '1. Title 2'; '##### Title 3' → '・Title 3'. If no MD headings exist, keep 'Title 1' as 'Title 1'.
           - Links: Keep Markdown links in 'text' form unchanged. Do not modify or delete any link content.
           - Lists: Convert '- item' MD lists into ordered lists ('1. item', '2. item') or unordered lists (use '・item'). Each list item must be on its own line, and keep one blank line before and after each item for readability.
           - Tables: If the MD contains tables, break them into bullet-style sections like '▶ Scenario Type A: XXX' and '▶ Scenario Type B: XXX'. Under each, list items with '1. 2. 3.' without losing info and without keeping table symbols.
@@ -341,7 +343,7 @@ def main():
     while True:
         user_query = input("\n🤔 Enter your question (or type 'exit' to quit): ").strip()
 
-        if user_query.lower() in ['quit', 'exit', 'q', '退出']:
+        if user_query.lower() in ['quit', 'exit', 'q']:
             print("👋 Thanks for using the Knowledge Base Q&A Assistant!")
             break
 
@@ -360,17 +362,17 @@ if __name__ == "__main__":
 
 #### 2.2.2 Initialize the runtime environment
 
-```python
-pip install OpenAI && pip install datetime
+```bash
+pip install openai requests
 ```
 
 #### 2.2.3 Replace environment variables in the code
 
 ##### Get the key (API_KEY)
 
-Log into the console at [https://memos-dashboard.openmem.net/cn/apikeys/](https://memos-dashboard.openmem.net/cn/apikeys/) and copy the key.
+Log into the console at [https://memos-dashboard.openmem.net/apikeys/](https://memos-dashboard.openmem.net/apikeys/) and copy the key.
 
-![image.png](https://cdn.memtensor.com.cn/img/1768481468406_q51iqx_compressed.png)
+![image.png](https://cdn.memtensor.com.cn/img/memos-best-practices-kb-apikey-en-20261028_compressed.png)
 
 ```python
 os.environ["MEMOS_API_KEY"] = "mpg-xx"
@@ -384,14 +386,17 @@ os.environ["OPENAI_API_KEY"] = "sk-xx"
 # [Optional] Replace with your BASE_URL
 os.environ["OPEN_API_BASE_URL"] = "http://xxx.xxx"
 
-openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"), os.getenv("OPEN_API_BASE_URL"))
+openai_client = OpenAI(
+    api_key=os.getenv("OPENAI_API_KEY"),
+    base_url=os.getenv("OPEN_API_BASE_URL") or None,
+)
 ```
 
 ##### Get the knowledge base ID
 
 For the knowledge base you just uploaded to, copy the ID and save it.
 
-![image.png](https://cdn.memtensor.com.cn/img/1768481493435_bkwqlu_compressed.png)
+![image.png](https://cdn.memtensor.com.cn/img/memos-best-practices-kb-id-en-20261028_compressed.png)
 
 ```python
 # Replace with your own knowledge base ID (this is an example only)
@@ -401,11 +406,11 @@ os.environ["KNOWLEDGE_BASE_IDS"] = json.dumps([
 ```
 
 ##### Execute the code
-```python
+```bash
 python knowledge_qa_assistant.py
 ```
 
-![image.png](https://cdn.memtensor.com.cn/img/1768533833272_krke26_compressed.jpeg)
+![image.png](https://cdn.memtensor.com.cn/img/memos-best-practices-kb-terminal-en-20261028_compressed.png)
 
 ### 2.3 Code walkthrough
 

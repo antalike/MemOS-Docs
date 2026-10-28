@@ -26,7 +26,7 @@ MemOS 记忆层的核心价值在于:**让 AI 应用拥有长期记忆能力*
 
 让我们通过1个真实的业务场景,直观感受 RAG 和 MemOS 的核心差异:
 
-```python
+```text
 DAY 1 员工询问:我的电脑是 MacBook Pro 13寸,Intel 芯片。我怎么安装公司内网代理?
 DAY 1 助手提供了 Intel 版本的安装步骤。
 DAY 20 员工询问:内网代理打不开了,我该重新装哪个版本?
@@ -34,7 +34,7 @@ DAY 20 员工询问:内网代理打不开了,我该重新装哪个版本?
 
 #### RAG 方案的问题
 
-```python
+```text
 # 根据用户发言检索"内网代理""打不开"相关内容,但无法召回"用户的设备型号"
 检索到知识:
 1. 内网代理常见故障排查
@@ -48,7 +48,7 @@ DAY 20 员工询问:内网代理打不开了,我该重新装哪个版本?
 
 #### MemOS方案的优势
 
-```python
+```text
 # 根据员工问题检索"内网代理""打不开"相关记忆,自动识别该员工的设备型号
 检索到记忆:
 1. 用户在20天前安装了公司内网代理,他的设备是 MacBook Pro 13(Intel)
@@ -361,8 +361,8 @@ if __name__ == "__main__":
 
 #### 2.2.2 初始化运行环境
 
-```python
-pip install OpenAI && pip install datetime
+```bash
+pip install openai requests
 ```
 
 #### 2.2.3 替换代码中的环境变量
@@ -400,7 +400,7 @@ os.environ["KNOWLEDGE_BASE_IDS"] = json.dumps([
 ```
 
 ##### 执行代码
-```python
+```bash
 python knowledge_qa_assistant.py
 ```
 

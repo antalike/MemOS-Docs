@@ -57,7 +57,7 @@ When making a technology selection, you can directly compare three approaches:
 | Approach | Characteristics | Limitations | Advantages of MemOS |
 | --- | --- | --- | --- |
 | **Traditional RAG** | Retrieves knowledge base documents | Does not process user behaviors, cannot build profiles | Suitable for FAQ, but not for personalized financial advisory |
-| **Self-Built Storage** | Directly stores behavior logs | Requires manual abstraction from behavior → memory; high prompt engineering cost | Requires developing大量 glue code |
+| **Self-Built Storage** | Directly stores behavior logs | Requires manual abstraction from behavior → memory; high prompt engineering cost | Requires extensive glue code |
 | **MemOS** | Two interfaces: `addMessage` for writing, `searchMemory` for retrieval | —— | Automatically abstracts behavior traces into memories for direct use by the model |
 
 

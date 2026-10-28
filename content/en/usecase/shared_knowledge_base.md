@@ -130,7 +130,7 @@ Fresh uploads usually come back as `running`, so the page polls `/get/knowledgeb
 Sharing does not call MemOS — worth repeating. After the owner enters the recipient's ID, the app runs two checks, writes one row, and is done:
 
 ```python
-def share_kb(self, kb_id, member_id):
+def share_kb(self, owner_id, kb_id, member_id):
     if not self.can_manage(owner_id, kb_id):
         raise PermissionError("only the owner can share")
     if not self.get_user(member_id):
@@ -138,7 +138,7 @@ def share_kb(self, kb_id, member_id):
     self.insert_share(kb_id, member_id)
 ```
 
-Recipients are matched by a stable user ID rather than a phone number or email — the same model Memmy uses for its knowledge base. When a recipient opens the page, the app reads from its two tables:
+The demo matches recipients by a stable user ID. An application can also resolve a phone number or email to an account first, as Memmy does, then store the corresponding user ID. When a recipient opens the page, the app reads from its two tables:
 
 ```python
 owned = store.list_owned(user_id)
@@ -188,7 +188,7 @@ Afterwards, the turn can be written back under the current `user_id` via `/add/m
 After integration, walk all three roles; all three statements must hold:
 
 1. `alice` creates a library, uploads documents, waits for "available", and shares with `bob` — the write path works.
-2. `bob` sees the library under shared libraries and can ask questions, but the UI offers no upload or delete entry; direct API calls are also blocked from write operations by `require_view`.
+2. `bob` sees the library under shared libraries and can ask questions, but the UI offers no upload or delete entry; direct write API calls are also rejected by the server's ownership check.
 3. `cara`'s sidebar shows nothing, and even a guessed knowledge-base ID sent straight to the API is rejected by the app layer. `cara` may still ask general questions, but the retrieval scope contains no knowledge base and the answer carries no citations.
 
 The third item is the one most often missed: isolation is not achieved by the frontend not rendering something, but by the server recomputing the visible scope before every retrieval.

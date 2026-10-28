@@ -2,10 +2,46 @@
 title: Claude MCP
 ---
 
-### Using in Claude Desktop
+## 1. Configure MCP and MemOS Cloud
+
+Add the following MCP configuration to your client:
+
+```json
+{
+  "mcpServers": {
+    "memos-api-mcp": {
+      "timeout": 60,
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@memtensor/memos-api-mcp"
+      ],
+      "env": {
+        "MEMOS_API_KEY": "mpg-xxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "MEMOS_USER_ID": "your-user-id",
+        "MEMOS_CHANNEL": "MODELSCOPE"
+      }
+    }
+  }
+}
+```
+
+Set the environment variables as follows:
+
+- `MEMOS_API_KEY`: Create an account in the [MemOS API console](https://memos-dashboard.openmem.net/apikeys/), create an API key, and copy it into the configuration.
+
+*The console image below is a localized illustration of the Chinese UI.*
+
+![Create an API key in the MemOS console](https://cdn.memtensor.com.cn/img/memos-best-practices-claude-apikey-en-20261028_compressed.png)
+
+- `MEMOS_USER_ID`: A stable, user-defined personal identifier. Use the same value for the same person across devices and clients. An email address, full name, or employee ID is suitable; random values, device IDs, and chat session IDs are unsuitable.
+- `MEMOS_CHANNEL`: Set it to `MODELSCOPE`.
+
+## 2. Use MemOS in Claude Desktop
 To use MemOS in Claude Desktop, click the avatar in the lower left corner -> "Settings" -> "Developer" -> "Edit Config", paste the configuration into the Claude_desktop_config.json file, and finally restart the client. You can use it in the chat when you observe that the memos-api-mcp service is in the running state.
 
-![Verification of using MemOS in Claude](https://cdn.memtensor.com.cn/img/1763105334517_9ayhrp_compressed.png)
+![MemOS MCP configuration and expected running state](https://cdn.memtensor.com.cn/img/memos-best-practices-claude-status-en-20261028_compressed.png)
 
 To improve the usage effect, it is recommended that users modify the user preference settings that apply to all conversations when using MemOS in Claude Desktop. The specific method is to click the avatar in the lower left corner -> "General", and paste the following content into the input box under "What personal preferences should Claude consider in responses?":
 

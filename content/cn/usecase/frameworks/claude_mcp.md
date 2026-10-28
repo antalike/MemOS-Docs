@@ -44,7 +44,7 @@ title: Claude MCP
 ## 2. 在 Claude 客服端中使用
 在Claude Desktop中使用MemOS，需点击左下角头像 -> "Settings" -> "Developer" -> "Edit Config"， 并粘贴配置到Claude_desktop_config.json文件中，最后重启客户端，观察到memos-api-mcp服务处于running状态即可在聊天中使用。
 
-![在Claude中使用MemOS-验证](https://cdn.memtensor.com.cn/img/1763105334517_9ayhrp_compressed.png)
+![MemOS MCP 配置与预期运行状态示意图](https://cdn.memtensor.com.cn/img/memos-best-practices-claude-status-cn-20261028_compressed.png)
 
 为了提升使用效果，建议用户在Claude Desktop中使用MemOS时修改作用于所有对话的用户偏好设置，具体方法为点击左下角头像 -> "General", 在"What personal preferences should Claude consider in responses?"下面的输入框中粘贴如下内容：
 
